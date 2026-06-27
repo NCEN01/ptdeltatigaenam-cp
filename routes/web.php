@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Account\AccountController;
+use App\Http\Controllers\Auth\CustomerEmailVerificationController;
+use App\Http\Controllers\Auth\CustomerPasswordController;
+use App\Http\Controllers\Auth\CustomerSessionController;
+use App\Http\Controllers\Auth\RegisteredCustomerController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
@@ -37,4 +42,35 @@ Route::prefix('{locale}')
 
         Route::get('/kontak', [ContactController::class, 'index'])->name('contact.index');
         Route::post('/kontak', [ContactController::class, 'store'])->name('contact.store');
+
+        /* ---------- Customer auth (guard: customer) ---------- */
+        Route::middleware('guest:customer')->group(function () {
+            Route::get('/daftar', [RegisteredCustomerController::class, 'show'])->name('register');
+            Route::post('/daftar', [RegisteredCustomerController::class, 'store']);
+            Route::get('/masuk', [CustomerSessionController::class, 'show'])->name('login');
+            Route::post('/masuk', [CustomerSessionController::class, 'store']);
+            Route::get('/lupa-password', [CustomerPasswordController::class, 'request'])->name('password.request');
+            Route::post('/lupa-password', [CustomerPasswordController::class, 'email'])->name('password.email');
+            Route::get('/reset-password/{token}', [CustomerPasswordController::class, 'reset'])->name('password.reset');
+            Route::post('/reset-password', [CustomerPasswordController::class, 'update'])->name('password.update');
+        });
+
+        Route::post('/keluar', [CustomerSessionController::class, 'destroy'])
+            ->middleware('auth:customer')->name('logout');
+
+        // Email verification
+        Route::get('/verifikasi-email/{id}/{hash}', [CustomerEmailVerificationController::class, 'verify'])
+            ->middleware('signed')->name('verification.verify');
+
+        Route::middleware('auth:customer')->group(function () {
+            Route::get('/verifikasi-email', [CustomerEmailVerificationController::class, 'notice'])->name('verification.notice');
+            Route::post('/verifikasi-email/kirim-ulang', [CustomerEmailVerificationController::class, 'resend'])
+                ->middleware('throttle:6,1')->name('verification.resend');
+
+            Route::middleware('verified.customer')->group(function () {
+                Route::get('/akun', [AccountController::class, 'profile'])->name('account.profile');
+                Route::patch('/akun', [AccountController::class, 'update'])->name('account.update');
+                Route::get('/akun/pesanan', [AccountController::class, 'orders'])->name('account.orders');
+            });
+        });
     });

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureCustomerEmailVerified;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -14,7 +15,16 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'locale' => SetLocale::class,
+            'verified.customer' => EnsureCustomerEmailVerified::class,
         ]);
+
+        // Guests are redirected to the localized login route (locale from the URL,
+        // since SetLocale may run after Authenticate in the priority order).
+        $middleware->redirectGuestsTo(function (Illuminate\Http\Request $request) {
+            $locale = $request->route('locale') ?? SetLocale::DEFAULT;
+
+            return route('login', ['locale' => $locale]);
+        });
 
         // Midtrans webhook posts without a CSRF token.
         $middleware->validateCsrfTokens(except: [

@@ -69,9 +69,15 @@
                     </div>
                 </div>
 
-                <a href="#" class="hidden btn-primary !px-5 !py-2.5 text-sm lg:inline-flex">
-                    {{ __('site.nav.login') }}
-                </a>
+                @auth('customer')
+                    <a href="{{ route('account.profile') }}" class="hidden btn-primary !px-5 !py-2.5 text-sm lg:inline-flex">
+                        {{ __('site.nav.account') }}
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="hidden btn-primary !px-5 !py-2.5 text-sm lg:inline-flex">
+                        {{ __('site.nav.login') }}
+                    </a>
+                @endauth
 
                 {{-- Mobile toggle --}}
                 <button @click="open = true" class="grid h-10 w-10 place-items-center rounded-full text-navy lg:hidden" aria-label="{{ __('site.common.menu') }}">
@@ -110,7 +116,11 @@
                         </a>
                     @endforeach
                 </div>
-                <a href="#" class="btn-primary w-full">{{ __('site.nav.login') }}</a>
+                @auth('customer')
+                    <a href="{{ route('account.profile') }}" class="btn-primary w-full">{{ __('site.nav.account') }}</a>
+                @else
+                    <a href="{{ route('login') }}" class="btn-primary w-full">{{ __('site.nav.login') }}</a>
+                @endauth
             </div>
         </div>
     </div>
