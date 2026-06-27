@@ -27,9 +27,17 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->authGuard('web')
+            ->brandName('Delta Tiga Enam')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::hex('#0A2A5E'),  // navy
+                'gold' => Color::hex('#C9A227'),     // accent
+                'danger' => Color::Rose,
+                'success' => Color::Emerald,
+                'warning' => Color::Amber,
             ])
+            ->sidebarCollapsibleOnDesktop()
+            ->databaseNotifications()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
