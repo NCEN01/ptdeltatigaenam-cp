@@ -38,4 +38,13 @@ class PartnershipRegistration extends Model
     {
         return 'REG-'.now()->format('Ymd').'-'.str_pad((string) (static::whereDate('created_at', today())->count() + 1), 4, '0', STR_PAD_LEFT);
     }
+
+    protected static function booted(): void
+    {
+        static::creating(function (PartnershipRegistration $r) {
+            if (blank($r->registration_number)) {
+                $r->registration_number = static::generateNumber();
+            }
+        });
+    }
 }

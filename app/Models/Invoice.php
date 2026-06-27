@@ -41,4 +41,16 @@ class Invoice extends Model
     {
         return 'INV-'.now()->format('Ymd').'-'.str_pad((string) (static::whereDate('created_at', today())->count() + 1), 4, '0', STR_PAD_LEFT);
     }
+
+    protected static function booted(): void
+    {
+        static::creating(function (Invoice $invoice) {
+            if (blank($invoice->invoice_number)) {
+                $invoice->invoice_number = static::generateNumber();
+            }
+            if (blank($invoice->created_by) && auth('web')->check()) {
+                $invoice->created_by = auth('web')->id();
+            }
+        });
+    }
 }
