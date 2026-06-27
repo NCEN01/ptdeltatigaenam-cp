@@ -43,4 +43,13 @@ class BlogPost extends Model
         return $query->where('status', 'published')
             ->where(fn ($q) => $q->whereNull('published_at')->orWhere('published_at', '<=', now()));
     }
+
+    protected static function booted(): void
+    {
+        static::creating(function (BlogPost $post) {
+            if (blank($post->author_id) && auth('web')->check()) {
+                $post->author_id = auth('web')->id();
+            }
+        });
+    }
 }

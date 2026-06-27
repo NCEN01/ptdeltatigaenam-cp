@@ -11,11 +11,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 trait RestrictsToPermission
 {
-    protected static ?string $accessPermission = null;
+    /**
+     * Resources override this to declare the gating permission name.
+     */
+    protected static function accessPermission(): ?string
+    {
+        return static::$accessPermission ?? null;
+    }
 
     protected static function userCan(): bool
     {
-        $permission = static::$accessPermission;
+        $permission = static::accessPermission();
 
         if ($permission === null) {
             return true;
