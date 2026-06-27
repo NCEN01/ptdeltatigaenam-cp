@@ -6,8 +6,10 @@ use App\Http\Controllers\Auth\CustomerPasswordController;
 use App\Http\Controllers\Auth\CustomerSessionController;
 use App\Http\Controllers\Auth\RegisteredCustomerController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MidtransWebhookController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PartnershipController;
 use App\Http\Controllers\PortfolioController;
@@ -18,8 +20,8 @@ use Illuminate\Support\Facades\Route;
 // Root → default locale
 Route::get('/', fn () => redirect('/'.SetLocale::DEFAULT));
 
-// Midtrans webhook (no locale, CSRF-exempt — see bootstrap/app.php). Filled in Stage 10.
-// Route::post('/midtrans/callback', [MidtransWebhookController::class, 'handle']);
+// Midtrans webhook (no locale prefix, CSRF-exempt — see bootstrap/app.php).
+Route::post('/midtrans/callback', [MidtransWebhookController::class, 'handle'])->name('midtrans.callback');
 
 Route::prefix('{locale}')
     ->where(['locale' => 'id|en'])
@@ -71,6 +73,12 @@ Route::prefix('{locale}')
                 Route::get('/akun', [AccountController::class, 'profile'])->name('account.profile');
                 Route::patch('/akun', [AccountController::class, 'update'])->name('account.update');
                 Route::get('/akun/pesanan', [AccountController::class, 'orders'])->name('account.orders');
+
+                // Checkout (requires verified customer)
+                Route::get('/checkout/{schedule}', [CheckoutController::class, 'create'])->name('checkout.create');
+                Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+                Route::get('/checkout/{order:order_number}/bayar', [CheckoutController::class, 'pay'])->name('checkout.pay');
+                Route::get('/checkout/{order:order_number}/status', [CheckoutController::class, 'finish'])->name('checkout.finish');
             });
         });
     });

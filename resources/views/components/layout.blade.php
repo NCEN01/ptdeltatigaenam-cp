@@ -55,5 +55,7 @@
     </main>
 
     <x-partials.footer />
+
+    @stack('scripts')
 </body>
 </html>
