@@ -6,6 +6,8 @@ use App\Models\PartnershipBenefit;
 use App\Models\PartnershipPackage;
 use App\Models\PartnershipRegistration;
 use App\Models\Setting;
+use App\Models\User;
+use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
 
 class PartnershipController extends Controller
@@ -34,7 +36,23 @@ class PartnershipController extends Controller
             'notes' => ['nullable', 'string', 'max:2000'],
         ]);
 
-        PartnershipRegistration::create([...$data, 'status' => 'baru', 'locale' => app()->getLocale(), 'is_read' => false]);
+        $registration = PartnershipRegistration::create([
+            ...$data, 'status' => 'baru', 'locale' => app()->getLocale(), 'is_read' => false,
+        ]);
+
+        // Notify Admin Transaksi (+ super admins) of the new lead.
+        $admins = User::where('is_active', true)
+            ->whereHas('roles', fn ($q) => $q->whereIn('name', ['admin_transaksi', 'super_admin']))
+            ->get();
+
+        if ($admins->isNotEmpty()) {
+            Notification::make()
+                ->title('Pendaftaran Kemitraan Baru')
+                ->body("{$registration->company_name} — {$registration->pic_name}")
+                ->icon('heroicon-o-clipboard-document-list')
+                ->success()
+                ->sendToDatabase($admins);
+        }
 
         return back()->with('status', __('site.contact.success'));
     }
