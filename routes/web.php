@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 // Root → default locale
 Route::get('/', fn () => redirect('/'.SetLocale::DEFAULT));
 
+// SEO
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+
 // Midtrans webhook (no locale prefix, CSRF-exempt — see bootstrap/app.php).
 Route::post('/midtrans/callback', [MidtransWebhookController::class, 'handle'])->name('midtrans.callback');
 
