@@ -1,3 +1,126 @@
+/* Fontshare: Clash Display (display) + General Sans (body). IBM Plex Mono via Google. */
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@400,500,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        --header-h: 84px;
+    }
+
+    [x-cloak] { display: none !important; }
+
+    html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    body {
+        @apply bg-white text-ink font-sans antialiased;
+        font-feature-settings: 'ss01', 'cv01';
+    }
+
+    ::selection {
+        @apply bg-navy text-white;
+    }
+
+    h1, h2, h3, h4 {
+        @apply font-display;
+    }
+
+    /* Visible, on-brand focus rings (never removed) */
+    :focus-visible {
+        @apply outline-none ring-2 ring-gold ring-offset-2 ring-offset-white;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.001ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.001ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+}
+
+@layer components {
+    /* Eyebrow / kicker label — mono, spaced, gold */
+    .eyebrow {
+        @apply font-mono text-[11px] uppercase tracking-label text-gold;
+    }
+
+    .eyebrow-muted {
+        @apply font-mono text-[11px] uppercase tracking-label text-navy-300;
+    }
+
+    /* Section rhythm — generous, editorial whitespace */
+    .section {
+        @apply py-20 md:py-28 lg:py-36;
+    }
+
+    .rule-gold {
+        @apply inline-block h-px w-10 bg-gold align-middle;
+    }
+
+    /* Buttons — full interaction states */
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium
+               transition-all duration-200 ease-out-soft focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none;
+    }
+
+    .btn-primary {
+        @apply btn bg-navy text-white shadow-card hover:bg-navy-800 hover:shadow-lift hover:-translate-y-0.5 active:translate-y-0;
+    }
+
+    .btn-gold {
+        @apply btn bg-gold text-ink shadow-gold hover:bg-gold-soft hover:-translate-y-0.5 active:translate-y-0;
+    }
+
+    .btn-ghost {
+        @apply btn border border-navy-200 text-navy hover:border-navy hover:bg-navy hover:text-white;
+    }
+
+    .btn-ghost-light {
+        @apply btn border border-white/25 text-white hover:bg-white hover:text-navy;
+    }
+
+    /* Cards — soft layered shadow, hairline border */
+    .card {
+        @apply rounded-2xl border border-navy-100 bg-white shadow-card transition-all duration-300 ease-out-soft;
+    }
+
+    .card-hover {
+        @apply hover:-translate-y-1 hover:shadow-lift hover:border-navy-200;
+    }
+
+    .link-underline {
+        @apply relative inline-flex items-center gap-1.5 text-navy after:absolute after:-bottom-0.5 after:left-0
+               after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full;
+    }
+}
+
+@layer utilities {
+    .text-balance { text-wrap: balance; }
+    .text-pretty { text-wrap: pretty; }
+
+    /* Aurora field for the dark hero */
+    .aurora {
+        background:
+            radial-gradient(60% 60% at 20% 20%, rgba(62,99,168,0.55) 0%, transparent 60%),
+            radial-gradient(50% 50% at 80% 30%, rgba(201,162,39,0.18) 0%, transparent 55%),
+            radial-gradient(60% 70% at 60% 90%, rgba(20,52,98,0.85) 0%, transparent 60%);
+        filter: blur(20px);
+    }
+
+    .grain {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    }
+
+    .mask-fade-x {
+        mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    }
+}
