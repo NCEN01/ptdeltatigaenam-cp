@@ -41,7 +41,7 @@ class TestimonialResource extends Resource
             Forms\Components\Select::make('rating')->options([5 => '5', 4 => '4', 3 => '3', 2 => '2', 1 => '1'])->label('Rating'),
             Forms\Components\Select::make('client_id')->relationship('client', 'name')->searchable()->label('Klien (opsional)'),
             Forms\Components\Select::make('portfolio_id')->relationship('portfolio', 'slug')
-                ->getOptionLabelFromRecordUsing(fn ($r) => $r->title)->searchable()->label('Portofolio (opsional)'),
+                ->getOptionLabelFromRecordUsing(fn ($record) => $record->title)->searchable()->label('Portofolio (opsional)'),
             Forms\Components\Toggle::make('is_featured')->label('Unggulan')->default(false),
             Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
             Forms\Components\TextInput::make('sort_order')->numeric()->default(0),

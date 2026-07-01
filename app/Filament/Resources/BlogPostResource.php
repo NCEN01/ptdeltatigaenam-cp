@@ -37,7 +37,7 @@ class BlogPostResource extends Resource
             Forms\Components\Section::make('Artikel')->schema([
                 Forms\Components\TextInput::make('title')->label('Judul')->required()->maxLength(280)
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $op) => $op === 'create' ? $set('slug', Str::slug((string) $state)) : null),
+                    ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
                 Forms\Components\TextInput::make('slug')->required()->maxLength(280)->unique(ignoreRecord: true),
                 Forms\Components\Textarea::make('excerpt')->label('Ringkasan')->rows(2)->columnSpanFull(),
                 Forms\Components\RichEditor::make('content')->label('Konten')->columnSpanFull(),
@@ -48,14 +48,13 @@ class BlogPostResource extends Resource
             ])->columns(2),
             Forms\Components\Section::make('Publikasi')->schema([
                 Forms\Components\Select::make('blog_category_id')->relationship('category', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($r) => $r->name)->searchable()->label('Kategori'),
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)->searchable()->preload()->label('Kategori'),
                 Forms\Components\Select::make('tags')->relationship('tags', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($r) => $r->name)->multiple()->preload()->label('Tag'),
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)->multiple()->preload()->label('Tag'),
                 Forms\Components\Select::make('status')->options([
                     'draft' => 'Draft', 'published' => 'Terbit', 'archived' => 'Arsip',
                 ])->default('draft')->required(),
                 Forms\Components\DateTimePicker::make('published_at')->label('Tanggal Terbit'),
-                Forms\Components\Toggle::make('is_featured')->label('Unggulan')->default(false),
             ])->columns(2),
             Forms\Components\Section::make('SEO')->collapsed()->schema([
                 Forms\Components\TextInput::make('meta_title')->label('Meta Title'),

@@ -7,6 +7,7 @@ return [
         'services' => 'Layanan',
         'portfolio' => 'Portofolio',
         'blog' => 'Blog',
+        'agenda' => 'Agenda',
         'partnership' => 'Kemitraan',
         'contact' => 'Kontak',
         'login' => 'Masuk',

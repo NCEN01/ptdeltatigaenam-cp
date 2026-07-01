@@ -1,6 +1,7 @@
-/* Fontshare: Clash Display (display) + General Sans (body). IBM Plex Mono via Google. */
-@import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@400,500,600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+/* Sentient (expressive serif — display) + Switzer (Swiss grotesque — body) via Fontshare,
+   Spline Sans Mono (labels/figures) via Google. Deliberately off the AI-default font list. */
+@import url('https://api.fontshare.com/v2/css?f[]=sentient@400,500,700&f[]=switzer@400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -9,6 +10,8 @@
 @layer base {
     :root {
         --header-h: 84px;
+        --cursor-x: 50%;
+        --cursor-y: 50%;
     }
 
     [x-cloak] { display: none !important; }
@@ -17,11 +20,13 @@
         scroll-behavior: smooth;
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
+        overflow-x: hidden;
     }
 
     body {
         @apply bg-white text-ink font-sans antialiased;
         font-feature-settings: 'ss01', 'cv01';
+        overflow-x: hidden;
     }
 
     ::selection {
@@ -32,25 +37,31 @@
         @apply font-display;
     }
 
-    /* Visible, on-brand focus rings (never removed) */
     :focus-visible {
-        @apply outline-none ring-2 ring-gold ring-offset-2 ring-offset-white;
+        @apply outline-none ring-2 ring-sky-500 ring-offset-2 ring-offset-white;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-        *, *::before, *::after {
-            animation-duration: 0.001ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.001ms !important;
-            scroll-behavior: auto !important;
-        }
-    }
+    /*
+     * Animations are intentionally kept ON regardless of the OS "reduce motion"
+     * setting (marketing site). The previous global override below disabled every
+     * animation/transition when the OS requested reduced motion, which made the
+     * whole site appear static. Re-enable it if strict accessibility is required.
+     *
+     * @media (prefers-reduced-motion: reduce) {
+     *     *, *::before, *::after {
+     *         animation-duration: 0.001ms !important;
+     *         animation-iteration-count: 1 !important;
+     *         transition-duration: 0.001ms !important;
+     *         scroll-behavior: auto !important;
+     *     }
+     * }
+     */
 }
 
 @layer components {
-    /* Eyebrow / kicker label — mono, spaced, gold */
+    /* Eyebrow / kicker label — mono, spaced, light-blue accent */
     .eyebrow {
-        @apply font-mono text-[11px] uppercase tracking-label text-gold;
+        @apply font-mono text-[11px] uppercase tracking-label text-sky-500;
     }
 
     .eyebrow-muted {
@@ -62,8 +73,9 @@
         @apply py-20 md:py-28 lg:py-36;
     }
 
+    /* Tiny accent rule — the rare gold detail */
     .rule-gold {
-        @apply inline-block h-px w-10 bg-gold align-middle;
+        @apply inline-block h-px w-10 bg-gradient-to-r from-sky-500 to-gold align-middle;
     }
 
     /* Buttons — full interaction states */
@@ -99,21 +111,158 @@
 
     .link-underline {
         @apply relative inline-flex items-center gap-1.5 text-navy after:absolute after:-bottom-0.5 after:left-0
-               after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full;
+               after:h-px after:w-0 after:bg-sky-500 after:transition-all after:duration-300 hover:after:w-full;
     }
+
+    /* Primary CTA — light/deep blue gradient (replaces gold as the lead action) */
+    .btn-blue {
+        @apply btn bg-gradient-to-r from-sky-500 to-sky-700 text-white shadow-[0_8px_30px_-12px_rgba(37,99,235,0.5)]
+               hover:from-sky-600 hover:to-sky-700 hover:-translate-y-0.5 active:translate-y-0;
+    }
+
+    /* Interactive 3D card — pointer-driven tilt via [data-tilt] (JS sets the CSS vars) */
+    .card-3d {
+        @apply relative overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-card
+               transition-[transform,box-shadow] duration-300 ease-out-soft;
+        transform: perspective(1000px) rotateY(var(--tilt-x, 0deg)) rotateX(var(--tilt-y, 0deg));
+        transform-style: preserve-3d;
+        will-change: transform;
+    }
+
+    .card-3d:hover {
+        @apply shadow-lift;
+    }
+
+    /* Cursor glare sheen */
+    .card-3d::after {
+        content: '';
+        @apply pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300;
+        background: radial-gradient(40% 40% at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.28), transparent 70%);
+    }
+
+    .card-3d:hover::after {
+        @apply opacity-100;
+    }
+
+    /* Hero rotating promo phrase */
+    .rotate-item {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transform: translateY(0.5em);
+        transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .rotate-item.is-active {
+        position: relative;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Fan carousel pagination dots */
+    .fan-dot {
+        height: 0.5rem;
+        width: 0.5rem;
+        border-radius: 9999px;
+        background: rgba(10, 42, 94, 0.18);
+        transition: all 0.3s ease;
+    }
+    .fan-dot.is-on {
+        background: rgba(37, 99, 235, 0.9);
+        transform: scale(1.4);
+    }
+
+    /* ── Glass card ── */
+    .card-glass {
+        @apply rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl transition-all duration-300 ease-out-soft;
+    }
+    .card-glass-hover {
+        @apply hover:-translate-y-1 hover:border-white/25 hover:bg-white/10 hover:shadow-lift;
+    }
+
+    /* ── Gradient border card ── */
+    .card-gradient-border {
+        @apply relative rounded-2xl bg-white p-[1px] transition-all duration-500;
+        background-image: linear-gradient(135deg, #0A2A5E 0%, #3B82F6 50%, #C9A227 100%);
+        background-size: 200% 200%;
+    }
+    .card-gradient-border:hover { background-position: 100% 100%; }
+    .card-gradient-border > * { @apply rounded-2xl bg-white h-full; }
+
+    /* ── Overlap card ── */
+    .card-overlap {
+        @apply relative z-10 -mt-20 rounded-3xl border border-navy-100 bg-white shadow-lift p-8 md:p-12;
+    }
+
+    /* ── Text reveal word ── */
+    .text-reveal-word {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(1.2em) rotateX(-15deg);
+        transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .text-reveal-word.is-visible { opacity: 1; transform: translateY(0) rotateX(0); }
+
+    /* ── Section divider ── */
+    .section-divider {
+        @apply mx-auto h-px w-full max-w-6xl;
+        background: linear-gradient(90deg, transparent 0%, rgba(10,42,94,0.08) 20%, rgba(201,162,39,0.25) 50%, rgba(10,42,94,0.08) 80%, transparent 100%);
+    }
+
+    /* ── Pill badges ── */
+    .pill {
+        @apply inline-flex items-center gap-1.5 rounded-full border border-navy-100 px-3.5 py-1.5 text-xs font-medium text-navy transition-all duration-300;
+    }
+    .pill-gold {
+        @apply pill border-gold/30 bg-gold/5 text-gold-deep hover:bg-gold/10 hover:border-gold/50;
+    }
+    .pill-sky {
+        @apply pill border-sky-200 bg-sky-50 text-sky-700 hover:bg-sky-100 hover:border-sky-300;
+    }
+
+    /* ── Glow dot ── */
+    .glow-dot {
+        @apply inline-block h-2 w-2 rounded-full bg-gold;
+        box-shadow: 0 0 12px rgba(201,162,39,0.6), 0 0 24px rgba(201,162,39,0.3);
+        animation: dot-pulse-glow 3s ease-in-out infinite;
+    }
+
+    /* ── Magnetic hover ── */
+    .magnetic { transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+
+    /* ── Section sm ── */
+    .section-sm { @apply py-14 md:py-20 lg:py-24; }
+
+    /* ── Button outline gold ── */
+    .btn-outline-gold {
+        @apply btn border border-gold/40 text-gold hover:bg-gold hover:text-ink hover:border-gold hover:shadow-gold;
+    }
+
+    /* ── Link gold ── */
+    .link-gold {
+        @apply relative inline-flex items-center gap-1.5 text-navy transition-colors duration-300 hover:text-gold;
+    }
+
+    /* ── Rule gold vertical ── */
+    .rule-gold-vertical {
+        @apply inline-block w-px h-10 bg-gradient-to-b from-sky-500 to-gold;
+    }
+
+    /* ── Numeral ── */
+    .numeral { @apply font-mono text-[10px] uppercase tracking-label; }
 }
 
 @layer utilities {
     .text-balance { text-wrap: balance; }
     .text-pretty { text-wrap: pretty; }
 
-    /* Aurora field for the dark hero */
+    /* Aurora field for dark sections — light/deep blue with a faint gold ember */
     .aurora {
         background:
-            radial-gradient(60% 60% at 20% 20%, rgba(62,99,168,0.55) 0%, transparent 60%),
-            radial-gradient(50% 50% at 80% 30%, rgba(201,162,39,0.18) 0%, transparent 55%),
-            radial-gradient(60% 70% at 60% 90%, rgba(20,52,98,0.85) 0%, transparent 60%);
-        filter: blur(20px);
+            radial-gradient(55% 60% at 18% 22%, rgba(51,207,247,0.30) 0%, transparent 60%),
+            radial-gradient(45% 50% at 82% 28%, rgba(28,125,224,0.38) 0%, transparent 58%),
+            radial-gradient(50% 45% at 72% 84%, rgba(201,162,39,0.07) 0%, transparent 55%),
+            radial-gradient(60% 70% at 55% 95%, rgba(8,24,47,0.86) 0%, transparent 60%);
+        filter: blur(22px);
     }
 
     .grain {
@@ -123,4 +272,95 @@
     .mask-fade-x {
         mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
     }
+
+    .mask-fade-y {
+        mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+    }
+
+    /* Vertical auto-scrolling testimonial column */
+    .marquee-col {
+        animation: marquee-y var(--dur, 24s) linear infinite;
+    }
+    .marquee-col:hover {
+        animation-play-state: paused;
+    }
+
+    /* Card-fan carousel (GSAP positions cards; CSS sets base box) */
+    .fan-layout {
+        position: relative;
+        height: 22rem;
+    }
+    @media (min-width: 480px) { .fan-layout { height: 25rem; } }
+    @media (min-width: 640px) { .fan-layout { height: 27rem; } }
+    @media (min-width: 768px) { .fan-layout { height: 32rem; } }
+    @media (min-width: 1024px) { .fan-layout { height: 36rem; } }
+
+    .fan-card {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 13rem;
+        aspect-ratio: 3 / 4;
+        margin-left: -6.5rem;
+        margin-top: -8.66rem;
+        border-radius: 1.25rem;
+        overflow: hidden;
+        background: #0A2A5E;
+        box-shadow: 0 24px 60px -22px rgba(10, 42, 94, 0.55);
+        will-change: transform;
+    }
+    @media (min-width: 768px) { .fan-card { width: 15rem; margin-left: -7.5rem; margin-top: -10rem; } }
+    @media (min-width: 1024px) { .fan-card { width: 17rem; margin-left: -8.5rem; margin-top: -11.33rem; } }
+
+    /* ── Aurora light (for white sections) ── */
+    .aurora-light {
+        background:
+            radial-gradient(50% 55% at 15% 20%, rgba(94,151,251,0.12) 0%, transparent 55%),
+            radial-gradient(45% 50% at 85% 25%, rgba(59,130,246,0.08) 0%, transparent 55%),
+            radial-gradient(40% 40% at 70% 80%, rgba(201,162,39,0.06) 0%, transparent 50%);
+        filter: blur(40px);
+    }
+
+    /* ── Parallax layers ── */
+    .parallax-slow { will-change: transform; }
+    .parallax-fast { will-change: transform; }
 }
+
+/* ── Global Keyframes ── */
+@keyframes dot-pulse-glow {
+    0%, 100% { box-shadow: 0 0 8px rgba(201,162,39,0.4), 0 0 18px rgba(201,162,39,0.2); }
+    50% { box-shadow: 0 0 18px rgba(201,162,39,0.7), 0 0 36px rgba(201,162,39,0.35); }
+}
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+@keyframes float-subtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Vertical marquee keyframe (defined here so it isn't purged — used by .marquee-col) */
+@keyframes marquee-y {
+    from { transform: translateY(0); }
+    to { transform: translateY(-50%); }
+}
+
+/* ── Hero carousel ── */
+@keyframes kenburns {
+    from { transform: scale(1.05); }
+    to { transform: scale(1.16); }
+}
+.hero-carousel .hero-slide-img { transform: scale(1.05); }
+.hero-carousel .swiper-slide-active .hero-slide-img { animation: kenburns 7s ease-out forwards; }
+.hero-carousel.swiper-initialized .swiper-slide:not(.swiper-slide-active) .hero-content { opacity: 0; }
+.hero-carousel .swiper-slide-active .hero-content > * { animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) both; }
+.hero-carousel .swiper-slide-active .hero-content > *:nth-child(2) { animation-delay: 0.12s; }
+.hero-carousel .swiper-slide-active .hero-content > *:nth-child(3) { animation-delay: 0.22s; }
+.hero-carousel .swiper-slide-active .hero-content > *:nth-child(4) { animation-delay: 0.32s; }
+[data-hero-carousel-pagination] .swiper-pagination-bullet {
+    width: 0.5rem; height: 0.5rem; border-radius: 9999px;
+    background: rgba(255,255,255,0.45); opacity: 1; transition: all 0.3s ease;
+}
+[data-hero-carousel-pagination] .swiper-pagination-bullet-active { width: 1.6rem; background: #fff; }

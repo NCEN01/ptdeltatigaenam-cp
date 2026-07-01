@@ -35,7 +35,7 @@ class BlogCategoryResource extends Resource
         return $form->schema([
             Forms\Components\TextInput::make('name')->label('Nama')->required()
                 ->live(onBlur: true)
-                ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $op) => $op === 'create' ? $set('slug', Str::slug((string) $state)) : null),
+                ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
             Forms\Components\TextInput::make('slug')->required()->unique(ignoreRecord: true),
             Forms\Components\TextInput::make('sort_order')->numeric()->default(0),
             Forms\Components\Toggle::make('is_active')->default(true),

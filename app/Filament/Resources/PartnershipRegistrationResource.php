@@ -63,7 +63,7 @@ class PartnershipRegistrationResource extends Resource
             ])->columns(2),
             Forms\Components\Section::make('Paket & Jadwal')->schema([
                 Forms\Components\Select::make('partnership_package_id')->relationship('package', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($r) => $r->name)->label('Paket')->searchable(),
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)->label('Paket')->searchable(),
                 Forms\Components\DateTimePicker::make('preferred_meeting_at')->label('Jadwal Diinginkan'),
                 Forms\Components\DateTimePicker::make('alternative_meeting_at')->label('Jadwal Alternatif'),
                 Forms\Components\Textarea::make('notes')->label('Catatan')->rows(3)->columnSpanFull(),

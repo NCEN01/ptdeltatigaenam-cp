@@ -9,6 +9,11 @@ export default defineConfig({
             refresh: true,
         }),
         VitePWA({
+            // Sementara dinonaktifkan saat fase redesign: SW ini akan menghapus
+            // dirinya sendiri + cache lama di browser yang sudah memasangnya,
+            // sehingga perubahan CSS/JS selalu langsung terlihat tanpa clear cache.
+            // Setelah desain final, hapus baris ini untuk mengaktifkan PWA lagi.
+            selfDestroying: true,
             registerType: 'autoUpdate',
             injectRegister: 'auto',
             includeAssets: ['favicon.svg', 'icons/icon-192.png', 'icons/icon-512.png'],

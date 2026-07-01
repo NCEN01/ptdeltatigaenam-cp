@@ -37,11 +37,11 @@ class PortfolioResource extends Resource
             Forms\Components\Section::make('Proyek')->schema([
                 Forms\Components\TextInput::make('title')->label('Judul')->required()->maxLength(280)
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $op) => $op === 'create' ? $set('slug', Str::slug((string) $state)) : null),
+                    ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
                 Forms\Components\TextInput::make('slug')->required()->maxLength(280)->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('client_name')->label('Nama Klien'),
                 Forms\Components\Select::make('service_category_id')->relationship('category', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($r) => $r->name)->searchable()->label('Kategori'),
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)->searchable()->label('Kategori'),
                 Forms\Components\DatePicker::make('project_date')->label('Tanggal Proyek'),
                 Forms\Components\Textarea::make('short_description')->label('Deskripsi Singkat')->rows(2)->columnSpanFull(),
                 Forms\Components\RichEditor::make('content')->label('Konten')->columnSpanFull(),

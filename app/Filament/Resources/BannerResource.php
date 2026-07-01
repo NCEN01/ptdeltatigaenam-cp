@@ -50,7 +50,7 @@ class BannerResource extends Resource
                     'blog' => 'Blog', 'portfolio' => 'Portofolio', 'about' => 'About', 'global' => 'Global',
                 ])->default('home_hero')->required(),
                 Forms\Components\Select::make('service_category_id')->relationship('category', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($r) => $r->name)->searchable()->label('Kategori (opsional)'),
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)->searchable()->label('Kategori (opsional)'),
                 Forms\Components\TextInput::make('sort_order')->numeric()->default(0),
                 Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
                 Forms\Components\DateTimePicker::make('starts_at')->label('Mulai Tayang'),

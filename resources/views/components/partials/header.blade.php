@@ -6,6 +6,7 @@
         ['route' => 'services.index', 'label' => __('site.nav.services')],
         ['route' => 'portfolio.index', 'label' => __('site.nav.portfolio')],
         ['route' => 'blog.index', 'label' => __('site.nav.blog')],
+        ['route' => 'agenda.index', 'label' => __('site.nav.agenda')],
         ['route' => 'partnership.index', 'label' => __('site.nav.partnership')],
         ['route' => 'contact.index', 'label' => __('site.nav.contact')],
     ];
@@ -14,35 +15,35 @@
 <header
     x-data="{ scrolled: false, open: false }"
     x-init="scrolled = window.scrollY > 24; window.addEventListener('scroll', () => scrolled = window.scrollY > 24)"
-    class="fixed inset-x-0 top-0 z-[100] transition-all duration-300 ease-out-soft"
-    :class="scrolled ? 'py-2.5' : 'py-4'"
+    class="fixed inset-x-0 top-0 z-[100] transition-all duration-500 ease-out-soft"
+    :class="scrolled ? 'py-2' : 'py-4'"
 >
     <div class="container">
         <div
-            class="flex items-center justify-between rounded-full border px-4 py-2.5 transition-all duration-300 ease-out-soft md:px-5"
+            class="flex items-center justify-between rounded-full border px-4 py-2.5 transition-all duration-500 ease-out-soft md:px-5"
             :class="scrolled
-                ? 'border-navy-100 bg-white/85 shadow-card backdrop-blur-xl'
+                ? 'border-navy-100 bg-white/80 backdrop-blur-2xl shadow-lift'
                 : 'border-transparent bg-transparent'"
         >
             {{-- Brand --}}
-            <a href="{{ route('home') }}" class="group flex items-center gap-2.5">
-                <span class="grid h-9 w-9 place-items-center rounded-xl bg-navy text-white shadow-card">
+            <a href="{{ route('home') }}" class="group flex items-center gap-2.5" data-magnetic>
+                <span class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-sky-500 to-navy-700 text-white shadow-card transition-all duration-300 group-hover:shadow-[0_8px_24px_-8px_rgba(28,125,224,0.6)]">
                     <span class="font-display text-lg font-semibold leading-none">D</span>
                 </span>
-                <span class="flex flex-col leading-none">
-                    <span class="font-display text-[15px] font-semibold tracking-tight text-navy">Delta Tiga Enam</span>
+                <span class="hidden flex-col leading-none sm:flex">
+                    <span class="font-display text-[15px] font-semibold tracking-tight text-navy transition-colors duration-300 group-hover:text-navy-700">Delta Tiga Enam</span>
                     <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-navy-300">Human Capital</span>
                 </span>
             </a>
 
             {{-- Desktop nav --}}
-            <nav class="hidden items-center gap-1 lg:flex" aria-label="Primary">
+            <nav class="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
                 @foreach ($nav as $item)
                     @php $active = request()->routeIs($item['route']); @endphp
                     <a href="{{ route($item['route']) }}"
-                       class="rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 {{ $active ? 'text-navy' : 'text-navy-500 hover:text-navy' }}">
+                       class="group relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 {{ $active ? 'text-navy' : 'text-navy-500 hover:text-navy' }}">
                         {{ $item['label'] }}
-                        @if ($active)<span class="mx-auto mt-0.5 block h-px w-4 bg-gold"></span>@endif
+                        <span class="pointer-events-none absolute -bottom-0.5 left-1/2 h-0.5 w-5 -translate-x-1/2 origin-center rounded-full bg-sky-500 transition-transform duration-300 ease-out-soft {{ $active ? 'scale-100' : 'scale-0 group-hover:scale-100' }}"></span>
                     </a>
                 @endforeach
             </nav>
@@ -70,11 +71,11 @@
                 </div>
 
                 @auth('customer')
-                    <a href="{{ route('account.profile') }}" class="hidden btn-primary !px-5 !py-2.5 text-sm lg:inline-flex">
+                    <a href="{{ route('account.profile') }}" class="hidden btn-blue !px-5 !py-2.5 text-sm lg:inline-flex">
                         {{ __('site.nav.account') }}
                     </a>
                 @else
-                    <a href="{{ route('login') }}" class="hidden btn-primary !px-5 !py-2.5 text-sm lg:inline-flex">
+                    <a href="{{ route('login') }}" class="hidden btn-blue !px-5 !py-2.5 text-sm lg:inline-flex">
                         {{ __('site.nav.login') }}
                     </a>
                 @endauth
@@ -117,9 +118,9 @@
                     @endforeach
                 </div>
                 @auth('customer')
-                    <a href="{{ route('account.profile') }}" class="btn-primary w-full">{{ __('site.nav.account') }}</a>
+                    <a href="{{ route('account.profile') }}" class="btn-blue w-full">{{ __('site.nav.account') }}</a>
                 @else
-                    <a href="{{ route('login') }}" class="btn-primary w-full">{{ __('site.nav.login') }}</a>
+                    <a href="{{ route('login') }}" class="btn-blue w-full">{{ __('site.nav.login') }}</a>
                 @endauth
             </div>
         </div>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\CustomerEmailVerificationController;
 use App\Http\Controllers\Auth\CustomerPasswordController;
 use App\Http\Controllers\Auth\CustomerSessionController;
 use App\Http\Controllers\Auth\RegisteredCustomerController;
+use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
@@ -41,6 +42,8 @@ Route::prefix('{locale}')
 
         Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
         Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+
+        Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda.index');
 
         Route::get('/kemitraan', [PartnershipController::class, 'index'])->name('partnership.index');
         Route::post('/kemitraan/daftar', [PartnershipController::class, 'store'])->name('partnership.store');

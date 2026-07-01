@@ -35,7 +35,7 @@ class BlogTagResource extends Resource
         return $form->schema([
             Forms\Components\TextInput::make('name')->label('Nama')->required()
                 ->live(onBlur: true)
-                ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $op) => $op === 'create' ? $set('slug', Str::slug((string) $state)) : null),
+                ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
             Forms\Components\TextInput::make('slug')->required()->unique(ignoreRecord: true),
         ])->columns(2);
     }

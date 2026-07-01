@@ -10,7 +10,6 @@ class BlogController extends Controller
     public function index()
     {
         return view('pages.blog.index', [
-            'featured' => BlogPost::published()->where('is_featured', true)->with('category')->latest('published_at')->first(),
             'posts' => BlogPost::published()->with('category')->latest('published_at')->paginate(9),
             'categories' => BlogCategory::where('is_active', true)->orderBy('sort_order')->get(),
         ]);

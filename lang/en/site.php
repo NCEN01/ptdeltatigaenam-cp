@@ -7,6 +7,7 @@ return [
         'services' => 'Services',
         'portfolio' => 'Portfolio',
         'blog' => 'Blog',
+        'agenda' => 'Agenda',
         'partnership' => 'Partnership',
         'contact' => 'Contact',
         'login' => 'Sign in',

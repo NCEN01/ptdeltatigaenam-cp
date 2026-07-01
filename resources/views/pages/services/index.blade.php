@@ -4,7 +4,8 @@
     <x-page-header
         :eyebrow="__('site.home.services_kicker')"
         :title="__('site.home.services_title')"
-        :subtitle="$id ? 'Dari konsultasi manajemen hingga sertifikasi kompetensi — dirancang untuk hasil yang terukur.' : 'From management consulting to competency certification — designed for measurable outcomes.'">
+        :subtitle="$id ? 'Dari konsultasi manajemen hingga sertifikasi kompetensi — dirancang untuk hasil yang terukur.' : 'From management consulting to competency certification — designed for measurable outcomes.'"
+        image="photo-1524178232363-1fb2b075b655">
         <nav class="mt-10 flex flex-wrap gap-2" aria-label="Categories">
             @foreach ($categories as $cat)
                 <a href="#{{ $cat->slug }}" class="rounded-full border border-white/15 px-4 py-2 text-sm text-navy-100 transition-colors hover:border-gold hover:text-gold">{{ $cat->name }}</a>
@@ -24,7 +25,7 @@
                 </div>
 
                 @if ($cat->services->isNotEmpty())
-                    <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-stagger>
                         @foreach ($cat->services as $service)
                             <a href="{{ route('services.show', $service->slug) }}" class="card card-hover group flex flex-col overflow-hidden" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
                                 <div class="relative aspect-[3/2] overflow-hidden bg-navy-100">
@@ -58,12 +59,25 @@
                         @endforeach
                     </div>
                 @else
-                    <p class="mt-10 text-navy-400">{{ $id ? 'Layanan akan segera hadir.' : 'Services coming soon.' }}</p>
+                    <div class="mt-10 rounded-3xl border border-dashed border-navy-200 bg-white p-12 text-center">
+                        <p class="font-display text-lg font-semibold text-navy">{{ $id ? 'Layanan akan segera hadir' : 'Services coming soon' }}</p>
+                        <p class="mt-2 text-sm text-navy-500">{{ $id ? 'Kami sedang menyiapkan layanan untuk kategori ini.' : 'We are preparing services for this category.' }}</p>
+                    </div>
                 @endif
             </div>
         </section>
     @empty
-        <div class="container section text-navy-400">{{ $id ? 'Belum ada layanan.' : 'No services yet.' }}</div>
+        <section class="section">
+            <div class="container">
+                <div class="rounded-3xl border border-dashed border-navy-200 bg-mist p-16 text-center">
+                    <span class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-navy text-gold">
+                        <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    </span>
+                    <p class="mt-5 font-display text-lg font-semibold text-navy">{{ $id ? 'Belum ada layanan' : 'No services yet' }}</p>
+                    <p class="mt-2 text-sm text-navy-500">{{ $id ? 'Daftar layanan akan ditampilkan di sini setelah tersedia.' : 'Our service catalog will appear here once available.' }}</p>
+                </div>
+            </div>
+        </section>
     @endforelse
 
     <x-cta-band />
