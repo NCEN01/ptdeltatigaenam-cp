@@ -272,6 +272,92 @@
         </section>
     @endif
 
+    {{-- ===================== UPCOMING AGENDAS ===================== --}}
+    <section class="section bg-white border-t border-navy-50">
+        <div class="container">
+            <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                <div class="max-w-2xl" data-aos="fade-up">
+                    <p class="eyebrow mb-3"><span class="rule-gold mr-3"></span>{{ $isId ? 'Jadwal Kegiatan' : 'Agenda' }}</p>
+                    <h2 class="text-display-lg font-semibold text-navy text-balance">{{ $isId ? 'Agenda Mendatang' : 'Upcoming Agenda' }}</h2>
+                </div>
+                @if ($upcomingAgendas->isNotEmpty())
+                    <a href="{{ route('agenda.index') }}" class="link-underline shrink-0 font-medium" data-aos="fade-up">
+                        {{ $isId ? 'Lihat Semua Agenda' : 'View All Agendas' }}
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                @endif
+            </div>
+
+            @if ($upcomingAgendas->isNotEmpty())
+                <div class="mt-10 grid gap-6 md:grid-cols-3">
+                    @foreach ($upcomingAgendas as $agenda)
+                        <div class="card card-hover flex flex-col overflow-hidden border-navy-100 shadow-card" data-aos="fade-up" data-aos-delay="{{ $loop->index * 90 }}">
+                            @if ($agenda->image)
+                                <div class="relative aspect-[16/10] overflow-hidden bg-navy-100">
+                                    <img src="{{ Storage::url($agenda->image) }}" alt="{{ $agenda->title }}" loading="lazy" class="h-full w-full object-cover">
+                                </div>
+                            @endif
+                            <div class="p-6 flex-1 flex flex-col justify-between">
+                                <div class="space-y-3">
+                                    {{-- Date Badge --}}
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex flex-col items-center justify-center rounded-xl bg-sky-50 px-3 py-1.5 text-center text-sky border border-sky/10">
+                                            <span class="font-mono text-lg font-black leading-none">{{ $agenda->starts_at->format('d') }}</span>
+                                            <span class="font-mono text-[9px] uppercase font-bold tracking-wider leading-none mt-0.5">{{ $agenda->starts_at->translatedFormat('M') }}</span>
+                                        </div>
+                                        <div class="text-[11px] font-mono text-navy-400">
+                                            <p>{{ $agenda->starts_at->translatedFormat('H:i') }} - {{ $agenda->ends_at->translatedFormat('H:i') }} WIB</p>
+                                            <p class="mt-0.5 text-navy-300">{{ $agenda->location }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <h3 class="font-display text-lg font-semibold text-navy leading-snug pt-1">
+                                        {{ $agenda->title }}
+                                    </h3>
+                                    @if ($agenda->excerpt)
+                                        <p class="text-xs leading-relaxed text-navy-500 line-clamp-2">
+                                            {{ $agenda->excerpt }}
+                                        </p>
+                                    @endif
+                                </div>
+
+                                <div class="mt-6 pt-4 border-t border-navy-100 flex items-center justify-between">
+                                    <a href="{{ route('agenda.index') }}" class="text-xs font-semibold text-sky hover:underline flex items-center gap-1.5 group/btn">
+                                        <span>{{ $isId ? 'Detail Agenda' : 'Agenda Detail' }}</span>
+                                        <span class="transition-transform group-hover/btn:translate-x-1">&rarr;</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                {{-- Premium Empty State / WhatsApp Lead Generation --}}
+                <div class="mt-10 card border-dashed border-2 border-navy-200 bg-navy-50/20 p-8 md:p-12 text-center rounded-3xl" data-aos="fade-up">
+                    <div class="max-w-md mx-auto space-y-4">
+                        <span class="grid h-12 w-12 place-items-center rounded-2xl bg-navy-50 text-navy-400 mx-auto">
+                            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+                        </span>
+                        <h3 class="font-display text-lg font-semibold text-navy">
+                            {{ $isId ? 'Belum Ada Agenda Terdekat' : 'No Upcoming Agendas' }}
+                        </h3>
+                        <p class="text-xs text-navy-400 leading-relaxed text-balance">
+                            {{ $isId
+                                ? 'Kami sedang merancang berbagai kelas pelatihan dan jadwal sertifikasi kompetensi terbaru. Ingin tahu jadwal terdekat atau berdiskusi?'
+                                : 'We are planning various training classes and new competence certification schedules. Want to know the nearest schedule or discuss?' }}
+                        </p>
+                        <div class="pt-2">
+                            <a href="https://wa.me/62818834766?text=Halo%20Delta%20Tiga%20Enam,%20saya%20ingin%20tahu%20jadwal%20pelatihan%20dan%20sertifikasi%20terdekat..." target="_blank" rel="noopener" class="btn bg-emerald-500 hover:bg-emerald-600 text-white shadow-lift inline-flex items-center gap-2">
+                                <svg class="h-4.5 w-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.45L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.97-1.861-1.868-4.339-2.897-6.97-2.899-5.437 0-9.862 4.37-9.866 9.801-.001 1.737.457 3.432 1.328 4.935l-.995 3.631 3.723-.979zm7.53-7.535c-.175-.29-.64-.464-.875-.58-.233-.115-1.393-.683-1.605-.765-.213-.083-.368-.124-.523.11-.155.233-.6 1.015-.736 1.173-.136.158-.271.176-.505.06-.233-.116-.988-.364-1.882-1.163-.695-.62-1.164-1.386-1.3-1.62-.137-.233-.015-.359.102-.475.106-.104.233-.272.35-.407.115-.136.154-.233.232-.387.078-.155.039-.29-.02-.406-.058-.115-.523-1.26-.716-1.725-.19-.453-.383-.39-.523-.397-.135-.007-.29-.008-.445-.008-.156 0-.41.058-.625.29-.215.233-.82.802-.82 1.953s.836 2.26 1.07 2.57c.233.29 1.644 2.51 3.982 3.52.556.24 1 .383 1.343.492.56.179 1.07.154 1.472.094.448-.067 1.393-.57 1.587-1.12.195-.55.195-1.022.136-1.122-.058-.1-.233-.175-.407-.29z"/></svg>
+                                <span>WhatsApp Admin</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </section>
+
     {{-- ===================== WHY CHOOSE US ===================== --}}
     <section class="section bg-mist">
         <div class="container grid gap-12 lg:grid-cols-12 lg:gap-16">
@@ -467,6 +553,240 @@
             @endif
         </section>
     @endif
+
+    {{-- ===================== INSTAGRAM UPDATES ===================== --}}
+    <section class="section bg-white border-t border-navy-50">
+        <div class="container">
+            <div class="mx-auto max-w-2xl text-center mb-12" data-aos="fade-up">
+                <span class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em]">
+                    <svg class="h-4 w-4 text-sky" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                    <span class="text-sky">{{ $isId ? 'Instagram' : 'Instagram' }}</span>
+                    <span class="text-navy-300">— @deltatigaenam</span>
+                </span>
+                <h2 class="mt-4 leading-[1.05] [font-size:clamp(2.1rem,5vw,3.6rem)]">
+                    <span class="block font-sans font-black tracking-tight text-navy">{{ $isId ? 'Update Terbaru' : 'Latest Updates' }}</span>
+                </h2>
+                <p class="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-navy-400 text-sm">
+                    {{ $isId
+                        ? 'Ikuti kegiatan terbaru dan informasi menarik dari kami di Instagram.'
+                        : 'Follow our latest activities and interesting information on Instagram.' }}
+                </p>
+            </div>
+
+            <div class="mx-auto grid gap-8 md:grid-cols-2 max-w-4xl">
+                {{-- Left Post --}}
+                @php
+                    $igLink1 = 'https://www.instagram.com/deltatigaenam/?utm_source=ig_embed&ig_rid=AoWIewf3tcwwvM1ipJJhX_8';
+                @endphp
+                <div class="card overflow-hidden border-navy-100 shadow-card transition-all duration-300 hover:shadow-lift hover:-translate-y-1" data-aos="fade-right">
+                    {{-- Card Header --}}
+                    <div class="flex items-center justify-between p-3.5 border-b border-navy-50 bg-white">
+                        <div class="flex items-center gap-2.5">
+                            <span class="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-navy to-navy-800 text-white font-display text-sm font-bold">D</span>
+                            <div class="leading-tight">
+                                <p class="text-xs font-semibold text-navy">deltatigaenam</p>
+                                <p class="text-[9px] text-navy-300">Original audio</p>
+                            </div>
+                        </div>
+                        <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="rounded bg-sky hover:bg-sky-600 px-3 py-1 text-[10px] font-semibold text-white transition">View profile</a>
+                    </div>
+                    
+                    {{-- Image & Text Overlay --}}
+                    <div class="relative aspect-square overflow-hidden bg-navy-950 group">
+                        <img src="/images/certified-risk-management.png" alt="Certified Risk Management Batch IV" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent p-5 pt-12 flex flex-col justify-end text-white">
+                            <span class="inline-block self-start rounded bg-sky px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white">BATCH IV</span>
+                            <h3 class="font-display text-lg font-bold mt-2 leading-tight">Certified Risk Management</h3>
+                            <p class="text-[11px] text-navy-200 mt-0.5">PT Delta Tiga Enam</p>
+                            <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-mono text-navy-300">
+                                <span>19 - 22 Agustus 2025</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Card Footer --}}
+                    <div class="p-3.5 border-t border-navy-50 flex items-center justify-between bg-white text-navy-400">
+                        <div class="flex items-center gap-3.5">
+                            <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="hover:text-rose-500 transition">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+                            </a>
+                            <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="hover:text-sky transition">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-1.923 2.202 4.968 4.968 0 0 0 2.803-.832c.43-.284.974-.354 1.5-.178 1.12.375 2.316.577 3.561.577z"/></svg>
+                            </a>
+                        </div>
+                        <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="text-xs font-semibold text-sky hover:underline inline-flex items-center gap-1">
+                            <span>{{ $isId ? 'Lihat di Instagram' : 'View on Instagram' }}</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Right Post --}}
+                @php
+                    $igLink2 = 'https://www.instagram.com/deltatigaenam/?utm_source=ig_embed&ig_rid=AzGOKnldj_0aFItwS2zdG-q';
+                @endphp
+                <div class="card overflow-hidden border-navy-100 shadow-card transition-all duration-300 hover:shadow-lift hover:-translate-y-1" data-aos="fade-left">
+                    {{-- Card Header --}}
+                    <div class="flex items-center justify-between p-3.5 border-b border-navy-50 bg-white">
+                        <div class="flex items-center gap-2.5">
+                            <span class="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-navy to-navy-800 text-white font-display text-sm font-bold">D</span>
+                            <div class="leading-tight">
+                                <p class="text-xs font-semibold text-navy">deltatigaenam</p>
+                                <p class="text-[9px] text-navy-300">Original audio</p>
+                            </div>
+                        </div>
+                        <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="rounded bg-sky hover:bg-sky-600 px-3 py-1 text-[10px] font-semibold text-white transition">View profile</a>
+                    </div>
+                    
+                    {{-- Image & Text Overlay --}}
+                    <div class="relative aspect-square overflow-hidden bg-navy-950 group">
+                        <img src="/images/training-seminar.png" alt="Delta Tiga Enam Training Seminar" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent p-5 pt-12 flex flex-col justify-end text-white">
+                            <span class="inline-block self-start rounded bg-sky px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white">SEMINAR</span>
+                            <h3 class="font-display text-lg font-bold mt-2 leading-tight">Pengembangan Kompetensi SDM</h3>
+                            <p class="text-[11px] text-navy-200 mt-0.5">PT Delta Tiga Enam</p>
+                            <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-mono text-navy-300">
+                                <span>05 - 06 Agustus 2025</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Card Footer --}}
+                    <div class="p-3.5 border-t border-navy-50 flex items-center justify-between bg-white text-navy-400">
+                        <div class="flex items-center gap-3.5">
+                            <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="hover:text-rose-500 transition">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+                            </a>
+                            <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="hover:text-sky transition">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-1.923 2.202 4.968 4.968 0 0 0 2.803-.832c.43-.284.974-.354 1.5-.178 1.12.375 2.316.577 3.561.577z"/></svg>
+                            </a>
+                        </div>
+                        <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="text-xs font-semibold text-sky hover:underline inline-flex items-center gap-1">
+                            <span>{{ $isId ? 'Lihat di Instagram' : 'View on Instagram' }}</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ===================== FAQ SECTION ===================== --}}
+    <section class="section bg-mist border-t border-navy-50">
+        <div class="container grid gap-12 lg:grid-cols-12 lg:gap-16">
+            
+            {{-- Left Side: Heading & WhatsApp CTA --}}
+            <div class="lg:col-span-5 flex flex-col justify-between space-y-8" data-aos="fade-right">
+                <div class="space-y-4">
+                    <p class="eyebrow"><span class="rule-gold mr-3"></span>FAQ</p>
+                    <h2 class="text-display-lg font-semibold text-navy text-balance">
+                        {{ $isId ? 'Pertanyaan yang Sering Diajukan' : 'Frequently Asked Questions' }}
+                    </h2>
+                    <p class="text-sm leading-relaxed text-navy-450">
+                        {{ $isId
+                            ? 'Temukan jawaban cepat untuk pertanyaan umum mengenai sertifikasi, pelatihan, rekrutmen, dan kemitraan di PT Delta Tiga Enam.'
+                            : 'Find quick answers to common questions about certification, training, recruitment, and partnerships at PT Delta Tiga Enam.' }}
+                    </p>
+                </div>
+
+                {{-- WhatsApp CTA Card --}}
+                <div class="card p-6 md:p-8 border-navy-100 bg-white shadow-card space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="grid h-10 w-10 place-items-center rounded-xl bg-emerald-500/10 text-emerald-600">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.45L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.97-1.861-1.868-4.339-2.897-6.97-2.899-5.437 0-9.862 4.37-9.866 9.801-.001 1.737.457 3.432 1.328 4.935l-.995 3.631 3.723-.979zm7.53-7.535c-.175-.29-.64-.464-.875-.58-.233-.115-1.393-.683-1.605-.765-.213-.083-.368-.124-.523.11-.155.233-.6 1.015-.736 1.173-.136.158-.271.176-.505.06-.233-.116-.988-.364-1.882-1.163-.695-.62-1.164-1.386-1.3-1.62-.137-.233-.015-.359.102-.475.106-.104.233-.272.35-.407.115-.136.154-.233.232-.387.078-.155.039-.29-.02-.406-.058-.115-.523-1.26-.716-1.725-.19-.453-.383-.39-.523-.397-.135-.007-.29-.008-.445-.008-.156 0-.41.058-.625.29-.215.233-.82.802-.82 1.953s.836 2.26 1.07 2.57c.233.29 1.644 2.51 3.982 3.52.556.24 1 .383 1.343.492.56.179 1.07.154 1.472.094.448-.067 1.393-.57 1.587-1.12.195-.55.195-1.022.136-1.122-.058-.1-.233-.175-.407-.29z"/></svg>
+                        </span>
+                        <h4 class="font-display font-semibold text-navy text-base">{{ $isId ? 'Punya pertanyaan lain?' : 'Have more questions?' }}</h4>
+                    </div>
+                    <p class="text-xs text-navy-400 leading-relaxed">
+                        {{ $isId 
+                            ? 'Jika Anda tidak menemukan jawaban yang dicari, hubungi admin kami melalui WhatsApp untuk konsultasi cepat.'
+                            : 'If you cannot find the answer you are looking for, contact our admin via WhatsApp for a quick consultation.' }}
+                    </p>
+                    <div class="pt-2">
+                        <a href="https://wa.me/62818834766?text=Halo%20Delta%20Tiga%20Enam,%20saya%20ingin%20bertanya%20mengenai..." target="_blank" rel="noopener" class="w-full btn bg-emerald-500 hover:bg-emerald-600 text-white shadow-lift inline-flex items-center justify-center gap-2">
+                            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.45L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.97-1.861-1.868-4.339-2.897-6.97-2.899-5.437 0-9.862 4.37-9.866 9.801-.001 1.737.457 3.432 1.328 4.935l-.995 3.631 3.723-.979zm7.53-7.535c-.175-.29-.64-.464-.875-.58-.233-.115-1.393-.683-1.605-.765-.213-.083-.368-.124-.523.11-.155.233-.6 1.015-.736 1.173-.136.158-.271.176-.505.06-.233-.116-.988-.364-1.882-1.163-.695-.62-1.164-1.386-1.3-1.62-.137-.233-.015-.359.102-.475.106-.104.233-.272.35-.407.115-.136.154-.233.232-.387.078-.155.039-.29-.02-.406-.058-.115-.523-1.26-.716-1.725-.19-.453-.383-.39-.523-.397-.135-.007-.29-.008-.445-.008-.156 0-.41.058-.625.29-.215.233-.82.802-.82 1.953s.836 2.26 1.07 2.57c.233.29 1.644 2.51 3.982 3.52.556.24 1 .383 1.343.492.56.179 1.07.154 1.472.094.448-.067 1.393-.57 1.587-1.12.195-.55.195-1.022.136-1.122-.058-.1-.233-.175-.407-.29z"/></svg>
+                            <span>Hubungi WA Admin</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Right Side: Accordion driven by AlpineJS --}}
+            <div class="lg:col-span-7" data-aos="fade-left" x-data="{ activeFaq: null }">
+                <div class="space-y-4">
+                    @php
+                        $faqs = $isId ? [
+                            [
+                                'q' => 'Apa saja layanan utama yang ditawarkan oleh PT Delta Tiga Enam?',
+                                'a' => 'Kami menawarkan solusi human capital terintegrasi yang mencakup Pelatihan SDM, Sertifikasi Kompetensi Profesi (BNSP), Asesmen & Seleksi Karyawan, serta Headhunter & Penempatan Tenaga Kerja.'
+                            ],
+                            [
+                                'q' => 'Apakah sertifikasi kompetensi dari Delta Tiga Enam resmi?',
+                                'a' => 'Ya, seluruh program sertifikasi kompetensi kami diselenggarakan secara resmi bekerja sama dengan LSP berlisensi BNSP (Badan Nasional Sertifikasi Profesi) sehingga diakui di tingkat nasional oleh berbagai sektor industri.'
+                            ],
+                            [
+                                'q' => 'Bagaimana cara mendaftar program pelatihan atau sertifikasi?',
+                                'a' => 'Anda dapat mendaftar langsung dengan memilih layanan di website kami, menghubungi admin kami melalui WhatsApp, atau mengirimkan detail kebutuhan Anda melalui formulir kontak.'
+                            ],
+                            [
+                                'q' => 'Apakah program pelatihan bisa diadakan khusus untuk internal perusahaan (In-House)?',
+                                'a' => 'Tentu saja. Kami menyediakan layanan In-House Training dengan materi, jadwal, dan metode penyampaian yang dirancang khusus menyesuaikan kebutuhan peningkatan kompetensi staf di perusahaan Anda.'
+                            ],
+                        ] : [
+                            [
+                                'q' => 'What are the main services offered by PT Delta Tiga Enam?',
+                                'a' => 'We offer integrated human capital solutions covering HR Training, Professional Competence Certification (BNSP), Employee Assessment & Selection, and Headhunting & Talent Placement.'
+                            ],
+                            [
+                                'q' => 'Are the competence certifications official?',
+                                'a' => 'Yes, all our competency certification programs are officially conducted in partnership with BNSP-licensed LSPs, ensuring national recognition across industries.'
+                            ],
+                            [
+                                'q' => 'How can I register for a training or certification program?',
+                                'a' => 'You can register directly by selecting the service on our website, contacting our admin via WhatsApp, or sending your details through the contact form.'
+                            ],
+                            [
+                                'q' => 'Can training programs be customized for internal company needs (In-House)?',
+                                'a' => 'Absolutely. We provide customized In-House Training with curriculum, schedule, and methods tailored to address specific competence needs in your organization.'
+                            ]
+                        ];
+                    @endphp
+
+                    @foreach ($faqs as $i => $faq)
+                        <div class="rounded-2xl border border-navy-100 bg-white overflow-hidden transition-all duration-300"
+                             x-bind:class="activeFaq === {{ $i }} ? 'shadow-lift border-sky/30' : 'hover:border-navy-250'"
+                        >
+                            <button
+                                type="button"
+                                x-on:click="activeFaq = activeFaq === {{ $i }} ? null : {{ $i }}"
+                                class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 font-display font-semibold text-navy text-[15px] focus:outline-none"
+                            >
+                                <span>{{ $faq['q'] }}</span>
+                                <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-navy/5 text-navy transition-transform duration-300"
+                                      x-bind:class="activeFaq === {{ $i }} ? 'rotate-180 bg-sky/10 text-sky' : ''"
+                                >
+                                    <svg class="h-3 w-3" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
+                            </button>
+                            <div
+                                x-show="activeFaq === {{ $i }}"
+                                x-transition:enter="transition ease-out duration-250"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-[500px]"
+                                x-transition:leave="transition ease-in duration-200"
+                                x-transition:leave-start="opacity-100 max-h-[500px]"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                class="px-6 pb-6 text-sm leading-relaxed text-navy-450 border-t border-navy-50/50 pt-4"
+                            >
+                                {{ $faq['a'] }}
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+        </div>
+    </section>
 
     {{-- ===================== CTA ===================== --}}
     <section class="relative overflow-hidden bg-navy-950 py-20 text-center text-white md:py-28">

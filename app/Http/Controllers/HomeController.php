@@ -32,6 +32,7 @@ class HomeController extends Controller
             'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),
             'clients' => Client::where('is_active', true)->orderBy('sort_order')->get(),
             'posts' => BlogPost::published()->with('category')->latest('published_at')->take(3)->get(),
+            'upcomingAgendas' => \App\Models\Agenda::published()->where('starts_at', '>=', now())->orderBy('starts_at')->take(3)->get(),
         ]);
     }
 }
