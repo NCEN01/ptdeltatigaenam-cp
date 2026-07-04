@@ -303,3 +303,139 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
         }
     });
 });
+
+// ═══════════════════════════════════════════
+//  CATEGORY COVERFLOW (drag · snap · 3D)
+// ═══════════════════════════════════════════
+document.querySelectorAll('[data-coverflow]').forEach((root) => {
+    const stage = root.querySelector('[data-cf-stage]');
+    const cards = Array.from(root.querySelectorAll('[data-cf-card]'));
+    const dotsWrap = root.querySelector('[data-cf-dots]');
+    const prevBtn = root.querySelector('[data-cf-prev]');
+    const nextBtn = root.querySelector('[data-cf-next]');
+    const n = cards.length;
+    if (!stage || n === 0) return;
+
+    let active = Math.floor(n / 2);
+    let pos = active;
+    let dragging = false;
+    let startX = 0;
+    let startPos = 0;
+    let moved = false;
+    let autoTimer = null;
+    let dir = 1;
+
+    const dots = [];
+    if (dotsWrap) {
+        cards.forEach((_, i) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'cf-dot';
+            b.setAttribute('aria-label', 'Kategori ' + (i + 1));
+            b.addEventListener('click', () => { stopAuto(); goTo(i); });
+            dotsWrap.appendChild(b);
+            dots.push(b);
+        });
+    }
+
+    const spacing = () => Math.max(150, (cards[0].offsetWidth || 300) * 0.64);
+
+    function render(instant) {
+        const sp = spacing();
+        cards.forEach((card, i) => {
+            const off = i - pos;
+            const abs = Math.abs(off);
+            const rot = Math.max(-40, Math.min(40, -off * 40));
+            const tz = -abs * 200;
+            const tx = off * sp;
+            const scale = off === 0 ? 1.06 : Math.max(0.78, 1 - abs * 0.09);
+            const opacity = abs > 2.7 ? 0 : Math.max(0.2, 1 - abs * 0.3);
+            card.style.transition = instant
+                ? 'none'
+                : 'transform .55s cubic-bezier(.22,.7,.25,1), opacity .55s ease';
+            card.style.transform =
+                'translate(-50%,-50%) translateX(' + tx + 'px) translateZ(' + tz + 'px) rotateY(' + rot + 'deg) scale(' + scale + ')';
+            card.style.opacity = opacity;
+            card.style.zIndex = String(200 - Math.round(abs * 10));
+            card.classList.toggle('is-active', Math.round(pos) === i);
+        });
+        const ai = Math.max(0, Math.min(n - 1, Math.round(pos)));
+        dots.forEach((d, i) => d.classList.toggle('is-on', i === ai));
+    }
+
+    function goTo(i, instant) {
+        active = Math.max(0, Math.min(n - 1, i));
+        pos = active;
+        render(instant);
+    }
+
+    function onDown(e) {
+        dragging = true;
+        moved = false;
+        startX = e.clientX;
+        startPos = pos;
+        stage.classList.add('is-grabbing');
+        stopAuto();
+        // NOTE: no setPointerCapture — it would hijack the card's click event and
+        // block navigation. Window-level pointermove/up already track the drag.
+    }
+    function onMove(e) {
+        if (!dragging) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 4) moved = true;
+        pos = Math.max(-0.5, Math.min(n - 0.5, startPos - dx / spacing()));
+        render(true);
+    }
+    function onUp() {
+        if (!dragging) return;
+        dragging = false;
+        stage.classList.remove('is-grabbing');
+        goTo(Math.round(pos));
+        startAuto();
+    }
+
+    stage.addEventListener('pointerdown', onDown);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
+
+    cards.forEach((card) => {
+        card.addEventListener('click', (e) => {
+            // A genuine click navigates to the category; a drag does not.
+            if (moved) e.preventDefault();
+        });
+    });
+
+    if (prevBtn) prevBtn.addEventListener('click', () => { stopAuto(); goTo(active - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { stopAuto(); goTo(active + 1); });
+
+    function tick() {
+        let next = active + dir;
+        if (next > n - 1) { dir = -1; next = active - 1; }
+        else if (next < 0) { dir = 1; next = active + 1; }
+        goTo(next);
+    }
+    function startAuto() { stopAuto(); if (n > 1 && !reduceMotion) autoTimer = setInterval(tick, 4000); }
+    function stopAuto() { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } }
+    root.addEventListener('pointerenter', stopAuto);
+    root.addEventListener('pointerleave', () => { if (!dragging) startAuto(); });
+
+    let rt;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => render(true), 120); });
+
+    goTo(active, true);
+    startAuto();
+});
+
+// ═══════════════════════════════════════════
+//  HORIZONTAL SCROLL CAROUSEL (prev / next)
+// ═══════════════════════════════════════════
+document.querySelectorAll('[data-hscroll]').forEach((root) => {
+    const track = root.querySelector('[data-hscroll-track]');
+    if (!track) return;
+    const amount = () => Math.round(track.clientWidth * 0.85);
+    const prev = root.querySelector('[data-hscroll-prev]');
+    const next = root.querySelector('[data-hscroll-next]');
+    if (prev) prev.addEventListener('click', () => track.scrollBy({ left: -amount(), behavior: 'smooth' }));
+    if (next) next.addEventListener('click', () => track.scrollBy({ left: amount(), behavior: 'smooth' }));
+});

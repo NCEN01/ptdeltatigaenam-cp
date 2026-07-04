@@ -80,5 +80,4 @@
         </section>
     @endforelse
 
-    <x-cta-band />
 </x-layout>

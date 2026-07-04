@@ -23,7 +23,7 @@ class CertificateController extends Controller
             })
             ->orderBy('sort_order')
             ->latest('id')
-            ->paginate(15)
+            ->paginate(10)
             ->withQueryString();
 
         return view('pages.sertifikat.index', compact('certificates', 'q'));

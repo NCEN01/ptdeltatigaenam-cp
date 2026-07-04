@@ -37,8 +37,8 @@
     @if ($ogImage)<meta property="og:image" content="{{ $ogImage }}">@endif
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <link rel="icon" href="{{ asset('images/logodelta36.png') }}" type="image/png">
+    <link rel="apple-touch-icon" href="{{ asset('images/logodelta36.png') }}">
     <link rel="manifest" href="{{ asset('build/manifest.webmanifest') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])

@@ -29,17 +29,15 @@
                 <span class="rule-gold mr-3"></span>{{ $eyebrow }}
             </p>
         @endif
-        <h1 class="mx-auto max-w-4xl text-display-xl font-semibold leading-[1.02] text-balance" data-aos="fade-up" data-aos-delay="60">{{ $title }}</h1>
+        <h1 class="mx-auto max-w-4xl text-display-xl leading-[1.06] text-balance" data-aos="fade-up" data-aos-delay="60">{{ $title }}</h1>
         @if ($subtitle)
             <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-navy-100 text-pretty" data-aos="fade-up" data-aos-delay="140">{{ $subtitle }}</p>
         @endif
         @if (trim($slot) !== '')
-            <div class="mt-2 flex flex-wrap items-center justify-center gap-3" data-aos="fade-up" data-aos-delay="200">{{ $slot }}</div>
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-3" data-aos="fade-up" data-aos-delay="200">{{ $slot }}</div>
         @endif
     </div>
 
-    {{-- Bottom decorative wave --}}
-    <div class="pointer-events-none absolute inset-x-0 -bottom-px">
-        <svg viewBox="0 0 1440 60" fill="none" class="w-full h-auto text-white"><path d="M0 60V30c120-20 320-40 480-20s280 30 480 15 320-25 480-5v40H0z" fill="currentColor"/></svg>
-    </div>
+    {{-- Clean fade into the page below (replaces the generic wave) --}}
+    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-white/[0.04]"></div>
 </section>

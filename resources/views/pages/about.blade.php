@@ -1,134 +1,151 @@
-<x-layout :title="__('site.nav.about')" :description="$about">
+@php
+    $isId = app()->getLocale() === 'id';
+    $aboutParas = array_filter(array_map('trim', preg_split('/\n\s*\n/', trim((string) $about)))) ?: [$about];
+
+    $offices = [
+        ['name' => 'Kantor Pusat (SCBD)', 'address' => 'Gedung Bursa Efek Indonesia Tower 1 Level 3, Unit 304, Jalan Jendral Sudirman Kav. 52-53, SCBD Senayan, Jakarta Selatan', 'phone' => '(021) 5890 5002'],
+        ['name' => $isId ? 'Kantor Pemasaran' : 'Marketing Office', 'address' => 'Cikarang Technopark, Jalan Inti I Blok C1 No. 7, Cibatu, Cikarang Selatan, Kabupaten Bekasi, Jawa Barat 17530', 'phone' => '(021) 8988 1110'],
+        ['name' => $isId ? 'Kantor Operasional' : 'Operational Office', 'address' => 'Taman Widya Asri Blok GG No. 18, Serang, Kota Serang, Banten 46111', 'phone' => '(0254) 401 900'],
+    ];
+
+    // Founder (structural content — editable here in the view).
+    $founderRole = $isId ? 'Direktur Utama' : 'Managing Director';
+    $founderName = 'Prasetyo Budiman';
+    $founderQuote = $isId
+        ? 'Membangun bangsa dimulai dari membangun manusianya. Di Delta Tiga Enam, kami berkomitmen menjadi jembatan bagi talenta Indonesia menuju standar dunia.'
+        : 'Building a nation begins with building its people. At Delta Tiga Enam, we are committed to bridging Indonesian talent toward world-class standards.';
+    $founderBio = $isId
+        ? 'Dengan pengalaman lebih dari 20 tahun di bidang Human Resources dan Manajemen Strategis, Prasetyo telah membantu berbagai perusahaan BUMN dan swasta dalam melakukan restrukturisasi organisasi.'
+        : 'With over 20 years of experience in Human Resources and Strategic Management, Prasetyo has helped state-owned and private companies restructure their organizations.';
+@endphp
+
+<x-layout :title="$isId ? 'Tentang Kami' : 'About Us'" :description="$tagline">
     <x-page-header
-        :eyebrow="__('site.nav.about')"
-        :title="app()->getLocale() === 'id' ? 'Membangun human capital yang berdampak' : 'Building human capital that matters'"
-        :subtitle="$tagline"
+        :eyebrow="'PT Delta Tiga Enam'"
+        :title="$isId ? 'Tentang Kami' : 'About Us'"
         image="photo-1522071820081-009f0129c71c" />
 
-    {{-- ===================== PROFILE ===================== --}}
-    <section class="section">
-        <div class="container grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
-            {{-- Narrative --}}
-            <div class="lg:col-span-7" data-aos="fade-up">
-                <p class="eyebrow mb-5"><span class="rule-gold mr-3"></span>{{ app()->getLocale() === 'id' ? 'Profil Perusahaan' : 'Company Profile' }}</p>
-                <h2 class="max-w-2xl text-display-lg font-semibold text-navy text-balance" data-text-reveal>
-                    {{ app()->getLocale() === 'id' ? 'Mitra pengembangan kompetensi & talenta' : 'A partner in competency & talent development' }}
-                </h2>
-                <div class="prose prose-lg mt-7 max-w-none text-navy-700 prose-headings:font-display prose-headings:text-navy">
-                    <p class="text-pretty leading-relaxed">{{ $about }}</p>
-                </div>
-
-                {{-- Value chips --}}
-                <div class="mt-9 flex flex-wrap gap-3">
-                    @foreach ($values as $value)
-                        <span class="inline-flex items-center gap-2 rounded-full border border-navy-100 bg-mist px-4 py-2 text-sm font-medium text-navy">
-                            <span class="h-1.5 w-1.5 rounded-full bg-gold"></span>{{ $value['title'] }}
-                        </span>
-                    @endforeach
-                </div>
+    {{-- ===================== COMPANY PROFILE ===================== --}}
+    <section class="section bg-white">
+        <div class="container grid gap-10 lg:grid-cols-12 lg:gap-16">
+            <div class="lg:col-span-4" data-aos="fade-up">
+                <h2 class="font-display text-3xl leading-tight text-navy md:text-4xl">{{ $isId ? 'Profil Perusahaan' : 'Company Profile' }}</h2>
+                <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
             </div>
-
-            {{-- Photo card — drop a real <img> here later --}}
-            <div class="lg:col-span-5" data-aos="fade-left" data-aos-delay="100">
-                <figure class="group relative aspect-[4/5] overflow-hidden rounded-3xl border border-navy-100 bg-navy-950 shadow-lift">
-                    {{--
-                        Ganti blok placeholder di bawah dengan foto perusahaan, contoh:
-                        <img src="{{ asset('images/about/kantor.jpg') }}" alt="PT Delta Tiga Enam"
-                             class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
-                    --}}
-                    <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-70"></div>
-                    <div class="pointer-events-none absolute inset-0 grain opacity-50"></div>
-                    <div class="absolute inset-0 grid place-items-center p-8 text-center text-white">
-                        <div>
-                            <span class="mx-auto grid h-16 w-16 place-items-center rounded-full border border-white/20 text-gold">
-                                <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none"><path d="M4 7h3l2-2h6l2 2h3v12H4V7z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.2" stroke="currentColor" stroke-width="1.3"/></svg>
-                            </span>
-                            <p class="mt-5 font-display text-lg font-semibold">{{ app()->getLocale() === 'id' ? 'Foto Perusahaan' : 'Company Photo' }}</p>
-                            <p class="mt-1 text-sm text-navy-100">{{ app()->getLocale() === 'id' ? 'Akan ditambahkan' : 'Coming soon' }}</p>
-                        </div>
-                    </div>
-                    <div class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-950 to-transparent p-6">
-                        <p class="font-mono text-[10px] uppercase tracking-label text-gold">PT Delta Tiga Enam</p>
-                    </div>
-                </figure>
-
-                {{-- Floating accent badge --}}
-                <div class="relative">
-                    <div class="absolute -top-10 left-6 hidden rounded-2xl border border-navy-100 bg-white px-5 py-4 shadow-card sm:block lg:left-auto lg:right-6">
-                        <p class="font-display text-3xl font-semibold text-navy">10+</p>
-                        <p class="text-xs text-navy-500">{{ app()->getLocale() === 'id' ? 'Tahun pengalaman' : 'Years of experience' }}</p>
-                    </div>
-                </div>
+            <div class="space-y-5 leading-relaxed text-navy-600 lg:col-span-8" data-aos="fade-up" data-aos-delay="80">
+                @foreach ($aboutParas as $para)
+                    <p class="text-pretty">{{ $para }}</p>
+                @endforeach
             </div>
         </div>
 
-        {{-- Stats strip --}}
+        {{-- Stats --}}
         <div class="container mt-16">
-            <dl class="grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-navy-100 bg-navy-100 sm:grid-cols-4" data-aos="fade-up">
+            <div class="grid grid-cols-2 gap-y-10 sm:grid-cols-4" data-aos="fade-up">
                 @foreach ($stats as $stat)
-                    <div class="bg-white p-7 md:p-8">
-                        <dt class="font-display text-4xl font-semibold tracking-tight text-navy md:text-5xl">{{ $stat['value'] }}</dt>
-                        <dd class="mt-2 text-sm text-navy-500">{{ $stat['label'] }}</dd>
+                    @php
+                        $num = (int) filter_var($stat['value'], FILTER_SANITIZE_NUMBER_INT);
+                        $suffix = str_replace((string) $num, '', (string) $stat['value']);
+                    @endphp
+                    <div class="px-2 text-center">
+                        <p class="font-display text-4xl md:text-5xl {{ $loop->first ? 'text-gold-deep' : 'text-navy' }}"
+                           data-counter="{{ $num }}" data-counter-suffix="{{ $suffix }}">0{{ $suffix }}</p>
+                        <p class="mt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-navy-400 md:text-[11px]">{{ $stat['label'] }}</p>
                     </div>
                 @endforeach
-            </dl>
+            </div>
         </div>
     </section>
 
     {{-- ===================== VISION & MISSION ===================== --}}
-    <section class="section bg-mist">
-        <div class="container">
-            <div class="max-w-2xl">
-                <p class="eyebrow mb-4" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ app()->getLocale() === 'id' ? 'Visi & Misi' : 'Vision & Mission' }}</p>
-                <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ app()->getLocale() === 'id' ? 'Arah dan komitmen kami' : 'Our direction and commitments' }}</h2>
+    <section class="relative overflow-hidden py-20 text-white md:py-28">
+        {{-- Background image + overlay --}}
+        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1920&q=80" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover">
+        {{-- Strong dark-blue overlay so the text stays clearly legible --}}
+        <div class="absolute inset-0 bg-navy-950/90"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-navy-950/70 via-transparent to-navy-950/80"></div>
+        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-20"></div>
+        <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
+
+        <div class="container relative">
+            {{-- Heading --}}
+            <div class="mx-auto mb-12 max-w-2xl text-center" data-aos="fade-up">
+                <p class="eyebrow inline-flex items-center justify-center"><span class="rule-gold mr-3"></span>{{ $isId ? 'Arah & Komitmen' : 'Direction & Commitment' }}</p>
+                <h2 class="mt-4 font-display text-3xl md:text-4xl">{{ $isId ? 'Visi & Misi' : 'Vision & Mission' }}</h2>
             </div>
 
-            {{-- Vision — premium dark band --}}
-            <div class="relative mt-12 overflow-hidden rounded-3xl bg-navy-950 p-8 text-white md:p-12" data-aos="fade-up">
-                <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-70"></div>
-                <div class="pointer-events-none absolute inset-0 grain opacity-50"></div>
-                <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                <div class="relative grid gap-8 lg:grid-cols-12 lg:items-center">
-                    <div class="lg:col-span-3">
-                        <span class="grid h-12 w-12 place-items-center rounded-2xl border border-gold/40 text-gold">
-                            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
-                        </span>
-                        <p class="eyebrow mt-5">{{ app()->getLocale() === 'id' ? 'Visi' : 'Vision' }}</p>
+            <div class="grid items-stretch gap-6 lg:grid-cols-2">
+                {{-- Vision — left/top aligned --}}
+                <div class="rounded-3xl border border-white/10 bg-navy-950/45 p-8 text-left backdrop-blur-md md:p-12" data-aos="fade-up">
+                    <p class="font-mono text-[11px] uppercase tracking-[0.24em] text-gold-soft">{{ $isId ? 'Visi' : 'Vision' }}</p>
+                    <span class="mt-3 block h-0.5 w-10 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
+                    <p class="mt-7 font-display text-xl leading-[1.45] text-white text-pretty md:text-2xl">&ldquo;{{ $vision }}&rdquo;</p>
+                </div>
+
+                {{-- Mission — numbered list, no icon --}}
+                <div class="rounded-3xl border border-white/10 bg-navy-950/45 p-8 backdrop-blur-md md:p-12" data-aos="fade-up" data-aos-delay="80">
+                    <p class="font-mono text-[11px] uppercase tracking-[0.24em] text-gold-soft">{{ $isId ? 'Misi' : 'Mission' }}</p>
+                    <span class="mt-3 block h-0.5 w-10 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
+                    @if ($missions->isNotEmpty())
+                        <ul class="mt-7 space-y-5">
+                            @foreach ($missions as $mission)
+                                <li class="flex items-start gap-5 border-b border-white/10 pb-5 last:border-0 last:pb-0">
+                                    <span class="font-display text-2xl leading-none text-gold-soft">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                                    <p class="pt-0.5 leading-relaxed text-white/90">{{ $mission->content }}</p>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ===================== FOUNDER ===================== --}}
+    <section class="relative overflow-hidden bg-navy-950 py-20 text-white md:py-28">
+        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-40"></div>
+        <div class="pointer-events-none absolute inset-0 grain opacity-40"></div>
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
+        <div class="container relative">
+            <div class="text-center" data-aos="fade-up">
+                <h2 class="font-display text-3xl md:text-4xl">{{ $isId ? 'Pendiri' : 'Founder' }}</h2>
+                <span class="mx-auto mt-4 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
+            </div>
+
+            <div class="mt-14 grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
+                {{-- Portrait --}}
+                <div class="relative mx-auto w-full max-w-md" data-aos="fade-up">
+                    <div class="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lift">
+                        <img src="{{ asset('images/pendiri.png') }}" alt="{{ $founderName }}" class="h-full w-full object-cover object-top">
+                        <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-navy-950/70 to-transparent"></div>
                     </div>
-                    <p class="font-display text-2xl font-semibold leading-snug text-balance md:text-3xl lg:col-span-9">{{ $vision }}</p>
+                    <div class="absolute -bottom-4 right-6 grid h-16 w-16 place-items-center rounded-xl bg-gold font-display text-4xl leading-none text-navy-950 shadow-lift">”</div>
+                </div>
+
+                {{-- Bio --}}
+                <div data-aos="fade-up" data-aos-delay="100">
+                    <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-gold-soft">{{ $founderRole }}</p>
+                    <h3 class="mt-2 font-display text-3xl md:text-4xl">{{ $founderName }}</h3>
+                    <p class="mt-6 text-pretty text-lg italic leading-relaxed text-navy-100">"{{ $founderQuote }}"</p>
+                    <p class="mt-6 max-w-xl text-pretty text-sm leading-relaxed text-navy-300">{{ $founderBio }}</p>
                 </div>
             </div>
-
-            {{-- Missions --}}
-            @if ($missions->isNotEmpty())
-                <p class="eyebrow mt-16 mb-8" data-aos="fade-up">{{ app()->getLocale() === 'id' ? 'Misi Kami' : 'Our Mission' }}</p>
-                <div class="grid gap-px overflow-hidden rounded-3xl border border-navy-100 bg-navy-100 md:grid-cols-2 lg:grid-cols-3">
-                    @foreach ($missions as $mission)
-                        <div class="group relative flex flex-col gap-6 bg-white p-8 transition-colors duration-300 hover:bg-mist" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 90 }}">
-                            <span class="grid h-12 w-12 place-items-center rounded-2xl bg-navy font-display text-lg text-white transition-colors duration-300 group-hover:bg-gold group-hover:text-ink">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                            <p class="text-pretty leading-relaxed text-navy-700">{{ $mission->content }}</p>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
         </div>
     </section>
 
     {{-- ===================== VALUES ===================== --}}
-    <section class="section">
+    <section class="section-sm border-t border-navy-50 bg-white">
         <div class="container">
-            <div class="max-w-2xl">
-                <p class="eyebrow mb-4" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ app()->getLocale() === 'id' ? 'Nilai Kami' : 'Our Values' }}</p>
-                <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ app()->getLocale() === 'id' ? 'Prinsip yang menjadi fondasi kami' : 'The principles at our foundation' }}</h2>
+            <div class="text-center" data-aos="fade-up">
+                <h2 class="font-display text-3xl text-navy md:text-4xl">{{ $isId ? 'Nilai Kami' : 'Our Values' }}</h2>
+                <span class="mx-auto mt-4 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
             </div>
-
-            <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-stagger>
+            <div class="mt-14 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
                 @foreach ($values as $value)
-                    <div class="card card-hover group p-8" data-aos="fade-up" data-aos-delay="{{ $loop->index * 80 }}">
-                        <span class="font-mono text-xs text-navy-300 transition-colors duration-300 group-hover:text-gold">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                        <h3 class="mt-5 font-display text-xl font-semibold text-navy transition-colors duration-300 group-hover:text-sky-600">{{ $value['title'] }}</h3>
-                        <p class="mt-3 text-pretty text-sm leading-relaxed text-navy-500">{{ $value['desc'] }}</p>
-                        <span class="mt-5 inline-block h-0.5 w-0 rounded-full bg-gradient-to-r from-sky-500 to-gold transition-all duration-500 group-hover:w-12"></span>
+                    <div class="group border-l-2 border-gold pl-5 transition-colors duration-300 hover:border-sky-500" data-aos="fade-up" data-aos-delay="{{ $loop->index * 70 }}">
+                        <h3 class="font-display text-lg text-navy">{{ $value['title'] }}</h3>
+                        <p class="mt-2.5 text-pretty text-sm leading-relaxed text-navy-500">{{ $value['desc'] }}</p>
                     </div>
                 @endforeach
             </div>
@@ -136,30 +153,22 @@
     </section>
 
     {{-- ===================== OFFICES ===================== --}}
-    @php
-        $isIdAbout = app()->getLocale() === 'id';
-        $aboutOffices = [
-            ['name' => 'Kantor Pusat', 'address' => 'Gedung Bursa Efek Indonesia Tower 1 Level 3, Unit 304, Jalan Jendral Sudirman Kav. 52-53, SCBD Senayan, Kebayoran Baru, Jakarta Selatan, DKI Jakarta', 'phone' => '021-5890 5002, 0818 834 766'],
-            ['name' => 'Kantor Pemasaran', 'address' => 'Cikarang Technopark, Jalan Inti I Blok C1 No. 7, Cibatu, Cikarang Selatan, Kabupaten Bekasi, Jawa Barat 17530', 'phone' => '021-8988 1110'],
-            ['name' => 'Kantor Operasional', 'address' => 'Taman Widya Asri Blok GG No. 18, Serang, Kota Serang, Banten 46111', 'phone' => '0817 018 6104'],
-        ];
-    @endphp
-    <section class="section bg-mist">
+    <section class="section-sm border-t border-navy-50 bg-neutral-50">
         <div class="container">
-            <div class="max-w-2xl">
-                <p class="eyebrow mb-4" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $isIdAbout ? 'Kantor Kami' : 'Our Offices' }}</p>
-                <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $isIdAbout ? 'Temui kami di lokasi berikut' : 'Find us at these locations' }}</h2>
+            <div class="text-center" data-aos="fade-up">
+                <h2 class="font-display text-3xl text-navy md:text-4xl">{{ $isId ? 'Kantor Kami' : 'Our Offices' }}</h2>
+                <span class="mx-auto mt-4 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
             </div>
             <div class="mt-12 grid gap-6 md:grid-cols-3">
-                @foreach ($aboutOffices as $office)
-                    <div class="card card-hover group flex flex-col p-8" data-aos="fade-up" data-aos-delay="{{ $loop->index * 80 }}">
-                        <span class="grid h-11 w-11 place-items-center rounded-2xl bg-navy text-gold transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">
-                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.2 7-11a7 7 0 10-14 0c0 5.8 7 11 7 11z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.4"/></svg>
+                @foreach ($offices as $office)
+                    <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift" data-aos="fade-up" data-aos-delay="{{ $loop->index * 80 }}">
+                        <span class="grid h-11 w-11 place-items-center rounded-xl bg-navy text-gold transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M15 9h.01M9 13h.01M15 13h.01M10 21v-4h4v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </span>
-                        <h3 class="mt-5 font-display text-xl font-semibold text-navy">{{ $office['name'] }}</h3>
+                        <h3 class="mt-5 font-display text-xl text-navy">{{ $office['name'] }}</h3>
                         <p class="mt-3 flex-1 text-sm leading-relaxed text-navy-500">{{ $office['address'] }}</p>
-                        <p class="mt-5 flex items-center gap-2 border-t border-navy-100 pt-4 font-mono text-xs text-navy-500">
-                            <svg class="h-3.5 w-3.5 shrink-0 text-gold" viewBox="0 0 24 24" fill="none"><path d="M5 4h4l2 5-3 2a12 12 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+                        <p class="mt-5 flex items-center gap-2 border-t border-navy-100 pt-4 text-sm font-medium text-navy">
+                            <svg class="h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 24 24" fill="none"><path d="M5 4h4l2 5-3 2a12 12 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
                             {{ $office['phone'] }}
                         </p>
                     </div>
@@ -168,5 +177,4 @@
         </div>
     </section>
 
-    <x-cta-band />
 </x-layout>

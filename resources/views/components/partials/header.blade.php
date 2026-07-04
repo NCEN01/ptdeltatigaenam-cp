@@ -1,6 +1,9 @@
 @php
     use App\Support\Locale;
     $current = Locale::current();
+    // Data-driven: the Services dropdown follows the admin's active categories automatically.
+    $serviceCategories = \App\Models\ServiceCategory::where('is_active', true)
+        ->orderBy('sort_order')->orderBy('name')->get(['name', 'slug']);
     $nav = [
         ['route' => 'about', 'label' => __('site.nav.about')],
         ['route' => 'services.index', 'label' => __('site.nav.services')],
@@ -27,25 +30,51 @@
                 : 'border-transparent bg-transparent'"
         >
             {{-- Brand --}}
-            <a href="{{ route('home') }}" class="group flex items-center gap-2.5" data-magnetic>
-                <span class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-sky-500 to-navy-700 text-white shadow-card transition-all duration-300 group-hover:shadow-[0_8px_24px_-8px_rgba(28,125,224,0.6)]">
-                    <span class="font-display text-lg font-semibold leading-none">D</span>
-                </span>
-                <span class="hidden flex-col leading-none sm:flex">
-                    <span class="font-display text-[15px] font-semibold tracking-tight text-navy transition-colors duration-300 group-hover:text-navy-700">Delta Tiga Enam</span>
-                    <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-navy-300">Human Capital</span>
-                </span>
+            <a href="{{ route('home') }}" class="group flex items-center gap-2.5">
+                <img src="{{ asset('images/logodelta36.png') }}" alt="PT. Delta Tiga Enam" width="36" height="36" class="h-7 w-7 shrink-0">
+                <span class="hidden font-display text-[17px] tracking-tight transition-colors duration-300 sm:block"
+                      :class="scrolled ? 'text-navy' : 'text-white'">PT. Delta Tiga Enam</span>
             </a>
 
             {{-- Desktop nav --}}
             <nav class="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
                 @foreach ($nav as $item)
                     @php $active = request()->routeIs($item['route']); @endphp
-                    <a href="{{ route($item['route']) }}"
-                       class="group relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 {{ $active ? 'text-navy' : 'text-navy-500 hover:text-navy' }}">
-                        {{ $item['label'] }}
-                        <span class="pointer-events-none absolute -bottom-0.5 left-1/2 h-0.5 w-5 -translate-x-1/2 origin-center rounded-full bg-sky-500 transition-transform duration-300 ease-out-soft {{ $active ? 'scale-100' : 'scale-0 group-hover:scale-100' }}"></span>
-                    </a>
+                    @if ($item['route'] === 'services.index' && $serviceCategories->isNotEmpty())
+                        {{-- Services with category dropdown (hover) --}}
+                        <div class="group relative">
+                            <a href="{{ route($item['route']) }}"
+                               class="relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300"
+                               :class="scrolled ? '{{ $active ? 'text-navy' : 'text-navy-500 group-hover:text-navy' }}' : '{{ $active ? 'text-white' : 'text-white/75 group-hover:text-white' }}'">
+                                {{ $item['label'] }}
+                                <svg class="h-3 w-3 transition-transform duration-300 group-hover:rotate-180" viewBox="0 0 12 12" fill="none"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <span class="pointer-events-none absolute -bottom-0.5 left-1/2 h-0.5 w-5 -translate-x-1/2 origin-center rounded-full bg-sky-500 transition-transform duration-300 ease-out-soft {{ $active ? 'scale-100' : 'scale-0 group-hover:scale-100' }}"></span>
+                            </a>
+                            <div class="invisible absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 ease-out-soft group-hover:visible group-hover:opacity-100">
+                                <div class="overflow-hidden rounded-2xl border border-navy-100 bg-white p-2 shadow-lift">
+                                    <p class="px-3.5 pb-1.5 pt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-navy-300">{{ $current === 'id' ? 'Kategori Layanan' : 'Service Categories' }}</p>
+                                    @foreach ($serviceCategories as $cat)
+                                        <a href="{{ route('services.index') }}#{{ $cat->slug }}" class="group/it flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-sm text-navy-600 transition-colors hover:bg-mist hover:text-navy">
+                                            <span>{{ $cat->name }}</span>
+                                            <svg class="h-3.5 w-3.5 shrink-0 text-navy-200 transition-all duration-200 group-hover/it:translate-x-0.5 group-hover/it:text-sky-600" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </a>
+                                    @endforeach
+                                    <div class="my-1.5 h-px bg-navy-50"></div>
+                                    <a href="{{ route('services.index') }}" class="flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-medium text-sky-600 transition-colors hover:bg-mist">
+                                        {{ $current === 'id' ? 'Lihat Semua Layanan' : 'View All Services' }}
+                                        <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <a href="{{ route($item['route']) }}"
+                           class="group relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300"
+                           :class="scrolled ? '{{ $active ? 'text-navy' : 'text-navy-500 hover:text-navy' }}' : '{{ $active ? 'text-white' : 'text-white/75 hover:text-white' }}'">
+                            {{ $item['label'] }}
+                            <span class="pointer-events-none absolute -bottom-0.5 left-1/2 h-0.5 w-5 -translate-x-1/2 origin-center rounded-full bg-sky-500 transition-transform duration-300 ease-out-soft {{ $active ? 'scale-100' : 'scale-0 group-hover:scale-100' }}"></span>
+                        </a>
+                    @endif
                 @endforeach
             </nav>
 
@@ -54,7 +83,8 @@
                 {{-- Language switcher --}}
                 <div x-data="{ langOpen: false }" class="relative hidden sm:block">
                     <button @click="langOpen = !langOpen" @click.outside="langOpen = false"
-                            class="flex items-center gap-1.5 rounded-full px-3 py-2 font-mono text-xs uppercase tracking-wider text-navy-500 transition-colors hover:text-navy"
+                            class="flex items-center gap-1.5 rounded-full px-3 py-2 font-mono text-xs uppercase tracking-wider transition-colors"
+                            :class="scrolled ? 'text-navy-500 hover:text-navy' : 'text-white/80 hover:text-white'"
                             aria-label="{{ __('site.common.language') }}">
                         {{ strtoupper($current) }}
                         <svg class="h-3 w-3" viewBox="0 0 12 12" fill="none"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -82,7 +112,7 @@
                 @endauth
 
                 {{-- Mobile toggle --}}
-                <button @click="open = true" class="grid h-10 w-10 place-items-center rounded-full text-navy lg:hidden" aria-label="{{ __('site.common.menu') }}">
+                <button @click="open = true" class="grid h-10 w-10 place-items-center rounded-full transition-colors lg:hidden" :class="scrolled ? 'text-navy' : 'text-white'" aria-label="{{ __('site.common.menu') }}">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
                 </button>
             </div>
@@ -101,12 +131,19 @@
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
                 </button>
             </div>
-            <nav class="flex flex-col gap-1" aria-label="Mobile">
+            <nav class="flex flex-col gap-1 overflow-y-auto" aria-label="Mobile">
                 @foreach ($nav as $item)
                     <a href="{{ route($item['route']) }}"
                        class="rounded-2xl px-4 py-3.5 font-display text-xl text-navy transition-colors hover:bg-mist {{ request()->routeIs($item['route']) ? 'bg-mist' : '' }}">
                         {{ $item['label'] }}
                     </a>
+                    @if ($item['route'] === 'services.index' && $serviceCategories->isNotEmpty())
+                        <div class="mb-1 ml-4 flex flex-col gap-0.5 border-l border-navy-100 pl-3">
+                            @foreach ($serviceCategories as $cat)
+                                <a href="{{ route('services.index') }}#{{ $cat->slug }}" @click="open = false" class="rounded-lg px-3 py-2 text-sm text-navy-500 transition-colors hover:bg-mist hover:text-navy">{{ $cat->name }}</a>
+                            @endforeach
+                        </div>
+                    @endif
                 @endforeach
             </nav>
             <div class="mt-auto space-y-4 pt-6">

@@ -21,14 +21,14 @@
         <div class="swiper hero-carousel" data-hero-carousel>
             <div class="swiper-wrapper">
                 @foreach ($heroSlides as $slide)
-                    <div class="swiper-slide relative min-h-[82svh] overflow-hidden bg-navy-950">
+                    <div class="swiper-slide relative min-h-[100svh] overflow-hidden bg-navy-950">
                         <img src="https://images.unsplash.com/{{ $slide['img'] }}?auto=format&fit=crop&w=1920&q=80"
                              alt="{{ $slide['title'] }}" {{ $loop->first ? 'loading=eager fetchpriority=high' : 'loading=lazy' }}
                              class="hero-slide-img absolute inset-0 h-full w-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-r from-navy-950/92 via-navy-950/70 to-navy-950/20"></div>
                         <div class="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-transparent to-navy-950/30"></div>
 
-                        <div class="container relative flex min-h-[82svh] items-center">
+                        <div class="container relative flex min-h-[100svh] items-center">
                             <div class="hero-content max-w-2xl py-28 text-white">
                                 <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-white backdrop-blur">
                                     <svg class="h-3.5 w-3.5 text-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg>
@@ -54,140 +54,103 @@
                 <svg class="h-5 w-5" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
 
-            {{-- pagination --}}
-            <div class="absolute inset-x-0 bottom-7 z-10 flex justify-center gap-2" data-hero-carousel-pagination></div>
-        </div>
+            {{-- pagination — lifted above the stats ledger --}}
+            <div class="absolute inset-x-0 bottom-24 z-20 flex justify-center gap-2" data-hero-carousel-pagination></div>
 
-        {{-- stats strip --}}
-        <div class="border-b border-navy-100 bg-white">
-            <div class="container">
-                <div class="mx-auto grid max-w-3xl grid-cols-3 gap-6 py-8">
-                    @foreach ($heroStats as $stat)
-                        @php
-                            $numVal = (int) filter_var($stat[0], FILTER_SANITIZE_NUMBER_INT);
-                            $suffix = str_replace((string) $numVal, '', $stat[0]);
-                        @endphp
-                        <div class="group cursor-default text-center transition-all duration-300 hover:-translate-y-1">
-                            <p class="font-sans text-3xl font-black tracking-tight text-navy transition-colors duration-300 group-hover:text-sky-600 md:text-4xl" data-counter="{{ $numVal }}" data-counter-suffix="{{ $suffix }}">0{{ $suffix }}</p>
-                            <p class="mt-1 font-mono text-[10px] uppercase tracking-wider text-navy-400">{{ $stat[1] }}</p>
+            {{-- stats ledger — merged onto the image (no top rule) --}}
+            <div class="absolute inset-x-0 bottom-0 z-20">
+                <div class="bg-gradient-to-t from-navy-950/90 via-navy-950/55 to-transparent backdrop-blur-[2px]">
+                    <div class="container">
+                        <div class="mx-auto grid max-w-2xl grid-cols-3 divide-x divide-white/10 py-4 md:py-5">
+                            @foreach ($heroStats as $stat)
+                                @php
+                                    $numVal = (int) filter_var($stat[0], FILTER_SANITIZE_NUMBER_INT);
+                                    $suffix = str_replace((string) $numVal, '', $stat[0]);
+                                @endphp
+                                <div class="group px-3 text-center md:px-6">
+                                    <p class="font-display text-xl text-white transition-colors duration-300 group-hover:text-gold-soft md:text-[1.7rem]" data-counter="{{ $numVal }}" data-counter-suffix="{{ $suffix }}">0{{ $suffix }}</p>
+                                    <p class="mt-1 font-mono text-[8px] uppercase tracking-[0.18em] text-navy-100 md:text-[9px]">{{ $stat[1] }}</p>
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    {{-- ===================== TRAINING CATEGORIES ===================== --}}
-    @php
-        $catColors = [
-            'from-sky-500 to-sky-700',
-            'from-rose-400 to-rose-600',
-            'from-emerald-400 to-emerald-600',
-            'from-violet-500 to-violet-700',
-            'from-amber-400 to-amber-600',
-            'from-cyan-400 to-cyan-600',
-            'from-fuchsia-500 to-fuchsia-700',
-        ];
-    @endphp
-    <section class="relative overflow-hidden bg-gradient-to-br from-navy-950 via-navy-900 to-sky-700 py-20 text-white md:py-28">
-        {{-- starfield + glow --}}
-        <div class="pointer-events-none absolute inset-0 opacity-[0.14]" style="background-image: radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px); background-size: 42px 42px;"></div>
-        <div class="pointer-events-none absolute left-1/2 top-0 h-80 w-[60rem] -translate-x-1/2 rounded-full bg-sky-700/20 blur-[120px]"></div>
-
-        {{-- floating chat bubbles --}}
-        <div class="pointer-events-none absolute left-[7%] top-28 hidden animate-float md:block">
-            <span class="relative inline-flex items-center gap-1.5 rounded-full bg-teal-300 px-3.5 py-1.5 text-xs font-semibold text-navy-950 shadow-lg">
-                <span class="h-2 w-2 rounded-full bg-navy-950/60"></span>{{ $isId ? 'Mentor' : 'Mentor' }}
-                <span class="absolute -bottom-1 left-5 h-3 w-3 rotate-45 bg-teal-300"></span>
-            </span>
-        </div>
-        <div class="pointer-events-none absolute right-[7%] top-44 hidden animate-float-slow md:block">
-            <span class="relative inline-flex items-center gap-1.5 rounded-full bg-rose-400 px-3.5 py-1.5 text-xs font-semibold text-navy-950 shadow-lg">
-                {{ $isId ? 'Peserta' : 'Learner' }}<span class="h-2 w-2 rounded-full bg-navy-950/60"></span>
-                <span class="absolute -top-1 right-5 h-3 w-3 rotate-45 bg-rose-400"></span>
-            </span>
-        </div>
+    {{-- ===================== SERVICE CATEGORIES · 3D COVERFLOW ===================== --}}
+    <section class="relative overflow-hidden py-20 text-white md:py-28"
+             style="background:
+                radial-gradient(65% 55% at 50% 105%, rgba(90,120,220,0.16), transparent 70%),
+                linear-gradient(160deg, #10305a 0%, #0c2245 35%, #081831 70%, #050f22 100%);">
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
+        <div class="pointer-events-none absolute inset-0 grain opacity-30"></div>
 
         <div class="container relative">
+            {{-- Header --}}
             <div class="mx-auto max-w-2xl text-center">
-                <span class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em]" data-aos="fade-up">
-                    <svg class="h-3.5 w-3.5 text-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg>
-                    <span class="text-gold">{{ $isId ? 'Kategori' : 'Categories' }}</span>
-                    <span class="text-navy-300">— {{ $isId ? 'Pilih Pelatihan Anda' : 'Choose Your Training' }}</span>
-                </span>
-                <h2 class="mt-6 leading-[1.05] [font-size:clamp(2.1rem,5vw,3.6rem)]" data-aos="fade-up" data-aos-delay="60">
-                    <span class="block font-sans font-black tracking-tight text-white">{{ $isId ? 'Pilih Kategori' : 'Choose a Category' }}</span>
-                    <span class="block font-display font-normal italic text-navy-300">{{ $isId ? 'Pelatihan Anda' : 'For Your Growth' }}</span>
+                <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-gold-soft" data-aos="fade-up">
+                    {{ $isId ? 'Kategori — Layanan Pengembangan SDM' : 'Categories — Human Capital Services' }}
+                </p>
+                <h2 class="mt-5 text-display-lg leading-[1.08]" data-aos="fade-up" data-aos-delay="60">
+                    <span class="block text-white">{{ $isId ? 'Pilih Kategori' : 'Choose a Category' }}</span>
+                    <span class="block bg-gradient-to-r from-[#7ec2ff] to-[#e3b552] bg-clip-text text-transparent">{{ $isId ? 'Layanan Anda.' : 'For Your Growth.' }}</span>
                 </h2>
-                <p class="mx-auto mt-5 max-w-xl text-pretty leading-relaxed text-navy-200" data-aos="fade-up" data-aos-delay="120">
+                <p class="mx-auto mt-5 max-w-xl text-pretty leading-relaxed text-navy-100" data-aos="fade-up" data-aos-delay="120">
                     {{ $isId
-                        ? 'Temukan kategori layanan pengembangan SDM kami — dari pelatihan dan sertifikasi hingga headhunter dan penempatan tenaga kerja.'
-                        : 'Explore our human capital service categories — from training and certification to headhunting and workforce placement.' }}
+                        ? 'Geser untuk menjelajah kategori layanan pengembangan SDM kami — dari pelatihan dan sertifikasi hingga headhunter dan penempatan tenaga kerja.'
+                        : 'Drag to explore our human capital service categories — from training and certification to headhunting and workforce placement.' }}
                 </p>
             </div>
 
             @if ($categories->isNotEmpty())
-                <div class="relative mt-12" data-fan-wrap data-aos="fade-up">
-                    <div class="fan-layout" data-fan>
+                <div class="mt-14 select-none" data-coverflow data-aos="fade-up">
+                    <div class="cf-stage" data-cf-stage>
                         @foreach ($categories as $cat)
-                            @php $sub = $cat->short_description ?: ($cat->services_count.' '.($isId ? 'layanan' : 'services')); @endphp
-                            <a href="{{ route('services.index') }}#{{ $cat->slug }}" class="fan-card group block ring-1 ring-white/10 transition-[box-shadow,transform] duration-300 hover:ring-2 hover:ring-white/40">
-                                {{-- colorful surface --}}
-                                @if ($cat->image)
-                                    <img src="{{ Storage::url($cat->image) }}" alt="{{ $cat->name }}" loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out-soft group-hover:scale-110">
-                                    <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/35"></div>
+                            @php $img = $cat->image ? (str_starts_with($cat->image, 'http') ? $cat->image : Storage::url($cat->image)) : null; @endphp
+                            <a href="{{ route('services.index') }}#{{ $cat->slug }}" class="cf-card group" data-cf-card aria-label="{{ $cat->name }}">
+                                @if ($img)
+                                    <img src="{{ $img }}" alt="{{ $cat->name }}" loading="lazy" draggable="false" class="absolute inset-0 h-full w-full object-cover">
                                 @else
-                                    <div class="absolute inset-0 bg-gradient-to-br {{ $catColors[$loop->index % count($catColors)] }} transition-transform duration-700 group-hover:scale-110"></div>
-                                    <div class="absolute inset-0 grain opacity-25"></div>
-                                    <div class="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/30"></div>
+                                    <div class="absolute inset-0 bg-gradient-to-br from-sky-600 to-navy-900"></div>
                                 @endif
-
-                                {{-- title (top-left) + Mulai pill (top-right) --}}
-                                <div class="absolute inset-x-4 top-4 flex items-start justify-between gap-2">
-                                    <div class="min-w-0">
-                                        <h3 class="truncate font-sans text-2xl font-black leading-none text-white drop-shadow-md">{{ $cat->name }}</h3>
-                                        <p class="mt-1.5 truncate text-xs font-medium text-white/85">{{ $sub }}</p>
-                                    </div>
-                                    <span class="hidden shrink-0 items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-navy shadow-md transition group-hover:flex sm:flex">
-                                        {{ $isId ? 'Mulai' : 'Start' }}
-                                        <span class="grid h-4 w-4 place-items-center rounded-full bg-gold text-ink">
-                                            <svg class="h-2.5 w-2.5" viewBox="0 0 16 16" fill="none"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                        </span>
-                                    </span>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/5"></div>
+                                <div class="absolute inset-x-5 bottom-5">
+                                    <p class="font-mono text-sm font-medium text-[#7ec2ff]">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</p>
+                                    <h3 class="mt-1 font-display text-xl leading-[1.12] text-white text-balance md:text-2xl">{{ $cat->name }}</h3>
                                 </div>
+                                <span class="cf-card-ring pointer-events-none absolute inset-0"></span>
                             </a>
                         @endforeach
                     </div>
 
-                    <div class="mt-10 flex flex-col items-center gap-6">
-                        @if ($categories->count() > 7)
-                            <div class="flex items-center gap-4">
-                                <button data-fan-prev class="grid h-11 w-11 place-items-center rounded-full border border-white/20 text-white transition hover:border-white hover:bg-white/10" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
-                                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                </button>
-                                <div class="flex items-center gap-2" data-fan-dots>
-                                    @foreach ($categories as $cat)<span class="fan-dot"></span>@endforeach
-                                </div>
-                                <button data-fan-next class="grid h-11 w-11 place-items-center rounded-full border border-white/20 text-white transition hover:border-white hover:bg-white/10" aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
-                                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                </button>
-                            </div>
-                        @endif
-                        <a href="{{ route('services.index') }}" class="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-white transition hover:border-white hover:bg-white hover:text-navy">
+                    {{-- Controls --}}
+                    <div class="mt-12 flex flex-col items-center gap-7">
+                        <div class="flex items-center gap-4">
+                            <button type="button" data-cf-prev class="grid h-12 w-12 place-items-center rounded-full border border-white/25 text-white transition hover:border-white hover:bg-white/10 active:scale-95" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
+                                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                            <div class="flex items-center gap-2" data-cf-dots></div>
+                            <button type="button" data-cf-next class="grid h-12 w-12 place-items-center rounded-full border border-white/25 text-white transition hover:border-white hover:bg-white/10 active:scale-95" aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
+                                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                        </div>
+                        <a href="{{ route('services.index') }}" class="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#7ec2ff] to-[#e3b552] px-7 py-3.5 text-sm font-semibold text-navy-950 shadow-[0_12px_34px_-12px_rgba(126,194,255,0.6)] transition duration-200 hover:-translate-y-0.5">
                             {{ $isId ? 'Lihat Semua Kategori' : 'View All Categories' }}
-                            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <svg class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </a>
                     </div>
                 </div>
             @else
-                <p class="mt-14 text-center text-navy-300">{{ $isId ? 'Belum ada kategori layanan.' : 'No service categories yet.' }}</p>
+                <p class="mt-14 text-center text-navy-200">{{ $isId ? 'Belum ada kategori layanan.' : 'No service categories yet.' }}</p>
             @endif
         </div>
     </section>
 
     {{-- ===================== LATEST SERVICES ===================== --}}
     @if ($latestServices->isNotEmpty())
-        <section class="section-sm bg-mist">
+        <section class="section-sm bg-white border-t border-navy-50">
             <div class="container">
                 <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                     <div class="max-w-2xl">
@@ -242,6 +205,94 @@
         </section>
     @endif
 
+    {{-- ===================== WHY CHOOSE US (image band + numbered row) ===================== --}}
+    @php
+        $reasons = $isId ? [
+            'Dibimbing Praktisi Ahli', 'Program Dipersonalisasi', 'Sertifikasi Diakui Industri',
+            'Pendampingan Menyeluruh', 'Materi Aplikatif', 'Jaringan Profesional', 'Harga Kompetitif',
+        ] : [
+            'Expert Practitioners', 'Personalized Programs', 'Recognized Certification',
+            'End-to-End Support', 'Applied Material', 'Professional Network', 'Competitive Pricing',
+        ];
+    @endphp
+    <section class="relative overflow-hidden bg-navy-950 text-white">
+        <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1920&q=80" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover">
+        <div class="absolute inset-0 bg-navy-950/82"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/88"></div>
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
+
+        <div class="container relative flex min-h-[34rem] flex-col justify-between py-16 md:min-h-[40rem] md:py-20">
+            {{-- Heading --}}
+            <div class="text-center" data-aos="fade-up">
+                <p class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-gold-soft">
+                    <span class="h-1.5 w-1.5 rounded-full bg-gold"></span>{{ $isId ? 'Keunggulan' : 'Advantages' }}
+                </p>
+                <h2 class="mt-4 font-display text-3xl text-white text-balance md:text-5xl">{{ $isId ? 'Alasan Memilih Kami?' : 'Why Choose Us?' }}</h2>
+                <p class="mx-auto mt-5 max-w-xl text-navy-100 text-pretty">{{ $isId ? 'Keahlian praktisi, pendekatan yang dipersonalisasi, dan komitmen pada hasil nyata bagi organisasi Anda.' : 'Practitioner expertise, a personalized approach, and a commitment to real results for your organization.' }}</p>
+            </div>
+
+            {{-- Numbered row --}}
+            <div class="mt-16 grid grid-cols-2 gap-y-8 border-t border-white/10 pt-8 sm:grid-cols-4 lg:grid-cols-7 lg:gap-y-0 lg:divide-x lg:divide-white/10">
+                @foreach ($reasons as $i => $r)
+                    <div class="lg:px-5" data-aos="fade-up" data-aos-delay="{{ $i * 55 }}">
+                        <p class="font-mono text-lg text-gold-soft">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}.</p>
+                        <p class="mt-3 font-display text-[15px] leading-snug text-white">{{ $r }}</p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- ===================== BLOG (heading + horizontal carousel) ===================== --}}
+    @if ($posts->isNotEmpty())
+        <section class="section bg-white">
+            <div class="container">
+                <div class="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
+                    {{-- Left --}}
+                    <div class="lg:col-span-4" data-aos="fade-up">
+                        <p class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-sky-600">
+                            <span class="h-1.5 w-1.5 rounded-full bg-gold"></span>{{ $isId ? 'Blog Terbaru' : 'Latest Blog' }}
+                        </p>
+                        <h2 class="mt-4 font-display text-3xl leading-tight text-navy text-balance md:text-4xl">{{ $isId ? 'Wawasan & artikel terbaru kami' : 'Our latest insights & articles' }}</h2>
+                        <p class="mt-5 max-w-sm leading-relaxed text-navy-500 text-pretty">{{ $isId ? 'Perspektif, riset, dan praktik terbaik seputar human capital.' : 'Perspectives, research, and best practices on human capital.' }}</p>
+                        <a href="{{ route('blog.index') }}" class="btn-blue mt-8">{{ $isId ? 'Semua Artikel' : 'All Articles' }}
+                            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </a>
+                    </div>
+
+                    {{-- Right: carousel --}}
+                    <div class="lg:col-span-8" data-hscroll>
+                        <div class="mb-6 flex items-center gap-3">
+                            <button type="button" data-hscroll-prev class="grid h-10 w-10 place-items-center rounded-full bg-sky-600 text-white transition hover:bg-sky-700 active:scale-95" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
+                                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                            <button type="button" data-hscroll-next class="grid h-10 w-10 place-items-center rounded-full bg-sky-600 text-white transition hover:bg-sky-700 active:scale-95" aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
+                                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                        </div>
+                        <div data-hscroll-track class="flex snap-x gap-6 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                            @foreach ($posts as $post)
+                                @php $bimg = $post->featured_image ? (str_starts_with($post->featured_image, 'http') ? $post->featured_image : Storage::url($post->featured_image)) : null; @endphp
+                                <a href="{{ route('blog.show', $post->slug) }}" class="group w-[260px] shrink-0 snap-start sm:w-[300px]">
+                                    <p class="font-mono text-lg text-navy-300">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}.</p>
+                                    <h3 class="mt-2 line-clamp-2 min-h-[3.25rem] font-display text-lg leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">{{ $post->title }}</h3>
+                                    <p class="mt-1 font-mono text-[10px] uppercase tracking-wider text-gold-deep">{{ optional($post->category)->name }}<span class="text-navy-300"> · {{ optional($post->published_at)->translatedFormat('d M Y') }}</span></p>
+                                    <div class="relative mt-4 aspect-[4/3] overflow-hidden rounded-2xl border border-navy-100 bg-navy-900">
+                                        @if ($bimg)
+                                            <img src="{{ $bimg }}" alt="{{ $post->title }}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">
+                                        @else
+                                            <div class="absolute inset-0 aurora opacity-60"></div>
+                                        @endif
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
+
     {{-- ===================== PORTFOLIO ===================== --}}
     @if ($portfolios->isNotEmpty())
         <section class="section-sm relative overflow-hidden">
@@ -279,6 +330,97 @@
             </div>
         </section>
     @endif
+
+    {{-- ===================== INSTAGRAM UPDATES ===================== --}}
+    <section class="section bg-white border-t border-navy-50">
+        <div class="container">
+            <div class="mx-auto max-w-2xl text-center mb-12" data-aos="fade-up">
+                <span class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em]">
+                    <svg class="h-4 w-4 text-sky" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                    <span class="text-sky">{{ $isId ? 'Instagram' : 'Instagram' }}</span>
+                    <span class="text-navy-300">— @deltatigaenam</span>
+                </span>
+                <h2 class="mt-4 leading-[1.05] [font-size:clamp(2.1rem,5vw,3.6rem)]">
+                    <span class="block font-display tracking-tight text-navy">{{ $isId ? 'Update Terbaru' : 'Latest Updates' }}</span>
+                </h2>
+                <p class="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-navy-400 text-sm">
+                    {{ $isId
+                        ? 'Ikuti kegiatan terbaru dan informasi menarik dari kami di Instagram.'
+                        : 'Follow our latest activities and interesting information on Instagram.' }}
+                </p>
+            </div>
+
+            <div class="mx-auto grid gap-8 md:grid-cols-2 max-w-4xl">
+                {{-- Left Post --}}
+                @php
+                    $igLink1 = 'https://www.instagram.com/deltatigaenam/?utm_source=ig_embed&ig_rid=AoWIewf3tcwwvM1ipJJhX_8';
+                @endphp
+                <div class="card overflow-hidden border-navy-100 shadow-card transition-all duration-300 hover:shadow-lift hover:-translate-y-1" data-aos="fade-right">
+                    <div class="flex items-center justify-between p-3.5 border-b border-navy-50 bg-white">
+                        <div class="flex items-center gap-2.5">
+                            <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-6 w-6 shrink-0 rounded-lg object-contain">
+
+                            <div class="leading-tight">
+                                <p class="text-xs font-semibold text-navy">deltatigaenam</p>
+                                <p class="text-[9px] text-navy-300">Original audio</p>
+                            </div>
+                        </div>
+                        <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="rounded bg-sky hover:bg-sky-600 px-3 py-1 text-[10px] font-semibold text-white transition">View profile</a>
+                    </div>
+                    <div class="relative aspect-square overflow-hidden bg-navy-950 group">
+                        <img src="/images/certified-risk-management.png" alt="Certified Risk Management Batch IV" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent p-5 pt-12 flex flex-col justify-end text-white">
+                            <span class="inline-block self-start rounded bg-sky px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white">BATCH IV</span>
+                            <h3 class="font-display text-lg font-bold mt-2 leading-tight">Certified Risk Management</h3>
+                            <p class="text-[11px] text-navy-200 mt-0.5">PT Delta Tiga Enam</p>
+                            <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-mono text-navy-300"><span>19 - 22 Agustus 2025</span></div>
+                        </div>
+                    </div>
+                    <div class="p-3.5 border-t border-navy-50 flex items-center justify-between bg-white text-navy-400">
+                        <div class="flex items-center gap-3.5">
+                            <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="hover:text-rose-500 transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></a>
+                            <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="hover:text-sky transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-1.923 2.202 4.968 4.968 0 0 0 2.803-.832c.43-.284.974-.354 1.5-.178 1.12.375 2.316.577 3.561.577z"/></svg></a>
+                        </div>
+                        <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="text-xs font-semibold text-sky hover:underline inline-flex items-center gap-1"><span>{{ $isId ? 'Lihat di Instagram' : 'View on Instagram' }}</span><span>&rarr;</span></a>
+                    </div>
+                </div>
+
+                {{-- Right Post --}}
+                @php
+                    $igLink2 = 'https://www.instagram.com/deltatigaenam/?utm_source=ig_embed&ig_rid=AzGOKnldj_0aFItwS2zdG-q';
+                @endphp
+                <div class="card overflow-hidden border-navy-100 shadow-card transition-all duration-300 hover:shadow-lift hover:-translate-y-1" data-aos="fade-left">
+                    <div class="flex items-center justify-between p-3.5 border-b border-navy-50 bg-white">
+                        <div class="flex items-center gap-2.5">
+                            <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-6 w-6 shrink-0 rounded-lg object-contain">
+
+                            <div class="leading-tight">
+                                <p class="text-xs font-semibold text-navy">deltatigaenam</p>
+                                <p class="text-[9px] text-navy-300">Original audio</p>
+                            </div>
+                        </div>
+                        <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="rounded bg-sky hover:bg-sky-600 px-3 py-1 text-[10px] font-semibold text-white transition">View profile</a>
+                    </div>
+                    <div class="relative aspect-square overflow-hidden bg-navy-950 group">
+                        <img src="/images/training-seminar.png" alt="Delta Tiga Enam Training Seminar" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent p-5 pt-12 flex flex-col justify-end text-white">
+                            <span class="inline-block self-start rounded bg-sky px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white">SEMINAR</span>
+                            <h3 class="font-display text-lg font-bold mt-2 leading-tight">Pengembangan Kompetensi SDM</h3>
+                            <p class="text-[11px] text-navy-200 mt-0.5">PT Delta Tiga Enam</p>
+                            <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-mono text-navy-300"><span>05 - 06 Agustus 2025</span></div>
+                        </div>
+                    </div>
+                    <div class="p-3.5 border-t border-navy-50 flex items-center justify-between bg-white text-navy-400">
+                        <div class="flex items-center gap-3.5">
+                            <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="hover:text-rose-500 transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></a>
+                            <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="hover:text-sky transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-1.923 2.202 4.968 4.968 0 0 0 2.803-.832c.43-.284.974-.354 1.5-.178 1.12.375 2.316.577 3.561.577z"/></svg></a>
+                        </div>
+                        <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="text-xs font-semibold text-sky hover:underline inline-flex items-center gap-1"><span>{{ $isId ? 'Lihat di Instagram' : 'View on Instagram' }}</span><span>&rarr;</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     {{-- ===================== UPCOMING AGENDAS ===================== --}}
     <section class="section bg-white border-t border-navy-50">
@@ -366,245 +508,11 @@
         </div>
     </section>
 
-    {{-- ===================== WHY CHOOSE US ===================== --}}
-    <section class="section bg-mist">
-        <div class="container grid gap-12 lg:grid-cols-12 lg:gap-16">
-            {{-- Left: editorial heading --}}
-            <div class="lg:col-span-5" data-aos="fade-up">
-                <p class="eyebrow mb-5"><span class="rule-gold mr-3"></span>{{ $isId ? 'Mengapa Kami' : 'Why Us' }}</p>
-                <h2 class="text-display-lg font-semibold leading-[1.05] text-navy text-balance">
-                    {{ $isId ? 'Mengapa memilih layanan' : 'Why choose' }}
-                    <span class="text-navy-400">PT Delta Tiga Enam</span>{{ $isId ? '?' : '?' }}
-                </h2>
-                <p class="mt-7 max-w-md text-lg leading-relaxed text-navy-500 text-pretty">
-                    {{ $isId
-                        ? 'Kami memadukan keahlian praktisi, pendekatan yang dipersonalisasi, dan komitmen pada hasil nyata — memastikan setiap pelatihan benar-benar meningkatkan kompetensi dan nilai organisasi Anda.'
-                        : 'We combine practitioner expertise, a personalized approach, and a commitment to real results — ensuring every program genuinely elevates your competencies and organizational value.' }}
-                </p>
-                <a href="{{ route('services.index') }}" class="btn-primary mt-9">{{ $isId ? 'Lihat Layanan Kami' : 'Explore Our Services' }}</a>
-            </div>
-
-            {{-- Right: reasons grid --}}
-            <div class="lg:col-span-7">
-                <div class="grid gap-6 sm:grid-cols-2">
-                    {{-- 01 --}}
-                    <div class="card card-hover p-7" data-aos="fade-up" data-aos-delay="60">
-                        <div class="flex items-center justify-between">
-                            <span class="grid h-12 w-12 place-items-center rounded-2xl bg-navy text-gold">
-                                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none"><path d="M3 8l9-4 9 4-9 4-9-4z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M7 10.5V15c0 1.1 2.2 2 5 2s5-.9 5-2v-4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-                            </span>
-                            <span class="font-mono text-xs text-navy-200">01</span>
-                        </div>
-                        <h3 class="mt-6 font-display text-lg font-semibold text-navy">{{ $isId ? 'Dibimbing Praktisi Ahli' : 'Guided by Expert Practitioners' }}</h3>
-                        <p class="mt-2 text-pretty text-sm leading-relaxed text-navy-500">{{ $isId ? 'Belajar langsung dari mentor berpengalaman yang memahami tantangan dunia kerja nyata.' : 'Learn directly from seasoned mentors who understand real-world challenges.' }}</p>
-                    </div>
-
-                    {{-- 02 --}}
-                    <div class="card card-hover p-7" data-aos="fade-up" data-aos-delay="120">
-                        <div class="flex items-center justify-between">
-                            <span class="grid h-12 w-12 place-items-center rounded-2xl bg-navy text-gold">
-                                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.2 5.4L20 9.6l-4 3.9L17 20l-5-3-5 3 1-6.5-4-3.9 5.8-1.2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-                            </span>
-                            <span class="font-mono text-xs text-navy-200">02</span>
-                        </div>
-                        <h3 class="mt-6 font-display text-lg font-semibold text-navy">{{ $isId ? 'Program yang Dipersonalisasi' : 'Personalized Programs' }}</h3>
-                        <p class="mt-2 text-pretty text-sm leading-relaxed text-navy-500">{{ $isId ? 'Kurikulum dan jadwal disesuaikan sepenuhnya dengan kebutuhan serta tujuan Anda.' : 'Curriculum and schedule fully tailored to your needs and goals.' }}</p>
-                    </div>
-
-                    {{-- 03 --}}
-                    <div class="card card-hover p-7" data-aos="fade-up" data-aos-delay="180">
-                        <div class="flex items-center justify-between">
-                            <span class="grid h-12 w-12 place-items-center rounded-2xl bg-navy text-gold">
-                                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="5" stroke="currentColor" stroke-width="1.4"/><path d="M9 13.5L8 21l4-2 4 2-1-7.5" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-                            </span>
-                            <span class="font-mono text-xs text-navy-200">03</span>
-                        </div>
-                        <h3 class="mt-6 font-display text-lg font-semibold text-navy">{{ $isId ? 'Sertifikasi Diakui Industri' : 'Industry-Recognized Certification' }}</h3>
-                        <p class="mt-2 text-pretty text-sm leading-relaxed text-navy-500">{{ $isId ? 'Tingkatkan kredibilitas dengan sertifikasi kompetensi yang diakui secara profesional.' : 'Boost credibility with professionally recognized competency certification.' }}</p>
-                    </div>
-
-                    {{-- 04 --}}
-                    <div class="card card-hover p-7" data-aos="fade-up" data-aos-delay="240">
-                        <div class="flex items-center justify-between">
-                            <span class="grid h-12 w-12 place-items-center rounded-2xl bg-navy text-gold">
-                                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.4"/><path d="M14.2 9.8L18 6M9.8 14.2L6 18M14.2 14.2L18 18M9.8 9.8L6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-                            </span>
-                            <span class="font-mono text-xs text-navy-200">04</span>
-                        </div>
-                        <h3 class="mt-6 font-display text-lg font-semibold text-navy">{{ $isId ? 'Pendampingan Menyeluruh' : 'End-to-End Support' }}</h3>
-                        <p class="mt-2 text-pretty text-sm leading-relaxed text-navy-500">{{ $isId ? 'Didampingi dari analisis kebutuhan, pelaksanaan, hingga evaluasi hasil.' : 'Supported from needs analysis and delivery through to outcome evaluation.' }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     {{-- ===================== TESTIMONIALS ===================== --}}
     <x-testimonial-columns :testimonials="$testimonials" />
 
-    {{-- ===================== BLOG ===================== --}}
-    @if ($posts->isNotEmpty())
-        <section class="section">
-            <div class="container">
-                <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-                    <div class="max-w-2xl">
-                        <p class="eyebrow mb-4" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $isId ? 'Blog Terbaru' : 'Latest Blog' }}</p>
-                        <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $isId ? 'Wawasan & artikel terbaru kami' : 'Our latest insights & articles' }}</h2>
-                    </div>
-                    <a href="{{ route('blog.index') }}" class="link-underline shrink-0 font-medium" data-aos="fade-up">{{ __('site.cta.view_all') }}</a>
-                </div>
-
-                <div class="mt-14 grid gap-6 md:grid-cols-3">
-                    @foreach ($posts as $post)
-                        <a href="{{ route('blog.show', $post->slug) }}" class="group block" data-aos="fade-up" data-aos-delay="{{ $loop->index * 90 }}">
-                            <article data-tilt class="card-3d flex h-full flex-col">
-                                <div class="relative aspect-[16/10] overflow-hidden bg-navy-100">
-                                    @if ($post->featured_image)
-                                        <img src="{{ Storage::url($post->featured_image) }}" alt="{{ $post->title }}" loading="lazy"
-                                             class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                                    @else
-                                        <div class="absolute inset-0 aurora opacity-60"></div>
-                                    @endif
-                                    <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/45 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
-                                </div>
-                                <div class="flex flex-1 flex-col p-6">
-                                    <p class="eyebrow-muted">{{ optional($post->category)->name }} · {{ optional($post->published_at)->translatedFormat('d M Y') }}</p>
-                                    <h3 class="mt-3 font-display text-xl font-semibold leading-snug text-navy transition-colors group-hover:text-navy-500">{{ $post->title }}</h3>
-                                    @if ($post->excerpt)<p class="mt-2 line-clamp-2 text-sm text-navy-500">{{ $post->excerpt }}</p>@endif
-                                    <span class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-navy">
-                                        {{ $isId ? 'Baca artikel' : 'Read article' }}
-                                        <span class="grid h-8 w-8 place-items-center rounded-full border border-navy-200 transition-all duration-300 group-hover:border-gold group-hover:bg-gold group-hover:text-ink">
-                                            <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                        </span>
-                                    </span>
-                                </div>
-                            </article>
-                        </a>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-    @endif
-
-    {{-- ===================== INSTAGRAM UPDATES ===================== --}}
-    <section class="section bg-white border-t border-navy-50">
-        <div class="container">
-            <div class="mx-auto max-w-2xl text-center mb-12" data-aos="fade-up">
-                <span class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em]">
-                    <svg class="h-4 w-4 text-sky" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-                    <span class="text-sky">{{ $isId ? 'Instagram' : 'Instagram' }}</span>
-                    <span class="text-navy-300">— @deltatigaenam</span>
-                </span>
-                <h2 class="mt-4 leading-[1.05] [font-size:clamp(2.1rem,5vw,3.6rem)]">
-                    <span class="block font-sans font-black tracking-tight text-navy">{{ $isId ? 'Update Terbaru' : 'Latest Updates' }}</span>
-                </h2>
-                <p class="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-navy-400 text-sm">
-                    {{ $isId
-                        ? 'Ikuti kegiatan terbaru dan informasi menarik dari kami di Instagram.'
-                        : 'Follow our latest activities and interesting information on Instagram.' }}
-                </p>
-            </div>
-
-            <div class="mx-auto grid gap-8 md:grid-cols-2 max-w-4xl">
-                {{-- Left Post --}}
-                @php
-                    $igLink1 = 'https://www.instagram.com/deltatigaenam/?utm_source=ig_embed&ig_rid=AoWIewf3tcwwvM1ipJJhX_8';
-                @endphp
-                <div class="card overflow-hidden border-navy-100 shadow-card transition-all duration-300 hover:shadow-lift hover:-translate-y-1" data-aos="fade-right">
-                    {{-- Card Header --}}
-                    <div class="flex items-center justify-between p-3.5 border-b border-navy-50 bg-white">
-                        <div class="flex items-center gap-2.5">
-                            <span class="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-navy to-navy-800 text-white font-display text-sm font-bold">D</span>
-                            <div class="leading-tight">
-                                <p class="text-xs font-semibold text-navy">deltatigaenam</p>
-                                <p class="text-[9px] text-navy-300">Original audio</p>
-                            </div>
-                        </div>
-                        <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="rounded bg-sky hover:bg-sky-600 px-3 py-1 text-[10px] font-semibold text-white transition">View profile</a>
-                    </div>
-                    
-                    {{-- Image & Text Overlay --}}
-                    <div class="relative aspect-square overflow-hidden bg-navy-950 group">
-                        <img src="/images/certified-risk-management.png" alt="Certified Risk Management Batch IV" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent p-5 pt-12 flex flex-col justify-end text-white">
-                            <span class="inline-block self-start rounded bg-sky px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white">BATCH IV</span>
-                            <h3 class="font-display text-lg font-bold mt-2 leading-tight">Certified Risk Management</h3>
-                            <p class="text-[11px] text-navy-200 mt-0.5">PT Delta Tiga Enam</p>
-                            <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-mono text-navy-300">
-                                <span>19 - 22 Agustus 2025</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Card Footer --}}
-                    <div class="p-3.5 border-t border-navy-50 flex items-center justify-between bg-white text-navy-400">
-                        <div class="flex items-center gap-3.5">
-                            <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="hover:text-rose-500 transition">
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
-                            </a>
-                            <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="hover:text-sky transition">
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-1.923 2.202 4.968 4.968 0 0 0 2.803-.832c.43-.284.974-.354 1.5-.178 1.12.375 2.316.577 3.561.577z"/></svg>
-                            </a>
-                        </div>
-                        <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="text-xs font-semibold text-sky hover:underline inline-flex items-center gap-1">
-                            <span>{{ $isId ? 'Lihat di Instagram' : 'View on Instagram' }}</span>
-                            <span>&rarr;</span>
-                        </a>
-                    </div>
-                </div>
-
-                {{-- Right Post --}}
-                @php
-                    $igLink2 = 'https://www.instagram.com/deltatigaenam/?utm_source=ig_embed&ig_rid=AzGOKnldj_0aFItwS2zdG-q';
-                @endphp
-                <div class="card overflow-hidden border-navy-100 shadow-card transition-all duration-300 hover:shadow-lift hover:-translate-y-1" data-aos="fade-left">
-                    {{-- Card Header --}}
-                    <div class="flex items-center justify-between p-3.5 border-b border-navy-50 bg-white">
-                        <div class="flex items-center gap-2.5">
-                            <span class="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-navy to-navy-800 text-white font-display text-sm font-bold">D</span>
-                            <div class="leading-tight">
-                                <p class="text-xs font-semibold text-navy">deltatigaenam</p>
-                                <p class="text-[9px] text-navy-300">Original audio</p>
-                            </div>
-                        </div>
-                        <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="rounded bg-sky hover:bg-sky-600 px-3 py-1 text-[10px] font-semibold text-white transition">View profile</a>
-                    </div>
-                    
-                    {{-- Image & Text Overlay --}}
-                    <div class="relative aspect-square overflow-hidden bg-navy-950 group">
-                        <img src="/images/training-seminar.png" alt="Delta Tiga Enam Training Seminar" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent p-5 pt-12 flex flex-col justify-end text-white">
-                            <span class="inline-block self-start rounded bg-sky px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white">SEMINAR</span>
-                            <h3 class="font-display text-lg font-bold mt-2 leading-tight">Pengembangan Kompetensi SDM</h3>
-                            <p class="text-[11px] text-navy-200 mt-0.5">PT Delta Tiga Enam</p>
-                            <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-mono text-navy-300">
-                                <span>05 - 06 Agustus 2025</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Card Footer --}}
-                    <div class="p-3.5 border-t border-navy-50 flex items-center justify-between bg-white text-navy-400">
-                        <div class="flex items-center gap-3.5">
-                            <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="hover:text-rose-500 transition">
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
-                            </a>
-                            <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="hover:text-sky transition">
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-1.923 2.202 4.968 4.968 0 0 0 2.803-.832c.43-.284.974-.354 1.5-.178 1.12.375 2.316.577 3.561.577z"/></svg>
-                            </a>
-                        </div>
-                        <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="text-xs font-semibold text-sky hover:underline inline-flex items-center gap-1">
-                            <span>{{ $isId ? 'Lihat di Instagram' : 'View on Instagram' }}</span>
-                            <span>&rarr;</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     {{-- ===================== FAQ SECTION ===================== --}}
-    <section class="section bg-mist border-t border-navy-50">
+    <section class="section bg-white border-t border-navy-50">
         <div class="container grid gap-12 lg:grid-cols-12 lg:gap-16">
             
             {{-- Left Side: Heading & WhatsApp CTA --}}
@@ -732,7 +640,7 @@
                 <div class="group mask-fade-x relative mt-12 overflow-hidden" data-aos="fade-up">
                     <div class="flex w-max animate-marquee items-center gap-6 pr-6 group-hover:[animation-play-state:paused]">
                         @foreach ($partners->concat($partners) as $partner)
-                            <div class="flex h-24 w-48 shrink-0 items-center justify-center rounded-2xl border border-navy-100 bg-mist px-6 opacity-70 grayscale transition duration-300 hover:-translate-y-1 hover:border-navy-200 hover:opacity-100 hover:grayscale-0">
+                            <div class="flex h-24 w-48 shrink-0 items-center justify-center rounded-2xl border border-navy-100 bg-white px-6 opacity-70 grayscale transition duration-300 hover:-translate-y-1 hover:border-navy-200 hover:opacity-100 hover:grayscale-0">
                                 @if ($partner->logo)
                                     <img src="{{ Storage::url($partner->logo) }}" alt="{{ $partner->name }}" loading="lazy" class="max-h-12 w-auto object-contain">
                                 @else
@@ -796,21 +704,5 @@
         </section>
     @endif
 
-    {{-- ===================== CTA ===================== --}}
-    <section class="relative overflow-hidden bg-navy-950 py-20 text-center text-white md:py-28">
-        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-70"></div>
-        <div class="pointer-events-none absolute inset-0 grain opacity-50"></div>
-        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-        <div class="container relative">
-            <p class="eyebrow mb-5">{{ $isId ? 'Mulai langkah berikutnya' : 'Take the next step' }}</p>
-            <h2 class="mx-auto max-w-3xl text-display-lg font-semibold text-balance" data-aos="fade-up">
-                {{ $isId ? 'Siap meningkatkan kompetensi tim Anda?' : 'Ready to elevate your team’s competencies?' }}
-            </h2>
-            <div class="mt-9 flex flex-wrap justify-center gap-4" data-aos="fade-up" data-aos-delay="80">
-                <a href="{{ route('partnership.index') }}" class="btn-gold">{{ __('site.cta.partner') }}</a>
-                <a href="{{ route('contact.index') }}" class="btn-ghost-light">{{ __('site.cta.consult') }}</a>
-            </div>
-        </div>
-    </section>
 
 </x-layout>

@@ -52,23 +52,27 @@ export default {
                     500: '#33CFF7',
                     600: '#15B6E6',
                 },
+                // Champagne gold — muted, premium. Used only as a tiny accent.
                 gold: {
-                    DEFAULT: '#C9A227',
-                    soft: '#E6C56C',
-                    deep: '#B7872F',
+                    DEFAULT: '#C2A25A',
+                    soft: '#DBC489',
+                    deep: '#A6863F',
                 },
                 ink: '#0B1220',
                 mist: '#EAF2FC',
+                paper: '#F6F8FC', // off-white section background for rhythm
             },
             fontFamily: {
-                display: ['Sentient', 'ui-serif', 'Georgia', 'serif'],
-                sans: ['Switzer', ...defaultTheme.fontFamily.sans],
-                mono: ['"Spline Sans Mono"', ...defaultTheme.fontFamily.mono],
+                // Only two typefaces site-wide: Didot (headings) + Avenir (body/UI).
+                display: ['"GFS Didot"', 'Didot', 'serif'],
+                sans: ['Avenir', '"Avenir Next"', 'system-ui', 'sans-serif'],
+                mono: ['Avenir', '"Avenir Next"', 'system-ui', 'sans-serif'],
             },
             fontSize: {
-                'display-2xl': ['clamp(2.75rem, 6.5vw, 5.5rem)', { lineHeight: '1.0', letterSpacing: '-0.02em' }],
-                'display-xl': ['clamp(2.25rem, 5vw, 4rem)', { lineHeight: '1.04', letterSpacing: '-0.018em' }],
-                'display-lg': ['clamp(1.9rem, 4vw, 3rem)', { lineHeight: '1.08', letterSpacing: '-0.015em' }],
+                // Serif display — line-height & tracking tuned for Young Serif's chunky forms.
+                'display-2xl': ['clamp(2.6rem, 6vw, 5rem)', { lineHeight: '1.03', letterSpacing: '-0.01em' }],
+                'display-xl': ['clamp(2.15rem, 4.6vw, 3.6rem)', { lineHeight: '1.06', letterSpacing: '-0.008em' }],
+                'display-lg': ['clamp(1.85rem, 3.6vw, 2.75rem)', { lineHeight: '1.1', letterSpacing: '-0.005em' }],
             },
             letterSpacing: {
                 label: '0.22em',

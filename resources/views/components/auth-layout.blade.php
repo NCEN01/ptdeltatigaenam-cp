@@ -15,17 +15,24 @@
     <div class="grid min-h-dvh lg:grid-cols-2">
         {{-- Brand panel --}}
         <div class="relative hidden overflow-hidden bg-navy-950 p-12 text-white lg:flex lg:flex-col lg:justify-between">
-            <div class="pointer-events-none absolute inset-0 aurora opacity-70"></div>
-            <div class="pointer-events-none absolute inset-0 grain opacity-50"></div>
+            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=80" alt="" class="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-40">
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/85 to-navy-950/60"></div>
+            <div class="pointer-events-none absolute inset-0 aurora opacity-40"></div>
+            <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/50 to-transparent"></div>
             <a href="{{ route('home') }}" class="relative flex items-center gap-3">
-                <span class="grid h-11 w-11 place-items-center rounded-2xl bg-white text-navy font-display text-xl font-semibold">D</span>
-                <span class="font-display text-lg font-semibold">PT Delta Tiga Enam</span>
+                <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-11 w-11 shrink-0">
+                <span class="font-display text-lg">PT Delta Tiga Enam</span>
             </a>
             <div class="relative">
-                <p class="eyebrow mb-5">Human Capital · Training · Certification</p>
-                <p class="max-w-md font-display text-3xl font-semibold leading-tight text-balance">
+                <p class="eyebrow mb-5"><span class="rule-gold mr-3"></span>Human Capital · Training · Certification</p>
+                <p class="max-w-md text-[2.2rem] leading-[1.12] text-balance">
                     {{ app()->getLocale() === 'id' ? 'Transformasi human capital yang berkelanjutan.' : 'Sustainable human capital transformation.' }}
                 </p>
+                <div class="mt-8 flex items-center gap-6">
+                    <div><p class="font-display text-2xl">500+</p><p class="font-mono text-[10px] uppercase tracking-wider text-navy-200">{{ app()->getLocale() === 'id' ? 'Profesional' : 'Professionals' }}</p></div>
+                    <div class="h-8 w-px bg-white/15"></div>
+                    <div><p class="font-display text-2xl">10+</p><p class="font-mono text-[10px] uppercase tracking-wider text-navy-200">{{ app()->getLocale() === 'id' ? 'Tahun' : 'Years' }}</p></div>
+                </div>
             </div>
             <p class="relative font-mono text-xs text-navy-300">© {{ now()->year }} PT Delta Tiga Enam</p>
         </div>
@@ -34,7 +41,7 @@
         <div class="flex items-center justify-center px-6 py-12 sm:px-12">
             <div class="w-full max-w-md">
                 <a href="{{ route('home') }}" class="mb-10 inline-flex items-center gap-2 text-sm text-navy-400 hover:text-navy lg:hidden">
-                    <span class="grid h-9 w-9 place-items-center rounded-xl bg-navy text-white font-display">D</span>
+                    <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-9 w-9">
                     Delta Tiga Enam
                 </a>
 

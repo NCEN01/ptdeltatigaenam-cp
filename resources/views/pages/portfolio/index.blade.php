@@ -100,5 +100,4 @@
     {{-- Testimonials --}}
     <x-testimonial-columns :testimonials="$testimonials" />
 
-    <x-cta-band />
 </x-layout>
