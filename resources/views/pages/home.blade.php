@@ -244,26 +244,34 @@
 
     {{-- ===================== PORTFOLIO ===================== --}}
     @if ($portfolios->isNotEmpty())
-        <section class="section bg-mist">
-            <div class="container">
-                <p class="eyebrow mb-4" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ __('site.home.portfolio_kicker') }}</p>
-                <h2 class="max-w-2xl text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ __('site.home.portfolio_title') }}</h2>
+        <section class="section-sm relative overflow-hidden">
+            {{-- Background image + dark overlay (kept light enough for the photo to show) --}}
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1920&q=80" alt="" loading="lazy"
+                 class="absolute inset-0 h-full w-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-b from-navy-950/85 via-navy-950/55 to-navy-950/80"></div>
+            <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
 
-                <div class="mt-14 grid gap-6 lg:grid-cols-3">
+            <div class="container relative">
+                <p class="eyebrow mb-3" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ __('site.home.portfolio_kicker') }}</p>
+                <h2 class="max-w-xl text-2xl font-semibold text-white text-balance md:text-3xl" data-aos="fade-up">{{ __('site.home.portfolio_title') }}</h2>
+
+                <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($portfolios as $p)
-                        <a href="{{ route('portfolio.show', $p->slug) }}" class="card card-hover group overflow-hidden" data-aos="fade-up" data-aos-delay="{{ $loop->index * 90 }}">
-                            <div class="relative aspect-[4/3] overflow-hidden bg-navy-100">
+                        <a href="{{ route('portfolio.show', $p->slug) }}"
+                           class="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.1]"
+                           data-aos="fade-up" data-aos-delay="{{ $loop->index * 90 }}">
+                            <div class="relative aspect-[16/10] overflow-hidden bg-navy-900">
                                 @if ($p->cover_image)
-                                    <img src="{{ Storage::url($p->cover_image) }}" alt="{{ $p->title }}" loading="lazy"
+                                    <img src="{{ str_starts_with($p->cover_image, 'http') ? $p->cover_image : Storage::url($p->cover_image) }}" alt="{{ $p->title }}" loading="lazy"
                                          class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
                                 @else
-                                    <div class="h-full w-full bg-gradient-to-br from-navy-200 to-navy-100"></div>
+                                    <div class="h-full w-full bg-gradient-to-br from-navy-700 to-navy-900"></div>
                                 @endif
                             </div>
-                            <div class="p-6">
-                                @if ($p->category)<p class="eyebrow-muted">{{ $p->category->name }}</p>@endif
-                                <h3 class="mt-3 font-display text-xl font-semibold text-navy">{{ $p->title }}</h3>
-                                @if ($p->client_name)<p class="mt-1 text-sm text-navy-400">{{ $p->client_name }}</p>@endif
+                            <div class="p-5">
+                                @if ($p->category)<p class="font-mono text-[10px] uppercase tracking-label text-gold">{{ $p->category->name }}</p>@endif
+                                <h3 class="mt-2 font-display text-base font-semibold text-white">{{ $p->title }}</h3>
+                                @if ($p->client_name)<p class="mt-1 text-xs text-white/50">{{ $p->client_name }}</p>@endif
                             </div>
                         </a>
                     @endforeach
@@ -475,82 +483,6 @@
                     @endforeach
                 </div>
             </div>
-        </section>
-    @endif
-
-    {{-- ===================== PARTNERS & CLIENTS ===================== --}}
-    @if ($partners->isNotEmpty() || $clients->isNotEmpty())
-        <section class="section">
-            {{-- MITRA KAMI --}}
-            @if ($partners->isNotEmpty())
-                <div class="container text-center" data-aos="fade-up">
-                    <p class="eyebrow mb-4"><span class="rule-gold mr-3"></span>{{ $isId ? 'Mitra Kami' : 'Our Partners' }}</p>
-                    <h2 class="mx-auto max-w-xl text-display-lg font-semibold text-navy text-balance">{{ $isId ? 'Mitra Yang Mendukung Dan Berkolaborasi Dengan Kami.' : 'Partners who support and collaborate with us.' }}</h2>
-                </div>
-                <div class="group mask-fade-x relative mt-12 overflow-hidden" data-aos="fade-up">
-                    <div class="flex w-max animate-marquee items-center gap-6 pr-6 group-hover:[animation-play-state:paused]">
-                        @foreach ($partners->concat($partners) as $partner)
-                            <div class="flex h-24 w-48 shrink-0 items-center justify-center rounded-2xl border border-navy-100 bg-mist px-6 opacity-70 grayscale transition duration-300 hover:-translate-y-1 hover:border-navy-200 hover:opacity-100 hover:grayscale-0">
-                                @if ($partner->logo)
-                                    <img src="{{ Storage::url($partner->logo) }}" alt="{{ $partner->name }}" loading="lazy" class="max-h-12 w-auto object-contain">
-                                @else
-                                    <span class="text-center font-display text-lg font-semibold text-navy-300">{{ $partner->name }}</span>
-                                @endif
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
-
-            {{-- KLIEN KAMI — blue panel: text + form (left), 2 vertical logo columns (right) --}}
-            @if ($clients->isNotEmpty())
-                @php $clientCol1 = $clients->concat($clients); $clientCol2 = $clients->reverse()->concat($clients->reverse()); @endphp
-                <div class="container mt-20" data-aos="fade-up">
-                    <div class="relative overflow-hidden rounded-[2.5rem] bg-navy-950 text-white shadow-lift">
-                        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-70"></div>
-                        <div class="pointer-events-none absolute inset-0 grain opacity-50"></div>
-                        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                        <div class="relative grid items-center gap-6 lg:grid-cols-2">
-                            {{-- Left: heading + description + form --}}
-                            <div class="px-8 py-12 md:px-12 md:py-16">
-                                <h2 class="font-sans text-4xl font-extrabold leading-tight text-balance md:text-5xl">{{ $isId ? 'Klien yang telah menggunakan layanan kami' : 'Clients who have used our services' }}</h2>
-                                <p class="mt-5 max-w-md text-pretty leading-relaxed text-white/90">{{ $isId ? 'Berbagai organisasi mempercayakan kebutuhan pengembangan SDM mereka kepada kami. Tinggalkan kontak Anda untuk menjadi bagian berikutnya.' : 'Organizations across industries trust us with their human capital development. Leave your details to be the next.' }}</p>
-                                <form action="#" onsubmit="event.preventDefault()" class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                                    <input type="text" name="name" placeholder="{{ $isId ? 'Masukkan Nama Anda' : 'Enter Your Name' }}" class="min-w-0 flex-1 rounded-full bg-white/95 px-5 py-3.5 text-sm text-navy placeholder:text-navy-300 focus:outline-none focus:ring-2 focus:ring-white">
-                                    <input type="email" name="email" placeholder="{{ $isId ? 'Masukkan Email Anda' : 'Enter Your Email' }}" class="min-w-0 flex-1 rounded-full bg-white/95 px-5 py-3.5 text-sm text-navy placeholder:text-navy-300 focus:outline-none focus:ring-2 focus:ring-white">
-                                    <button type="submit" class="rounded-full bg-gradient-to-r from-cyan-500 to-sky-500 px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-white shadow-[0_8px_30px_-12px_rgba(28,125,224,0.6)] transition duration-200 hover:-translate-y-0.5 hover:from-cyan-400 hover:to-sky-400">{{ $isId ? 'Kirim' : 'Send' }}</button>
-                                </form>
-                            </div>
-
-                            {{-- Right: 2 vertical logo columns (marquee up & down) --}}
-                            <div class="mask-fade-y relative grid max-h-[24rem] grid-cols-2 gap-4 overflow-hidden px-6 py-8 md:max-h-[26rem] md:pr-10">
-                                <div class="marquee-col flex flex-col gap-4" style="--dur: 22s">
-                                    @foreach ($clientCol1 as $client)
-                                        <div class="flex h-20 shrink-0 items-center justify-center rounded-2xl bg-white px-5 opacity-90 grayscale transition duration-300 hover:scale-105 hover:opacity-100 hover:grayscale-0">
-                                            @if ($client->logo)
-                                                <img src="{{ Storage::url($client->logo) }}" alt="{{ $client->name }}" loading="lazy" class="max-h-10 w-auto object-contain">
-                                            @else
-                                                <span class="text-center font-display text-sm font-semibold text-navy">{{ $client->name }}</span>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-                                <div class="marquee-col flex flex-col gap-4 [animation-direction:reverse]" style="--dur: 26s">
-                                    @foreach ($clientCol2 as $client)
-                                        <div class="flex h-20 shrink-0 items-center justify-center rounded-2xl bg-white px-5 opacity-90 grayscale transition duration-300 hover:scale-105 hover:opacity-100 hover:grayscale-0">
-                                            @if ($client->logo)
-                                                <img src="{{ Storage::url($client->logo) }}" alt="{{ $client->name }}" loading="lazy" class="max-h-10 w-auto object-contain">
-                                            @else
-                                                <span class="text-center font-display text-sm font-semibold text-navy">{{ $client->name }}</span>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
         </section>
     @endif
 
@@ -787,6 +719,82 @@
 
         </div>
     </section>
+
+    {{-- ===================== PARTNERS & CLIENTS ===================== --}}
+    @if ($partners->isNotEmpty() || $clients->isNotEmpty())
+        <section class="section">
+            {{-- MITRA KAMI --}}
+            @if ($partners->isNotEmpty())
+                <div class="container text-center" data-aos="fade-up">
+                    <p class="eyebrow mb-4"><span class="rule-gold mr-3"></span>{{ $isId ? 'Mitra Kami' : 'Our Partners' }}</p>
+                    <h2 class="mx-auto max-w-xl text-display-lg font-semibold text-navy text-balance">{{ $isId ? 'Mitra Yang Mendukung Dan Berkolaborasi Dengan Kami.' : 'Partners who support and collaborate with us.' }}</h2>
+                </div>
+                <div class="group mask-fade-x relative mt-12 overflow-hidden" data-aos="fade-up">
+                    <div class="flex w-max animate-marquee items-center gap-6 pr-6 group-hover:[animation-play-state:paused]">
+                        @foreach ($partners->concat($partners) as $partner)
+                            <div class="flex h-24 w-48 shrink-0 items-center justify-center rounded-2xl border border-navy-100 bg-mist px-6 opacity-70 grayscale transition duration-300 hover:-translate-y-1 hover:border-navy-200 hover:opacity-100 hover:grayscale-0">
+                                @if ($partner->logo)
+                                    <img src="{{ Storage::url($partner->logo) }}" alt="{{ $partner->name }}" loading="lazy" class="max-h-12 w-auto object-contain">
+                                @else
+                                    <span class="text-center font-display text-lg font-semibold text-navy-300">{{ $partner->name }}</span>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            {{-- KLIEN KAMI — blue panel: text + form (left), 2 vertical logo columns (right) --}}
+            @if ($clients->isNotEmpty())
+                @php $clientCol1 = $clients->concat($clients); $clientCol2 = $clients->reverse()->concat($clients->reverse()); @endphp
+                <div class="container mt-20" data-aos="fade-up">
+                    <div class="relative overflow-hidden rounded-[2.5rem] bg-navy-950 text-white shadow-lift">
+                        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-70"></div>
+                        <div class="pointer-events-none absolute inset-0 grain opacity-50"></div>
+                        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                        <div class="relative grid items-center gap-6 lg:grid-cols-2">
+                            {{-- Left: heading + description + form --}}
+                            <div class="px-8 py-12 md:px-12 md:py-16">
+                                <h2 class="font-sans text-4xl font-extrabold leading-tight text-balance md:text-5xl">{{ $isId ? 'Klien yang telah menggunakan layanan kami' : 'Clients who have used our services' }}</h2>
+                                <p class="mt-5 max-w-md text-pretty leading-relaxed text-white/90">{{ $isId ? 'Berbagai organisasi mempercayakan kebutuhan pengembangan SDM mereka kepada kami. Tinggalkan kontak Anda untuk menjadi bagian berikutnya.' : 'Organizations across industries trust us with their human capital development. Leave your details to be the next.' }}</p>
+                                <form action="#" onsubmit="event.preventDefault()" class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                                    <input type="text" name="name" placeholder="{{ $isId ? 'Masukkan Nama Anda' : 'Enter Your Name' }}" class="min-w-0 flex-1 rounded-full bg-white/95 px-5 py-3.5 text-sm text-navy placeholder:text-navy-300 focus:outline-none focus:ring-2 focus:ring-white">
+                                    <input type="email" name="email" placeholder="{{ $isId ? 'Masukkan Email Anda' : 'Enter Your Email' }}" class="min-w-0 flex-1 rounded-full bg-white/95 px-5 py-3.5 text-sm text-navy placeholder:text-navy-300 focus:outline-none focus:ring-2 focus:ring-white">
+                                    <button type="submit" class="rounded-full bg-gradient-to-r from-cyan-500 to-sky-500 px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-white shadow-[0_8px_30px_-12px_rgba(28,125,224,0.6)] transition duration-200 hover:-translate-y-0.5 hover:from-cyan-400 hover:to-sky-400">{{ $isId ? 'Kirim' : 'Send' }}</button>
+                                </form>
+                            </div>
+
+                            {{-- Right: 2 vertical logo columns (marquee up & down) --}}
+                            <div class="mask-fade-y relative grid max-h-[24rem] grid-cols-2 gap-4 overflow-hidden px-6 py-8 md:max-h-[26rem] md:pr-10">
+                                <div class="marquee-col flex flex-col gap-4" style="--dur: 22s">
+                                    @foreach ($clientCol1 as $client)
+                                        <div class="flex h-20 shrink-0 items-center justify-center rounded-2xl bg-white px-5 opacity-90 grayscale transition duration-300 hover:scale-105 hover:opacity-100 hover:grayscale-0">
+                                            @if ($client->logo)
+                                                <img src="{{ Storage::url($client->logo) }}" alt="{{ $client->name }}" loading="lazy" class="max-h-10 w-auto object-contain">
+                                            @else
+                                                <span class="text-center font-display text-sm font-semibold text-navy">{{ $client->name }}</span>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <div class="marquee-col flex flex-col gap-4 [animation-direction:reverse]" style="--dur: 26s">
+                                    @foreach ($clientCol2 as $client)
+                                        <div class="flex h-20 shrink-0 items-center justify-center rounded-2xl bg-white px-5 opacity-90 grayscale transition duration-300 hover:scale-105 hover:opacity-100 hover:grayscale-0">
+                                            @if ($client->logo)
+                                                <img src="{{ Storage::url($client->logo) }}" alt="{{ $client->name }}" loading="lazy" class="max-h-10 w-auto object-contain">
+                                            @else
+                                                <span class="text-center font-display text-sm font-semibold text-navy">{{ $client->name }}</span>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        </section>
+    @endif
 
     {{-- ===================== CTA ===================== --}}
     <section class="relative overflow-hidden bg-navy-950 py-20 text-center text-white md:py-28">

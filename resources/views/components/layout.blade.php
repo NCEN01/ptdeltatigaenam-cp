@@ -50,6 +50,28 @@
 
     <x-partials.header />
 
+    {{-- Flash toast (checkout, forms, etc.) --}}
+    @php $flash = session('success') ?? session('status') ?? session('error'); @endphp
+    @if ($flash)
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 6000)"
+             x-transition:enter="transition ease-out-soft duration-300"
+             x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+             class="fixed inset-x-0 top-24 z-[120] flex justify-center px-4">
+            <div class="flex items-start gap-3 rounded-2xl border px-5 py-3.5 shadow-lift backdrop-blur-xl {{ session('error') ? 'border-red-200 bg-red-50/95 text-red-800' : 'border-sky-200 bg-sky-50/95 text-navy' }}">
+                <span class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full {{ session('error') ? 'bg-red-500' : 'bg-sky-500' }} text-white">
+                    <svg class="h-3 w-3" viewBox="0 0 16 16" fill="none">
+                        @if (session('error'))<path d="M8 5v4m0 3h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        @else<path d="M3.5 8.5 6.5 11.5 12.5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>@endif
+                    </svg>
+                </span>
+                <p class="text-sm font-medium">{{ $flash }}</p>
+                <button @click="show = false" class="ml-2 text-current/60 hover:text-current" aria-label="Close">
+                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </button>
+            </div>
+        </div>
+    @endif
+
     <main id="main">
         {{ $slot }}
     </main>

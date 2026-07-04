@@ -74,6 +74,9 @@
                             @if ($schedule->quota)
                                 <p class="mt-2 font-mono text-xs text-navy-400">{{ max(0, $schedule->quota - $schedule->seats_taken) }} {{ $id ? 'kursi tersisa' : 'seats left' }}</p>
                             @endif
+                            @if ($schedule->effectivePrice() > 0)
+                                <p class="mt-3 font-display text-xl font-semibold text-navy">Rp {{ number_format($schedule->effectivePrice(), 0, ',', '.') }}<span class="text-sm font-normal text-navy-400"> / {{ $id ? 'peserta' : 'person' }}</span></p>
+                            @endif
                             @if ($service->is_purchasable)
                                 @if (Route::has('checkout.create'))
                                     <a href="{{ route('checkout.create', $schedule->id) }}" class="btn-primary mt-4 w-full !py-2.5 text-sm">{{ __('site.cta.buy') }}</a>

@@ -16,6 +16,12 @@ class MidtransService
         Config::$is3ds = config('midtrans.is_3ds', true);
     }
 
+    /** Whether Midtrans credentials are present (so we can fail gracefully otherwise). */
+    public function isConfigured(): bool
+    {
+        return filled(config('midtrans.server_key')) && filled(config('midtrans.client_key'));
+    }
+
     /**
      * Create a Snap token for an order. The Midtrans order_id mirrors order_number.
      */

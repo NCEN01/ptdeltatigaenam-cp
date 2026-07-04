@@ -37,6 +37,15 @@ class RegisteredCustomerController extends Controller
             'is_active' => true,
         ]);
 
+        // Dev convenience: skip email verification when enabled (see config/customer.php).
+        if (config('customer.auto_verify')) {
+            $customer->forceFill(['email_verified_at' => now()])->save();
+            Auth::guard('customer')->login($customer);
+
+            return redirect()->intended(route('account.profile'))
+                ->with('success', app()->getLocale() === 'id' ? 'Akun berhasil dibuat. Selamat datang!' : 'Account created. Welcome!');
+        }
+
         event(new Registered($customer));
         $customer->sendEmailVerificationNotification();
 

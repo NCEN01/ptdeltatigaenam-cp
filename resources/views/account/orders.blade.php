@@ -33,6 +33,19 @@
                                 <p class="mt-2 font-display text-lg font-semibold text-navy">Rp {{ number_format((float) $order->total_amount, 0, ',', '.') }}</p>
                             </div>
                         </div>
+
+                        @if ($order->status !== 'paid' && ! config('midtrans.is_production'))
+                            <div class="mt-4 flex flex-wrap items-center gap-3 border-t border-dashed border-navy-100 pt-4">
+                                <a href="{{ route('checkout.pay', $order->order_number) }}" class="btn-ghost !px-5 !py-2.5 text-sm">{{ $id ? 'Lanjutkan pembayaran' : 'Continue payment' }}</a>
+                                <form method="POST" action="{{ route('checkout.simulate', $order->order_number) }}">
+                                    @csrf
+                                    <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
+                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        {{ $id ? 'Simulasi Bayar (Sandbox)' : 'Simulate Payment (Sandbox)' }}
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
                     </div>
                 @empty
                     <div class="rounded-3xl border border-dashed border-navy-200 p-12 text-center">

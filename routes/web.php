@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\CustomerSessionController;
 use App\Http\Controllers\Auth\RegisteredCustomerController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
@@ -44,6 +45,8 @@ Route::prefix('{locale}')
         Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
         Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda.index');
+
+        Route::get('/sertifikat', [CertificateController::class, 'index'])->name('certificates.index');
 
         Route::get('/kemitraan', [PartnershipController::class, 'index'])->name('partnership.index');
         Route::post('/kemitraan/daftar', [PartnershipController::class, 'store'])->name('partnership.store');
@@ -85,6 +88,7 @@ Route::prefix('{locale}')
                 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
                 Route::get('/checkout/{order:order_number}/bayar', [CheckoutController::class, 'pay'])->name('checkout.pay');
                 Route::get('/checkout/{order:order_number}/status', [CheckoutController::class, 'finish'])->name('checkout.finish');
+                Route::post('/checkout/{order:order_number}/simulasi-bayar', [CheckoutController::class, 'simulatePaid'])->name('checkout.simulate');
             });
         });
     });

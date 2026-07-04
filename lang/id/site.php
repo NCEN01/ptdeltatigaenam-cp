@@ -8,6 +8,7 @@ return [
         'portfolio' => 'Portofolio',
         'blog' => 'Blog',
         'agenda' => 'Agenda',
+        'certificates' => 'Sertifikat',
         'partnership' => 'Kemitraan',
         'contact' => 'Kontak',
         'login' => 'Masuk',
@@ -49,6 +50,11 @@ return [
         'blog_kicker' => 'Wawasan',
         'blog_title' => 'Pemikiran terbaru dari tim kami',
         'stats' => 'Dalam angka',
+    ],
+    'checkout' => [
+        'unavailable' => 'Pembayaran online sedang tidak tersedia. Silakan hubungi kami untuk pendaftaran.',
+        'gateway_error' => 'Maaf, terjadi kendala saat memproses pembayaran. Silakan coba lagi atau hubungi kami.',
+        'paid_simulated' => 'Pembayaran dikonfirmasi (simulasi sandbox). Pesanan Anda kini berstatus lunas.',
     ],
     'contact' => [
         'title' => 'Mari berbincang',

@@ -55,6 +55,12 @@ class OrderResource extends Resource
                 Infolists\Components\TextEntry::make('subtotal')->money('IDR'),
                 Infolists\Components\TextEntry::make('tax')->money('IDR'),
             ])->columns(3),
+            Infolists\Components\Section::make('Peserta')->schema([
+                Infolists\Components\RepeatableEntry::make('participants')->hiddenLabel()->schema([
+                    Infolists\Components\TextEntry::make('name')->label('Nama'),
+                    Infolists\Components\TextEntry::make('phone')->label('Telepon'),
+                ])->columns(2),
+            ])->visible(fn (Order $record) => filled($record->participants)),
             Infolists\Components\Section::make('Transaksi Midtrans')->schema([
                 Infolists\Components\RepeatableEntry::make('transactions')->schema([
                     Infolists\Components\TextEntry::make('payment_type')->label('Metode'),

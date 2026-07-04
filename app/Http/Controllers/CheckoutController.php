@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\ServiceSchedule;
 use App\Models\Transaction;
+use App\Notifications\OrderPaidNotification;
 use App\Services\MidtransService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class CheckoutController extends Controller
 {
@@ -32,23 +34,31 @@ class CheckoutController extends Controller
     {
         $data = $request->validate([
             'service_schedule_id' => ['required', 'exists:service_schedules,id'],
-            'quantity' => ['required', 'integer', 'min:1', 'max:50'],
             'customer_name' => ['required', 'string', 'max:150'],
             'customer_email' => ['required', 'email', 'max:150'],
             'customer_phone' => ['required', 'string', 'max:50'],
             'customer_company' => ['nullable', 'string', 'max:200'],
+            'participants' => ['required', 'array', 'min:1', 'max:50'],
+            'participants.*.name' => ['required', 'string', 'max:150'],
+            'participants.*.phone' => ['required', 'string', 'max:50'],
             'notes' => ['nullable', 'string', 'max:1000'],
         ]);
 
         $schedule = ServiceSchedule::with('service')->findOrFail($data['service_schedule_id']);
         abort_unless($schedule->service && $schedule->service->is_purchasable, 404);
 
+        if (! $this->midtrans->isConfigured()) {
+            return back()->withInput()->with('error', __('site.checkout.unavailable'));
+        }
+
+        // Participant list is the source of truth for the quantity.
+        $participants = array_values($data['participants']);
         $unit = $schedule->effectivePrice();
-        $qty = (int) $data['quantity'];
+        $qty = count($participants);
         $subtotal = $unit * $qty;
 
-        $order = DB::transaction(function () use ($request, $schedule, $data, $unit, $qty, $subtotal) {
-            return Order::create([
+        $order = DB::transaction(function () use ($request, $schedule, $data, $participants, $unit, $qty, $subtotal) {
+            $order = Order::create([
                 'order_number' => Order::generateNumber(),
                 'customer_id' => $request->user('customer')->id,
                 'service_id' => $schedule->service_id,
@@ -58,6 +68,7 @@ class CheckoutController extends Controller
                 'customer_phone' => $data['customer_phone'],
                 'customer_company' => $data['customer_company'] ?? null,
                 'quantity' => $qty,
+                'participants' => $participants,
                 'unit_price' => $unit,
                 'subtotal' => $subtotal,
                 'tax' => 0,
@@ -65,9 +76,25 @@ class CheckoutController extends Controller
                 'notes' => $data['notes'] ?? null,
                 'status' => 'pending',
             ]);
+
+            foreach ($participants as $p) {
+                $order->attendees()->create([
+                    'name' => $p['name'],
+                    'phone' => $p['phone'] ?? null,
+                ]);
+            }
+
+            return $order;
         });
 
-        $token = $this->midtrans->createSnapToken($order->load('service'));
+        try {
+            $token = $this->midtrans->createSnapToken($order->load('service'));
+        } catch (\Throwable $e) {
+            report($e);
+            $order->update(['status' => 'failed']);
+
+            return back()->withInput()->with('error', __('site.checkout.gateway_error'));
+        }
 
         Transaction::create([
             'order_id' => $order->id,
@@ -89,8 +116,18 @@ class CheckoutController extends Controller
             return redirect()->route('checkout.finish', $order->order_number);
         }
 
-        $token = $order->latestTransaction?->snap_token
-            ?? $this->midtrans->createSnapToken($order->load('service'));
+        if (! $this->midtrans->isConfigured()) {
+            return redirect()->route('services.index')->with('error', __('site.checkout.unavailable'));
+        }
+
+        try {
+            $token = $order->latestTransaction?->snap_token
+                ?? $this->midtrans->createSnapToken($order->load('service'));
+        } catch (\Throwable $e) {
+            report($e);
+
+            return redirect()->route('services.index')->with('error', __('site.checkout.gateway_error'));
+        }
 
         return view('pages.checkout.pay', [
             'order' => $order,
@@ -105,5 +142,40 @@ class CheckoutController extends Controller
         abort_unless($order->customer_id === $request->user('customer')->id, 403);
 
         return view('pages.checkout.finish', ['order' => $order->fresh()]);
+    }
+
+    /**
+     * Sandbox only: manually confirm an order as paid. Useful in local dev where
+     * the Midtrans webhook cannot reach localhost, so orders stay "pending" even
+     * after a successful Snap simulation. Disabled in production.
+     */
+    public function simulatePaid(Request $request, string $locale, Order $order)
+    {
+        abort_unless($order->customer_id === $request->user('customer')->id, 403);
+        abort_if(config('midtrans.is_production'), 404);
+
+        if ($order->status !== 'paid') {
+            DB::transaction(function () use ($order) {
+                Transaction::updateOrCreate(
+                    ['midtrans_order_id' => $order->order_number],
+                    [
+                        'order_id' => $order->id,
+                        'gross_amount' => $order->total_amount,
+                        'transaction_status' => 'settlement',
+                        'payment_type' => 'simulation',
+                        'transaction_time' => now(),
+                        'settlement_time' => now(),
+                    ],
+                );
+
+                $order->update(['status' => 'paid', 'paid_at' => now()]);
+            });
+
+            Notification::route('mail', $order->customer_email)
+                ->notify(new OrderPaidNotification($order->fresh()));
+        }
+
+        return redirect()->route('checkout.finish', $order->order_number)
+            ->with('success', __('site.checkout.paid_simulated'));
     }
 }

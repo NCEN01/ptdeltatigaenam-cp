@@ -16,6 +16,7 @@ class RoleSeeder extends Seeder
         'manage_banners',
         'manage_blog',
         'manage_agenda',
+        'manage_certificates',
         'manage_portfolio',
         'manage_partners',
         'manage_partnership_packages',

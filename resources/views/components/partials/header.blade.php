@@ -4,6 +4,7 @@
     $nav = [
         ['route' => 'about', 'label' => __('site.nav.about')],
         ['route' => 'services.index', 'label' => __('site.nav.services')],
+        ['route' => 'certificates.index', 'label' => __('site.nav.certificates')],
         ['route' => 'portfolio.index', 'label' => __('site.nav.portfolio')],
         ['route' => 'blog.index', 'label' => __('site.nav.blog')],
         ['route' => 'agenda.index', 'label' => __('site.nav.agenda')],

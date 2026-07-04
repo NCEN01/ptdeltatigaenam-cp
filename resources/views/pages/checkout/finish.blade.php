@@ -37,6 +37,21 @@
                     <a href="{{ route('services.index') }}" class="btn-ghost">{{ __('site.cta.explore') }}</a>
                 @endif
             </div>
+
+            {{-- Sandbox helper: webhook can't reach localhost, so confirm manually. --}}
+            @if ($order->status !== 'paid' && ! config('midtrans.is_production'))
+                <div class="mx-auto mt-10 max-w-sm rounded-2xl border border-dashed border-emerald-300 bg-emerald-50/50 p-5">
+                    <p class="font-mono text-[10px] uppercase tracking-label text-emerald-600">{{ $id ? 'Mode Sandbox' : 'Sandbox Mode' }}</p>
+                    <p class="mt-1.5 text-sm text-navy-500">{{ $id ? 'Sudah bayar di Midtrans tapi status belum berubah? Konfirmasi manual di sini.' : 'Paid on Midtrans but status not updated? Confirm manually here.' }}</p>
+                    <form method="POST" action="{{ route('checkout.simulate', $order->order_number) }}" class="mt-4">
+                        @csrf
+                        <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            {{ $id ? 'Simulasi Pembayaran Berhasil' : 'Simulate Successful Payment' }}
+                        </button>
+                    </form>
+                </div>
+            @endif
         </div>
     </section>
 </x-layout>

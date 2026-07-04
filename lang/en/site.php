@@ -8,6 +8,7 @@ return [
         'portfolio' => 'Portfolio',
         'blog' => 'Blog',
         'agenda' => 'Agenda',
+        'certificates' => 'Certificates',
         'partnership' => 'Partnership',
         'contact' => 'Contact',
         'login' => 'Sign in',
@@ -49,6 +50,11 @@ return [
         'blog_kicker' => 'Insights',
         'blog_title' => 'Latest thinking from our team',
         'stats' => 'By the numbers',
+    ],
+    'checkout' => [
+        'unavailable' => 'Online payment is currently unavailable. Please contact us to register.',
+        'gateway_error' => 'Sorry, something went wrong while processing your payment. Please try again or contact us.',
+        'paid_simulated' => 'Payment confirmed (sandbox simulation). Your order is now marked as paid.',
     ],
     'contact' => [
         'title' => "Let's talk",

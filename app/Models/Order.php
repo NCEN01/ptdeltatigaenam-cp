@@ -11,9 +11,38 @@ class Order extends Model
 {
     protected $guarded = ['id'];
 
+    /**
+     * Keep the schedule's seats_taken in sync as an order enters/leaves the
+     * "paid" state, so quota tracking stays accurate for event preparation.
+     */
+    protected static function booted(): void
+    {
+        static::updated(function (Order $order): void {
+            if (! $order->wasChanged('status') || ! $order->service_schedule_id) {
+                return;
+            }
+
+            $schedule = $order->schedule;
+            if (! $schedule) {
+                return;
+            }
+
+            $wasPaid = $order->getOriginal('status') === 'paid';
+            $isPaid = $order->status === 'paid';
+            $seats = (int) $order->quantity;
+
+            if ($isPaid && ! $wasPaid) {
+                $schedule->increment('seats_taken', $seats);
+            } elseif ($wasPaid && ! $isPaid) {
+                $schedule->decrement('seats_taken', min((int) $schedule->seats_taken, $seats));
+            }
+        });
+    }
+
     protected function casts(): array
     {
         return [
+            'participants' => 'array',
             'unit_price' => 'decimal:2',
             'subtotal' => 'decimal:2',
             'tax' => 'decimal:2',
@@ -40,6 +69,11 @@ class Order extends Model
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function attendees(): HasMany
+    {
+        return $this->hasMany(OrderParticipant::class);
     }
 
     public function latestTransaction(): HasOne
