@@ -1,11 +1,14 @@
 @php
     use App\Models\Setting;
+    use App\Models\OfficeLocation;
 
     $id = app()->getLocale() === 'id';
     $email = 'info@deltatigaenam.com';
     $website = 'www.deltatigaenam.com';
     $linkedin = Setting::get('linkedin_url', 'https://linkedin.com/company/deltatigaenam');
     $year = now()->year;
+
+    $offices = OfficeLocation::where('is_active', true)->orderBy('sort_order')->get();
 
     $nav = [
         'about' => __('site.nav.about'),
@@ -212,37 +215,51 @@
                 <p class="text-sm font-semibold text-gold">{{ $id ? 'Kantor Kami' : 'Our Offices' }}</p>
                 <span class="mt-2.5 block h-0.5 w-7 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
                 <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {{-- Kantor Pusat --}}
-                    <div class="p-4">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-gold-deep">{{ $id ? 'Kantor Pusat' : 'Head Office' }}</p>
-                        <p class="mt-2 text-sm leading-relaxed text-navy-600">
-                            Gedung Bursa Efek Indonesia Tower 1 Level 3, Unit 304<br>
-                            Jalan Jendral Sudirman Kav. 52-53, SCBD Senayan,<br>
-                            Kebayoran Baru, Jakarta Selatan, DKI Jakarta
-                        </p>
-                        <p class="mt-3 text-xs font-medium text-navy-500">PH. 021-5890 5002, 0818 834 766</p>
-                    </div>
+                    @if ($offices->isNotEmpty())
+                        @foreach ($offices as $office)
+                            <div class="p-4">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gold-deep">{{ $office->name }}</p>
+                                <p class="mt-2 text-sm leading-relaxed text-navy-600">
+                                    {!! nl2br(e($office->address)) !!}
+                                </p>
+                                @if ($office->phone)
+                                    <p class="mt-3 text-xs font-medium text-navy-500">PH. {{ $office->phone }}</p>
+                                @endif
+                            </div>
+                        @endforeach
+                    @else
+                        {{-- Kantor Pusat --}}
+                        <div class="p-4">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-gold-deep">{{ $id ? 'Kantor Pusat' : 'Head Office' }}</p>
+                            <p class="mt-2 text-sm leading-relaxed text-navy-600">
+                                Gedung Bursa Efek Indonesia Tower 1 Level 3, Unit 304<br>
+                                Jalan Jendral Sudirman Kav. 52-53, SCBD Senayan,<br>
+                                Kebayoran Baru, Jakarta Selatan, DKI Jakarta
+                            </p>
+                            <p class="mt-3 text-xs font-medium text-navy-500">PH. 021-5890 5002, 0818 834 766</p>
+                        </div>
 
-                    {{-- Kantor Pemasaran --}}
-                    <div class="p-4">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-gold-deep">{{ $id ? 'Kantor Pemasaran' : 'Marketing Office' }}</p>
-                        <p class="mt-2 text-sm leading-relaxed text-navy-600">
-                            Cikarang Technopark, Jalan Inti I Blok C1 No. 7<br>
-                            Cibatu, Cikarang Selatan, Kabupaten Bekasi<br>
-                            Jawa Barat 17530
-                        </p>
-                        <p class="mt-3 text-xs font-medium text-navy-500">PH. 021-8988 1110</p>
-                    </div>
+                        {{-- Kantor Pemasaran --}}
+                        <div class="p-4">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-gold-deep">{{ $id ? 'Kantor Pemasaran' : 'Marketing Office' }}</p>
+                            <p class="mt-2 text-sm leading-relaxed text-navy-600">
+                                Cikarang Technopark, Jalan Inti I Blok C1 No. 7<br>
+                                Cibatu, Cikarang Selatan, Kabupaten Bekasi<br>
+                                Jawa Barat 17530
+                            </p>
+                            <p class="mt-3 text-xs font-medium text-navy-500">PH. 021-8988 1110</p>
+                        </div>
 
-                    {{-- Kantor Operasional --}}
-                    <div class="p-4">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-gold-deep">{{ $id ? 'Kantor Operasional' : 'Operational Office' }}</p>
-                        <p class="mt-2 text-sm leading-relaxed text-navy-600">
-                            Taman Widya Asri Blok GG No. 18, Serang<br>
-                            Kota Serang, Banten 46111
-                        </p>
-                        <p class="mt-3 text-xs font-medium text-navy-500">PH. 0817 018 6104</p>
-                    </div>
+                        {{-- Kantor Operasional --}}
+                        <div class="p-4">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-gold-deep">{{ $id ? 'Kantor Operasional' : 'Operational Office' }}</p>
+                            <p class="mt-2 text-sm leading-relaxed text-navy-600">
+                                Taman Widya Asri Blok GG No. 18, Serang<br>
+                                Kota Serang, Banten 46111
+                            </p>
+                            <p class="mt-3 text-xs font-medium text-navy-500">PH. 0817 018 6104</p>
+                        </div>
+                    @endif
                 </div>
             </div>
 

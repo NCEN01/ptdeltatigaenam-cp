@@ -27,7 +27,7 @@ class PublicSiteTest extends TestCase
     public function test_home_renders_in_both_locales(): void
     {
         $this->get('/id')->assertOk()->assertSee('human capital', false);
-        $this->get('/en')->assertOk()->assertSee('Sustainable human capital transformation', false);
+        $this->get('/en')->assertOk()->assertSee('sustainable human capital transformation', false);
     }
 
     public function test_hreflang_tags_present(): void

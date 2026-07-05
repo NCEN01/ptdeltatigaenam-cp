@@ -89,14 +89,25 @@
             </div>
 
             <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                @foreach ($manfaat as $item)
-                    <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
-                        <span class="grid h-11 w-11 place-items-center rounded-xl bg-navy font-display text-lg text-gold transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                        <h3 class="mt-6 font-display text-lg text-navy">{{ $item[0] }}</h3>
-                        <p class="mt-2.5 text-pretty text-sm leading-relaxed text-navy-500">{{ $item[1] }}</p>
-                        <span class="mt-5 block h-0.5 w-0 rounded-full bg-gradient-to-r from-gold to-gold-soft transition-all duration-500 group-hover:w-12"></span>
-                    </div>
-                @endforeach
+                @if (isset($benefits) && $benefits->isNotEmpty())
+                    @foreach ($benefits as $benefit)
+                        <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
+                            <span class="grid h-11 w-11 place-items-center rounded-xl bg-navy font-display text-lg text-gold transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                            <h3 class="mt-6 font-display text-lg text-navy">{{ $benefit->title }}</h3>
+                            <p class="mt-2.5 text-pretty text-sm leading-relaxed text-navy-500">{{ $benefit->description }}</p>
+                            <span class="mt-5 block h-0.5 w-0 rounded-full bg-gradient-to-r from-gold to-gold-soft transition-all duration-500 group-hover:w-12"></span>
+                        </div>
+                    @endforeach
+                @else
+                    @foreach ($manfaat as $item)
+                        <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
+                            <span class="grid h-11 w-11 place-items-center rounded-xl bg-navy font-display text-lg text-gold transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                            <h3 class="mt-6 font-display text-lg text-navy">{{ $item[0] }}</h3>
+                            <p class="mt-2.5 text-pretty text-sm leading-relaxed text-navy-500">{{ $item[1] }}</p>
+                            <span class="mt-5 block h-0.5 w-0 rounded-full bg-gradient-to-r from-gold to-gold-soft transition-all duration-500 group-hover:w-12"></span>
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
     </section>
@@ -116,7 +127,15 @@
 
                     <div class="mt-14 grid items-stretch gap-6 md:grid-cols-2 lg:grid-cols-4">
                         @foreach ($packages as $package)
-                            @php $meta = $tierMeta[$package->tier] ?? ['tagline' => '', 'perks' => []]; @endphp
+                            @php
+                                $meta = $tierMeta[$package->tier] ?? ['tagline' => '', 'perks' => []];
+                                $tagline = $package->tagline ?: $meta['tagline'];
+                                $dbFeatures = $package->features;
+                                if (is_string($dbFeatures)) {
+                                    $dbFeatures = json_decode($dbFeatures, true);
+                                }
+                                $perks = (!empty($dbFeatures) && is_array($dbFeatures)) ? $dbFeatures : $meta['perks'];
+                            @endphp
                             <div class="group relative flex flex-col overflow-hidden rounded-3xl border bg-white shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-lift {{ $package->is_highlighted ? 'border-gold ring-1 ring-gold' : 'border-navy-100' }}"
                                  data-aos="fade-up" data-aos-delay="{{ $loop->index * 90 }}">
                                 @if ($package->is_highlighted)
@@ -129,7 +148,7 @@
                                     <div class="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/10 blur-xl"></div>
                                     <p class="relative font-mono text-[10px] uppercase tracking-label text-white/70">{{ $id ? 'Paket' : 'Package' }}</p>
                                     <h3 class="relative mt-2 font-display text-3xl">{{ $package->name }}</h3>
-                                    <p class="relative mt-3 text-sm leading-relaxed text-white/85">{{ $meta['tagline'] }}</p>
+                                    <p class="relative mt-3 text-sm leading-relaxed text-white/85">{{ $tagline }}</p>
                                 </div>
 
                                 {{-- Body --}}
@@ -138,7 +157,7 @@
                                     <p class="mt-1 font-display text-lg text-navy">{{ $package->price ? 'Rp '.number_format((float) $package->price, 0, ',', '.') : ($id ? 'Via penawaran (invoice)' : 'By offer (invoice)') }}</p>
 
                                     <ul class="mt-6 flex-1 space-y-3 border-t border-navy-100 pt-6">
-                                        @foreach ($meta['perks'] as $perk)
+                                        @foreach ($perks as $perk)
                                             <li class="flex items-start gap-2.5 text-sm text-navy-600">
                                                 <svg class="mt-0.5 h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                                 <span>{{ $perk }}</span>

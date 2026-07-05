@@ -7,22 +7,47 @@
         $heroStats = $isId
             ? [['500+', 'Profesional Terlatih'], ['98%', 'Kepuasan Klien'], ['10+', 'Tahun Pengalaman']]
             : [['500+', 'Professionals Trained'], ['98%', 'Client Satisfaction'], ['10+', 'Years Experience']];
-        $heroSlides = $isId ? [
-            ['img' => 'photo-1524178232363-1fb2b075b655', 'cat' => 'Pelatihan', 'title' => 'Pelatihan SDM yang Berdampak', 'desc' => 'Program pelatihan karyawan yang relevan dan inovatif untuk meningkatkan kompetensi serta produktivitas tim Anda.'],
-            ['img' => 'photo-1542744173-8e7e53415bb0', 'cat' => 'Sertifikasi', 'title' => 'Sertifikasi Profesi Terpercaya', 'desc' => 'Sertifikasi kompetensi yang diakui secara profesional untuk meningkatkan kredibilitas dan daya saing SDM Anda.'],
-            ['img' => 'photo-1521737604893-d14cc237f11d', 'cat' => 'Headhunter', 'title' => 'Headhunter & Penempatan Talenta', 'desc' => 'Penyeleksian dan penempatan talenta terbaik yang sesuai dengan kebutuhan strategis perusahaan Anda.'],
-        ] : [
-            ['img' => 'photo-1524178232363-1fb2b075b655', 'cat' => 'Training', 'title' => 'Impactful HR Training', 'desc' => "Relevant, innovative employee training programs to boost your team's competency and productivity."],
-            ['img' => 'photo-1542744173-8e7e53415bb0', 'cat' => 'Certification', 'title' => 'Trusted Professional Certification', 'desc' => "Professionally recognized competency certification to strengthen your people's credibility and edge."],
-            ['img' => 'photo-1521737604893-d14cc237f11d', 'cat' => 'Headhunting', 'title' => 'Headhunting & Talent Placement', 'desc' => 'Selection and placement of top talent aligned with your strategic business needs.'],
-        ];
+        
+        $slides = [];
+        if (isset($heroBanners) && $heroBanners->isNotEmpty()) {
+            foreach ($heroBanners as $banner) {
+                $slides[] = [
+                    'img_url' => str_starts_with($banner->image, 'http') ? $banner->image : Storage::url($banner->image),
+                    'cat' => optional($banner->category)->name ?: ($isId ? 'Layanan' : 'Services'),
+                    'title' => $banner->title,
+                    'desc' => $banner->subtitle,
+                    'link' => $banner->link_url ?: route('services.index'),
+                    'btn_text' => $banner->button_text ?: ($isId ? 'Jelajahi' : 'Explore'),
+                ];
+            }
+        } else {
+            $hardcodedSlides = $isId ? [
+                ['img' => 'photo-1524178232363-1fb2b075b655', 'cat' => 'Pelatihan', 'title' => 'Pelatihan SDM yang Berdampak', 'desc' => 'Program pelatihan karyawan yang relevan dan inovatif untuk meningkatkan kompetensi serta produktivitas tim Anda.'],
+                ['img' => 'photo-1542744173-8e7e53415bb0', 'cat' => 'Sertifikasi', 'title' => 'Sertifikasi Profesi Terpercaya', 'desc' => 'Sertifikasi kompetensi yang diakui secara profesional untuk meningkatkan kredibilitas dan daya saing SDM Anda.'],
+                ['img' => 'photo-1521737604893-d14cc237f11d', 'cat' => 'Headhunter', 'title' => 'Headhunter & Penempatan Talenta', 'desc' => 'Penyeleksian dan penempatan talenta terbaik yang sesuai dengan kebutuhan strategis perusahaan Anda.'],
+            ] : [
+                ['img' => 'photo-1524178232363-1fb2b075b655', 'cat' => 'Training', 'title' => 'Impactful HR Training', 'desc' => "Relevant, innovative employee training programs to boost your team's competency and productivity."],
+                ['img' => 'photo-1542744173-8e7e53415bb0', 'cat' => 'Certification', 'title' => 'Trusted Professional Certification', 'desc' => "Professionally recognized competency certification to strengthen your people's credibility and edge."],
+                ['img' => 'photo-1521737604893-d14cc237f11d', 'cat' => 'Headhunting', 'title' => 'Headhunting & Talent Placement', 'desc' => 'Selection and placement of top talent aligned with your strategic business needs.'],
+            ];
+            foreach ($hardcodedSlides as $s) {
+                $slides[] = [
+                    'img_url' => "https://images.unsplash.com/" . $s['img'] . "?auto=format&fit=crop&w=1920&q=80",
+                    'cat' => $s['cat'],
+                    'title' => $s['title'],
+                    'desc' => $s['desc'],
+                    'link' => route('services.index'),
+                    'btn_text' => __('site.cta.explore'),
+                ];
+            }
+        }
     @endphp
     <section class="relative">
         <div class="swiper hero-carousel" data-hero-carousel>
             <div class="swiper-wrapper">
-                @foreach ($heroSlides as $slide)
+                @foreach ($slides as $slide)
                     <div class="swiper-slide relative min-h-[100svh] overflow-hidden bg-navy-950">
-                        <img src="https://images.unsplash.com/{{ $slide['img'] }}?auto=format&fit=crop&w=1920&q=80"
+                        <img src="{{ $slide['img_url'] }}"
                              alt="{{ $slide['title'] }}" {{ $loop->first ? 'loading=eager fetchpriority=high' : 'loading=lazy' }}
                              class="hero-slide-img absolute inset-0 h-full w-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-r from-navy-950/92 via-navy-950/70 to-navy-950/20"></div>
@@ -38,7 +63,7 @@
                                 <h1 class="mt-6 font-display font-normal leading-[1.05] text-balance [font-size:clamp(2.2rem,5.2vw,4rem)]">{{ $hl }}@if ($hl) @endif<span class="italic-accent text-gradient-hero">{{ $ha }}</span></h1>
                                 <p class="mt-6 max-w-xl text-base leading-relaxed text-navy-100 text-pretty md:text-lg">{{ $slide['desc'] }}</p>
                                 <div class="mt-9 flex flex-wrap items-center gap-4">
-                                    <a href="{{ route('services.index') }}" class="btn-blue">{{ __('site.cta.explore') }}</a>
+                                    <a href="{{ $slide['link'] }}" class="btn-blue">{{ $slide['btn_text'] }}</a>
                                     <a href="{{ route('contact.index') }}" class="btn-ghost-light">{{ __('site.cta.consult') }}</a>
                                 </div>
                             </div>

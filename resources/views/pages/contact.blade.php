@@ -3,26 +3,6 @@
 
     $email = 'info@deltatigaenam.com';
 
-    $offices = [
-        [
-            'name' => 'Kantor Pusat (SCBD)',
-            'address' => 'Gedung Bursa Efek Indonesia Tower 1 Level 3, Unit 304, Jalan Jendral Sudirman Kav. 52-53, SCBD Senayan, Kebayoran Baru, Jakarta Selatan',
-            'phone' => '021-5890 5002',
-            'maps' => 'Gedung Bursa Efek Indonesia Tower 1, SCBD, Jakarta Selatan',
-        ],
-        [
-            'name' => $id ? 'Kantor Pemasaran' : 'Marketing Office',
-            'address' => 'Cikarang Technopark, Jalan Inti I Blok C1 No. 7, Cibatu, Cikarang Selatan, Kabupaten Bekasi, Jawa Barat 17530',
-            'phone' => '021-8988 1110',
-            'maps' => 'Cikarang Technopark, Cikarang Selatan, Bekasi',
-        ],
-        [
-            'name' => $id ? 'Kantor Operasional' : 'Operational Office',
-            'address' => 'Taman Widya Asri Blok GG No. 18, Serang, Kota Serang, Banten 46111',
-            'phone' => '0817 018 6104',
-            'maps' => 'Taman Widya Asri, Serang, Banten',
-        ],
-    ];
 
     $waNumber = '62818834766';
     $waText = rawurlencode($id ? 'Halo Delta Tiga Enam, saya ingin bertanya seputar layanan Anda.' : 'Hello Delta Tiga Enam, I would like to ask about your services.');
