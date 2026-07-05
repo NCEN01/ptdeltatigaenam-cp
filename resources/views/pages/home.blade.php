@@ -95,8 +95,8 @@
                     {{ $isId ? 'Kategori — Layanan Pengembangan SDM' : 'Categories — Human Capital Services' }}
                 </p>
                 <h2 class="mt-5 text-display-lg leading-[1.08]" data-aos="fade-up" data-aos-delay="60">
-                    <span class="block text-white">{{ $isId ? 'Pilih Kategori' : 'Choose a Category' }}</span>
-                    <span class="block bg-gradient-to-r from-[#7ec2ff] to-[#e3b552] bg-clip-text text-transparent">{{ $isId ? 'Layanan Anda.' : 'For Your Growth.' }}</span>
+                    <span class="block font-semibold text-white">{{ $isId ? 'Pilih Kategori' : 'Choose a Category' }}</span>
+                    <span class="italic-accent text-gradient-hero block">{{ $isId ? 'Layanan Anda.' : 'For Your Growth.' }}</span>
                 </h2>
                 <p class="mx-auto mt-5 max-w-xl text-pretty leading-relaxed text-navy-100" data-aos="fade-up" data-aos-delay="120">
                     {{ $isId
@@ -137,7 +137,7 @@
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                         </div>
-                        <a href="{{ route('services.index') }}" class="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#7ec2ff] to-[#e3b552] px-7 py-3.5 text-sm font-semibold text-navy-950 shadow-[0_12px_34px_-12px_rgba(126,194,255,0.6)] transition duration-200 hover:-translate-y-0.5">
+                        <a href="{{ route('services.index') }}" class="btn-blue group mt-2">
                             {{ $isId ? 'Lihat Semua Kategori' : 'View All Categories' }}
                             <svg class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </a>
@@ -169,7 +169,7 @@
                     <div class="swiper-wrapper">
                         @foreach ($latestServices as $service)
                             <div class="swiper-slide flex h-auto">
-                                <a href="{{ route('services.show', $service->slug) }}" class="card card-hover group flex w-full flex-col overflow-hidden">
+                                <a href="{{ route('services.show', $service->slug) }}" data-spotlight class="card card-hover group flex w-full flex-col overflow-hidden">
                                     <div class="relative aspect-[16/10] overflow-hidden bg-navy-100">
                                         @if ($service->image)
                                             <img src="{{ Storage::url($service->image) }}" alt="{{ $service->title }}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
@@ -274,7 +274,7 @@
                         <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none gap-6 overflow-x-auto scroll-smooth pb-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             @foreach ($posts as $post)
                                 @php $bimg = $post->featured_image ? (str_starts_with($post->featured_image, 'http') ? $post->featured_image : Storage::url($post->featured_image)) : null; @endphp
-                                <a href="{{ route('blog.show', $post->slug) }}" class="group min-w-0 shrink-0 basis-[82%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)]">
+                                <a href="{{ route('blog.show', $post->slug) }}" data-spotlight class="group min-w-0 shrink-0 basis-[82%] snap-start overflow-hidden rounded-2xl sm:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)]">
                                     <p class="font-mono text-lg text-navy-300">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}.</p>
                                     <h3 class="mt-2 line-clamp-2 min-h-[3.25rem] font-display text-lg leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">{{ $post->title }}</h3>
                                     @if (optional($post->category)->name)
@@ -475,7 +475,7 @@
 
                     <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none gap-6 overflow-x-auto scroll-smooth pb-4 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                         @foreach ($upcomingAgendas as $agenda)
-                            <a href="{{ route('agenda.index') }}"
+                            <a href="{{ route('agenda.index') }}" data-spotlight
                                class="group relative flex min-w-0 shrink-0 basis-[80%] snap-start flex-col overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-card transition-all duration-500 ease-out-soft hover:-translate-y-1.5 hover:border-navy-200 hover:shadow-lift sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)] lg:basis-[calc((100%_-_4.5rem)/4)]">
 
                             {{-- Media (compact) --}}

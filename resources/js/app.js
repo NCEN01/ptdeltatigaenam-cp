@@ -45,6 +45,15 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(refreshScr
 try { initCoverflow(); } catch (e) { console.error('[coverflow]', e); }
 try { initHscroll(); } catch (e) { console.error('[hscroll]', e); }
 
+// Cursor spotlight glow on cards — delegated; positions the radial glow under the cursor.
+document.addEventListener('pointermove', (e) => {
+    const el = e.target.closest('[data-spotlight]');
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--sx', `${((e.clientX - r.left) / r.width) * 100}%`);
+    el.style.setProperty('--sy', `${((e.clientY - r.top) / r.height) * 100}%`);
+}, { passive: true });
+
 // Button press ripple — delegated, so it also covers buttons added later. The soft
 // scale-down on :active is handled in CSS. Disabled under reduced-motion.
 if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {

@@ -462,6 +462,22 @@
         .btn:hover::after { transform: translateX(130%); }
     }
     .btn > * { position: relative; z-index: 1; }
+
+    /* Cursor-following spotlight glow on cards — the "circular hover". JS sets --sx/--sy. */
+    [data-spotlight] { position: relative; }
+    [data-spotlight]::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 4;
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity 0.35s ease;
+        background: radial-gradient(190px circle at var(--sx, 50%) var(--sy, 50%), rgba(120, 194, 255, 0.20), transparent 62%);
+        pointer-events: none;
+    }
+    [data-spotlight]:hover::after { opacity: 1; }
+
     .btn-ripple {
         position: absolute;
         border-radius: 9999px;
