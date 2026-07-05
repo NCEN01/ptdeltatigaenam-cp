@@ -77,25 +77,8 @@
         </div>
     </section>
 
-    {{-- Clients --}}
-    @if ($clients->isNotEmpty())
-        <section class="border-y border-navy-100 bg-mist py-16 lg:py-20">
-            <div class="container">
-                <p class="eyebrow-muted mb-10 text-center">{{ $id ? 'Klien yang mempercayai kami' : 'Clients who trust us' }}</p>
-                <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-                    @foreach ($clients as $client)
-                        <div class="flex h-20 items-center justify-center rounded-2xl border border-navy-100 bg-white px-6 opacity-70 grayscale transition duration-300 hover:-translate-y-1 hover:border-navy-200 hover:opacity-100 hover:grayscale-0">
-                            @if ($client->logo)
-                                <img src="{{ Storage::url($client->logo) }}" alt="{{ $client->name }}" loading="lazy" class="max-h-10 w-auto object-contain">
-                            @else
-                                <span class="text-center font-display text-base font-semibold text-navy-300">{{ $client->name }}</span>
-                            @endif
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-    @endif
+    {{-- Partners & Clients --}}
+    <x-partners-clients :partners="$partners" :clients="$clients" />
 
     {{-- Testimonials --}}
     <x-testimonial-columns :testimonials="$testimonials" />

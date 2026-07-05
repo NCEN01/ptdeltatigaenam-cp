@@ -439,46 +439,70 @@
             </div>
 
             @if ($upcomingAgendas->isNotEmpty())
-                <div class="mt-10 grid gap-6 md:grid-cols-3">
+                <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($upcomingAgendas as $agenda)
-                        <div class="card card-hover flex flex-col overflow-hidden border-navy-100 shadow-card" data-aos="fade-up" data-aos-delay="{{ $loop->index * 90 }}">
-                            @if ($agenda->image)
-                                <div class="relative aspect-[16/10] overflow-hidden bg-navy-100">
-                                    <img src="{{ Storage::url($agenda->image) }}" alt="{{ $agenda->title }}" loading="lazy" class="h-full w-full object-cover">
-                                </div>
-                            @endif
-                            <div class="p-6 flex-1 flex flex-col justify-between">
-                                <div class="space-y-3">
-                                    {{-- Date Badge --}}
-                                    <div class="flex items-center gap-3">
-                                        <div class="flex flex-col items-center justify-center rounded-xl bg-sky-50 px-3 py-1.5 text-center text-sky border border-sky/10">
-                                            <span class="font-mono text-lg font-black leading-none">{{ $agenda->starts_at->format('d') }}</span>
-                                            <span class="font-mono text-[9px] uppercase font-bold tracking-wider leading-none mt-0.5">{{ $agenda->starts_at->translatedFormat('M') }}</span>
-                                        </div>
-                                        <div class="text-[11px] font-mono text-navy-400">
-                                            <p>{{ $agenda->starts_at->translatedFormat('H:i') }} - {{ $agenda->ends_at->translatedFormat('H:i') }} WIB</p>
-                                            <p class="mt-0.5 text-navy-300">{{ $agenda->location }}</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <h3 class="font-display text-lg font-semibold text-navy leading-snug pt-1">
-                                        {{ $agenda->title }}
-                                    </h3>
-                                    @if ($agenda->excerpt)
-                                        <p class="text-xs leading-relaxed text-navy-500 line-clamp-2">
-                                            {{ $agenda->excerpt }}
-                                        </p>
-                                    @endif
+                        <a href="{{ route('agenda.index') }}"
+                           class="group relative flex flex-col overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-card transition-all duration-500 ease-out-soft hover:-translate-y-1.5 hover:border-navy-200 hover:shadow-lift"
+                           data-aos="fade-up" data-aos-delay="{{ $loop->index * 90 }}">
+
+                            {{-- Media --}}
+                            <div class="relative aspect-[16/10] overflow-hidden bg-navy-900">
+                                @if ($agenda->image)
+                                    <img src="{{ Storage::url($agenda->image) }}" alt="{{ $agenda->title }}" loading="lazy"
+                                         class="h-full w-full object-cover transition-transform duration-700 ease-out-soft group-hover:scale-[1.05]">
+                                @else
+                                    <div class="absolute inset-0" style="background: linear-gradient(150deg,#12365f 0%,#0a1f3c 100%);"></div>
+                                    <div class="absolute inset-0 aurora opacity-40"></div>
+                                @endif
+                                <div class="absolute inset-0 bg-gradient-to-t from-navy-950/60 via-navy-950/10 to-transparent"></div>
+
+                                {{-- Floating date badge --}}
+                                <div class="absolute left-4 top-4 flex w-14 flex-col items-center rounded-2xl bg-white/95 py-2 text-center shadow-lift ring-1 ring-white/60 backdrop-blur">
+                                    <span class="font-display text-2xl font-semibold leading-none text-navy">{{ $agenda->starts_at->format('d') }}</span>
+                                    <span class="mt-1 font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-gold-deep">{{ $agenda->starts_at->translatedFormat('M') }}</span>
                                 </div>
 
-                                <div class="mt-6 pt-4 border-t border-navy-100 flex items-center justify-between">
-                                    <a href="{{ route('agenda.index') }}" class="text-xs font-semibold text-sky hover:underline flex items-center gap-1.5 group/btn">
-                                        <span>{{ $isId ? 'Detail Agenda' : 'Agenda Detail' }}</span>
-                                        <span class="transition-transform group-hover/btn:translate-x-1">&rarr;</span>
-                                    </a>
+                                {{-- Weekday pill --}}
+                                <span class="absolute bottom-4 left-4 rounded-full bg-white/15 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white ring-1 ring-white/25 backdrop-blur-md">
+                                    {{ $agenda->starts_at->translatedFormat('l') }}
+                                </span>
+                            </div>
+
+                            {{-- Body --}}
+                            <div class="flex flex-1 flex-col p-6">
+                                <h3 class="line-clamp-2 font-display text-xl font-semibold leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">
+                                    {{ $agenda->title }}
+                                </h3>
+
+                                @if ($agenda->excerpt)
+                                    <p class="mt-3 line-clamp-2 text-sm leading-relaxed text-navy-500">{{ $agenda->excerpt }}</p>
+                                @endif
+
+                                {{-- Meta --}}
+                                <div class="mt-5 space-y-2.5 text-sm text-navy-600">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-sky-50 text-sky-600">
+                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </span>
+                                        <span class="font-medium">{{ $agenda->starts_at->translatedFormat('H:i') }}&ndash;{{ $agenda->ends_at->translatedFormat('H:i') }} WIB</span>
+                                    </div>
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-sky-50 text-sky-600">
+                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-5.686 7-11a7 7 0 1 0-14 0c0 5.314 7 11 7 11Z" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5"/></svg>
+                                        </span>
+                                        <span class="truncate">{{ $agenda->location }}</span>
+                                    </div>
+                                </div>
+
+                                {{-- Footer CTA --}}
+                                <div class="mt-6 flex items-center justify-between border-t border-navy-100 pt-4">
+                                    <span class="text-sm font-semibold text-navy">{{ $isId ? 'Lihat Detail' : 'View Details' }}</span>
+                                    <span class="grid h-9 w-9 place-items-center rounded-full bg-navy text-white transition-all duration-300 ease-out-soft group-hover:translate-x-0.5 group-hover:bg-sky-600">
+                                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </span>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
             @else
@@ -516,7 +540,7 @@
         <div class="container grid gap-12 lg:grid-cols-12 lg:gap-16">
             
             {{-- Left Side: Heading & WhatsApp CTA --}}
-            <div class="lg:col-span-5 flex flex-col justify-between space-y-8" data-aos="fade-right">
+            <div class="lg:col-span-5 flex flex-col space-y-8 lg:sticky lg:top-28 lg:self-start" data-aos="fade-right">
                 <div class="space-y-4">
                     <p class="eyebrow"><span class="rule-gold mr-3"></span>FAQ</p>
                     <h2 class="text-display-lg font-semibold text-navy text-balance">
@@ -530,19 +554,21 @@
                 </div>
 
                 {{-- WhatsApp CTA Card --}}
-                <div class="card p-6 md:p-8 border-navy-100 bg-white shadow-card space-y-4">
-                    <div class="flex items-center gap-3">
-                        <span class="grid h-10 w-10 place-items-center rounded-xl bg-emerald-500/10 text-emerald-600">
+                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-900 to-navy-950 p-7 text-white shadow-lift ring-1 ring-white/5 space-y-4 md:p-8">
+                    <div class="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-emerald-500/15 blur-3xl"></div>
+                    <div class="pointer-events-none absolute -bottom-16 -left-10 h-40 w-40 rounded-full bg-gold/10 blur-3xl"></div>
+                    <div class="relative flex items-center gap-3">
+                        <span class="grid h-10 w-10 place-items-center rounded-xl bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-400/25">
                             <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.45L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.97-1.861-1.868-4.339-2.897-6.97-2.899-5.437 0-9.862 4.37-9.866 9.801-.001 1.737.457 3.432 1.328 4.935l-.995 3.631 3.723-.979zm7.53-7.535c-.175-.29-.64-.464-.875-.58-.233-.115-1.393-.683-1.605-.765-.213-.083-.368-.124-.523.11-.155.233-.6 1.015-.736 1.173-.136.158-.271.176-.505.06-.233-.116-.988-.364-1.882-1.163-.695-.62-1.164-1.386-1.3-1.62-.137-.233-.015-.359.102-.475.106-.104.233-.272.35-.407.115-.136.154-.233.232-.387.078-.155.039-.29-.02-.406-.058-.115-.523-1.26-.716-1.725-.19-.453-.383-.39-.523-.397-.135-.007-.29-.008-.445-.008-.156 0-.41.058-.625.29-.215.233-.82.802-.82 1.953s.836 2.26 1.07 2.57c.233.29 1.644 2.51 3.982 3.52.556.24 1 .383 1.343.492.56.179 1.07.154 1.472.094.448-.067 1.393-.57 1.587-1.12.195-.55.195-1.022.136-1.122-.058-.1-.233-.175-.407-.29z"/></svg>
                         </span>
-                        <h4 class="font-display font-semibold text-navy text-base">{{ $isId ? 'Punya pertanyaan lain?' : 'Have more questions?' }}</h4>
+                        <h4 class="font-display font-semibold text-white text-base">{{ $isId ? 'Punya pertanyaan lain?' : 'Have more questions?' }}</h4>
                     </div>
-                    <p class="text-xs text-navy-400 leading-relaxed">
-                        {{ $isId 
+                    <p class="relative text-xs text-navy-200 leading-relaxed">
+                        {{ $isId
                             ? 'Jika Anda tidak menemukan jawaban yang dicari, hubungi admin kami melalui WhatsApp untuk konsultasi cepat.'
                             : 'If you cannot find the answer you are looking for, contact our admin via WhatsApp for a quick consultation.' }}
                     </p>
-                    <div class="pt-2">
+                    <div class="relative pt-2">
                         <a href="https://wa.me/62818834766?text=Halo%20Delta%20Tiga%20Enam,%20saya%20ingin%20bertanya%20mengenai..." target="_blank" rel="noopener" class="w-full btn bg-emerald-500 hover:bg-emerald-600 text-white shadow-lift inline-flex items-center justify-center gap-2">
                             <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.45L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.97-1.861-1.868-4.339-2.897-6.97-2.899-5.437 0-9.862 4.37-9.866 9.801-.001 1.737.457 3.432 1.328 4.935l-.995 3.631 3.723-.979zm7.53-7.535c-.175-.29-.64-.464-.875-.58-.233-.115-1.393-.683-1.605-.765-.213-.083-.368-.124-.523.11-.155.233-.6 1.015-.736 1.173-.136.158-.271.176-.505.06-.233-.116-.988-.364-1.882-1.163-.695-.62-1.164-1.386-1.3-1.62-.137-.233-.015-.359.102-.475.106-.104.233-.272.35-.407.115-.136.154-.233.232-.387.078-.155.039-.29-.02-.406-.058-.115-.523-1.26-.716-1.725-.19-.453-.383-.39-.523-.397-.135-.007-.29-.008-.445-.008-.156 0-.41.058-.625.29-.215.233-.82.802-.82 1.953s.836 2.26 1.07 2.57c.233.29 1.644 2.51 3.982 3.52.556.24 1 .383 1.343.492.56.179 1.07.154 1.472.094.448-.067 1.393-.57 1.587-1.12.195-.55.195-1.022.136-1.122-.058-.1-.233-.175-.407-.29z"/></svg>
                             <span>Hubungi WA Admin</span>
@@ -552,73 +578,92 @@
             </div>
 
             {{-- Right Side: Accordion driven by AlpineJS --}}
-            <div class="lg:col-span-7" data-aos="fade-left" x-data="{ activeFaq: null }">
-                <div class="space-y-4">
-                    @php
-                        $faqs = $isId ? [
-                            [
-                                'q' => 'Apa saja layanan utama yang ditawarkan oleh PT Delta Tiga Enam?',
-                                'a' => 'Kami menawarkan solusi human capital terintegrasi yang mencakup Pelatihan SDM, Sertifikasi Kompetensi Profesi (BNSP), Asesmen & Seleksi Karyawan, serta Headhunter & Penempatan Tenaga Kerja.'
-                            ],
-                            [
-                                'q' => 'Apakah sertifikasi kompetensi dari Delta Tiga Enam resmi?',
-                                'a' => 'Ya, seluruh program sertifikasi kompetensi kami diselenggarakan secara resmi bekerja sama dengan LSP berlisensi BNSP (Badan Nasional Sertifikasi Profesi) sehingga diakui di tingkat nasional oleh berbagai sektor industri.'
-                            ],
-                            [
-                                'q' => 'Bagaimana cara mendaftar program pelatihan atau sertifikasi?',
-                                'a' => 'Anda dapat mendaftar langsung dengan memilih layanan di website kami, menghubungi admin kami melalui WhatsApp, atau mengirimkan detail kebutuhan Anda melalui formulir kontak.'
-                            ],
-                            [
-                                'q' => 'Apakah program pelatihan bisa diadakan khusus untuk internal perusahaan (In-House)?',
-                                'a' => 'Tentu saja. Kami menyediakan layanan In-House Training dengan materi, jadwal, dan metode penyampaian yang dirancang khusus menyesuaikan kebutuhan peningkatan kompetensi staf di perusahaan Anda.'
-                            ],
-                        ] : [
-                            [
-                                'q' => 'What are the main services offered by PT Delta Tiga Enam?',
-                                'a' => 'We offer integrated human capital solutions covering HR Training, Professional Competence Certification (BNSP), Employee Assessment & Selection, and Headhunting & Talent Placement.'
-                            ],
-                            [
-                                'q' => 'Are the competence certifications official?',
-                                'a' => 'Yes, all our competency certification programs are officially conducted in partnership with BNSP-licensed LSPs, ensuring national recognition across industries.'
-                            ],
-                            [
-                                'q' => 'How can I register for a training or certification program?',
-                                'a' => 'You can register directly by selecting the service on our website, contacting our admin via WhatsApp, or sending your details through the contact form.'
-                            ],
-                            [
-                                'q' => 'Can training programs be customized for internal company needs (In-House)?',
-                                'a' => 'Absolutely. We provide customized In-House Training with curriculum, schedule, and methods tailored to address specific competence needs in your organization.'
-                            ]
-                        ];
-                    @endphp
+            <div class="lg:col-span-7" data-aos="fade-left" x-data="{ activeFaq: 0 }">
+                @php
+                    $faqs = $isId ? [
+                        [
+                            'q' => 'Apa saja layanan utama yang ditawarkan oleh PT Delta Tiga Enam?',
+                            'a' => 'Kami menawarkan solusi human capital terintegrasi yang mencakup Pelatihan SDM, Sertifikasi Kompetensi Profesi (BNSP), Asesmen & Seleksi Karyawan, serta Headhunter & Penempatan Tenaga Kerja.',
+                        ],
+                        [
+                            'q' => 'Apa manfaat bekerja sama dengan konsultan human capital seperti Delta Tiga Enam?',
+                            'a' => 'Sebagai konsultan human capital, kami membantu perusahaan mengelola SDM secara strategis — mulai dari pemetaan kompetensi, peningkatan produktivitas, hingga efisiensi rekrutmen. Anda mendapatkan pendampingan ahli sehingga setiap keputusan terkait talenta menjadi lebih terukur, hemat biaya, dan berdampak langsung pada kinerja organisasi.',
+                        ],
+                        [
+                            'q' => 'Apakah sertifikasi kompetensi dari Delta Tiga Enam resmi?',
+                            'a' => 'Ya, seluruh program sertifikasi kompetensi kami diselenggarakan secara resmi bekerja sama dengan LSP berlisensi BNSP (Badan Nasional Sertifikasi Profesi) sehingga diakui di tingkat nasional oleh berbagai sektor industri.',
+                        ],
+                        [
+                            'q' => 'Berapa lama durasi pelatihan dan apakah peserta memperoleh sertifikat?',
+                            'a' => 'Durasi pelatihan bervariasi mulai dari 1–5 hari tergantung program dan tingkat kompetensinya. Setiap peserta yang menyelesaikan pelatihan akan memperoleh sertifikat; khusus program sertifikasi kompetensi, sertifikat diterbitkan resmi oleh LSP berlisensi BNSP setelah peserta dinyatakan kompeten dalam uji sertifikasi.',
+                        ],
+                        [
+                            'q' => 'Bagaimana cara mendaftar program pelatihan atau sertifikasi?',
+                            'a' => 'Anda dapat mendaftar langsung dengan memilih layanan di website kami, menghubungi admin kami melalui WhatsApp, atau mengirimkan detail kebutuhan Anda melalui formulir kontak.',
+                        ],
+                        [
+                            'q' => 'Apakah program pelatihan bisa diadakan khusus untuk internal perusahaan (In-House)?',
+                            'a' => 'Tentu saja. Kami menyediakan layanan In-House Training dengan materi, jadwal, dan metode penyampaian yang dirancang khusus menyesuaikan kebutuhan peningkatan kompetensi staf di perusahaan Anda.',
+                        ],
+                    ] : [
+                        [
+                            'q' => 'What are the main services offered by PT Delta Tiga Enam?',
+                            'a' => 'We offer integrated human capital solutions covering HR Training, Professional Competence Certification (BNSP), Employee Assessment & Selection, and Headhunting & Talent Placement.',
+                        ],
+                        [
+                            'q' => 'What are the benefits of working with a human capital consultant like Delta Tiga Enam?',
+                            'a' => 'As a human capital consultant, we help companies manage their workforce strategically — from competency mapping and productivity improvement to more efficient recruitment. You gain expert guidance so every talent-related decision becomes measurable, cost-effective, and directly impacts organizational performance.',
+                        ],
+                        [
+                            'q' => 'Are the competence certifications official?',
+                            'a' => 'Yes, all our competency certification programs are officially conducted in partnership with BNSP-licensed LSPs, ensuring national recognition across industries.',
+                        ],
+                        [
+                            'q' => 'How long is the training and do participants receive a certificate?',
+                            'a' => 'Training duration varies from 1–5 days depending on the program and competency level. Every participant who completes the training receives a certificate; for competency certification programs, certificates are officially issued by BNSP-licensed LSPs once the participant is declared competent in the assessment.',
+                        ],
+                        [
+                            'q' => 'How can I register for a training or certification program?',
+                            'a' => 'You can register directly by selecting the service on our website, contacting our admin via WhatsApp, or sending your details through the contact form.',
+                        ],
+                        [
+                            'q' => 'Can training programs be customized for internal company needs (In-House)?',
+                            'a' => 'Absolutely. We provide customized In-House Training with curriculum, schedule, and methods tailored to address specific competence needs in your organization.',
+                        ],
+                    ];
+                @endphp
 
+                <div class="space-y-3">
                     @foreach ($faqs as $i => $faq)
-                        <div class="rounded-2xl border border-navy-100 bg-white overflow-hidden transition-all duration-300"
-                             x-bind:class="activeFaq === {{ $i }} ? 'shadow-lift border-sky/30' : 'hover:border-navy-250'"
-                        >
-                            <button
-                                type="button"
-                                x-on:click="activeFaq = activeFaq === {{ $i }} ? null : {{ $i }}"
-                                class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 font-display font-semibold text-navy text-[15px] focus:outline-none"
-                            >
-                                <span>{{ $faq['q'] }}</span>
-                                <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-navy/5 text-navy transition-transform duration-300"
-                                      x-bind:class="activeFaq === {{ $i }} ? 'rotate-180 bg-sky/10 text-sky' : ''"
-                                >
-                                    <svg class="h-3 w-3" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <div class="overflow-hidden rounded-2xl border bg-white transition-all duration-300"
+                             :class="activeFaq === {{ $i }} ? 'border-gold/40 shadow-card' : 'border-navy-100 hover:border-navy-200'">
+                            <button type="button"
+                                    x-on:click="activeFaq = activeFaq === {{ $i }} ? null : {{ $i }}"
+                                    :aria-expanded="activeFaq === {{ $i }}"
+                                    class="flex w-full items-center gap-4 px-5 py-5 text-left focus:outline-none md:px-6">
+                                <span class="font-mono text-sm font-bold tabular-nums transition-colors duration-300"
+                                      :class="activeFaq === {{ $i }} ? 'text-gold-deep' : 'text-navy-300'">{{ sprintf('%02d', $i + 1) }}</span>
+                                <span class="flex-1 font-display text-[15px] font-semibold leading-snug text-navy md:text-[17px]">{{ $faq['q'] }}</span>
+                                <span class="relative grid h-8 w-8 shrink-0 place-items-center rounded-full transition-colors duration-300"
+                                      :class="activeFaq === {{ $i }} ? 'bg-navy text-white' : 'bg-navy-50 text-navy-500'">
+                                    <span class="absolute h-0.5 w-3.5 rounded-full bg-current"></span>
+                                    <span class="absolute h-3.5 w-0.5 rounded-full bg-current transition-transform duration-300"
+                                          :class="activeFaq === {{ $i }} ? 'scale-y-0' : ''"></span>
                                 </span>
                             </button>
-                            <div
-                                x-show="activeFaq === {{ $i }}"
-                                x-transition:enter="transition ease-out duration-250"
-                                x-transition:enter-start="opacity-0 max-h-0"
-                                x-transition:enter-end="opacity-100 max-h-[500px]"
-                                x-transition:leave="transition ease-in duration-200"
-                                x-transition:leave-start="opacity-100 max-h-[500px]"
-                                x-transition:leave-end="opacity-0 max-h-0"
-                                class="px-6 pb-6 text-sm leading-relaxed text-navy-450 border-t border-navy-50/50 pt-4"
-                            >
-                                {{ $faq['a'] }}
+                            <div x-show="activeFaq === {{ $i }}"
+                                 x-transition:enter="transition-all ease-out duration-300"
+                                 x-transition:enter-start="opacity-0 max-h-0"
+                                 x-transition:enter-end="opacity-100 max-h-[600px]"
+                                 x-transition:leave="transition-all ease-in duration-200"
+                                 x-transition:leave-start="opacity-100 max-h-[600px]"
+                                 x-transition:leave-end="opacity-0 max-h-0"
+                                 class="overflow-hidden">
+                                <div class="px-5 pb-6 md:px-6">
+                                    <div class="ml-9 border-l-2 border-gold/40 pl-4 text-sm leading-relaxed text-navy-500">
+                                        {{ $faq['a'] }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     @endforeach
@@ -629,80 +674,7 @@
     </section>
 
     {{-- ===================== PARTNERS & CLIENTS ===================== --}}
-    @if ($partners->isNotEmpty() || $clients->isNotEmpty())
-        <section class="section">
-            {{-- MITRA KAMI --}}
-            @if ($partners->isNotEmpty())
-                <div class="container text-center" data-aos="fade-up">
-                    <p class="eyebrow mb-4"><span class="rule-gold mr-3"></span>{{ $isId ? 'Mitra Kami' : 'Our Partners' }}</p>
-                    <h2 class="mx-auto max-w-xl text-display-lg font-semibold text-navy text-balance">{{ $isId ? 'Mitra Yang Mendukung Dan Berkolaborasi Dengan Kami.' : 'Partners who support and collaborate with us.' }}</h2>
-                </div>
-                <div class="group mask-fade-x relative mt-12 overflow-hidden" data-aos="fade-up">
-                    <div class="flex w-max animate-marquee items-center gap-6 pr-6 group-hover:[animation-play-state:paused]">
-                        @foreach ($partners->concat($partners) as $partner)
-                            <div class="flex h-24 w-48 shrink-0 items-center justify-center rounded-2xl border border-navy-100 bg-white px-6 opacity-70 grayscale transition duration-300 hover:-translate-y-1 hover:border-navy-200 hover:opacity-100 hover:grayscale-0">
-                                @if ($partner->logo)
-                                    <img src="{{ Storage::url($partner->logo) }}" alt="{{ $partner->name }}" loading="lazy" class="max-h-12 w-auto object-contain">
-                                @else
-                                    <span class="text-center font-display text-lg font-semibold text-navy-300">{{ $partner->name }}</span>
-                                @endif
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
-
-            {{-- KLIEN KAMI — blue panel: text + form (left), 2 vertical logo columns (right) --}}
-            @if ($clients->isNotEmpty())
-                @php $clientCol1 = $clients->concat($clients); $clientCol2 = $clients->reverse()->concat($clients->reverse()); @endphp
-                <div class="container mt-20" data-aos="fade-up">
-                    <div class="relative overflow-hidden rounded-[2.5rem] bg-navy-950 text-white shadow-lift">
-                        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-70"></div>
-                        <div class="pointer-events-none absolute inset-0 grain opacity-50"></div>
-                        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                        <div class="relative grid items-center gap-6 lg:grid-cols-2">
-                            {{-- Left: heading + description + form --}}
-                            <div class="px-8 py-12 md:px-12 md:py-16">
-                                <h2 class="font-sans text-4xl font-extrabold leading-tight text-balance md:text-5xl">{{ $isId ? 'Klien yang telah menggunakan layanan kami' : 'Clients who have used our services' }}</h2>
-                                <p class="mt-5 max-w-md text-pretty leading-relaxed text-white/90">{{ $isId ? 'Berbagai organisasi mempercayakan kebutuhan pengembangan SDM mereka kepada kami. Tinggalkan kontak Anda untuk menjadi bagian berikutnya.' : 'Organizations across industries trust us with their human capital development. Leave your details to be the next.' }}</p>
-                                <form action="#" onsubmit="event.preventDefault()" class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                                    <input type="text" name="name" placeholder="{{ $isId ? 'Masukkan Nama Anda' : 'Enter Your Name' }}" class="min-w-0 flex-1 rounded-full bg-white/95 px-5 py-3.5 text-sm text-navy placeholder:text-navy-300 focus:outline-none focus:ring-2 focus:ring-white">
-                                    <input type="email" name="email" placeholder="{{ $isId ? 'Masukkan Email Anda' : 'Enter Your Email' }}" class="min-w-0 flex-1 rounded-full bg-white/95 px-5 py-3.5 text-sm text-navy placeholder:text-navy-300 focus:outline-none focus:ring-2 focus:ring-white">
-                                    <button type="submit" class="rounded-full bg-gradient-to-r from-cyan-500 to-sky-500 px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-white shadow-[0_8px_30px_-12px_rgba(28,125,224,0.6)] transition duration-200 hover:-translate-y-0.5 hover:from-cyan-400 hover:to-sky-400">{{ $isId ? 'Kirim' : 'Send' }}</button>
-                                </form>
-                            </div>
-
-                            {{-- Right: 2 vertical logo columns (marquee up & down) --}}
-                            <div class="mask-fade-y relative grid max-h-[24rem] grid-cols-2 gap-4 overflow-hidden px-6 py-8 md:max-h-[26rem] md:pr-10">
-                                <div class="marquee-col flex flex-col gap-4" style="--dur: 22s">
-                                    @foreach ($clientCol1 as $client)
-                                        <div class="flex h-20 shrink-0 items-center justify-center rounded-2xl bg-white px-5 opacity-90 grayscale transition duration-300 hover:scale-105 hover:opacity-100 hover:grayscale-0">
-                                            @if ($client->logo)
-                                                <img src="{{ Storage::url($client->logo) }}" alt="{{ $client->name }}" loading="lazy" class="max-h-10 w-auto object-contain">
-                                            @else
-                                                <span class="text-center font-display text-sm font-semibold text-navy">{{ $client->name }}</span>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-                                <div class="marquee-col flex flex-col gap-4 [animation-direction:reverse]" style="--dur: 26s">
-                                    @foreach ($clientCol2 as $client)
-                                        <div class="flex h-20 shrink-0 items-center justify-center rounded-2xl bg-white px-5 opacity-90 grayscale transition duration-300 hover:scale-105 hover:opacity-100 hover:grayscale-0">
-                                            @if ($client->logo)
-                                                <img src="{{ Storage::url($client->logo) }}" alt="{{ $client->name }}" loading="lazy" class="max-h-10 w-auto object-contain">
-                                            @else
-                                                <span class="text-center font-display text-sm font-semibold text-navy">{{ $client->name }}</span>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
-        </section>
-    @endif
+    <x-partners-clients :partners="$partners" :clients="$clients" />
 
 
 </x-layout>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Partner;
 use App\Models\Portfolio;
 use App\Models\Testimonial;
 
@@ -13,6 +14,7 @@ class PortfolioController extends Controller
         return view('pages.portfolio.index', [
             'portfolios' => Portfolio::where('is_active', true)->with('category')
                 ->orderBy('sort_order')->latest('project_date')->get(),
+            'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),
             'clients' => Client::where('is_active', true)->orderBy('sort_order')->get(),
             'testimonials' => Testimonial::where('is_active', true)->orderBy('sort_order')->get(),
         ]);

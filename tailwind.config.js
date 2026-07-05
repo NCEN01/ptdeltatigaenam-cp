@@ -94,6 +94,10 @@ export default {
                     from: { transform: 'translateX(0)' },
                     to: { transform: 'translateX(-50%)' },
                 },
+                'marquee-reverse': {
+                    from: { transform: 'translateX(-50%)' },
+                    to: { transform: 'translateX(0)' },
+                },
                 'marquee-y': {
                     from: { transform: 'translateY(0)' },
                     to: { transform: 'translateY(-50%)' },
@@ -121,6 +125,8 @@ export default {
             animation: {
                 'aurora-drift': 'aurora-drift 18s ease-in-out infinite',
                 marquee: 'marquee 40s linear infinite',
+                'marquee-slow': 'marquee 55s linear infinite',
+                'marquee-reverse': 'marquee-reverse 48s linear infinite',
                 'marquee-y': 'marquee-y 24s linear infinite',
                 'fade-up': 'fade-up 0.7s cubic-bezier(0.16,1,0.3,1) both',
                 float: 'float 8s ease-in-out infinite',
