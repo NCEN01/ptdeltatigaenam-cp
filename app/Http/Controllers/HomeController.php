@@ -25,14 +25,15 @@ class HomeController extends Controller
                 ->with('category')->orderBy('sort_order')->take(4)->get(),
             'latestServices' => Service::where('is_active', true)
                 ->with('category')->latest()->take(6)->get(),
-            'portfolios' => Portfolio::where('is_active', true)->where('is_featured', true)
-                ->with('category')->orderBy('sort_order')->take(3)->get(),
+            // 3 newest portfolios — auto-updates whenever a more recent one is added.
+            'portfolios' => Portfolio::where('is_active', true)
+                ->with('category')->latest('project_date')->latest('id')->take(3)->get(),
             'testimonials' => Testimonial::where('is_active', true)
                 ->orderBy('sort_order')->take(12)->get(),
             'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),
             'clients' => Client::where('is_active', true)->orderBy('sort_order')->get(),
-            'posts' => BlogPost::published()->with('category')->latest('published_at')->take(3)->get(),
-            'upcomingAgendas' => \App\Models\Agenda::published()->where('starts_at', '>=', now())->orderBy('starts_at')->take(3)->get(),
+            'posts' => BlogPost::published()->with('category')->latest('published_at')->take(9)->get(),
+            'upcomingAgendas' => \App\Models\Agenda::published()->where('starts_at', '>=', now())->orderBy('starts_at')->take(9)->get(),
         ]);
     }
 }

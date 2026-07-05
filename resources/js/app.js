@@ -37,6 +37,14 @@ window.addEventListener('load', refreshScroll);
 setTimeout(refreshScroll, 600);
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(refreshScroll);
 
+// Initialize the interactive carousels up-front and in isolation. `initCoverflow` and
+// `initHscroll` are hoisted function declarations (defined lower in this file), so calling
+// them here — before any other enhancement module runs — guarantees they work even if a
+// later module throws. Without this, a single downstream error left the coverflow cards
+// stacked and the Blog/Agenda arrows + auto-scroll dead.
+try { initCoverflow(); } catch (e) { console.error('[coverflow]', e); }
+try { initHscroll(); } catch (e) { console.error('[hscroll]', e); }
+
 // Hero category rotator
 const heroEl = document.querySelector('[data-hero-swiper]');
 if (heroEl) {
@@ -164,20 +172,25 @@ if (!reduceMotion) {
     });
 }
 
-// Generic content carousels (testimonials, portfolio)
+// Generic content carousels (testimonials, portfolio, agenda)
 document.querySelectorAll('[data-carousel]').forEach((el) => {
-    new Swiper(el, {
-        modules: [Autoplay, Pagination],
-        slidesPerView: 1.2,
-        spaceBetween: 16,
-        autoplay: reduceMotion ? false : { delay: 5000, disableOnInteraction: false },
-        pagination: { el: el.querySelector('[data-carousel-pagination]'), clickable: true },
-        breakpoints: {
-            640: { slidesPerView: 2, spaceBetween: 18 },
-            1024: { slidesPerView: 3, spaceBetween: 20 },
-            1280: { slidesPerView: 4, spaceBetween: 20 },
-        },
-    });
+    try {
+        const prevEl = el.parentElement.querySelector('[data-carousel-prev]');
+        const nextEl = el.parentElement.querySelector('[data-carousel-next]');
+        new Swiper(el, {
+            modules: [Autoplay, Navigation, Pagination],
+            slidesPerView: 1.2,
+            spaceBetween: 16,
+            autoplay: reduceMotion ? false : { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
+            pagination: { el: el.parentElement.querySelector('[data-carousel-pagination]'), clickable: true },
+            navigation: (prevEl && nextEl) ? { prevEl, nextEl } : undefined,
+            breakpoints: {
+                640: { slidesPerView: 2, spaceBetween: 18 },
+                1024: { slidesPerView: 3, spaceBetween: 20 },
+                1280: { slidesPerView: 4, spaceBetween: 20 },
+            },
+        });
+    } catch (e) { console.error('[carousel]', e); }
 });
 
 // ═══════════════════════════════════════════
@@ -307,7 +320,8 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 // ═══════════════════════════════════════════
 //  CATEGORY COVERFLOW (drag · snap · 3D)
 // ═══════════════════════════════════════════
-document.querySelectorAll('[data-coverflow]').forEach((root) => {
+function initCoverflow() {
+    document.querySelectorAll('[data-coverflow]').forEach((root) => {
     const stage = root.querySelector('[data-cf-stage]');
     const cards = Array.from(root.querySelectorAll('[data-cf-card]'));
     const dotsWrap = root.querySelector('[data-cf-dots]');
@@ -425,17 +439,62 @@ document.querySelectorAll('[data-coverflow]').forEach((root) => {
 
     goTo(active, true);
     startAuto();
-});
+    // Re-measure once the page (fonts/images) has fully settled.
+    window.addEventListener('load', () => { try { render(true); } catch (_) {} });
+    });
+}
 
 // ═══════════════════════════════════════════
-//  HORIZONTAL SCROLL CAROUSEL (prev / next)
+//  HORIZONTAL SCROLL CAROUSEL (prev / next · drag · auto)
 // ═══════════════════════════════════════════
-document.querySelectorAll('[data-hscroll]').forEach((root) => {
+function initHscroll() {
+    document.querySelectorAll('[data-hscroll]').forEach((root) => {
     const track = root.querySelector('[data-hscroll-track]');
     if (!track) return;
-    const amount = () => Math.round(track.clientWidth * 0.85);
+    // Scroll by a full "page" (however many whole cards are visible) so each nudge
+    // reveals the next set — falls back to ~90% of the viewport when empty.
+    const amount = () => {
+        const first = track.firstElementChild;
+        if (first) {
+            const gap = parseFloat(getComputedStyle(track).columnGap || '0') || 0;
+            const step = first.getBoundingClientRect().width + gap;
+            const perView = Math.max(1, Math.round(track.clientWidth / step));
+            return Math.round(step * perView);
+        }
+        return Math.round(track.clientWidth * 0.9);
+    };
     const prev = root.querySelector('[data-hscroll-prev]');
     const next = root.querySelector('[data-hscroll-next]');
-    if (prev) prev.addEventListener('click', () => track.scrollBy({ left: -amount(), behavior: 'smooth' }));
-    if (next) next.addEventListener('click', () => track.scrollBy({ left: amount(), behavior: 'smooth' }));
-});
+    if (prev) prev.addEventListener('click', () => { pauseAuto(); track.scrollBy({ left: -amount(), behavior: 'smooth' }); });
+    if (next) next.addEventListener('click', () => { pauseAuto(); track.scrollBy({ left: amount(), behavior: 'smooth' }); });
+
+    // Drag / swipe to scroll.
+    let down = false, moved = false, startX = 0, startLeft = 0;
+    track.addEventListener('pointerdown', (e) => {
+        down = true; moved = false; startX = e.clientX; startLeft = track.scrollLeft;
+    });
+    window.addEventListener('pointermove', (e) => {
+        if (!down) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 4) moved = true;
+        track.scrollLeft = startLeft - dx;
+    });
+    const up = () => { down = false; };
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+    // Swallow the click that ends a drag so cards don't navigate mid-swipe.
+    track.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
+
+    // Auto-advance when opted in (data-hscroll-auto) and there is overflow.
+    let timer = null;
+    const canAuto = root.hasAttribute('data-hscroll-auto') && !reduceMotion;
+    const atEnd = () => track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    const tick = () => { atEnd() ? track.scrollTo({ left: 0, behavior: 'smooth' }) : track.scrollBy({ left: amount(), behavior: 'smooth' }); };
+    function startAuto() { stopAuto(); if (canAuto && track.scrollWidth > track.clientWidth + 8) timer = setInterval(tick, 3800); }
+    function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
+    function pauseAuto() { stopAuto(); setTimeout(startAuto, 7000); }
+    root.addEventListener('pointerenter', stopAuto);
+    root.addEventListener('pointerleave', startAuto);
+    startAuto();
+    });
+}

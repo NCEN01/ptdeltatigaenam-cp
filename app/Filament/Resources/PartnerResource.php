@@ -34,6 +34,8 @@ class PartnerResource extends Resource
     {
         return $form->schema([
             Forms\Components\TextInput::make('name')->label('Nama')->required()->maxLength(200),
+            Forms\Components\TextInput::make('registration_number')->label('No. Registrasi')->maxLength(100)
+                ->placeholder('Contoh: 8141312')->helperText('Nomor registrasi mitra yang tampil di bawah logo pada halaman depan.'),
             Forms\Components\TextInput::make('website_url')->label('Website')->url(),
             MediaUpload::for('logo', 'logo', 'partners')->label('Logo'),
             Forms\Components\Textarea::make('description')->label('Deskripsi')->rows(2),
@@ -47,6 +49,7 @@ class PartnerResource extends Resource
         return $table->defaultSort('sort_order')->columns([
             Tables\Columns\ImageColumn::make('logo')->disk('public')->label('')->size(80),
             Tables\Columns\TextColumn::make('name')->label('Nama')->searchable(),
+            Tables\Columns\TextColumn::make('registration_number')->label('No. Registrasi')->searchable()->placeholder('—'),
             Tables\Columns\ToggleColumn::make('is_active')->label('Aktif'),
         ])->actions([
             Tables\Actions\EditAction::make(),

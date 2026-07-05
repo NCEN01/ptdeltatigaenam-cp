@@ -261,7 +261,7 @@
                     </div>
 
                     {{-- Right: carousel --}}
-                    <div class="lg:col-span-8" data-hscroll>
+                    <div class="lg:col-span-8" data-hscroll data-hscroll-auto>
                         <div class="mb-6 flex items-center gap-3">
                             <button type="button" data-hscroll-prev class="grid h-10 w-10 place-items-center rounded-full bg-sky-600 text-white transition hover:bg-sky-700 active:scale-95" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -270,13 +270,16 @@
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                         </div>
-                        <div data-hscroll-track class="flex snap-x gap-6 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none gap-6 overflow-x-auto scroll-smooth pb-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             @foreach ($posts as $post)
                                 @php $bimg = $post->featured_image ? (str_starts_with($post->featured_image, 'http') ? $post->featured_image : Storage::url($post->featured_image)) : null; @endphp
-                                <a href="{{ route('blog.show', $post->slug) }}" class="group w-[260px] shrink-0 snap-start sm:w-[300px]">
+                                <a href="{{ route('blog.show', $post->slug) }}" class="group min-w-0 shrink-0 basis-[82%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)]">
                                     <p class="font-mono text-lg text-navy-300">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}.</p>
                                     <h3 class="mt-2 line-clamp-2 min-h-[3.25rem] font-display text-lg leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">{{ $post->title }}</h3>
-                                    <p class="mt-1 font-mono text-[10px] uppercase tracking-wider text-gold-deep">{{ optional($post->category)->name }}<span class="text-navy-300"> · {{ optional($post->published_at)->translatedFormat('d M Y') }}</span></p>
+                                    @if (optional($post->category)->name)
+                                        <p class="mt-1 font-mono text-[10px] uppercase tracking-wider text-gold-deep">{{ $post->category->name }}</p>
+                                    @endif
+                                    <p class="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-navy-300">{{ optional($post->published_at)->translatedFormat('d M Y') }}</p>
                                     <div class="relative mt-4 aspect-[4/3] overflow-hidden rounded-2xl border border-navy-100 bg-navy-900">
                                         @if ($bimg)
                                             <img src="{{ $bimg }}" alt="{{ $post->title }}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">
@@ -303,8 +306,17 @@
             <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
 
             <div class="container relative">
-                <p class="eyebrow mb-3" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ __('site.home.portfolio_kicker') }}</p>
-                <h2 class="max-w-xl text-2xl font-semibold text-white text-balance md:text-3xl" data-aos="fade-up">{{ __('site.home.portfolio_title') }}</h2>
+                <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                    <div class="max-w-xl">
+                        <p class="eyebrow mb-3" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ __('site.home.portfolio_kicker') }}</p>
+                        <h2 class="text-2xl font-semibold text-white text-balance md:text-3xl" data-aos="fade-up">{{ __('site.home.portfolio_title') }}</h2>
+                    </div>
+                    <a href="{{ route('portfolio.index') }}" data-aos="fade-up"
+                       class="group inline-flex shrink-0 items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-white transition duration-300 hover:border-white hover:bg-white hover:text-navy-950">
+                        {{ $isId ? 'Lihat Semua Portofolio' : 'View All Portfolio' }}
+                        <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                </div>
 
                 <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($portfolios as $p)
@@ -423,29 +435,49 @@
     </section>
 
     {{-- ===================== UPCOMING AGENDAS ===================== --}}
-    <section class="section bg-white border-t border-navy-50">
-        <div class="container">
-            <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                <div class="max-w-2xl" data-aos="fade-up">
-                    <p class="eyebrow mb-3"><span class="rule-gold mr-3"></span>{{ $isId ? 'Jadwal Kegiatan' : 'Agenda' }}</p>
-                    <h2 class="text-display-lg font-semibold text-navy text-balance">{{ $isId ? 'Agenda Mendatang' : 'Upcoming Agenda' }}</h2>
-                </div>
-                @if ($upcomingAgendas->isNotEmpty())
-                    <a href="{{ route('agenda.index') }}" class="link-underline shrink-0 font-medium" data-aos="fade-up">
-                        {{ $isId ? 'Lihat Semua Agenda' : 'View All Agendas' }}
-                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </a>
-                @endif
+    <section class="section relative overflow-hidden border-t border-navy-50 bg-paper">
+        {{-- Animated background --}}
+        <div class="pointer-events-none absolute inset-0 overflow-hidden">
+            <div class="absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full" style="background: radial-gradient(circle, rgba(28,125,224,0.10), transparent 70%);"></div>
+            <div class="absolute -left-24 top-16 h-72 w-72 animate-float-slow rounded-full bg-sky-300/25 blur-3xl"></div>
+            <div class="absolute -right-24 top-1/3 h-80 w-80 animate-float rounded-full bg-gold-soft/20 blur-3xl"></div>
+            <div class="absolute -bottom-16 left-1/3 h-72 w-72 animate-float-slow rounded-full bg-sky-200/30 blur-3xl"></div>
+            <div class="absolute -left-20 -top-20 h-64 w-64 animate-spin-slow rounded-full border border-dashed border-sky-300/40"></div>
+        </div>
+
+        <div class="container relative">
+            {{-- Centered header --}}
+            <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
+                <p class="eyebrow inline-flex items-center justify-center gap-2">
+                    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4" stroke-linecap="round"/></svg>
+                    {{ $isId ? 'Jadwal Kegiatan' : 'Agenda' }}
+                </p>
+                <h2 class="mt-3 text-display-xl font-semibold text-navy text-balance">{{ $isId ? 'Agenda Mendatang Kami' : 'Our Upcoming Agenda' }}</h2>
+                <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-navy-450">
+                    {{ $isId
+                        ? 'Ikuti kelas pelatihan, sertifikasi, dan kegiatan terbaru dari kami. Geser untuk melihat jadwal lengkapnya.'
+                        : 'Join our latest training classes, certifications, and events. Swipe to explore the full schedule.' }}
+                </p>
             </div>
 
             @if ($upcomingAgendas->isNotEmpty())
-                <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    @foreach ($upcomingAgendas as $agenda)
-                        <a href="{{ route('agenda.index') }}"
-                           class="group relative flex flex-col overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-card transition-all duration-500 ease-out-soft hover:-translate-y-1.5 hover:border-navy-200 hover:shadow-lift"
-                           data-aos="fade-up" data-aos-delay="{{ $loop->index * 90 }}">
+                <div class="relative mt-12" data-hscroll data-hscroll-auto data-aos="fade-up">
+                    {{-- Arrows (desktop) --}}
+                    <button type="button" data-hscroll-prev aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}"
+                        class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 lg:grid">
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <button type="button" data-hscroll-next aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}"
+                        class="absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 lg:grid">
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
 
-                            {{-- Media --}}
+                    <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none gap-6 overflow-x-auto scroll-smooth pb-4 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        @foreach ($upcomingAgendas as $agenda)
+                            <a href="{{ route('agenda.index') }}"
+                               class="group relative flex min-w-0 shrink-0 basis-[80%] snap-start flex-col overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-card transition-all duration-500 ease-out-soft hover:-translate-y-1.5 hover:border-navy-200 hover:shadow-lift sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)] lg:basis-[calc((100%_-_4.5rem)/4)]">
+
+                            {{-- Media (compact) --}}
                             <div class="relative aspect-[16/10] overflow-hidden bg-navy-900">
                                 @if ($agenda->image)
                                     <img src="{{ Storage::url($agenda->image) }}" alt="{{ $agenda->title }}" loading="lazy"
@@ -454,56 +486,51 @@
                                     <div class="absolute inset-0" style="background: linear-gradient(150deg,#12365f 0%,#0a1f3c 100%);"></div>
                                     <div class="absolute inset-0 aurora opacity-40"></div>
                                 @endif
-                                <div class="absolute inset-0 bg-gradient-to-t from-navy-950/60 via-navy-950/10 to-transparent"></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-navy-950/55 via-navy-950/5 to-transparent"></div>
 
-                                {{-- Floating date badge --}}
-                                <div class="absolute left-4 top-4 flex w-14 flex-col items-center rounded-2xl bg-white/95 py-2 text-center shadow-lift ring-1 ring-white/60 backdrop-blur">
-                                    <span class="font-display text-2xl font-semibold leading-none text-navy">{{ $agenda->starts_at->format('d') }}</span>
-                                    <span class="mt-1 font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-gold-deep">{{ $agenda->starts_at->translatedFormat('M') }}</span>
+                                {{-- Compact date badge --}}
+                                <div class="absolute left-3 top-3 flex w-11 flex-col items-center rounded-xl bg-white/95 py-1.5 text-center shadow-lift ring-1 ring-white/60 backdrop-blur">
+                                    <span class="font-display text-lg font-semibold leading-none text-navy">{{ $agenda->starts_at->format('d') }}</span>
+                                    <span class="font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-gold-deep">{{ $agenda->starts_at->translatedFormat('M') }}</span>
                                 </div>
 
-                                {{-- Weekday pill --}}
-                                <span class="absolute bottom-4 left-4 rounded-full bg-white/15 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white ring-1 ring-white/25 backdrop-blur-md">
-                                    {{ $agenda->starts_at->translatedFormat('l') }}
+                                {{-- Status pill --}}
+                                <span class="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-sky-600/90 px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-white shadow-lift backdrop-blur">
+                                    <span class="h-1 w-1 rounded-full bg-white/90"></span>
+                                    {{ $isId ? 'Akan Datang' : 'Upcoming' }}
                                 </span>
                             </div>
 
-                            {{-- Body --}}
-                            <div class="flex flex-1 flex-col p-6">
-                                <h3 class="line-clamp-2 font-display text-xl font-semibold leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">
+                            {{-- Body (compact) --}}
+                            <div class="flex flex-1 flex-col p-5">
+                                <div class="flex items-center gap-2 font-mono text-[11px] text-navy-400">
+                                    <svg class="h-3.5 w-3.5 shrink-0 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    <span class="shrink-0">{{ $agenda->starts_at->translatedFormat('H:i') }} WIB</span>
+                                    @if ($agenda->location)
+                                        <span class="text-navy-200">&middot;</span>
+                                        <span class="truncate">{{ $agenda->location }}</span>
+                                    @endif
+                                </div>
+
+                                <h3 class="mt-2.5 line-clamp-2 font-display text-base font-semibold leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">
                                     {{ $agenda->title }}
                                 </h3>
 
-                                @if ($agenda->excerpt)
-                                    <p class="mt-3 line-clamp-2 text-sm leading-relaxed text-navy-500">{{ $agenda->excerpt }}</p>
-                                @endif
-
-                                {{-- Meta --}}
-                                <div class="mt-5 space-y-2.5 text-sm text-navy-600">
-                                    <div class="flex items-center gap-2.5">
-                                        <span class="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-sky-50 text-sky-600">
-                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                        </span>
-                                        <span class="font-medium">{{ $agenda->starts_at->translatedFormat('H:i') }}&ndash;{{ $agenda->ends_at->translatedFormat('H:i') }} WIB</span>
-                                    </div>
-                                    <div class="flex items-center gap-2.5">
-                                        <span class="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-sky-50 text-sky-600">
-                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-5.686 7-11a7 7 0 1 0-14 0c0 5.314 7 11 7 11Z" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5"/></svg>
-                                        </span>
-                                        <span class="truncate">{{ $agenda->location }}</span>
-                                    </div>
-                                </div>
-
-                                {{-- Footer CTA --}}
-                                <div class="mt-6 flex items-center justify-between border-t border-navy-100 pt-4">
-                                    <span class="text-sm font-semibold text-navy">{{ $isId ? 'Lihat Detail' : 'View Details' }}</span>
-                                    <span class="grid h-9 w-9 place-items-center rounded-full bg-navy text-white transition-all duration-300 ease-out-soft group-hover:translate-x-0.5 group-hover:bg-sky-600">
-                                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    </span>
-                                </div>
+                                <span class="mt-auto inline-flex items-center gap-1.5 pt-4 text-xs font-bold uppercase tracking-[0.1em] text-sky-600 transition-colors group-hover:text-sky-700">
+                                    {{ $isId ? 'Selengkapnya' : 'Read More' }}
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
                             </div>
-                        </a>
-                    @endforeach
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="mt-10 text-center" data-aos="fade-up">
+                    <a href="{{ route('agenda.index') }}" class="inline-flex items-center gap-2 rounded-full border border-navy-200 px-6 py-3 text-sm font-medium text-navy transition duration-300 hover:border-navy hover:bg-navy hover:text-white">
+                        {{ $isId ? 'Lihat Semua Agenda' : 'View All Agendas' }}
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
                 </div>
             @else
                 {{-- Premium Empty State / WhatsApp Lead Generation --}}

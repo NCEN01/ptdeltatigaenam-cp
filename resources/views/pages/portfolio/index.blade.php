@@ -77,10 +77,10 @@
         </div>
     </section>
 
-    {{-- Partners & Clients --}}
-    <x-partners-clients :partners="$partners" :clients="$clients" />
-
     {{-- Testimonials --}}
     <x-testimonial-columns :testimonials="$testimonials" />
+
+    {{-- Partners & Clients --}}
+    <x-partners-clients :partners="$partners" :clients="$clients" />
 
 </x-layout>
