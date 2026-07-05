@@ -93,7 +93,7 @@
 
     {{-- Light band that holds the overlapping CTA card --}}
     <div class="container pt-16 md:pt-20">
-        <div class="relative z-20 mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-navy-900 px-6 py-10 text-center text-white shadow-lift ring-1 ring-white/5 md:px-20 md:py-14" data-aos="fade-up">
+        <div class="relative z-20 mx-auto max-w-7xl overflow-hidden rounded-3xl bg-navy-anim px-6 py-10 text-center text-white shadow-lift ring-1 ring-white/5 md:px-20 md:py-14" data-aos="fade-up">
             {{-- faint flowing line-art --}}
             <svg class="pointer-events-none absolute inset-0 h-full w-full opacity-[0.07]" viewBox="0 0 800 400" fill="none" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
                 <path d="M-40 300C160 180 260 420 460 300S760 120 900 240" stroke="white" stroke-width="60" stroke-linecap="round"/>

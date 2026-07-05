@@ -34,7 +34,8 @@
                                     <svg class="h-3.5 w-3.5 text-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg>
                                     {{ $slide['cat'] }}
                                 </span>
-                                <h1 class="mt-6 font-display font-normal leading-[1.05] text-balance [font-size:clamp(2.2rem,5.2vw,4rem)]">{{ $slide['title'] }}</h1>
+                                @php $hw = preg_split('/\s+/', trim($slide['title'])); $ha = count($hw) ? array_pop($hw) : ''; $hl = implode(' ', $hw); @endphp
+                                <h1 class="mt-6 font-display font-normal leading-[1.05] text-balance [font-size:clamp(2.2rem,5.2vw,4rem)]">{{ $hl }}@if ($hl) @endif<span class="italic-accent text-gradient-hero">{{ $ha }}</span></h1>
                                 <p class="mt-6 max-w-xl text-base leading-relaxed text-navy-100 text-pretty md:text-lg">{{ $slide['desc'] }}</p>
                                 <div class="mt-9 flex flex-wrap items-center gap-4">
                                     <a href="{{ route('services.index') }}" class="btn-blue">{{ __('site.cta.explore') }}</a>

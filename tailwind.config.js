@@ -121,9 +121,25 @@ export default {
                     '0%, 100%': { opacity: '0.4' },
                     '50%': { opacity: '0.85' },
                 },
+                'gradient-pan': {
+                    '0%, 100%': { backgroundPosition: '0% 50%' },
+                    '50%': { backgroundPosition: '100% 50%' },
+                },
+            },
+            // Tighter, more decisive radius scale (tokens). Elements with no radius
+            // stay square — only elements already using rounded-* pick these up.
+            borderRadius: {
+                sm: '4px',
+                DEFAULT: '5px',
+                md: '6px',
+                lg: '8px',
+                xl: '8px',
+                '2xl': '10px',
+                '3xl': '12px',
             },
             animation: {
                 'aurora-drift': 'aurora-drift 18s ease-in-out infinite',
+                'gradient-pan': 'gradient-pan 22s ease-in-out infinite',
                 marquee: 'marquee 40s linear infinite',
                 'marquee-slow': 'marquee 55s linear infinite',
                 'marquee-reverse': 'marquee-reverse 48s linear infinite',

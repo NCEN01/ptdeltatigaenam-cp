@@ -5,7 +5,15 @@
     'image' => null, // Unsplash photo id, e.g. "photo-1524178232363-1fb2b075b655"
 ])
 
-<section class="relative flex min-h-[30rem] flex-col justify-center overflow-hidden bg-navy-950 pt-32 pb-16 text-center text-white md:min-h-[40rem] md:pt-40 md:pb-24">
+@php
+    // Split the title so the last word becomes an italic, gradient accent —
+    // the consistent bold-upright + italic-gradient heading pattern across every page.
+    $hwWords = preg_split('/\s+/', trim((string) $title)) ?: [];
+    $hwAccent = count($hwWords) ? array_pop($hwWords) : '';
+    $hwLead = implode(' ', $hwWords);
+@endphp
+
+<section class="relative flex min-h-[30rem] flex-col justify-center overflow-hidden bg-navy-anim pt-32 pb-16 text-center text-white md:min-h-[40rem] md:pt-40 md:pb-24">
     @if ($image)
         {{-- Layer 1: background image --}}
         <img src="https://images.unsplash.com/{{ $image }}?auto=format&fit=crop&w=1920&q=80" alt="" loading="eager"
@@ -29,7 +37,7 @@
                 <span class="rule-gold mr-3"></span>{{ $eyebrow }}
             </p>
         @endif
-        <h1 class="mx-auto max-w-4xl text-display-xl leading-[1.06] text-balance" data-aos="fade-up" data-aos-delay="60">{{ $title }}</h1>
+        <h1 class="mx-auto max-w-4xl text-display-xl leading-[1.06] text-balance" data-aos="fade-up" data-aos-delay="60">{{ $hwLead }}@if ($hwLead) @endif<span class="italic-accent text-gradient-hero">{{ $hwAccent }}</span></h1>
         @if ($subtitle)
             <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-navy-100 text-pretty" data-aos="fade-up" data-aos-delay="140">{{ $subtitle }}</p>
         @endif

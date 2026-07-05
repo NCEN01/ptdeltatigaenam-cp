@@ -84,8 +84,8 @@
 
     /* Buttons — full interaction states */
     .btn {
-        @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium
-               transition-all duration-200 ease-out-soft focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none;
+        @apply relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium
+               transition-all duration-200 ease-out-soft focus-visible:outline-none active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none;
     }
 
     .btn-primary {
@@ -307,7 +307,7 @@
         aspect-ratio: 3 / 4;
         margin-left: -6.5rem;
         margin-top: -8.66rem;
-        border-radius: 1.25rem;
+        border-radius: 12px;
         overflow: hidden;
         background: #0A2A5E;
         box-shadow: 0 24px 60px -22px rgba(10, 42, 94, 0.55);
@@ -386,7 +386,7 @@
     left: 50%;
     width: min(80vw, 320px);
     aspect-ratio: 320 / 340;
-    border-radius: 24px;
+    border-radius: 12px;
     overflow: hidden;
     transform: translate(-50%, -50%);
     transform-style: preserve-3d;
@@ -412,4 +412,67 @@
 .cf-dot.is-on {
     width: 1.6rem;
     background: linear-gradient(90deg, #7ec2ff, #e3b552);
+}
+
+/* ═══════════════════════ POLISH: gradients · gradient type · button motion ═══════════════════════ */
+@layer components {
+    /* Animated deep-navy gradient — slow, subtle; pauses under reduced-motion. */
+    .bg-navy-anim {
+        background: linear-gradient(135deg, #08182F 0%, #0c2245 28%, #143a6e 50%, #0c2245 72%, #08182F 100%);
+        background-size: 220% 220%;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .bg-navy-anim { animation: gradient-pan 22s ease-in-out infinite; }
+    }
+
+    /* Reusable gradient typography — headings only, never body text. */
+    .text-gradient,
+    .text-gradient-hero,
+    .text-gradient-gold {
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+    }
+    .text-gradient { background-image: linear-gradient(100deg, #1C7DE0 0%, #3b8fe6 50%, #7ec2ff 100%); }
+    .text-gradient-hero { background-image: linear-gradient(100deg, #ffffff 0%, #d4e6ff 42%, #7ec2ff 100%); }
+    .text-gradient-gold { background-image: linear-gradient(100deg, #DBC489 0%, #C2A25A 55%, #A6863F 100%); }
+
+    /* Slanted accent word inside display headings. The display face is single-weight with
+       font-synthesis:none globally, so we re-enable synthetic obliquing just here. */
+    .italic-accent { font-style: italic; font-synthesis: style; -webkit-font-synthesis: style; }
+    /* Fallback to a solid, high-contrast colour when background-clip:text is unsupported. */
+    @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+        .text-gradient { color: #1C7DE0; -webkit-text-fill-color: #1C7DE0; }
+        .text-gradient-hero { color: #ffffff; -webkit-text-fill-color: #ffffff; }
+        .text-gradient-gold { color: #C2A25A; -webkit-text-fill-color: #C2A25A; }
+    }
+
+    /* Button shine sweep + click ripple — motion only when allowed. */
+    @media (prefers-reduced-motion: no-preference) {
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.22) 50%, transparent 62%);
+            transform: translateX(-130%);
+            transition: transform 0.6s ease;
+            pointer-events: none;
+        }
+        .btn:hover::after { transform: translateX(130%); }
+    }
+    .btn > * { position: relative; z-index: 1; }
+    .btn-ripple {
+        position: absolute;
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.35);
+        transform: scale(0);
+        pointer-events: none;
+        z-index: 0;
+        animation: ripple 0.6s ease-out forwards;
+    }
+}
+
+@keyframes ripple {
+    to { transform: scale(2.6); opacity: 0; }
 }

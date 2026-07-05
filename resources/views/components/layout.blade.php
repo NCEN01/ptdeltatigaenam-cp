@@ -78,6 +78,57 @@
 
     <x-partials.footer />
 
+    {{-- Floating helpers (all pages): scroll-to-top (upper) + WhatsApp with "Butuh bantuan?" bubble (lower) --}}
+    <div x-data="floatingHelpers()"
+         class="fixed bottom-5 left-4 z-[130] flex flex-col items-start gap-3 print:hidden">
+        {{-- Scroll to top — appears after ~1 screen --}}
+        <button type="button" x-cloak x-show="showTop"
+                x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2"
+                @click="toTop()" aria-label="{{ $locale === 'id' ? 'Kembali ke atas' : 'Back to top' }}"
+                class="grid h-12 w-12 place-items-center rounded-full bg-navy text-white shadow-lift ring-1 ring-white/10 transition hover:-translate-y-0.5 hover:bg-navy-800 active:scale-95">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </button>
+
+        {{-- WhatsApp + help bubble --}}
+        <div class="relative" @mouseenter="showBubble = true">
+            <div x-cloak x-show="showBubble"
+                 x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-2" x-transition:enter-end="opacity-100 translate-x-0"
+                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                 class="absolute bottom-1/2 left-[4.5rem] flex translate-y-1/2 items-center gap-2 whitespace-nowrap rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-navy shadow-lift ring-1 ring-navy-100">
+                <span>{{ $locale === 'id' ? 'Butuh bantuan?' : 'Need help?' }}</span>
+                <button type="button" @click.stop="showBubble = false" aria-label="{{ $locale === 'id' ? 'Tutup' : 'Close' }}" class="text-navy-300 transition-colors hover:text-navy">
+                    <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                </button>
+                <span class="absolute right-full top-1/2 -translate-y-1/2 border-8 border-transparent border-r-white"></span>
+            </div>
+            <a href="https://wa.me/62818834766?text={{ rawurlencode($locale === 'id' ? 'Halo Delta Tiga Enam, saya butuh bantuan.' : 'Hello Delta Tiga Enam, I need some help.') }}"
+               target="_blank" rel="noopener" aria-label="WhatsApp"
+               class="grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_10px_30px_-8px_rgba(37,211,102,0.6)] ring-1 ring-white/20 transition hover:-translate-y-0.5 active:scale-95">
+                <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.45L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.97-1.861-1.868-4.339-2.897-6.97-2.899-5.437 0-9.862 4.37-9.866 9.801-.001 1.737.457 3.432 1.328 4.935l-.995 3.631 3.723-.979zm7.53-7.535c-.175-.29-.64-.464-.875-.58-.233-.115-1.393-.683-1.605-.765-.213-.083-.368-.124-.523.11-.155.233-.6 1.015-.736 1.173-.136.158-.271.176-.505.06-.233-.116-.988-.364-1.882-1.163-.695-.62-1.164-1.386-1.3-1.62-.137-.233-.015-.359.102-.475.106-.104.233-.272.35-.407.115-.136.154-.233.232-.387.078-.155.039-.29-.02-.406-.058-.115-.523-1.26-.716-1.725-.19-.453-.383-.39-.523-.397-.135-.007-.29-.008-.445-.008z"/></svg>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function floatingHelpers() {
+            return {
+                showTop: false,
+                showBubble: false,
+                init() {
+                    const onScroll = () => { this.showTop = window.scrollY > window.innerHeight * 0.9; };
+                    window.addEventListener('scroll', onScroll, { passive: true });
+                    onScroll();
+                    setTimeout(() => { this.showBubble = true; }, 2800);
+                },
+                toTop() {
+                    const rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                    window.scrollTo({ top: 0, behavior: rm ? 'auto' : 'smooth' });
+                },
+            };
+        }
+    </script>
+
     @stack('scripts')
 </body>
 </html>

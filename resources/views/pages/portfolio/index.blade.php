@@ -26,7 +26,7 @@
                         @php $cover = $p->cover_image ? (str_starts_with($p->cover_image, 'http') ? $p->cover_image : Storage::url($p->cover_image)) : null; @endphp
                         <a href="{{ route('portfolio.show', $p->slug) }}" class="group block" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
                             {{-- Visual with hover reveal --}}
-                            <div class="relative aspect-[4/3] overflow-hidden rounded-[1.25rem] bg-navy-100 ring-1 ring-navy-100 transition-shadow duration-500 group-hover:shadow-lift">
+                            <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-navy-100 ring-1 ring-navy-100 transition-shadow duration-500 group-hover:shadow-lift">
                                 @if ($cover)
                                     <img src="{{ $cover }}" alt="{{ $p->title }}" loading="lazy" class="h-full w-full object-cover transition-transform duration-[900ms] ease-out-soft group-hover:scale-[1.07]">
                                 @else

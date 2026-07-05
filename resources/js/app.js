@@ -45,6 +45,25 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(refreshScr
 try { initCoverflow(); } catch (e) { console.error('[coverflow]', e); }
 try { initHscroll(); } catch (e) { console.error('[hscroll]', e); }
 
+// Button press ripple — delegated, so it also covers buttons added later. The soft
+// scale-down on :active is handled in CSS. Disabled under reduced-motion.
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.addEventListener('pointerdown', (e) => {
+        const btn = e.target.closest('.btn, [data-ripple]');
+        if (!btn || btn.hasAttribute('disabled')) return;
+        const rect = btn.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const span = document.createElement('span');
+        span.className = 'btn-ripple';
+        span.style.width = span.style.height = `${size}px`;
+        span.style.left = `${e.clientX - rect.left - size / 2}px`;
+        span.style.top = `${e.clientY - rect.top - size / 2}px`;
+        btn.appendChild(span);
+        span.addEventListener('animationend', () => span.remove());
+        setTimeout(() => span.remove(), 800);
+    }, { passive: true });
+}
+
 // Hero category rotator
 const heroEl = document.querySelector('[data-hero-swiper]');
 if (heroEl) {
