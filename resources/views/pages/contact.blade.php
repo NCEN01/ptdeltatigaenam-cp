@@ -20,6 +20,7 @@
         :eyebrow="'PT Delta Tiga Enam'"
         :title="__('site.contact.title')"
         :subtitle="$id ? 'Ceritakan kebutuhan organisasi Anda — tim kami akan merespons dengan cepat.' : 'Tell us about your needs — our team will respond promptly.'"
+        placement="contact"
         image="photo-1497366754035-f200968a6e72" />
 
     {{-- ===================== CONTACT + FORM ===================== --}}

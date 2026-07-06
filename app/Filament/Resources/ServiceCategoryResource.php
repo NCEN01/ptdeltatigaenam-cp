@@ -8,7 +8,6 @@ use App\Filament\Resources\ServiceCategoryResource\Pages;
 use App\Models\ServiceCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -16,7 +15,6 @@ use Illuminate\Support\Str;
 
 class ServiceCategoryResource extends Resource
 {
-    use Translatable;
     use RestrictsToPermission;
 
     protected static ?string $model = ServiceCategory::class;
@@ -36,34 +34,39 @@ class ServiceCategoryResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\Section::make('Identitas')->schema([
-                Forms\Components\TextInput::make('name')
-                    ->label('Nama')
+            Forms\Components\Section::make('Identitas (ID/EN)')->schema([
+                Forms\Components\TextInput::make('name.id')
+                    ->label('Nama (ID)')
                     ->required()
                     ->maxLength(170)
                     ->live(onBlur: true)
                     ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
+                Forms\Components\TextInput::make('name.en')
+                    ->label('Nama (EN)')
+                    ->maxLength(170),
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(170)
                     ->unique(ignoreRecord: true)
                     ->helperText('URL unik, otomatis dari nama (boleh diubah).'),
-                Forms\Components\TextInput::make('short_description')->label('Deskripsi Singkat')->maxLength(255),
-                Forms\Components\Textarea::make('description')->label('Deskripsi')->rows(4),
-                Forms\Components\TextInput::make('icon')->label('Ikon (heroicon)')->placeholder('heroicon-o-academic-cap'),
+                Forms\Components\TextInput::make('short_description.id')->label('Deskripsi Singkat (ID)')->maxLength(255),
+                Forms\Components\TextInput::make('short_description.en')->label('Deskripsi Singkat (EN)')->maxLength(255),
+                Forms\Components\Textarea::make('description.id')->label('Deskripsi (ID)')->rows(4),
+                Forms\Components\Textarea::make('description.en')->label('Deskripsi (EN)')->rows(4),
             ])->columns(2),
 
             Forms\Components\Section::make('Media & Tampilan')->schema([
                 MediaUpload::for('image', 'thumbnail', 'service-categories')->label('Gambar'),
                 Forms\Components\Toggle::make('is_featured')->label('Unggulan')->default(false),
                 Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
-                Forms\Components\TextInput::make('sort_order')->label('Urutan')->numeric()->default(0),
             ])->columns(2),
 
-            Forms\Components\Section::make('SEO')->collapsed()->schema([
-                Forms\Components\TextInput::make('meta_title')->label('Meta Title')->maxLength(255),
-                Forms\Components\Textarea::make('meta_description')->label('Meta Description')->rows(2),
-            ])->columns(1),
+            Forms\Components\Section::make('SEO (ID/EN)')->collapsed()->schema([
+                Forms\Components\TextInput::make('meta_title.id')->label('Meta Title (ID)')->maxLength(255),
+                Forms\Components\TextInput::make('meta_title.en')->label('Meta Title (EN)')->maxLength(255),
+                Forms\Components\Textarea::make('meta_description.id')->label('Meta Description (ID)')->rows(2),
+                Forms\Components\Textarea::make('meta_description.en')->label('Meta Description (EN)')->rows(2),
+            ])->columns(2),
         ]);
     }
 

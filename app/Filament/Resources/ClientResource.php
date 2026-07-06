@@ -34,7 +34,6 @@ class ClientResource extends Resource
             Forms\Components\TextInput::make('name')->label('Nama')->required()->maxLength(200),
             Forms\Components\TextInput::make('website_url')->label('Website')->url(),
             MediaUpload::for('logo', 'logo', 'clients')->label('Logo'),
-            Forms\Components\TextInput::make('sort_order')->numeric()->default(0),
             Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
         ])->columns(2);
     }

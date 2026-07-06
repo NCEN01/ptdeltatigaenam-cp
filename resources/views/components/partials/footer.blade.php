@@ -1,6 +1,5 @@
 @php
     use App\Models\Setting;
-    use App\Models\OfficeLocation;
 
     $id = app()->getLocale() === 'id';
     $email = 'info@deltatigaenam.com';
@@ -8,7 +7,8 @@
     $linkedin = Setting::get('linkedin_url', 'https://linkedin.com/company/deltatigaenam');
     $year = now()->year;
 
-    $offices = OfficeLocation::where('is_active', true)->orderBy('sort_order')->get();
+    // Hardcoded office locations (no longer using OfficeLocation model)
+    $offices = collect([]);
 
     $nav = [
         'about' => __('site.nav.about'),

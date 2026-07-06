@@ -18,6 +18,10 @@
             <aside class="lg:col-span-3"><x-account-nav /></aside>
 
             <div class="lg:col-span-9">
+                <a href="{{ route('services.index') }}" class="mb-4 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-navy-400 transition-colors hover:text-navy">
+                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    {{ $id ? 'Kembali ke layanan' : 'Back to services' }}
+                </a>
                 @forelse ($orders as $order)
                     <div class="mb-4 rounded-2xl border border-navy-100 p-6">
                         <div class="flex flex-wrap items-start justify-between gap-4">

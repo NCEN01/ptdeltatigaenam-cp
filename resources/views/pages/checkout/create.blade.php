@@ -12,6 +12,10 @@
         <div class="container grid gap-10 lg:grid-cols-12">
             {{-- Form --}}
             <div class="lg:col-span-7">
+                <a href="{{ route('services.show', $service->slug) }}" class="mb-6 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-navy-400 transition-colors hover:text-navy">
+                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    {{ $id ? 'Kembali ke detail layanan' : 'Back to service details' }}
+                </a>
                 <form method="POST" action="{{ route('checkout.store') }}" class="space-y-6">
                     @csrf
                     <input type="hidden" name="service_schedule_id" value="{{ $schedule->id }}">

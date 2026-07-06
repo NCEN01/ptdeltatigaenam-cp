@@ -7,14 +7,12 @@ use App\Filament\Resources\PartnershipPackageResource\Pages;
 use App\Models\PartnershipPackage;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
 class PartnershipPackageResource extends Resource
 {
-    use Translatable;
     use RestrictsToPermission;
 
     protected static ?string $model = PartnershipPackage::class;
@@ -34,23 +32,45 @@ class PartnershipPackageResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\Select::make('tier')->options([
-                'blue' => 'Blue', 'silver' => 'Silver', 'gold' => 'Gold', 'platinum' => 'Platinum',
-            ])->required()->unique(ignoreRecord: true),
-            Forms\Components\TextInput::make('slug')->required()->unique(ignoreRecord: true),
-            Forms\Components\TextInput::make('name')->label('Nama Tampilan')->required(),
-            Forms\Components\TextInput::make('tagline')->label('Tagline'),
-            Forms\Components\Textarea::make('description')->label('Deskripsi')->rows(3)->columnSpanFull(),
-            Forms\Components\Repeater::make('features')->label('Fitur (per bahasa)')->simple(
-                Forms\Components\TextInput::make('feature')->required(),
-            )->columnSpanFull()->helperText('Daftar fitur untuk bahasa yang aktif.'),
-            Forms\Components\TextInput::make('price')->label('Harga Indikatif')->numeric()->prefix('Rp')->helperText('Kosongkan untuk "by quote".'),
-            Forms\Components\TextInput::make('price_note')->label('Catatan Harga')->placeholder('mulai dari'),
-            Forms\Components\ColorPicker::make('color')->label('Warna Aksen'),
-            Forms\Components\Toggle::make('is_highlighted')->label('Disorot')->default(false),
-            Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
-            Forms\Components\TextInput::make('sort_order')->numeric()->default(0),
-        ])->columns(2);
+            Forms\Components\Section::make('Info Paket')->schema([
+                Forms\Components\Select::make('tier')->options([
+                    'blue' => 'Blue', 'silver' => 'Silver', 'gold' => 'Gold', 'platinum' => 'Platinum',
+                ])->required()->unique(ignoreRecord: true),
+                Forms\Components\TextInput::make('slug')->required()->unique(ignoreRecord: true),
+                Forms\Components\ColorPicker::make('color')->label('Warna Aksen'),
+                Forms\Components\TextInput::make('sort_order')->numeric()->default(0),
+            ])->columns(4),
+
+            Forms\Components\Section::make('Konten (ID/EN)')->schema([
+                Forms\Components\TextInput::make('name.id')->label('Nama (ID)')->required()->maxLength(200),
+                Forms\Components\TextInput::make('name.en')->label('Nama (EN)')->maxLength(200),
+                Forms\Components\TextInput::make('tagline.id')->label('Tagline (ID)')->maxLength(200),
+                Forms\Components\TextInput::make('tagline.en')->label('Tagline (EN)')->maxLength(200),
+                Forms\Components\Textarea::make('description.id')->label('Deskripsi (ID)')->rows(3),
+                Forms\Components\Textarea::make('description.en')->label('Deskripsi (EN)')->rows(3),
+                Forms\Components\TextInput::make('price_note.id')->label('Catatan Harga (ID)')->placeholder('mulai dari'),
+                Forms\Components\TextInput::make('price_note.en')->label('Catatan Harga (EN)')->placeholder('starting from'),
+            ])->columns(2),
+
+            Forms\Components\Section::make('Fitur (ID/EN)')->schema([
+                Forms\Components\Repeater::make('features.id')
+                    ->label('Fitur (ID)')
+                    ->simple(Forms\Components\TextInput::make('item')->required())
+                    ->columnSpan(6)
+                    ->helperText('Daftar fitur dalam Bahasa Indonesia.'),
+                Forms\Components\Repeater::make('features.en')
+                    ->label('Fitur (EN)')
+                    ->simple(Forms\Components\TextInput::make('item')->required())
+                    ->columnSpan(6)
+                    ->helperText('Feature list in English.'),
+            ])->columns(12),
+
+            Forms\Components\Section::make('Harga & Status')->schema([
+                Forms\Components\TextInput::make('price')->label('Harga Indikatif')->numeric()->prefix('Rp')->helperText('Kosongkan untuk "by quote".'),
+                Forms\Components\Toggle::make('is_highlighted')->label('Disorot')->default(false),
+                Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
+            ])->columns(3),
+        ]);
     }
 
     public static function table(Table $table): Table

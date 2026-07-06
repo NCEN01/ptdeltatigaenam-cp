@@ -28,6 +28,11 @@ class ManageSettings extends Page implements HasForms
 
     public ?array $data = [];
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     public static function canAccess(): bool
     {
         return (bool) auth()->user()?->can('manage_settings');

@@ -69,6 +69,12 @@ class MidtransWebhookController extends Controller
             if ($newStatus === 'paid' && ! $wasPaid) {
                 Notification::route('mail', $order->customer_email)
                     ->notify(new OrderPaidNotification($order));
+
+                // Increment seats_taken on the service
+                $service = $order->service;
+                if ($service && $service->quota) {
+                    $service->increment('seats_taken', $order->quantity);
+                }
             }
         }
 

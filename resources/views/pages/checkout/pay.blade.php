@@ -10,6 +10,10 @@
 
     <section class="section">
         <div class="container max-w-2xl">
+            <a href="{{ route('account.orders') }}" class="mb-6 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-navy-400 transition-colors hover:text-navy">
+                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {{ $id ? 'Kembali ke pesanan saya' : 'Back to my orders' }}
+            </a>
             <div class="rounded-3xl border border-navy-100 p-8 text-center">
                 <p class="eyebrow mb-3">{{ $id ? 'Total Tagihan' : 'Amount Due' }}</p>
                 <p class="font-display text-4xl font-semibold text-navy">Rp {{ number_format((float) $order->total_amount, 0, ',', '.') }}</p>

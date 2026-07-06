@@ -42,7 +42,6 @@
                     <p class="font-mono text-[10px] uppercase tracking-label text-gold-soft">{{ $id ? 'Investasi' : 'Investment' }}</p>
                     @if ($service->price > 0)
                         <p class="mt-2 font-display text-4xl">Rp {{ number_format((float) $service->price, 0, ',', '.') }}<span class="text-base font-normal text-navy-200"> / {{ $id ? 'peserta' : 'person' }}</span></p>
-                        @if ($service->price_label)<p class="mt-1 text-sm text-navy-200">{{ $service->price_label }}</p>@endif
                     @else
                         <p class="mt-2 font-display text-3xl">{{ $id ? 'Hubungi kami' : 'Contact us' }}</p>
                     @endif
@@ -148,26 +147,38 @@
 
                     {{-- Schedules --}}
                     <div class="space-y-3 p-5">
+                        @php
+                            $left = $service->quota ? max(0, $service->quota - $service->seats_taken) : null;
+                            $full = $left !== null && $left <= 0;
+                            $low = $left !== null && $left > 0 && $left <= 5;
+                        @endphp
                         @forelse ($service->schedules as $schedule)
-                            @php
-                                $left = $schedule->quota ? max(0, $schedule->quota - $schedule->seats_taken) : null;
-                                $full = $left !== null && $left <= 0;
-                                $low = $left !== null && $left > 0 && $left <= 5;
-                            @endphp
                             <div class="rounded-2xl border {{ $low ? 'border-amber-200' : 'border-navy-100' }} bg-white p-5 transition-shadow duration-300 hover:shadow-card">
                                 <div class="flex items-start justify-between gap-3">
                                     <div>
                                         <p class="font-display text-lg text-navy">{{ $schedule->start_date?->translatedFormat('d M Y') }}</p>
+                                        @if ($schedule->start_time)
+                                            <p class="mt-1 font-mono text-xs text-navy-500">
+                                                {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }}
+                                                @if ($schedule->end_time) – {{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }} WIB @endif
+                                            </p>
+                                        @endif
                                         @if ($schedule->location)<p class="mt-0.5 text-sm text-navy-400">{{ $schedule->location }}</p>@endif
                                     </div>
-                                    <span class="shrink-0 rounded-full bg-navy-50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-navy-500">{{ $schedule->mode }}</span>
+                                    <span class="shrink-0 rounded-full bg-navy-50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-navy-500">{{ $service->mode }}</span>
                                 </div>
 
                                 @if ($left !== null)
-                                    <p class="mt-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider {{ $full ? 'bg-rose-50 text-rose-600' : ($low ? 'bg-amber-50 text-amber-700' : 'bg-emerald-50 text-emerald-700') }}">
-                                        <span class="h-1.5 w-1.5 rounded-full {{ $full ? 'bg-rose-500' : ($low ? 'bg-amber-500' : 'bg-emerald-500') }}"></span>
-                                        {{ $full ? ($id ? 'Kuota penuh' : 'Fully booked') : ($low ? ($id ? 'Hampir habis · sisa '.$left.' kursi!' : 'Almost gone · '.$left.' left!') : $left.' '.($id ? 'kursi tersisa' : 'seats left')) }}
-                                    </p>
+                                    <div class="mt-3 flex items-center gap-3">
+                                        {{-- Quota bar --}}
+                                        <div class="flex-1 h-2 rounded-full bg-navy-100 overflow-hidden">
+                                            <div class="h-full rounded-full transition-all {{ $full ? 'bg-rose-500' : ($low ? 'bg-amber-500' : 'bg-emerald-500') }}"
+                                                 style="width: {{ $service->quota > 0 ? round(($service->seats_taken / $service->quota) * 100) : 0 }}%"></div>
+                                        </div>
+                                        <span class="shrink-0 font-mono text-[10px] uppercase tracking-wider {{ $full ? 'text-rose-600' : ($low ? 'text-amber-700' : 'text-emerald-700') }}">
+                                            {{ $full ? ($id ? 'Penuh' : 'Full') : $left.'/'.$service->quota }}
+                                        </span>
+                                    </div>
                                 @endif
 
                                 @if ($schedule->effectivePrice() > 0)
@@ -176,7 +187,9 @@
 
                                 @if ($service->is_purchasable)
                                     @if ($full)
-                                        <a href="{{ route('contact.index') }}" class="btn-ghost mt-4 w-full justify-center !py-2.5 text-sm">{{ $id ? 'Tanya Ketersediaan' : 'Ask Availability' }}</a>
+                                        <button disabled class="mt-4 w-full justify-center !py-2.5 text-sm rounded-full border border-navy-200 bg-navy-50 text-navy-400 cursor-not-allowed font-medium">
+                                            {{ $id ? 'Kuota Penuh' : 'Fully Booked' }}
+                                        </button>
                                     @elseif (Route::has('checkout.create'))
                                         <a href="{{ route('checkout.create', $schedule->id) }}" class="btn-blue mt-4 w-full justify-center !py-2.5 text-sm">{{ $id ? 'Daftar / Beli' : 'Register / Buy' }}</a>
                                     @else
@@ -194,10 +207,10 @@
 
                     @if ($service->is_purchasable && $service->schedules->isNotEmpty())
                         <div class="space-y-2 border-t border-navy-100 bg-neutral-50 px-6 py-5 text-xs text-navy-500">
-                            <p class="flex items-center gap-2">
+                            <div class="flex items-center gap-2">
                                 <svg class="h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 24 24" fill="none"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
                                 {{ $id ? 'Pembayaran aman: QRIS, e-wallet, VA, & kartu (Midtrans).' : 'Secure payment: QRIS, e-wallet, VA & card (Midtrans).' }}
-                            </p>
+                            </div>
                             <p class="flex items-center gap-2">
                                 <svg class="h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5 5.5.8-4 3.9 1 5.5L12 15.5 7 18.2l1-5.5-4-3.9 5.5-.8z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
                                 {{ $id ? 'Sertifikat resmi untuk setiap peserta yang lulus.' : 'Official certificate for every participant who passes.' }}

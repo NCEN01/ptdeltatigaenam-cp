@@ -20,6 +20,7 @@ class RoleSeeder extends Seeder
         'manage_portfolio',
         'manage_partners',
         'manage_partnership_packages',
+        'manage_instagram_updates',
         'manage_settings',
         'manage_offices',
         'manage_missions',

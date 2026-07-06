@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Banner;
 use App\Models\BlogPost;
 use App\Models\Client;
+use App\Models\InstagramUpdate;
 use App\Models\Partner;
 use App\Models\Portfolio;
 use App\Models\Service;
@@ -29,11 +30,12 @@ class HomeController extends Controller
             'portfolios' => Portfolio::where('is_active', true)
                 ->with('category')->latest('project_date')->latest('id')->take(3)->get(),
             'testimonials' => Testimonial::where('is_active', true)
-                ->orderBy('sort_order')->take(12)->get(),
+                ->latest()->take(12)->get(),
             'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),
             'clients' => Client::where('is_active', true)->orderBy('sort_order')->get(),
             'posts' => BlogPost::published()->with('category')->latest('published_at')->take(9)->get(),
             'upcomingAgendas' => \App\Models\Agenda::published()->where('starts_at', '>=', now())->orderBy('starts_at')->take(9)->get(),
+            'instagramUpdates' => InstagramUpdate::where('is_active', true)->orderBy('sort_order')->take(2)->get(),
         ]);
     }
 }

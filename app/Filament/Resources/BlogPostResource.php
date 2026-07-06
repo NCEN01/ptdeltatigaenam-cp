@@ -8,7 +8,6 @@ use App\Filament\Resources\BlogPostResource\Pages;
 use App\Models\BlogPost;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -16,7 +15,6 @@ use Illuminate\Support\Str;
 
 class BlogPostResource extends Resource
 {
-    use Translatable;
     use RestrictsToPermission;
 
     protected static ?string $model = BlogPost::class;
@@ -34,18 +32,28 @@ class BlogPostResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\Section::make('Artikel')->schema([
-                Forms\Components\TextInput::make('title')->label('Judul')->required()->maxLength(280)
+            Forms\Components\Section::make('Artikel (ID/EN)')->schema([
+                Forms\Components\TextInput::make('title.id')
+                    ->label('Judul (ID)')
+                    ->required()
+                    ->maxLength(280)
                     ->live(onBlur: true)
                     ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
+                Forms\Components\TextInput::make('title.en')
+                    ->label('Judul (EN)')
+                    ->maxLength(280),
                 Forms\Components\TextInput::make('slug')->required()->maxLength(280)->unique(ignoreRecord: true),
-                Forms\Components\Textarea::make('excerpt')->label('Ringkasan')->rows(2)->columnSpanFull(),
-                Forms\Components\RichEditor::make('content')->label('Konten')->columnSpanFull(),
+                Forms\Components\Textarea::make('excerpt.id')->label('Ringkasan (ID)')->rows(2),
+                Forms\Components\Textarea::make('excerpt.en')->label('Ringkasan (EN)')->rows(2),
+                Forms\Components\RichEditor::make('content.id')->label('Konten (ID)')->columnSpanFull(),
+                Forms\Components\RichEditor::make('content.en')->label('Konten (EN)')->columnSpanFull(),
             ])->columns(2),
+
             Forms\Components\Section::make('Media')->schema([
                 MediaUpload::for('featured_image', 'blog', 'blog')->label('Gambar Utama'),
                 MediaUpload::for('banner_image', 'blog_banner', 'blog')->label('Banner Header'),
             ])->columns(2),
+
             Forms\Components\Section::make('Publikasi')->schema([
                 Forms\Components\Select::make('blog_category_id')->relationship('category', 'slug')
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)->searchable()->preload()->label('Kategori'),
@@ -56,10 +64,13 @@ class BlogPostResource extends Resource
                 ])->default('draft')->required(),
                 Forms\Components\DateTimePicker::make('published_at')->label('Tanggal Terbit'),
             ])->columns(2),
-            Forms\Components\Section::make('SEO')->collapsed()->schema([
-                Forms\Components\TextInput::make('meta_title')->label('Meta Title'),
-                Forms\Components\Textarea::make('meta_description')->label('Meta Description')->rows(2),
-            ]),
+
+            Forms\Components\Section::make('SEO (ID/EN)')->collapsed()->schema([
+                Forms\Components\TextInput::make('meta_title.id')->label('Meta Title (ID)')->maxLength(200),
+                Forms\Components\TextInput::make('meta_title.en')->label('Meta Title (EN)')->maxLength(200),
+                Forms\Components\Textarea::make('meta_description.id')->label('Meta Description (ID)')->rows(2),
+                Forms\Components\Textarea::make('meta_description.en')->label('Meta Description (EN)')->rows(2),
+            ])->columns(2),
         ]);
     }
 

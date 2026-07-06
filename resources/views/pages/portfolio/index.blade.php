@@ -5,6 +5,7 @@
         :eyebrow="__('site.home.portfolio_kicker')"
         :title="__('site.home.portfolio_title')"
         :subtitle="$id ? 'Kegiatan, klien, dan kisah dampak yang kami banggakan.' : 'Projects, clients, and the impact stories we are proud of.'"
+        placement="portfolio"
         image="photo-1531403009284-440f080d1e12" />
 
     {{-- Portfolio grid (asymmetric) --}}

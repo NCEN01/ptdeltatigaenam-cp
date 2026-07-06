@@ -42,7 +42,6 @@ class CertificateHolderResource extends Resource
             Forms\Components\Section::make('Masa Berlaku')->schema([
                 Forms\Components\DatePicker::make('issued_at')->label('Tanggal Terbit'),
                 Forms\Components\DatePicker::make('expires_at')->label('Tanggal Berakhir'),
-                Forms\Components\TextInput::make('sort_order')->label('Urutan')->numeric()->default(0),
                 Forms\Components\Toggle::make('is_active')->label('Tampilkan di website')->default(true),
             ])->columns(2),
         ]);

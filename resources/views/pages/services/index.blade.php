@@ -5,6 +5,7 @@
         :eyebrow="__('site.home.services_kicker')"
         :title="__('site.home.services_title')"
         :subtitle="$id ? 'Dari konsultasi manajemen hingga sertifikasi kompetensi — dirancang untuk hasil yang terukur.' : 'From management consulting to competency certification — designed for measurable outcomes.'"
+        placement="services"
         image="photo-1524178232363-1fb2b075b655">
         <nav class="mt-10 flex flex-wrap gap-2" aria-label="Categories">
             @foreach ($categories as $cat)

@@ -167,35 +167,6 @@ CREATE TABLE `settings` (
   UNIQUE KEY `settings_key_unique` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `company_missions` (
-  `id`         BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `content`    JSON NOT NULL,
-  `icon`       VARCHAR(100) NULL DEFAULT NULL,
-  `sort_order` INT NOT NULL DEFAULT 0,
-  `is_active`  TINYINT(1) NOT NULL DEFAULT 1,
-  `created_at` TIMESTAMP NULL DEFAULT NULL,
-  `updated_at` TIMESTAMP NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE `office_locations` (
-  `id`         BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name`       JSON NOT NULL,
-  `type`       ENUM('pusat','pemasaran','operasional','lainnya') NOT NULL DEFAULT 'lainnya',
-  `address`    TEXT NOT NULL,
-  `phone`      VARCHAR(100) NULL DEFAULT NULL,
-  `whatsapp`   VARCHAR(100) NULL DEFAULT NULL,
-  `email`      VARCHAR(150) NULL DEFAULT NULL,
-  `map_embed`  TEXT NULL DEFAULT NULL,
-  `latitude`   DECIMAL(10,7) NULL DEFAULT NULL,
-  `longitude`  DECIMAL(10,7) NULL DEFAULT NULL,
-  `sort_order` INT NOT NULL DEFAULT 0,
-  `is_active`  TINYINT(1) NOT NULL DEFAULT 1,
-  `created_at` TIMESTAMP NULL DEFAULT NULL,
-  `updated_at` TIMESTAMP NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 -- =====================================================================
 --  BAGIAN 4 — LAYANAN (FITUR INTI) — multi-bahasa
 -- =====================================================================

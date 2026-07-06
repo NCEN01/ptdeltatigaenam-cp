@@ -15,7 +15,7 @@ class Service extends Model
     protected $guarded = ['id'];
 
     public array $translatable = [
-        'title', 'short_description', 'description', 'price_label', 'duration',
+        'title', 'short_description', 'description', 'duration',
         'meta_title', 'meta_description',
     ];
 
@@ -26,6 +26,8 @@ class Service extends Model
             'is_purchasable' => 'boolean',
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
+            'quota' => 'integer',
+            'seats_taken' => 'integer',
         ];
     }
 
@@ -47,5 +49,14 @@ class Service extends Model
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function getAvailableSeatsAttribute(): ?int
+    {
+        if ($this->quota === null) {
+            return null;
+        }
+
+        return max(0, (int) $this->quota - (int) $this->seats_taken);
     }
 }

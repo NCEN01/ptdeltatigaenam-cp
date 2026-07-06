@@ -296,21 +296,33 @@ if (!reduceMotion) {
         const suffix = el.dataset.counterSuffix || '';
         const prefix = el.dataset.counterPrefix || '';
         const decimals = parseInt(el.dataset.counterDecimals) || 0;
-        ScrollTrigger.create({
-            trigger: el,
-            start: 'top 90%',
-            once: true,
-            onEnter: () => {
-                gsap.to({ val: 0 }, {
-                    val: target,
-                    duration: 2,
-                    ease: 'power2.out',
-                    onUpdate: function () {
-                        el.textContent = prefix + this.targets()[0].val.toFixed(decimals) + suffix;
-                    },
-                });
-            },
-        });
+
+        const animate = () => {
+            gsap.to({ val: 0 }, {
+                val: target,
+                duration: 2,
+                ease: 'power2.out',
+                onUpdate: function () {
+                    el.textContent = prefix + this.targets()[0].val.toFixed(decimals) + suffix;
+                },
+            });
+        };
+
+        // If the element is already visible (e.g. hero section), animate immediately.
+        const rect = el.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+        if (isVisible) {
+            // Small delay so the page layout has settled
+            setTimeout(animate, 300);
+        } else {
+            ScrollTrigger.create({
+                trigger: el,
+                start: 'top 90%',
+                once: true,
+                onEnter: () => animate(),
+            });
+        }
     });
 }
 

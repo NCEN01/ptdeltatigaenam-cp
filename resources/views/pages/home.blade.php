@@ -4,9 +4,19 @@
 
     {{-- ===================== HERO CAROUSEL ===================== --}}
     @php
-        $heroStats = $isId
-            ? [['500+', 'Profesional Terlatih'], ['98%', 'Kepuasan Klien'], ['10+', 'Tahun Pengalaman']]
-            : [['500+', 'Professionals Trained'], ['98%', 'Client Satisfaction'], ['10+', 'Years Experience']];
+        $heroStats = [];
+        for ($i = 1; $i <= 3; $i++) {
+            $val = \App\Models\Setting::get("hero_stat_{$i}_value", '');
+            $label = \App\Models\Setting::getLocalized("hero_stat_{$i}_label");
+            if ($val !== '' && $label !== null) {
+                $heroStats[] = [$val, $label];
+            }
+        }
+        if (empty($heroStats)) {
+            $heroStats = $isId
+                ? [['500+', 'Profesional Terlatih'], ['98%', 'Kepuasan Klien'], ['10+', 'Tahun Pengalaman']]
+                : [['500+', 'Professionals Trained'], ['98%', 'Client Satisfaction'], ['10+', 'Years Experience']];
+        }
         
         $slides = [];
         if (isset($heroBanners) && $heroBanners->isNotEmpty()) {
@@ -388,75 +398,85 @@
                 </p>
             </div>
 
-            <div class="mx-auto grid gap-8 md:grid-cols-2 max-w-4xl">
-                {{-- Left Post --}}
-                @php
-                    $igLink1 = 'https://www.instagram.com/deltatigaenam/?utm_source=ig_embed&ig_rid=AoWIewf3tcwwvM1ipJJhX_8';
-                @endphp
-                <div class="card overflow-hidden border-navy-100 shadow-card transition-all duration-300 hover:shadow-lift hover:-translate-y-1" data-aos="fade-right">
-                    <div class="flex items-center justify-between p-3.5 border-b border-navy-50 bg-white">
-                        <div class="flex items-center gap-2.5">
-                            <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-6 w-6 shrink-0 rounded-lg object-contain">
-
-                            <div class="leading-tight">
-                                <p class="text-xs font-semibold text-navy">deltatigaenam</p>
-                                <p class="text-[9px] text-navy-300">Original audio</p>
+            @if (isset($instagramUpdates) && $instagramUpdates->isNotEmpty())
+                <div class="mx-auto grid gap-8 md:grid-cols-2 max-w-4xl">
+                    @foreach ($instagramUpdates as $ig)
+                        @php $igImg = $ig->image ? (str_starts_with($ig->image, 'http') ? $ig->image : \Illuminate\Support\Facades\Storage::url($ig->image)) : null; @endphp
+                        <div class="card overflow-hidden border-navy-100 shadow-card transition-all duration-300 hover:shadow-lift hover:-translate-y-1" data-aos="{{ $loop->first ? 'fade-right' : 'fade-left' }}">
+                            <div class="flex items-center justify-between p-3.5 border-b border-navy-50 bg-white">
+                                <div class="flex items-center gap-2.5">
+                                    <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-6 w-6 shrink-0 rounded-lg object-contain">
+                                    <div class="leading-tight">
+                                        <p class="text-xs font-semibold text-navy">deltatigaenam</p>
+                                        <p class="text-[9px] text-navy-300">Original audio</p>
+                                    </div>
+                                </div>
+                                @if ($ig->instagram_url)
+                                    <a href="{{ $ig->instagram_url }}" target="_blank" rel="noopener" class="rounded bg-sky hover:bg-sky-600 px-3 py-1 text-[10px] font-semibold text-white transition">View profile</a>
+                                @endif
+                            </div>
+                            <div class="relative aspect-[4/5] overflow-hidden bg-navy-950 group">
+                                @if ($igImg)
+                                    <img src="{{ $igImg }}" alt="{{ $ig->title }}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                                @else
+                                    <div class="absolute inset-0 aurora opacity-60"></div>
+                                @endif
+                                <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent p-5 pt-12 flex flex-col justify-end text-white">
+                                    @if ($ig->batch_label)
+                                        <span class="inline-block self-start rounded bg-sky px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white">{{ $ig->batch_label }}</span>
+                                    @endif
+                                    <h3 class="font-display text-lg font-bold mt-2 leading-tight">{{ $ig->title }}</h3>
+                                    @if ($ig->company)<p class="text-[11px] text-navy-200 mt-0.5">{{ $ig->company }}</p>@endif
+                                    @if ($ig->date_range)
+                                        <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-mono text-navy-300"><span>{{ $ig->date_range }}</span></div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="p-3.5 border-t border-navy-50 flex items-center justify-between bg-white text-navy-400">
+                                <div class="flex items-center gap-3.5">
+                                    <a href="{{ $ig->instagram_url ?? 'https://www.instagram.com/deltatigaenam/' }}" target="_blank" rel="noopener" class="hover:text-rose-500 transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></a>
+                                    <a href="{{ $ig->instagram_url ?? 'https://www.instagram.com/deltatigaenam/' }}" target="_blank" rel="noopener" class="hover:text-sky transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-1.923 2.202 4.968 4.968 0 0 0 2.803-.832c.43-.284.974-.354 1.5-.178 1.12.375 2.316.577 3.561.577z"/></svg></a>
+                                </div>
+                                <a href="{{ $ig->instagram_url ?? 'https://www.instagram.com/deltatigaenam/' }}" target="_blank" rel="noopener" class="text-xs font-semibold text-sky hover:underline inline-flex items-center gap-1"><span>{{ $isId ? 'Lihat di Instagram' : 'View on Instagram' }}</span><span>&rarr;</span></a>
                             </div>
                         </div>
-                        <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="rounded bg-sky hover:bg-sky-600 px-3 py-1 text-[10px] font-semibold text-white transition">View profile</a>
-                    </div>
-                    <div class="relative aspect-square overflow-hidden bg-navy-950 group">
-                        <img src="/images/certified-risk-management.png" alt="Certified Risk Management Batch IV" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent p-5 pt-12 flex flex-col justify-end text-white">
-                            <span class="inline-block self-start rounded bg-sky px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white">BATCH IV</span>
-                            <h3 class="font-display text-lg font-bold mt-2 leading-tight">Certified Risk Management</h3>
-                            <p class="text-[11px] text-navy-200 mt-0.5">PT Delta Tiga Enam</p>
-                            <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-mono text-navy-300"><span>19 - 22 Agustus 2025</span></div>
-                        </div>
-                    </div>
-                    <div class="p-3.5 border-t border-navy-50 flex items-center justify-between bg-white text-navy-400">
-                        <div class="flex items-center gap-3.5">
-                            <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="hover:text-rose-500 transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></a>
-                            <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="hover:text-sky transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-1.923 2.202 4.968 4.968 0 0 0 2.803-.832c.43-.284.974-.354 1.5-.178 1.12.375 2.316.577 3.561.577z"/></svg></a>
-                        </div>
-                        <a href="{{ $igLink1 }}" target="_blank" rel="noopener" class="text-xs font-semibold text-sky hover:underline inline-flex items-center gap-1"><span>{{ $isId ? 'Lihat di Instagram' : 'View on Instagram' }}</span><span>&rarr;</span></a>
-                    </div>
+                    @endforeach
                 </div>
-
-                {{-- Right Post --}}
-                @php
-                    $igLink2 = 'https://www.instagram.com/deltatigaenam/?utm_source=ig_embed&ig_rid=AzGOKnldj_0aFItwS2zdG-q';
-                @endphp
-                <div class="card overflow-hidden border-navy-100 shadow-card transition-all duration-300 hover:shadow-lift hover:-translate-y-1" data-aos="fade-left">
-                    <div class="flex items-center justify-between p-3.5 border-b border-navy-50 bg-white">
-                        <div class="flex items-center gap-2.5">
-                            <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-6 w-6 shrink-0 rounded-lg object-contain">
-
-                            <div class="leading-tight">
-                                <p class="text-xs font-semibold text-navy">deltatigaenam</p>
-                                <p class="text-[9px] text-navy-300">Original audio</p>
+            @else
+                <div class="mx-auto grid gap-8 md:grid-cols-2 max-w-4xl">
+                    @php $fallbackIg = [['img' => '/images/certified-risk-management.png', 'label' => 'BATCH IV', 'title' => 'Certified Risk Management', 'company' => 'PT Delta Tiga Enam', 'date' => '19 - 22 Agustus 2025', 'link' => 'https://www.instagram.com/deltatigaenam/'], ['img' => '/images/training-seminar.png', 'label' => 'SEMINAR', 'title' => 'Pengembangan Kompetensi SDM', 'company' => 'PT Delta Tiga Enam', 'date' => '05 - 06 Agustus 2025', 'link' => 'https://www.instagram.com/deltatigaenam/']]; @endphp
+                    @foreach ($fallbackIg as $fi)
+                        <div class="card overflow-hidden border-navy-100 shadow-card transition-all duration-300 hover:shadow-lift hover:-translate-y-1" data-aos="{{ $loop->first ? 'fade-right' : 'fade-left' }}">
+                            <div class="flex items-center justify-between p-3.5 border-b border-navy-50 bg-white">
+                                <div class="flex items-center gap-2.5">
+                                    <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-6 w-6 shrink-0 rounded-lg object-contain">
+                                    <div class="leading-tight">
+                                        <p class="text-xs font-semibold text-navy">deltatigaenam</p>
+                                        <p class="text-[9px] text-navy-300">Original audio</p>
+                                    </div>
+                                </div>
+                                <a href="{{ $fi['link'] }}" target="_blank" rel="noopener" class="rounded bg-sky hover:bg-sky-600 px-3 py-1 text-[10px] font-semibold text-white transition">View profile</a>
+                            </div>
+                            <div class="relative aspect-[4/5] overflow-hidden bg-navy-950 group">
+                                <img src="{{ $fi['img'] }}" alt="{{ $fi['title'] }}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                                <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent p-5 pt-12 flex flex-col justify-end text-white">
+                                    <span class="inline-block self-start rounded bg-sky px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white">{{ $fi['label'] }}</span>
+                                    <h3 class="font-display text-lg font-bold mt-2 leading-tight">{{ $fi['title'] }}</h3>
+                                    <p class="text-[11px] text-navy-200 mt-0.5">{{ $fi['company'] }}</p>
+                                    <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-mono text-navy-300"><span>{{ $fi['date'] }}</span></div>
+                                </div>
+                            </div>
+                            <div class="p-3.5 border-t border-navy-50 flex items-center justify-between bg-white text-navy-400">
+                                <div class="flex items-center gap-3.5">
+                                    <a href="{{ $fi['link'] }}" target="_blank" rel="noopener" class="hover:text-rose-500 transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></a>
+                                    <a href="{{ $fi['link'] }}" target="_blank" rel="noopener" class="hover:text-sky transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-1.923 2.202 4.968 4.968 0 0 0 2.803-.832c.43-.284.974-.354 1.5-.178 1.12.375 2.316.577 3.561.577z"/></svg></a>
+                                </div>
+                                <a href="{{ $fi['link'] }}" target="_blank" rel="noopener" class="text-xs font-semibold text-sky hover:underline inline-flex items-center gap-1"><span>{{ $isId ? 'Lihat di Instagram' : 'View on Instagram' }}</span><span>&rarr;</span></a>
                             </div>
                         </div>
-                        <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="rounded bg-sky hover:bg-sky-600 px-3 py-1 text-[10px] font-semibold text-white transition">View profile</a>
-                    </div>
-                    <div class="relative aspect-square overflow-hidden bg-navy-950 group">
-                        <img src="/images/training-seminar.png" alt="Delta Tiga Enam Training Seminar" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent p-5 pt-12 flex flex-col justify-end text-white">
-                            <span class="inline-block self-start rounded bg-sky px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white">SEMINAR</span>
-                            <h3 class="font-display text-lg font-bold mt-2 leading-tight">Pengembangan Kompetensi SDM</h3>
-                            <p class="text-[11px] text-navy-200 mt-0.5">PT Delta Tiga Enam</p>
-                            <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-mono text-navy-300"><span>05 - 06 Agustus 2025</span></div>
-                        </div>
-                    </div>
-                    <div class="p-3.5 border-t border-navy-50 flex items-center justify-between bg-white text-navy-400">
-                        <div class="flex items-center gap-3.5">
-                            <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="hover:text-rose-500 transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></a>
-                            <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="hover:text-sky transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-1.923 2.202 4.968 4.968 0 0 0 2.803-.832c.43-.284.974-.354 1.5-.178 1.12.375 2.316.577 3.561.577z"/></svg></a>
-                        </div>
-                        <a href="{{ $igLink2 }}" target="_blank" rel="noopener" class="text-xs font-semibold text-sky hover:underline inline-flex items-center gap-1"><span>{{ $isId ? 'Lihat di Instagram' : 'View on Instagram' }}</span><span>&rarr;</span></a>
-                    </div>
+                    @endforeach
                 </div>
-            </div>
+            @endif
         </div>
     </section>
 

@@ -47,6 +47,12 @@ class CheckoutController extends Controller
         $schedule = ServiceSchedule::with('service')->findOrFail($data['service_schedule_id']);
         abort_unless($schedule->service && $schedule->service->is_purchasable, 404);
 
+        // Check quota: if quota is set and full, reject.
+        $service = $schedule->service;
+        if ($service->quota && $service->seats_taken >= $service->quota) {
+            return back()->withInput()->with('error', __('Kuota sudah penuh.'));
+        }
+
         if (! $this->midtrans->isConfigured()) {
             return back()->withInput()->with('error', __('site.checkout.unavailable'));
         }
@@ -141,6 +147,38 @@ class CheckoutController extends Controller
     {
         abort_unless($order->customer_id === $request->user('customer')->id, 403);
 
+        // When returning from Midtrans Snap in sandbox, auto-confirm the payment
+        // because webhooks cannot reach localhost.
+        $status = $request->query('transaction_status');
+        if (!config('midtrans.is_production') && in_array($status, ['settlement', 'capture'])) {
+            if ($order->status !== 'paid') {
+                DB::transaction(function () use ($order, $request) {
+                    Transaction::updateOrCreate(
+                        ['midtrans_order_id' => $order->order_number],
+                        [
+                            'order_id' => $order->id,
+                            'gross_amount' => $order->total_amount,
+                            'transaction_status' => 'settlement',
+                            'payment_type' => $request->query('payment_type', 'midtrans'),
+                            'transaction_time' => now(),
+                            'settlement_time' => now(),
+                        ],
+                    );
+
+                    $order->update(['status' => 'paid', 'paid_at' => now()]);
+
+                    // Increment seats_taken
+                    $service = $order->service;
+                    if ($service && $service->quota) {
+                        $service->increment('seats_taken', $order->quantity);
+                    }
+                });
+
+                Notification::route('mail', $order->customer_email)
+                    ->notify(new OrderPaidNotification($order->fresh()));
+            }
+        }
+
         return view('pages.checkout.finish', ['order' => $order->fresh()]);
     }
 
@@ -169,6 +207,12 @@ class CheckoutController extends Controller
                 );
 
                 $order->update(['status' => 'paid', 'paid_at' => now()]);
+
+                // Increment seats_taken on the service
+                $service = $order->service;
+                if ($service && $service->quota) {
+                    $service->increment('seats_taken', $order->quantity);
+                }
             });
 
             Notification::route('mail', $order->customer_email)

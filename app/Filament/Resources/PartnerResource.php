@@ -8,14 +8,12 @@ use App\Filament\Resources\PartnerResource\Pages;
 use App\Models\Partner;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
 class PartnerResource extends Resource
 {
-    use Translatable;
     use RestrictsToPermission;
 
     protected static ?string $model = Partner::class;
@@ -36,17 +34,15 @@ class PartnerResource extends Resource
             Forms\Components\TextInput::make('name')->label('Nama')->required()->maxLength(200),
             Forms\Components\TextInput::make('registration_number')->label('No. Registrasi')->maxLength(100)
                 ->placeholder('Contoh: 8141312')->helperText('Nomor registrasi mitra yang tampil di bawah logo pada halaman depan.'),
-            Forms\Components\TextInput::make('website_url')->label('Website')->url(),
+            Forms\Components\TextInput::make('website_url')->label('Website')->url()->maxLength(500),
             MediaUpload::for('logo', 'logo', 'partners')->label('Logo'),
-            Forms\Components\Textarea::make('description')->label('Deskripsi')->rows(2),
-            Forms\Components\TextInput::make('sort_order')->numeric()->default(0),
             Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
         ])->columns(2);
     }
 
     public static function table(Table $table): Table
     {
-        return $table->defaultSort('sort_order')->columns([
+        return $table->defaultSort('created_at', 'desc')->columns([
             Tables\Columns\ImageColumn::make('logo')->disk('public')->label('')->size(80),
             Tables\Columns\TextColumn::make('name')->label('Nama')->searchable(),
             Tables\Columns\TextColumn::make('registration_number')->label('No. Registrasi')->searchable()->placeholder('—'),

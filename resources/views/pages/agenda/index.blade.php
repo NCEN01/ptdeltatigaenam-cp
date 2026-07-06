@@ -5,6 +5,7 @@
         :eyebrow="$id ? 'Agenda' : 'Agenda'"
         :title="$id ? 'Agenda & kegiatan terbaru' : 'Latest agenda & events'"
         :subtitle="$id ? 'Jadwal pelatihan, sertifikasi, seminar, dan kegiatan terbaru dari PT Delta Tiga Enam.' : 'Upcoming training, certification, seminars, and events from PT Delta Tiga Enam.'"
+        placement="agenda"
         image="photo-1517048676732-d65bc937f952" />
 
     <section class="section">

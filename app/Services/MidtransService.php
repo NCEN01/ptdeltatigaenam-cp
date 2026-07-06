@@ -43,6 +43,9 @@ class MidtransService
                 'email' => $order->customer_email,
                 'phone' => $order->customer_phone,
             ],
+            'callbacks' => [
+                'finish' => route('checkout.finish', $order->order_number),
+            ],
         ];
 
         return Snap::getSnapToken($params);

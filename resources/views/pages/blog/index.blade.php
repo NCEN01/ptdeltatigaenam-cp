@@ -9,6 +9,7 @@
         :eyebrow="__('site.home.blog_kicker')"
         :title="__('site.home.blog_title')"
         :subtitle="$id ? 'Perspektif, riset, dan praktik terbaik seputar human capital.' : 'Perspectives, research, and best practices on human capital.'"
+        placement="blog"
         image="photo-1499750310107-5fef28a66643" />
 
     <section class="section bg-white">

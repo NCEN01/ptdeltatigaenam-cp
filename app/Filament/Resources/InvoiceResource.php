@@ -66,8 +66,7 @@ class InvoiceResource extends Resource
                         Forms\Components\TextInput::make('description')->label('Deskripsi')->required()->columnSpan(2),
                         Forms\Components\TextInput::make('quantity')->label('Qty')->numeric()->default(1)->required()->live(onBlur: true),
                         Forms\Components\TextInput::make('unit_price')->label('Harga Satuan')->numeric()->default(0)->required()->prefix('Rp')->live(onBlur: true),
-                        Forms\Components\Hidden::make('sort_order')->default(0),
-                    ])->columns(4)->defaultItems(1)
+                    ])->columns(3)->defaultItems(1)
                     ->reorderable()->collapsible(),
             ]),
 
@@ -89,7 +88,7 @@ class InvoiceResource extends Resource
                 Tables\Columns\TextColumn::make('invoice_number')->label('Nomor')->searchable()->copyable(),
                 Tables\Columns\TextColumn::make('bill_to_company')->label('Perusahaan')->searchable(),
                 Tables\Columns\TextColumn::make('total')->money('IDR')->sortable(),
-                Tables\Columns\TextColumn::make('status')->badge()->formatStateUsing(fn ($s) => self::STATUSES[$s] ?? $s)
+                Tables\Columns\TextColumn::make('status')->badge()->formatStateUsing(fn (string $state) => self::STATUSES[$state] ?? $state)
                     ->color(fn ($state) => match ($state) {
                         'lunas' => 'success', 'draft' => 'gray', 'jatuh_tempo', 'dibatalkan' => 'danger', default => 'warning',
                     }),

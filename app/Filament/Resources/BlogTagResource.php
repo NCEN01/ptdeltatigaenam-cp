@@ -7,7 +7,6 @@ use App\Filament\Resources\BlogTagResource\Pages;
 use App\Models\BlogTag;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -15,7 +14,6 @@ use Illuminate\Support\Str;
 
 class BlogTagResource extends Resource
 {
-    use Translatable;
     use RestrictsToPermission;
 
     protected static ?string $model = BlogTag::class;
@@ -33,11 +31,17 @@ class BlogTagResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\TextInput::make('name')->label('Nama')->required()
+            Forms\Components\TextInput::make('name.id')
+                ->label('Nama (ID)')
+                ->required()
+                ->maxLength(100)
                 ->live(onBlur: true)
                 ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
-            Forms\Components\TextInput::make('slug')->required()->unique(ignoreRecord: true),
-        ])->columns(2);
+            Forms\Components\TextInput::make('name.en')
+                ->label('Nama (EN)')
+                ->maxLength(100),
+            Forms\Components\TextInput::make('slug')->required()->unique(ignoreRecord: true)->maxLength(150),
+        ])->columns(3);
     }
 
     public static function table(Table $table): Table

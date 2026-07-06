@@ -17,6 +17,7 @@
         :eyebrow="'PT Delta Tiga Enam'"
         :title="$id ? 'Pemegang Sertifikat' : 'Certificate Holders'"
         :subtitle="$id ? 'Bukti nyata kompetensi — para profesional yang telah lulus sertifikasi resmi bersama kami.' : 'Real proof of competency — professionals who have earned official certification with us.'"
+        placement="certificate"
         image="photo-1524178232363-1fb2b075b655" />
 
     {{-- ===================== SELLING INTRO + TRUST ===================== --}}

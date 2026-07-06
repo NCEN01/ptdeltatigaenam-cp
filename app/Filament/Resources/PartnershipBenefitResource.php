@@ -7,14 +7,12 @@ use App\Filament\Resources\PartnershipBenefitResource\Pages;
 use App\Models\PartnershipBenefit;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
 class PartnershipBenefitResource extends Resource
 {
-    use Translatable;
     use RestrictsToPermission;
 
     protected static ?string $model = PartnershipBenefit::class;
@@ -31,15 +29,35 @@ class PartnershipBenefitResource extends Resource
 
     protected static ?string $accessPermission = 'manage_partnership_packages';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\TextInput::make('title')->label('Judul')->required(),
-            Forms\Components\TextInput::make('icon')->label('Ikon (heroicon)')->placeholder('heroicon-o-check-badge'),
-            Forms\Components\Textarea::make('description')->label('Deskripsi')->rows(3)->columnSpanFull(),
-            Forms\Components\TextInput::make('sort_order')->numeric()->default(0),
-            Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
-        ])->columns(2);
+            Forms\Components\Section::make('Manfaat (ID/EN)')->schema([
+                Forms\Components\TextInput::make('title.id')
+                    ->label('Judul (ID)')
+                    ->required()
+                    ->maxLength(200),
+                Forms\Components\TextInput::make('title.en')
+                    ->label('Judul (EN)')
+                    ->maxLength(200),
+                Forms\Components\TextInput::make('icon')
+                    ->label('Ikon (heroicon)')
+                    ->placeholder('heroicon-o-check-badge'),
+                Forms\Components\Textarea::make('description.id')
+                    ->label('Deskripsi (ID)')
+                    ->rows(3),
+                Forms\Components\Textarea::make('description.en')
+                    ->label('Deskripsi (EN)')
+                    ->rows(3),
+                Forms\Components\TextInput::make('sort_order')->numeric()->default(0),
+                Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
+            ])->columns(2),
+        ]);
     }
 
     public static function table(Table $table): Table

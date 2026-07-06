@@ -13,8 +13,6 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             ServiceCategorySeeder::class,
             PartnershipPackageSeeder::class,
-            OfficeLocationSeeder::class,
-            CompanyMissionSeeder::class,
             SettingSeeder::class,
         ]);
     }

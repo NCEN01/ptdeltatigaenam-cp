@@ -16,7 +16,7 @@ class PortfolioController extends Controller
                 ->orderBy('sort_order')->latest('project_date')->get(),
             'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),
             'clients' => Client::where('is_active', true)->orderBy('sort_order')->get(),
-            'testimonials' => Testimonial::where('is_active', true)->orderBy('sort_order')->get(),
+            'testimonials' => Testimonial::where('is_active', true)->latest()->get(),
         ]);
     }
 
