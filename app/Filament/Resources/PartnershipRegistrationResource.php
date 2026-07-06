@@ -109,7 +109,14 @@ class PartnershipRegistrationResource extends Resource
                     ]))
                     ->visible(fn () => auth()->user()?->can('manage_invoices')),
             ])
-            ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->requiresConfirmation()
+                        ->modalHeading('Hapus Pendaftaran Kemitraan Secara Massal')
+                        ->modalDescription('Apakah Anda yakin ingin menghapus pendaftaran kemitraan yang dipilih secara permanen?'),
+                ]),
+            ]);
     }
 
     public static function getPages(): array

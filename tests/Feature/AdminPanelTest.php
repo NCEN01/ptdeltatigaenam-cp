@@ -25,18 +25,18 @@ class AdminPanelTest extends TestCase
         $admin = $this->admin();
 
         $pages = [
-            '/admin/service-categories',
-            '/admin/service-categories/create',
-            '/admin/services',
-            '/admin/services/create',
-            '/admin/banners/create',
-            '/admin/blog-posts/create',
-            '/admin/portfolios/create',
-            '/admin/partnership-packages/create',
-            '/admin/testimonials/create',
-            '/admin/office-locations/create',
-            '/admin/contact-messages',
-            '/admin/manage-settings',
+            '/d36-panel/service-categories',
+            '/d36-panel/service-categories/create',
+            '/d36-panel/services',
+            '/d36-panel/services/create',
+            '/d36-panel/banners/create',
+            '/d36-panel/blog-posts/create',
+            '/d36-panel/portfolios/create',
+            '/d36-panel/partnership-packages/create',
+            '/d36-panel/testimonials/create',
+            '/d36-panel/office-locations/create',
+            '/d36-panel/contact-messages',
+            '/d36-panel/manage-settings',
         ];
 
         foreach ($pages as $url) {
@@ -51,6 +51,6 @@ class AdminPanelTest extends TestCase
         $konten->assignRole('admin_konten');
 
         // Content admin can open content resources.
-        $this->actingAs($konten, 'web')->get('/admin/service-categories')->assertSuccessful();
+        $this->actingAs($konten, 'web')->get('/d36-panel/service-categories')->assertSuccessful();
     }
 }

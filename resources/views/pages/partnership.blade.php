@@ -217,6 +217,9 @@
 
                     <form method="POST" action="{{ route('partnership.store') }}" class="overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-lift">
                         @csrf
+                        <div style="display:none !important" aria-hidden="true">
+                            <input type="text" name="website_url" tabindex="-1" autocomplete="off">
+                        </div>
 
                         <div class="space-y-10 p-7 md:p-10">
                             {{-- A. Company info --}}

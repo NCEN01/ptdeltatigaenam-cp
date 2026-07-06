@@ -77,7 +77,7 @@ class CustomerAuthTest extends TestCase
             'preferred_locale' => 'id', 'is_active' => true, 'email_verified_at' => now(),
         ]);
 
-        // A customer is not a panel User; /admin must not authenticate them.
-        $this->actingAs($customer, 'customer')->get('/admin')->assertRedirect();
+        // A customer is not a panel User; /d36-panel must not authenticate them.
+        $this->actingAs($customer, 'customer')->get('/d36-panel')->assertRedirect();
     }
 }

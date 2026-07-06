@@ -8,7 +8,23 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PartnershipRegistration extends Model
 {
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'company_name',
+        'company_address',
+        'pic_name',
+        'pic_position',
+        'phone',
+        'email',
+        'partnership_package_id',
+        'preferred_meeting_at',
+        'alternative_meeting_at',
+        'notes',
+        'status',
+        'locale',
+        'is_read',
+        'assigned_to',
+        'registration_number',
+    ];
 
     protected function casts(): array
     {

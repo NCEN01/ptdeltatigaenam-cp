@@ -17,7 +17,7 @@ class InvoiceTest extends TestCase
 
     public function test_invoice_service_calculates_totals_and_generates_pdf(): void
     {
-        Storage::fake('public');
+        Storage::fake('local');
 
         $invoice = Invoice::create([
             'bill_to_company' => 'PT Contoh',
@@ -40,7 +40,7 @@ class InvoiceTest extends TestCase
         $this->assertEquals(2000000, (float) InvoiceItem::where('description', 'Pelatihan A')->first()->amount);
 
         $path = $service->generatePdf($invoice);
-        Storage::disk('public')->assertExists($path);
+        Storage::disk('local')->assertExists($path);
         $this->assertStringEndsWith('.pdf', $path);
         $this->assertEquals($path, $invoice->fresh()->file_path);
     }
@@ -57,7 +57,7 @@ class InvoiceTest extends TestCase
         $konten = User::factory()->create(['is_active' => true]);
         $konten->assignRole('admin_konten');
 
-        $this->actingAs($konten, 'web')->get('/admin/orders')->assertForbidden();
+        $this->actingAs($konten, 'web')->get('/d36-panel/orders')->assertForbidden();
     }
 
     public function test_transaction_admin_can_access_orders(): void
@@ -66,6 +66,6 @@ class InvoiceTest extends TestCase
         $txn = User::factory()->create(['is_active' => true]);
         $txn->assignRole('admin_transaksi');
 
-        $this->actingAs($txn, 'web')->get('/admin/orders')->assertSuccessful();
+        $this->actingAs($txn, 'web')->get('/d36-panel/orders')->assertSuccessful();
     }
 }

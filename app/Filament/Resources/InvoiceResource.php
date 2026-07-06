@@ -112,9 +112,16 @@ class InvoiceResource extends Resource
                 Tables\Actions\Action::make('downloadPdf')
                     ->label('Unduh')->icon('heroicon-o-arrow-down-tray')
                     ->visible(fn (Invoice $r) => filled($r->file_path))
-                    ->url(fn (Invoice $r) => \Illuminate\Support\Facades\Storage::disk('public')->url($r->file_path), shouldOpenInNewTab: true),
+                    ->url(fn (Invoice $r) => route('admin.invoices.download', ['invoice' => $r]), shouldOpenInNewTab: true),
             ])
-            ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->requiresConfirmation()
+                        ->modalHeading('Hapus Invoice Secara Massal')
+                        ->modalDescription('Apakah Anda yakin ingin menghapus invoice yang dipilih secara permanen? Data ini tidak dapat dikembalikan.'),
+                ]),
+            ]);
     }
 
     public static function getPages(): array

@@ -41,7 +41,7 @@ class InvoiceService
         $pdf = Pdf::loadView('pdf.invoice', ['invoice' => $invoice])->setPaper('a4');
 
         $path = "invoices/{$invoice->invoice_number}.pdf";
-        Storage::disk('public')->put($path, $pdf->output());
+        Storage::disk('local')->put($path, $pdf->output());
 
         $invoice->forceFill(['file_path' => $path])->saveQuietly();
 

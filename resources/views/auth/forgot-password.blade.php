@@ -6,6 +6,9 @@
 
     <form method="POST" action="{{ route('password.email') }}" class="space-y-5">
         @csrf
+        <div style="display:none !important" aria-hidden="true">
+            <input type="text" name="website_url" tabindex="-1" autocomplete="off">
+        </div>
         <x-field name="email" type="email" :label="__('site.contact.email')" required />
         <button type="submit" class="btn-primary w-full">{{ $id ? 'Kirim Tautan' : 'Send Reset Link' }}</button>
     </form>

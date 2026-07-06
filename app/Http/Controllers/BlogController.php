@@ -14,11 +14,11 @@ class BlogController extends Controller
         return view('pages.blog.index', [
             'posts' => BlogPost::published()->with('category')
                 ->when($q !== '', function ($query) use ($q) {
-                    // title/excerpt are translatable JSON columns — a LIKE matches the
-                    // keyword in any stored locale.
-                    $query->where(function ($sub) use ($q) {
-                        $sub->where('title', 'like', "%{$q}%")
-                            ->orWhere('excerpt', 'like', "%{$q}%");
+                    // Escape SQL wildcards
+                    $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $q);
+                    $query->where(function ($sub) use ($escaped) {
+                        $sub->where('title', 'like', "%{$escaped}%")
+                            ->orWhere('excerpt', 'like', "%{$escaped}%");
                     });
                 })
                 ->latest('published_at')->paginate(9)->withQueryString(),
@@ -30,7 +30,12 @@ class BlogController extends Controller
     public function show(string $locale, string $slug)
     {
         $post = BlogPost::where('slug', $slug)->published()->with(['category', 'author', 'tags'])->firstOrFail();
-        $post->increment('views');
+        
+        $sessionKey = 'viewed_post_' . $post->id;
+        if (! session()->has($sessionKey)) {
+            $post->increment('views');
+            session()->put($sessionKey, true);
+        }
 
         return view('pages.blog.show', [
             'post' => $post,

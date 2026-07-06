@@ -26,8 +26,8 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('admin')
-            ->login()
+            ->path('d36-panel')
+            ->login(\App\Filament\Pages\Auth\Login::class)
             ->authGuard('web')
             ->brandName('Delta Tiga Enam')
             ->colors([
@@ -56,10 +56,10 @@ class AdminPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->widgets([
+            ->widgets(array_filter([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
-            ])
+                app()->isLocal() ? Widgets\FilamentInfoWidget::class : null,
+            ]))
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

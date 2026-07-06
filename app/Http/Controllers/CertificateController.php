@@ -13,12 +13,13 @@ class CertificateController extends Controller
 
         $certificates = CertificateHolder::active()
             ->when($q !== '', function ($query) use ($q) {
-                $query->where(function ($sub) use ($q) {
-                    $sub->where('participant_name', 'like', "%{$q}%")
-                        ->orWhere('company_name', 'like', "%{$q}%")
-                        ->orWhere('certificate_number', 'like', "%{$q}%")
-                        ->orWhere('ujk_number', 'like', "%{$q}%")
-                        ->orWhere('qualification', 'like', "%{$q}%");
+                $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $q);
+                $query->where(function ($sub) use ($escaped) {
+                    $sub->where('participant_name', 'like', "%{$escaped}%")
+                        ->orWhere('company_name', 'like', "%{$escaped}%")
+                        ->orWhere('certificate_number', 'like', "%{$escaped}%")
+                        ->orWhere('ujk_number', 'like', "%{$escaped}%")
+                        ->orWhere('qualification', 'like', "%{$escaped}%");
                 });
             })
             ->orderBy('sort_order')

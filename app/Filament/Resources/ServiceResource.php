@@ -110,7 +110,16 @@ class ServiceResource extends Resource
                 Tables\Columns\TextColumn::make('category.name')->label('Kategori')->badge(),
                 Tables\Columns\TextColumn::make('price')->label('Harga')->money('IDR')->sortable(),
                 Tables\Columns\IconColumn::make('is_purchasable')->label('Online')->boolean(),
-                Tables\Columns\ToggleColumn::make('is_active')->label('Aktif'),
+                Tables\Columns\IconColumn::make('is_active')
+                    ->label('Aktif')
+                    ->boolean()
+                    ->action(
+                        Tables\Actions\Action::make('toggleActive')
+                            ->requiresConfirmation()
+                            ->modalHeading('Ubah Status Aktif')
+                            ->modalDescription('Apakah Anda yakin ingin mengubah status aktif layanan ini?')
+                            ->action(fn (Service $record) => $record->update(['is_active' => !$record->is_active]))
+                    ),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('service_category_id')->relationship('category', 'slug')->label('Kategori'),

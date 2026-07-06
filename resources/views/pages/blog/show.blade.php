@@ -66,7 +66,7 @@
                                 prose-img:mx-auto prose-img:my-8 prose-img:h-auto prose-img:max-h-[520px] prose-img:w-auto prose-img:rounded-2xl prose-img:shadow-card prose-img:ring-1 prose-img:ring-navy-100
                                 prose-figure:mx-auto prose-figure:text-center prose-figcaption:text-navy-400
                                 [&_img]:mx-auto">
-                        {!! $post->content !!}
+                        {!! \App\Helpers\HtmlSanitizer::clean($post->content) !!}
                     </div>
 
                     {{-- Footer --}}

@@ -39,7 +39,7 @@
                                 prose-strong:text-navy
                                 prose-blockquote:border-l-2 prose-blockquote:border-gold prose-blockquote:not-italic prose-blockquote:text-navy-600
                                 prose-img:rounded-2xl prose-img:shadow-card">
-                        {!! $portfolio->content !!}
+                        {!! \App\Helpers\HtmlSanitizer::clean($portfolio->content) !!}
                     </div>
                 @endif
             </div>

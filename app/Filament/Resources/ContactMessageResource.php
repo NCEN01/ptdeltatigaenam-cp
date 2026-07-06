@@ -68,7 +68,10 @@ class ContactMessageResource extends Resource
             Tables\Actions\BulkActionGroup::make([
                 Tables\Actions\BulkAction::make('markRead')->label('Tandai Dibaca')->icon('heroicon-o-check')
                     ->action(fn ($records) => $records->each->update(['is_read' => true])),
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\DeleteBulkAction::make()
+                    ->requiresConfirmation()
+                    ->modalHeading('Hapus Pesan Kontak Secara Massal')
+                    ->modalDescription('Apakah Anda yakin ingin menghapus semua pesan kontak yang dipilih secara permanen?'),
             ]),
         ]);
     }

@@ -13,9 +13,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->append(\App\Http\Middleware\AddSecurityHeaders::class);
+
         $middleware->alias([
             'locale' => SetLocale::class,
             'verified.customer' => EnsureCustomerEmailVerified::class,
+            'honeypot' => \App\Http\Middleware\PreventSpamHoneypot::class,
         ]);
 
         // Guests are redirected to the localized login route (locale from the URL,

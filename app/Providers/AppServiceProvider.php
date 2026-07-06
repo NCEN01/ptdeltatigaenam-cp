@@ -22,5 +22,14 @@ class AppServiceProvider extends ServiceProvider
 
             return null;
         });
+
+        // Enforce strong password defaults in production
+        \Illuminate\Validation\Rules\Password::defaults(function () {
+            $rule = \Illuminate\Validation\Rules\Password::min(8);
+
+            return $this->app->isProduction()
+                ? $rule->letters()->numbers()->symbols()->mixedCase()
+                : $rule;
+        });
     }
 }

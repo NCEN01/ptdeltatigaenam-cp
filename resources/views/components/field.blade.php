@@ -5,6 +5,7 @@
     'required' => false,
     'value' => null,
     'placeholder' => null,
+    'autocomplete' => null,
 ])
 
 @php $val = old($name, $value); $invalid = $errors->has($name); @endphp
@@ -28,7 +29,13 @@
         <input id="{{ $name }}" name="{{ $name }}" type="{{ $type }}" value="{{ $val }}"
             @if ($required) required aria-required="true" @endif
             @if ($invalid) aria-invalid="true" aria-describedby="{{ $name }}-error" @endif
-            autocomplete="{{ $name === 'email' ? 'email' : ($name === 'phone' ? 'tel' : 'on') }}"
+            autocomplete="{{ $autocomplete ?? match($name) {
+                'email' => 'email',
+                'phone' => 'tel',
+                'password' => ($type === 'password' ? 'current-password' : 'off'),
+                'password_confirmation' => 'new-password',
+                default => 'off',
+            } }}"
             placeholder="{{ $placeholder }}"
             {{ $attributes->class([
                 'w-full rounded-2xl border bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-navy-300 focus:outline-none focus:ring-2 focus:ring-gold',

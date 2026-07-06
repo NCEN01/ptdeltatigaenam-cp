@@ -51,24 +51,24 @@ class ManageSettings extends Page implements HasForms
     {
         return $form->schema([
             Section::make('Profil Perusahaan')->schema([
-                TextInput::make('site_name')->label('Nama Situs'),
-                TextInput::make('site_email')->label('Email')->email(),
-                TextInput::make('site_phone')->label('Telepon'),
-                TextInput::make('linkedin_url')->label('LinkedIn')->url(),
+                TextInput::make('site_name')->label('Nama Situs')->required()->maxLength(100),
+                TextInput::make('site_email')->label('Email')->email()->required()->maxLength(255),
+                TextInput::make('site_phone')->label('Telepon')->required()->maxLength(30),
+                TextInput::make('linkedin_url')->label('LinkedIn')->url()->nullable()->maxLength(255),
             ])->columns(2),
 
             Section::make('Tentang (ID/EN)')->schema([
-                Textarea::make('company_tagline.id')->label('Tagline (ID)')->rows(2),
-                Textarea::make('company_tagline.en')->label('Tagline (EN)')->rows(2),
-                Textarea::make('company_about.id')->label('Tentang (ID)')->rows(4),
-                Textarea::make('company_about.en')->label('Tentang (EN)')->rows(4),
-                Textarea::make('company_vision.id')->label('Visi (ID)')->rows(2),
-                Textarea::make('company_vision.en')->label('Visi (EN)')->rows(2),
+                Textarea::make('company_tagline.id')->label('Tagline (ID)')->required()->maxLength(500)->rows(2),
+                Textarea::make('company_tagline.en')->label('Tagline (EN)')->nullable()->maxLength(500)->rows(2),
+                Textarea::make('company_about.id')->label('Tentang (ID)')->required()->maxLength(2000)->rows(4),
+                Textarea::make('company_about.en')->label('Tentang (EN)')->nullable()->maxLength(2000)->rows(4),
+                Textarea::make('company_vision.id')->label('Visi (ID)')->required()->maxLength(1000)->rows(2),
+                Textarea::make('company_vision.en')->label('Visi (EN)')->nullable()->maxLength(1000)->rows(2),
             ])->columns(2),
 
             Section::make('Kemitraan')->schema([
-                Textarea::make('partnership_intro.id')->label('Intro Kemitraan (ID)')->rows(3),
-                Textarea::make('partnership_intro.en')->label('Intro Kemitraan (EN)')->rows(3),
+                Textarea::make('partnership_intro.id')->label('Intro Kemitraan (ID)')->required()->maxLength(1000)->rows(3),
+                Textarea::make('partnership_intro.en')->label('Intro Kemitraan (EN)')->nullable()->maxLength(1000)->rows(3),
             ])->columns(2),
         ])->statePath('data');
     }

@@ -49,21 +49,34 @@ Route::prefix('{locale}')
         Route::get('/sertifikat', [CertificateController::class, 'index'])->name('certificates.index');
 
         Route::get('/kemitraan', [PartnershipController::class, 'index'])->name('partnership.index');
-        Route::post('/kemitraan/daftar', [PartnershipController::class, 'store'])->name('partnership.store');
+        Route::post('/kemitraan/daftar', [PartnershipController::class, 'store'])
+            ->middleware(['throttle:5,1', 'honeypot'])
+            ->name('partnership.store');
 
         Route::get('/kontak', [ContactController::class, 'index'])->name('contact.index');
-        Route::post('/kontak', [ContactController::class, 'store'])->name('contact.store');
+        Route::post('/kontak', [ContactController::class, 'store'])
+            ->middleware(['throttle:5,1', 'honeypot'])
+            ->name('contact.store');
 
         /* ---------- Customer auth (guard: customer) ---------- */
         Route::middleware('guest:customer')->group(function () {
             Route::get('/daftar', [RegisteredCustomerController::class, 'show'])->name('register');
-            Route::post('/daftar', [RegisteredCustomerController::class, 'store']);
+            Route::post('/daftar', [RegisteredCustomerController::class, 'store'])
+                ->middleware(['throttle:5,1', 'honeypot']);
+
             Route::get('/masuk', [CustomerSessionController::class, 'show'])->name('login');
-            Route::post('/masuk', [CustomerSessionController::class, 'store']);
+            Route::post('/masuk', [CustomerSessionController::class, 'store'])
+                ->middleware('throttle:5,1');
+
             Route::get('/lupa-password', [CustomerPasswordController::class, 'request'])->name('password.request');
-            Route::post('/lupa-password', [CustomerPasswordController::class, 'email'])->name('password.email');
+            Route::post('/lupa-password', [CustomerPasswordController::class, 'email'])
+                ->middleware(['throttle:5,1', 'honeypot'])
+                ->name('password.email');
+
             Route::get('/reset-password/{token}', [CustomerPasswordController::class, 'reset'])->name('password.reset');
-            Route::post('/reset-password', [CustomerPasswordController::class, 'update'])->name('password.update');
+            Route::post('/reset-password', [CustomerPasswordController::class, 'update'])
+                ->middleware(['throttle:5,1', 'honeypot'])
+                ->name('password.update');
         });
 
         Route::post('/keluar', [CustomerSessionController::class, 'destroy'])
@@ -80,15 +93,33 @@ Route::prefix('{locale}')
 
             Route::middleware('verified.customer')->group(function () {
                 Route::get('/akun', [AccountController::class, 'profile'])->name('account.profile');
-                Route::patch('/akun', [AccountController::class, 'update'])->name('account.update');
+                Route::patch('/akun', [AccountController::class, 'update'])
+                    ->middleware('throttle:10,1')
+                    ->name('account.update');
                 Route::get('/akun/pesanan', [AccountController::class, 'orders'])->name('account.orders');
 
                 // Checkout (requires verified customer)
                 Route::get('/checkout/{schedule}', [CheckoutController::class, 'create'])->name('checkout.create');
-                Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+                Route::post('/checkout', [CheckoutController::class, 'store'])
+                    ->middleware('throttle:10,1')
+                    ->name('checkout.store');
                 Route::get('/checkout/{order:order_number}/bayar', [CheckoutController::class, 'pay'])->name('checkout.pay');
                 Route::get('/checkout/{order:order_number}/status', [CheckoutController::class, 'finish'])->name('checkout.finish');
-                Route::post('/checkout/{order:order_number}/simulasi-bayar', [CheckoutController::class, 'simulatePaid'])->name('checkout.simulate');
+
+                if (! app()->environment('production')) {
+                    Route::post('/checkout/{order:order_number}/simulasi-bayar', [CheckoutController::class, 'simulatePaid'])->name('checkout.simulate');
+                }
             });
         });
     });
+
+Route::get('/admin-api/invoices/{invoice}/download', function (\App\Models\Invoice $invoice) {
+    abort_unless(auth()->user()?->can('manage_invoices'), 403);
+
+    $filePath = $invoice->file_path;
+    if (blank($filePath) || !\Illuminate\Support\Facades\Storage::disk('local')->exists($filePath)) {
+        abort(404);
+    }
+
+    return \Illuminate\Support\Facades\Storage::disk('local')->download($filePath);
+})->middleware(['web', \Filament\Http\Middleware\Authenticate::class])->name('admin.invoices.download');

@@ -105,6 +105,9 @@ class OrderResource extends Resource
                 Tables\Actions\Action::make('export')
                     ->label('Ekspor CSV')
                     ->icon('heroicon-o-arrow-down-tray')
+                    ->requiresConfirmation()
+                    ->modalHeading('Konfirmasi Ekspor CSV')
+                    ->modalDescription('Apakah Anda yakin ingin mengekspor seluruh data pesanan? File ini akan berisi informasi sensitif pelanggan (nama, email, telepon).')
                     ->action(fn () => static::exportCsv()),
             ])
             ->actions([Tables\Actions\ViewAction::make()]);
@@ -113,6 +116,12 @@ class OrderResource extends Resource
     public static function exportCsv()
     {
         $filename = 'orders-'.now()->format('Ymd-His').'.csv';
+
+        \Illuminate\Support\Facades\Log::channel('single')->info('Admin exported CSV containing customer orders PII.', [
+            'user_id' => auth()->id(),
+            'user_email' => auth()->user()?->email,
+            'ip' => request()->ip(),
+        ]);
 
         return Response::streamDownload(function () {
             $out = fopen('php://output', 'w');

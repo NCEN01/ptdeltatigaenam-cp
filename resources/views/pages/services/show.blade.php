@@ -113,7 +113,7 @@
                                 prose-p:text-navy-600 prose-p:leading-relaxed
                                 prose-li:text-navy-600 prose-a:text-sky-700 prose-a:font-medium prose-strong:text-navy
                                 prose-img:rounded-2xl">
-                        {!! $service->description !!}
+                        {!! \App\Helpers\HtmlSanitizer::clean($service->description) !!}
                     </div>
                 @endif
 
