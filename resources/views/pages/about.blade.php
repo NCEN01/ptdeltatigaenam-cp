@@ -5,13 +5,13 @@
 
     // Founder (structural content — editable here in the view).
     $founderRole = $isId ? 'Direktur Utama' : 'Managing Director';
-    $founderName = 'Prasetyo Budiman';
+    $founderName = 'Dani Taupan';
     $founderQuote = $isId
         ? 'Membangun bangsa dimulai dari membangun manusianya. Di Delta Tiga Enam, kami berkomitmen menjadi jembatan bagi talenta Indonesia menuju standar dunia.'
         : 'Building a nation begins with building its people. At Delta Tiga Enam, we are committed to bridging Indonesian talent toward world-class standards.';
     $founderBio = $isId
-        ? 'Dengan pengalaman lebih dari 20 tahun di bidang Human Resources dan Manajemen Strategis, Prasetyo telah membantu berbagai perusahaan BUMN dan swasta dalam melakukan restrukturisasi organisasi.'
-        : 'With over 20 years of experience in Human Resources and Strategic Management, Prasetyo has helped state-owned and private companies restructure their organizations.';
+        ? 'Dengan pengalaman lebih dari 20 tahun di bidang Human Resources dan Manajemen Strategis, Dani telah membantu berbagai perusahaan BUMN dan swasta dalam melakukan restrukturisasi organisasi.'
+        : 'With over 20 years of experience in Human Resources and Strategic Management, Dani has helped state-owned and private companies restructure their organizations.';
 @endphp
 
 <x-layout :title="$isId ? 'Tentang Kami' : 'About Us'" :description="$tagline">

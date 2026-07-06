@@ -127,7 +127,7 @@
                                 <div class="flex items-center gap-3">
                                     <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl transition-colors duration-300"
                                           x-bind:class="activeOffice === {{ $index }} ? 'bg-sky-600 text-white' : 'bg-navy text-gold'">
-                                        <svg class="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M15 9h.01M9 13h.01M15 13h.01M10 21v-4h4v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                     </span>
                                     <span class="font-display text-[17px] text-navy">{{ $office['name'] }}</span>
                                 </div>

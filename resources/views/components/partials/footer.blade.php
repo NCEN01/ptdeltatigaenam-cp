@@ -92,7 +92,7 @@
     [$ctaEyebrow, $ctaTitle, $ctaSub, $ctaBtn, $ctaRoute] = $ctaSet[$ctaKey];
 @endphp
 
-<footer class="bg-mist">
+<footer class="bg-slate-100">
 
     {{-- Light band that holds the overlapping CTA card --}}
     <div class="container pt-16 md:pt-20">
@@ -117,8 +117,8 @@
         </div>
     </div>
 
-    {{-- Full-width white area — pulled up so the card overlaps its top edge --}}
-    <div class="relative z-10 -mt-24 bg-white">
+    {{-- Full-width footer area — pulled up so the card overlaps its top edge --}}
+    <div class="relative z-10 -mt-24 bg-slate-100">
         <div class="container pb-10 pt-32 md:pt-36">
             <div class="grid gap-12 lg:grid-cols-12 lg:gap-8">
 
