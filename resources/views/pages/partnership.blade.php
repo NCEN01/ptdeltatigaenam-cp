@@ -149,7 +149,8 @@
                                     <div class="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/10 blur-xl"></div>
                                     <p class="relative font-mono text-[10px] uppercase tracking-label text-white/70">{{ $id ? 'Paket' : 'Package' }}</p>
                                     <h3 class="relative mt-2 font-display text-3xl">{{ $package->name }}</h3>
-                                    <p class="relative mt-3 text-sm leading-relaxed text-white/85">{{ $tagline }}</p>
+                                    {{-- min-height reserves 2 lines so every colored header box is the same size --}}
+                                    <p class="relative mt-3 line-clamp-2 min-h-[2.85rem] text-sm leading-relaxed text-white/85">{{ $tagline }}</p>
                                 </div>
 
                                 {{-- Body --}}

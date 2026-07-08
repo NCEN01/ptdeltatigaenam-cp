@@ -50,7 +50,7 @@ Route::prefix('{locale}')
 
         Route::get('/kemitraan', [PartnershipController::class, 'index'])->name('partnership.index');
         Route::post('/kemitraan/daftar', [PartnershipController::class, 'store'])
-            ->middleware(['throttle:5,1', 'honeypot'])
+            ->middleware(['auth:customer', 'throttle:5,1', 'honeypot'])
             ->name('partnership.store');
 
         Route::get('/kontak', [ContactController::class, 'index'])->name('contact.index');

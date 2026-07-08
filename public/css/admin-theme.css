@@ -1,0 +1,199 @@
+/* ============================================================================
+   Delta Tiga Enam — Admin panel cosmetic polish
+   Purely visual. No logic, routes, or data behavior is affected.
+   ============================================================================ */
+
+:root {
+    --d36-navy: #0a2a5e;
+    --d36-navy-deep: #08182f;
+    --d36-sky: #1c7de0;
+    --d36-sky-light: #7ec2ff;
+    --d36-gold: #c9a227;
+    --d36-gold-soft: #dbc489;
+}
+
+/* ===========================================================================
+   LOGIN / SIMPLE PAGES
+   =========================================================================== */
+.fi-simple-layout {
+    background:
+        radial-gradient(55% 70% at 12% 8%, rgba(28, 125, 224, 0.38), transparent 60%),
+        radial-gradient(45% 55% at 88% 92%, rgba(201, 162, 39, 0.20), transparent 60%),
+        radial-gradient(40% 45% at 50% 50%, rgba(126, 194, 255, 0.10), transparent 70%),
+        linear-gradient(150deg, #0a1f3c 0%, #0a2a5e 45%, #08182f 100%);
+    background-attachment: fixed;
+    position: relative;
+    isolation: isolate;
+}
+
+/* soft floating orbs behind the card */
+.fi-simple-layout::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+        radial-gradient(18rem 18rem at 20% 25%, rgba(28, 125, 224, 0.25), transparent 70%),
+        radial-gradient(16rem 16rem at 82% 75%, rgba(201, 162, 39, 0.16), transparent 70%);
+    animation: d36-float 16s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+@keyframes d36-float {
+    from { transform: translate3d(-1.5%, -1%, 0) scale(1.02); }
+    to   { transform: translate3d(2%, 1.5%, 0) scale(1.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .fi-simple-layout::before { animation: none; }
+}
+
+/* the login card */
+.fi-simple-main {
+    border-radius: 1.25rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.55) !important;
+    box-shadow:
+        0 30px 70px -25px rgba(0, 0, 0, 0.55),
+        0 2px 10px -4px rgba(10, 42, 94, 0.25) !important;
+    position: relative;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.97) !important;
+    backdrop-filter: blur(6px);
+}
+.dark .fi-simple-main {
+    background-color: rgba(17, 24, 39, 0.92) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* gold accent line across the top of the card */
+.fi-simple-main::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--d36-gold), var(--d36-gold-soft), transparent);
+}
+
+/* brand + heading inside the card */
+.fi-simple-header {
+    text-align: center;
+}
+.fi-simple-header .fi-logo {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-size: 1.4rem;
+    background: linear-gradient(100deg, var(--d36-navy), var(--d36-sky));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+/* ===========================================================================
+   DASHBOARD — STAT CARDS (colourful, lively)
+   =========================================================================== */
+.fi-wi-stats-overview-stat {
+    border-radius: 1rem !important;
+    border: 1px solid rgba(10, 42, 94, 0.06) !important;
+    box-shadow:
+        0 1px 2px rgba(10, 42, 94, 0.04),
+        0 14px 32px -20px rgba(10, 42, 94, 0.28) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+.fi-wi-stats-overview-stat:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 42px -18px rgba(10, 42, 94, 0.38) !important;
+}
+
+/* colour variety + left accent bar (light mode) */
+.fi-wi-stats-overview-stat:nth-child(4n + 1) {
+    background: linear-gradient(135deg, #ecfdf5, #ffffff 62%) !important;
+    box-shadow: inset 4px 0 0 #10b981, 0 14px 32px -20px rgba(10, 42, 94, 0.28) !important;
+}
+.fi-wi-stats-overview-stat:nth-child(4n + 2) {
+    background: linear-gradient(135deg, #fffbeb, #ffffff 62%) !important;
+    box-shadow: inset 4px 0 0 #f59e0b, 0 14px 32px -20px rgba(10, 42, 94, 0.28) !important;
+}
+.fi-wi-stats-overview-stat:nth-child(4n + 3) {
+    background: linear-gradient(135deg, #eff6ff, #ffffff 62%) !important;
+    box-shadow: inset 4px 0 0 var(--d36-sky), 0 14px 32px -20px rgba(10, 42, 94, 0.28) !important;
+}
+.fi-wi-stats-overview-stat:nth-child(4n + 4) {
+    background: linear-gradient(135deg, #fef2f2, #ffffff 62%) !important;
+    box-shadow: inset 4px 0 0 #f43f5e, 0 14px 32px -20px rgba(10, 42, 94, 0.28) !important;
+}
+
+/* dark mode variants */
+.dark .fi-wi-stats-overview-stat:nth-child(4n + 1) {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.14), rgba(255, 255, 255, 0.02)) !important;
+    box-shadow: inset 4px 0 0 #10b981, 0 14px 32px -20px rgba(0, 0, 0, 0.6) !important;
+}
+.dark .fi-wi-stats-overview-stat:nth-child(4n + 2) {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.14), rgba(255, 255, 255, 0.02)) !important;
+    box-shadow: inset 4px 0 0 #f59e0b, 0 14px 32px -20px rgba(0, 0, 0, 0.6) !important;
+}
+.dark .fi-wi-stats-overview-stat:nth-child(4n + 3) {
+    background: linear-gradient(135deg, rgba(28, 125, 224, 0.16), rgba(255, 255, 255, 0.02)) !important;
+    box-shadow: inset 4px 0 0 var(--d36-sky), 0 14px 32px -20px rgba(0, 0, 0, 0.6) !important;
+}
+.dark .fi-wi-stats-overview-stat:nth-child(4n + 4) {
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.14), rgba(255, 255, 255, 0.02)) !important;
+    box-shadow: inset 4px 0 0 #f43f5e, 0 14px 32px -20px rgba(0, 0, 0, 0.6) !important;
+}
+
+.fi-wi-stats-overview-stat-value {
+    font-weight: 800 !important;
+    letter-spacing: -0.02em;
+}
+
+/* ===========================================================================
+   SECTIONS / WIDGETS / TABLES — softer, rounder
+   =========================================================================== */
+.fi-section,
+.fi-wi-chart,
+.fi-ta-ctn,
+.fi-wi > .fi-section {
+    border-radius: 0.9rem !important;
+    box-shadow: 0 1px 2px rgba(10, 42, 94, 0.04), 0 10px 26px -20px rgba(10, 42, 94, 0.22) !important;
+}
+
+/* account/welcome widget accent */
+.fi-account-widget {
+    border-radius: 0.9rem !important;
+    background: linear-gradient(120deg, rgba(28, 125, 224, 0.08), transparent 55%) !important;
+}
+
+/* ===========================================================================
+   SIDEBAR — gold active accent
+   =========================================================================== */
+.fi-sidebar-item-active > .fi-sidebar-item-button,
+.fi-sidebar-item.fi-active > .fi-sidebar-item-button {
+    box-shadow: inset 3px 0 0 var(--d36-gold);
+    border-radius: 0.55rem;
+    background: linear-gradient(90deg, rgba(201, 162, 39, 0.10), transparent 70%) !important;
+}
+.fi-sidebar-group-label {
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.66rem !important;
+    opacity: 0.75;
+}
+
+/* ===========================================================================
+   TOPBAR + BUTTONS — micro polish
+   =========================================================================== */
+.fi-topbar > nav {
+    backdrop-filter: blur(10px);
+}
+.fi-btn {
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+.fi-btn:active {
+    transform: scale(0.97);
+}
+
+/* page heading a touch bolder */
+.fi-header-heading {
+    letter-spacing: -0.02em;
+    font-weight: 800 !important;
+}

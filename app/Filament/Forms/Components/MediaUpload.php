@@ -35,6 +35,11 @@ class MediaUpload extends FileUpload
 
         $this->image()
             ->disk(config('media.disk', 'public'))
+            // Skip per-file exists()/size()/mimeType() lookups when loading existing
+            // images on the edit form. Those calls (finfo mime detection especially) are
+            // slow on local/Windows and made FilePond hang on "Menunggu ukuran berkas".
+            // The preview URL is still provided, so the current image still shows.
+            ->fetchFileInformation(false)
             ->maxSize(($spec['max_upload_kb'] ?? 4096))
             ->acceptedFileTypes($this->acceptedTypes($spec))
             ->helperText($this->dimensionHint($spec))

@@ -40,6 +40,8 @@ class InstagramUpdateResource extends Resource
                         ->image()
                         ->disk('public')
                         ->directory('instagram')
+                        // Faster edit-form loading: skip slow size/mime lookups on the existing file.
+                        ->fetchFileInformation(false)
                         ->required()
                         ->columnSpanFull(),
                 ]),

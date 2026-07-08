@@ -43,7 +43,7 @@
     $hwLead = implode(' ', $hwWords);
 @endphp
 
-<section class="relative flex min-h-[30rem] flex-col justify-center overflow-hidden bg-navy-anim pt-32 pb-16 text-center text-white md:min-h-[40rem] md:pt-40 md:pb-24">
+<section class="relative flex min-h-[22rem] flex-col justify-center overflow-hidden bg-navy-anim pt-24 pb-12 text-center text-white md:min-h-[30rem] md:pt-28 md:pb-16">
     @if ($bgImage)
         <img src="{{ $bgImage }}" alt="" loading="eager"
              class="pointer-events-none absolute inset-0 h-full w-full object-cover">

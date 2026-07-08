@@ -11,7 +11,9 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\SpatieLaravelTranslatablePlugin;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
+use Illuminate\Support\HtmlString;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -39,6 +41,13 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->sidebarCollapsibleOnDesktop()
             ->databaseNotifications()
+            // Cosmetic-only theme polish (colourful stats, nicer login). No logic changes.
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn (): HtmlString => new HtmlString(
+                    '<link rel="stylesheet" href="'.asset('css/admin-theme.css').'?v='.@filemtime(public_path('css/admin-theme.css')).'">'
+                ),
+            )
             ->plugins([
                 SpatieLaravelTranslatablePlugin::make()
                     ->defaultLocales(['id', 'en']),

@@ -17,10 +17,29 @@
 @endphp
 
 <header
-    x-data="{ scrolled: false, open: false }"
-    x-init="scrolled = window.scrollY > 24; window.addEventListener('scroll', () => scrolled = window.scrollY > 24)"
-    class="fixed inset-x-0 top-0 z-[100] transition-all duration-500 ease-out-soft"
-    :class="scrolled ? 'py-2' : 'py-4'"
+    x-data="{ scrolled: false, open: false, navHidden: false, lastScrollY: 0 }"
+    x-init="
+        scrolled = window.scrollY > 24;
+        lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const currentY = window.scrollY;
+            scrolled = currentY > 24;
+            // Only hide after scrolling past 300px to avoid flickering near the top
+            if (currentY > 300 && currentY > lastScrollY + 8) {
+                navHidden = true;   // scrolling down → hide
+            } else if (currentY < lastScrollY - 8) {
+                navHidden = false;  // scrolling up → show
+            }
+            lastScrollY = currentY;
+        }, { passive: true })
+    "
+    class="fixed inset-x-0 top-0 z-[100] will-change-transform transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+    :class="{
+        'py-2': scrolled,
+        'py-4': !scrolled,
+        '-translate-y-full opacity-0': navHidden,
+        'translate-y-0 opacity-100': !navHidden
+    }"
 >
     <div class="container">
         <div
