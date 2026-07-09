@@ -54,39 +54,38 @@
     </section>
 
     {{-- ===================== VISION & MISSION ===================== --}}
-    <section class="relative overflow-hidden py-20 text-white md:py-28">
+    <section class="relative overflow-hidden py-14 text-white md:py-20">
         {{-- Background image + overlay --}}
         <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1920&q=80" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover">
-        {{-- Strong dark-blue overlay so the text stays clearly legible --}}
-        <div class="absolute inset-0 bg-navy-950/90"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-navy-950/70 via-transparent to-navy-950/80"></div>
+        {{-- Same gradient treatment as the "Keunggulan" band — image visible through the middle --}}
+        <div class="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/88"></div>
         <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-20"></div>
         <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
 
         <div class="container relative">
             {{-- Heading --}}
-            <div class="mx-auto mb-12 max-w-2xl text-center" data-aos="fade-up">
+            <div class="mx-auto mb-8 max-w-2xl text-center" data-aos="fade-up">
                 <p class="eyebrow inline-flex items-center justify-center"><span class="rule-gold mr-3"></span>{{ $isId ? 'Arah & Komitmen' : 'Direction & Commitment' }}</p>
                 <h2 class="mt-4 font-display text-3xl md:text-4xl">{{ $isId ? 'Visi & Misi' : 'Vision & Mission' }}</h2>
             </div>
 
             <div class="grid items-stretch gap-6 lg:grid-cols-2">
                 {{-- Vision — left/top aligned --}}
-                <div class="rounded-3xl border border-white/10 bg-navy-950/45 p-8 text-left backdrop-blur-md md:p-12" data-aos="fade-up">
+                <div class="rounded-3xl border border-white/10 bg-navy-950/45 p-6 text-left backdrop-blur-md md:p-8" data-aos="fade-up">
                     <p class="font-mono text-[11px] uppercase tracking-[0.24em] text-gold-soft">{{ $isId ? 'Visi' : 'Vision' }}</p>
                     <span class="mt-3 block h-0.5 w-10 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
-                    <p class="mt-7 font-display text-xl leading-[1.45] text-white text-pretty md:text-2xl">&ldquo;{{ $vision }}&rdquo;</p>
+                    <p class="mt-5 font-display text-xl leading-[1.45] text-white text-pretty md:text-2xl">&ldquo;{{ $vision }}&rdquo;</p>
                 </div>
 
                 {{-- Mission — numbered list, no icon --}}
-                <div class="rounded-3xl border border-white/10 bg-navy-950/45 p-8 backdrop-blur-md md:p-12" data-aos="fade-up" data-aos-delay="80">
+                <div class="rounded-3xl border border-white/10 bg-navy-950/45 p-6 backdrop-blur-md md:p-8" data-aos="fade-up" data-aos-delay="80">
                     <p class="font-mono text-[11px] uppercase tracking-[0.24em] text-gold-soft">{{ $isId ? 'Misi' : 'Mission' }}</p>
                     <span class="mt-3 block h-0.5 w-10 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
                     @if ($missions->isNotEmpty())
-                        <ul class="mt-7 space-y-5">
+                        <ul class="mt-5 space-y-4">
                             @foreach ($missions as $mission)
-                                <li class="flex items-start gap-5 border-b border-white/10 pb-5 last:border-0 last:pb-0">
+                                <li class="flex items-start gap-5 border-b border-white/10 pb-4 last:border-0 last:pb-0">
                                     <span class="font-display text-2xl leading-none text-gold-soft">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                                     <p class="pt-0.5 leading-relaxed text-white/90">{{ $mission->content }}</p>
                                 </li>

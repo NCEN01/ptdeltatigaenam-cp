@@ -41,7 +41,10 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            // Relative URL so images follow whatever host is being used (localhost, LAN, or
+            // an ngrok tunnel) instead of being pinned to APP_URL. Prevents broken images
+            // when the site is opened on a different host than APP_URL.
+            'url' => '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

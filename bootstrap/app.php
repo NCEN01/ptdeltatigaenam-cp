@@ -13,6 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Trust proxy/tunnel forwarded headers (e.g. ngrok) so the app detects HTTPS
+        // correctly and generates https URLs — otherwise assets are blocked as mixed content.
+        $middleware->trustProxies(at: '*');
+
         $middleware->append(\App\Http\Middleware\AddSecurityHeaders::class);
 
         $middleware->alias([

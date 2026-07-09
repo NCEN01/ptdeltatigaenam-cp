@@ -59,8 +59,8 @@
 
     <div class="container relative">
         @if ($eyebrow)
-            <p class="eyebrow mb-5 inline-flex items-center justify-center" data-aos="fade-up">
-                <span class="rule-gold mr-3"></span>{{ $eyebrow }}
+            <p class="eyebrow mb-5 inline-flex items-center justify-center text-gold-soft" data-aos="fade-up">
+                <span class="rule-gold mr-3 from-gold"></span>{{ $eyebrow }}
             </p>
         @endif
         <h1 class="mx-auto max-w-4xl text-display-xl leading-[1.06] text-balance" data-aos="fade-up" data-aos-delay="60">{{ $hwLead }}@if ($hwLead) @endif<span class="italic-accent text-gradient-hero">{{ $hwAccent }}</span></h1>

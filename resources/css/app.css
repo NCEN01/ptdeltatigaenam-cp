@@ -1,7 +1,7 @@
-/* Type system: Didot for headings/display (via GFS Didot — a faithful, freely available
-   Didot revival) and Avenir for all body & UI text. No other typefaces are used site-wide;
-   Avenir falls back to the system UI font where it is not installed. */
-@import url('https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap');
+/* Type system: two typefaces on a display↔text axis. Plus Jakarta Sans carries headings,
+   labels and UI chrome ("main" voice); Figtree carries body & description prose for calm,
+   readable reading. Both ship real weights (400/500/600/700) + italics. System UI fallback. */
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -25,9 +25,8 @@
 
     body {
         @apply bg-white text-ink font-sans antialiased;
-        /* Didot ships a single weight — never let the browser fake a bolder cut
-           (faux-bold on a high-contrast serif looks cheap). */
-        font-synthesis: none;
+        /* Instrument Sans ships true weights & italics — allow the real cuts. */
+        font-synthesis: weight style;
         overflow-x: hidden;
     }
 
@@ -35,10 +34,12 @@
         @apply bg-navy text-white;
     }
 
-    /* Display headings: Didot at its true weight, gently tightened. */
+    /* Headings: Instrument Sans, confident semibold, gently tightened. Emphasis words
+       lean on real italic (.italic-accent). Balanced wrapping for even line lengths. */
     h1, h2, h3, h4 {
-        @apply font-display font-normal;
-        letter-spacing: -0.005em;
+        @apply font-display font-semibold;
+        letter-spacing: -0.02em;
+        text-wrap: balance;
     }
 
     :focus-visible {
@@ -118,10 +119,10 @@
                after:h-px after:w-0 after:bg-sky-500 after:transition-all after:duration-300 hover:after:w-full;
     }
 
-    /* Primary CTA — light/deep blue gradient (replaces gold as the lead action) */
+    /* Primary CTA — deep-blue gradient (#1565c0 → darker) for confident white-text contrast */
     .btn-blue {
-        @apply btn bg-gradient-to-r from-sky-500 to-sky-700 text-white shadow-[0_8px_30px_-12px_rgba(37,99,235,0.5)]
-               hover:from-sky-600 hover:to-sky-700 hover:-translate-y-0.5 active:translate-y-0;
+        @apply btn bg-gradient-to-r from-navy-500 to-navy-700 text-white shadow-[0_8px_30px_-12px_rgba(21,101,192,0.55)]
+               hover:from-navy-600 hover:to-navy-800 hover:-translate-y-0.5 active:translate-y-0;
     }
 
     /* Interactive 3D card — pointer-driven tilt via [data-tilt] (JS sets the CSS vars) */
@@ -167,11 +168,11 @@
         height: 0.5rem;
         width: 0.5rem;
         border-radius: 9999px;
-        background: rgba(10, 42, 94, 0.18);
+        background: rgba(11, 49, 97, 0.18);
         transition: all 0.3s ease;
     }
     .fan-dot.is-on {
-        background: rgba(37, 99, 235, 0.9);
+        background: rgba(21, 101, 192, 0.9);
         transform: scale(1.4);
     }
 
@@ -186,7 +187,7 @@
     /* ── Gradient border card ── */
     .card-gradient-border {
         @apply relative rounded-2xl bg-white p-[1px] transition-all duration-500;
-        background-image: linear-gradient(135deg, #0A2A5E 0%, #3B82F6 50%, #C9A227 100%);
+        background-image: linear-gradient(135deg, #0d3a73 0%, #1565c0 50%, #edae49 100%);
         background-size: 200% 200%;
     }
     .card-gradient-border:hover { background-position: 100% 100%; }
@@ -209,7 +210,7 @@
     /* ── Section divider ── */
     .section-divider {
         @apply mx-auto h-px w-full max-w-6xl;
-        background: linear-gradient(90deg, transparent 0%, rgba(10,42,94,0.08) 20%, rgba(201,162,39,0.25) 50%, rgba(10,42,94,0.08) 80%, transparent 100%);
+        background: linear-gradient(90deg, transparent 0%, rgba(21,101,192,0.12) 20%, rgba(237,174,73,0.30) 50%, rgba(21,101,192,0.12) 80%, transparent 100%);
     }
 
     /* ── Pill badges ── */
@@ -226,7 +227,7 @@
     /* ── Glow dot ── */
     .glow-dot {
         @apply inline-block h-2 w-2 rounded-full bg-gold;
-        box-shadow: 0 0 12px rgba(201,162,39,0.6), 0 0 24px rgba(201,162,39,0.3);
+        box-shadow: 0 0 12px rgba(237,174,73,0.6), 0 0 24px rgba(237,174,73,0.3);
         animation: dot-pulse-glow 3s ease-in-out infinite;
     }
 
@@ -262,10 +263,10 @@
     /* Aurora field for dark sections — light/deep blue with a faint gold ember */
     .aurora {
         background:
-            radial-gradient(55% 60% at 18% 22%, rgba(51,207,247,0.30) 0%, transparent 60%),
-            radial-gradient(45% 50% at 82% 28%, rgba(28,125,224,0.38) 0%, transparent 58%),
-            radial-gradient(50% 45% at 72% 84%, rgba(201,162,39,0.07) 0%, transparent 55%),
-            radial-gradient(60% 70% at 55% 95%, rgba(8,24,47,0.86) 0%, transparent 60%);
+            radial-gradient(55% 60% at 18% 22%, rgba(72,202,228,0.32) 0%, transparent 60%),
+            radial-gradient(45% 50% at 82% 28%, rgba(21,101,192,0.45) 0%, transparent 58%),
+            radial-gradient(50% 45% at 72% 84%, rgba(237,174,73,0.08) 0%, transparent 55%),
+            radial-gradient(60% 70% at 55% 95%, rgba(13,58,115,0.88) 0%, transparent 60%);
         filter: blur(22px);
     }
 
@@ -309,8 +310,8 @@
         margin-top: -8.66rem;
         border-radius: 12px;
         overflow: hidden;
-        background: #0A2A5E;
-        box-shadow: 0 24px 60px -22px rgba(10, 42, 94, 0.55);
+        background: #0d3a73;
+        box-shadow: 0 24px 60px -22px rgba(11, 49, 97, 0.55);
         will-change: transform;
     }
     @media (min-width: 768px) { .fan-card { width: 15rem; margin-left: -7.5rem; margin-top: -10rem; } }
@@ -319,9 +320,9 @@
     /* ── Aurora light (for white sections) ── */
     .aurora-light {
         background:
-            radial-gradient(50% 55% at 15% 20%, rgba(94,151,251,0.12) 0%, transparent 55%),
-            radial-gradient(45% 50% at 85% 25%, rgba(59,130,246,0.08) 0%, transparent 55%),
-            radial-gradient(40% 40% at 70% 80%, rgba(201,162,39,0.06) 0%, transparent 50%);
+            radial-gradient(50% 55% at 15% 20%, rgba(72,202,228,0.14) 0%, transparent 55%),
+            radial-gradient(45% 50% at 85% 25%, rgba(21,101,192,0.10) 0%, transparent 55%),
+            radial-gradient(40% 40% at 70% 80%, rgba(237,174,73,0.06) 0%, transparent 50%);
         filter: blur(40px);
     }
 
@@ -332,8 +333,8 @@
 
 /* ── Global Keyframes ── */
 @keyframes dot-pulse-glow {
-    0%, 100% { box-shadow: 0 0 8px rgba(201,162,39,0.4), 0 0 18px rgba(201,162,39,0.2); }
-    50% { box-shadow: 0 0 18px rgba(201,162,39,0.7), 0 0 36px rgba(201,162,39,0.35); }
+    0%, 100% { box-shadow: 0 0 8px rgba(237,174,73,0.4), 0 0 18px rgba(237,174,73,0.2); }
+    50% { box-shadow: 0 0 18px rgba(237,174,73,0.7), 0 0 36px rgba(237,174,73,0.35); }
 }
 @keyframes gradient-shift {
     0% { background-position: 0% 50%; }
@@ -391,7 +392,7 @@
     transform: translate(-50%, -50%);
     transform-style: preserve-3d;
     backface-visibility: hidden;
-    background: #0b1f3d;
+    background: #0d3a73;
     box-shadow: 0 30px 60px -22px rgba(0, 0, 0, 0.65);
     -webkit-user-drag: none;
     user-select: none;
@@ -406,47 +407,33 @@
     height: 0.5rem;
     width: 0.5rem;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.28);
+    background: rgba(237, 174, 73, 0.45);
     transition: all 0.35s cubic-bezier(0.22, 0.7, 0.25, 1);
 }
 .cf-dot.is-on {
     width: 1.6rem;
-    background: linear-gradient(90deg, #7ec2ff, #e3b552);
+    background: linear-gradient(90deg, #edae49, #f6c877);
 }
 
 /* ═══════════════════════ POLISH: gradients · gradient type · button motion ═══════════════════════ */
 @layer components {
     /* Animated deep-navy gradient — slow, subtle; pauses under reduced-motion. */
     .bg-navy-anim {
-        background: linear-gradient(135deg, #08182F 0%, #0c2245 28%, #143a6e 50%, #0c2245 72%, #08182F 100%);
+        background: linear-gradient(135deg, #0d3a73 0%, #114f98 28%, #1565c0 50%, #114f98 72%, #0d3a73 100%);
         background-size: 220% 220%;
     }
     @media (prefers-reduced-motion: no-preference) {
         .bg-navy-anim { animation: gradient-pan 22s ease-in-out infinite; }
     }
 
-    /* Reusable gradient typography — headings only, never body text. */
-    .text-gradient,
-    .text-gradient-hero,
-    .text-gradient-gold {
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        -webkit-text-fill-color: transparent;
-    }
-    .text-gradient { background-image: linear-gradient(100deg, #1C7DE0 0%, #3b8fe6 50%, #7ec2ff 100%); }
-    .text-gradient-hero { background-image: linear-gradient(100deg, #ffffff 0%, #d4e6ff 42%, #7ec2ff 100%); }
-    .text-gradient-gold { background-image: linear-gradient(100deg, #DBC489 0%, #C2A25A 55%, #A6863F 100%); }
+    /* Accent-word colours for display headings — solid, high-contrast (no gradient text).
+       Emphasis is carried by weight + real italic, not by a fill. */
+    .text-gradient { color: #1565c0; }       /* dark-blue accent on light backgrounds */
+    .text-gradient-hero { color: #48cae4; }  /* light-blue accent on dark backgrounds */
+    .text-gradient-gold { color: #edae49; }  /* gold accent */
 
-    /* Slanted accent word inside display headings. The display face is single-weight with
-       font-synthesis:none globally, so we re-enable synthetic obliquing just here. */
-    .italic-accent { font-style: italic; font-synthesis: style; -webkit-font-synthesis: style; }
-    /* Fallback to a solid, high-contrast colour when background-clip:text is unsupported. */
-    @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
-        .text-gradient { color: #1C7DE0; -webkit-text-fill-color: #1C7DE0; }
-        .text-gradient-hero { color: #ffffff; -webkit-text-fill-color: #ffffff; }
-        .text-gradient-gold { color: #C2A25A; -webkit-text-fill-color: #C2A25A; }
-    }
+    /* Slanted emphasis word inside display headings — Instrument Sans has a true italic. */
+    .italic-accent { font-style: italic; }
 
     /* Button shine sweep + click ripple — motion only when allowed. */
     @media (prefers-reduced-motion: no-preference) {
@@ -473,7 +460,7 @@
         border-radius: inherit;
         opacity: 0;
         transition: opacity 0.35s ease;
-        background: radial-gradient(190px circle at var(--sx, 50%) var(--sy, 50%), rgba(120, 194, 255, 0.20), transparent 62%);
+        background: radial-gradient(190px circle at var(--sx, 50%) var(--sy, 50%), rgba(72, 202, 228, 0.22), transparent 62%);
         pointer-events: none;
     }
     [data-spotlight]:hover::after { opacity: 1; }

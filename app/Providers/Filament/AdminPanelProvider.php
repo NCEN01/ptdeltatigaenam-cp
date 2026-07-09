@@ -33,8 +33,8 @@ class AdminPanelProvider extends PanelProvider
             ->authGuard('web')
             ->brandName('Delta Tiga Enam')
             ->colors([
-                'primary' => Color::hex('#0A2A5E'),  // navy
-                'gold' => Color::hex('#C9A227'),     // accent
+                'primary' => Color::hex('#1565c0'),  // brand dark blue
+                'gold' => Color::hex('#edae49'),     // accent
                 'danger' => Color::Rose,
                 'success' => Color::Emerald,
                 'warning' => Color::Amber,

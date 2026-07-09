@@ -72,7 +72,7 @@
         {{-- ===================== KLIEN — blue band, logos only (no wrapper boxes), scrolls left forever ===================== --}}
         @if ($clients->isNotEmpty())
             <div class="relative w-full overflow-hidden py-10 md:py-12 {{ $partners->isNotEmpty() ? 'mt-10 md:mt-14' : '' }}"
-                 style="background: radial-gradient(120% 160% at 12% -20%, #1b4d8a 0%, transparent 55%), linear-gradient(155deg, #10305a 0%, #0b2247 50%, #081831 100%);"
+                 style="background: radial-gradient(120% 160% at 12% -20%, #1e78d4 0%, transparent 55%), linear-gradient(155deg, #1565c0 0%, #114f98 50%, #0d3a73 100%);"
                  data-aos="fade-up">
                 <div class="pointer-events-none absolute inset-0 grain opacity-40"></div>
                 <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"></div>

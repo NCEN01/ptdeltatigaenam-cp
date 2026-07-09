@@ -18,7 +18,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#0A2A5E">
+    {{-- Behind an HTTPS tunnel/proxy (e.g. ngrok) the page is HTTPS but some URLs may still
+         be http — tell the browser to upgrade them so nothing is blocked as mixed content.
+         Only emitted on secure/forwarded-https requests so local http isn't affected. --}}
+    @if (request()->isSecure() || request()->header('X-Forwarded-Proto') === 'https')
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    @endif
+    <meta name="theme-color" content="#1565c0">
     <title>{{ $pageTitle }}</title>
     <meta name="description" content="{{ $desc }}">
 

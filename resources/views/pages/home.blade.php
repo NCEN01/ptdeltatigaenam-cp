@@ -23,7 +23,7 @@
             foreach ($heroBanners as $banner) {
                 $slides[] = [
                     'img_url' => str_starts_with($banner->image, 'http') ? $banner->image : Storage::url($banner->image),
-                    'cat' => optional($banner->category)->name ?: ($isId ? 'Layanan' : 'Services'),
+                    'cat' => optional($banner->category)->name,
                     'title' => $banner->title,
                     'desc' => $banner->subtitle,
                     'link' => $banner->link_url ?: route('services.index'),
@@ -60,18 +60,21 @@
                         <img src="{{ $slide['img_url'] }}"
                              alt="{{ $slide['title'] }}" {{ $loop->first ? 'loading=eager fetchpriority=high' : 'loading=lazy' }}
                              class="hero-slide-img absolute inset-0 h-full w-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-navy-950/92 via-navy-950/70 to-navy-950/20"></div>
+                        {{-- Blue gradient wash: dark navy on the left, fading out before the right so the photo stays clear on that side --}}
+                        <div class="absolute inset-0" style="background: linear-gradient(100deg, #0d3a73 0%, rgba(15,72,144,0.92) 22%, rgba(21,101,192,0.42) 44%, rgba(21,101,192,0) 66%);"></div>
                         <div class="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-transparent to-navy-950/30"></div>
 
                         <div class="container relative flex min-h-[100svh] items-center">
                             <div class="hero-content max-w-2xl py-28 text-white">
-                                <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-white backdrop-blur">
-                                    <svg class="h-3.5 w-3.5 text-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg>
-                                    {{ $slide['cat'] }}
-                                </span>
+                                @if (! empty($slide['cat']))
+                                    <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-white backdrop-blur">
+                                        <svg class="h-3.5 w-3.5 text-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg>
+                                        {{ $slide['cat'] }}
+                                    </span>
+                                @endif
                                 @php $hw = preg_split('/\s+/', trim($slide['title'])); $ha = count($hw) ? array_pop($hw) : ''; $hl = implode(' ', $hw); @endphp
-                                <h1 class="mt-6 font-display font-normal leading-[1.05] text-balance [font-size:clamp(2.2rem,5.2vw,4rem)]">{{ $hl }}@if ($hl) @endif<span class="italic-accent text-gradient-hero">{{ $ha }}</span></h1>
-                                <p class="mt-6 max-w-xl text-base leading-relaxed text-navy-100 text-pretty md:text-lg">{{ $slide['desc'] }}</p>
+                                <h1 class="font-display font-bold leading-[1.05] text-balance [font-size:clamp(2.2rem,5.2vw,4rem)] {{ empty($slide['cat']) ? '' : 'mt-6' }}">{{ $hl }}@if ($hl) @endif<span class="italic-accent font-bold text-gradient-hero">{{ $ha }}</span></h1>
+                                <p class="mt-6 max-w-xl text-base font-semibold leading-relaxed text-gold-soft text-pretty md:text-lg">{{ $slide['desc'] }}</p>
                                 <div class="mt-9 flex flex-wrap items-center gap-4">
                                     <a href="{{ $slide['link'] }}" class="btn-blue">{{ $slide['btn_text'] }}</a>
                                     <a href="{{ route('contact.index') }}" class="btn-ghost-light">{{ __('site.cta.consult') }}</a>
@@ -116,32 +119,27 @@
     </section>
 
     {{-- ===================== SERVICE CATEGORIES · 3D COVERFLOW ===================== --}}
-    <section class="relative overflow-hidden py-20 text-white md:py-28"
+    <section class="relative overflow-hidden py-14 text-white md:py-20"
              style="background:
-                radial-gradient(65% 55% at 50% 105%, rgba(90,120,220,0.16), transparent 70%),
-                linear-gradient(160deg, #10305a 0%, #0c2245 35%, #081831 70%, #050f22 100%);">
+                radial-gradient(65% 55% at 50% 105%, rgba(30,120,212,0.28), transparent 70%),
+                linear-gradient(160deg, #1565c0 0%, #12559f 38%, #0f4890 70%, #0c3a75 100%);">
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
         <div class="pointer-events-none absolute inset-0 grain opacity-30"></div>
 
         <div class="container relative">
             {{-- Header --}}
             <div class="mx-auto max-w-2xl text-center">
-                <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-gold-soft" data-aos="fade-up">
-                    {{ $isId ? 'Kategori — Layanan Pengembangan SDM' : 'Categories — Human Capital Services' }}
-                </p>
-                <h2 class="mt-5 text-display-lg leading-[1.08]" data-aos="fade-up" data-aos-delay="60">
-                    <span class="block font-semibold text-white">{{ $isId ? 'Pilih Kategori' : 'Choose a Category' }}</span>
-                    <span class="italic-accent text-gradient-hero block">{{ $isId ? 'Layanan Anda.' : 'For Your Growth.' }}</span>
+                <h2 class="text-display-lg leading-[1.08]" data-aos="fade-up">
+                    <span class="font-semibold text-white">{{ $isId ? 'Kategori' : 'Service' }}</span>
+                    <span class="italic-accent text-gradient-hero">{{ $isId ? 'Layanan' : 'Categories' }}</span>
                 </h2>
-                <p class="mx-auto mt-5 max-w-xl text-pretty leading-relaxed text-navy-100" data-aos="fade-up" data-aos-delay="120">
-                    {{ $isId
-                        ? 'Geser untuk menjelajah kategori layanan pengembangan SDM kami — dari pelatihan dan sertifikasi hingga headhunter dan penempatan tenaga kerja.'
-                        : 'Drag to explore our human capital service categories — from training and certification to headhunting and workforce placement.' }}
+                <p class="mx-auto mt-4 max-w-xl text-pretty font-medium leading-relaxed text-gold-soft" data-aos="fade-up" data-aos-delay="80">
+                    {{ $isId ? 'Geser untuk pilih kategori layanan Anda.' : 'Drag to choose your service category.' }}
                 </p>
             </div>
 
             @if ($categories->isNotEmpty())
-                <div class="mt-14 select-none" data-coverflow data-aos="fade-up">
+                <div class="mt-10 select-none" data-coverflow data-aos="fade-up">
                     <div class="cf-stage" data-cf-stage>
                         @foreach ($categories as $cat)
                             @php $img = $cat->image ? (str_starts_with($cat->image, 'http') ? $cat->image : Storage::url($cat->image)) : null; @endphp
@@ -153,7 +151,7 @@
                                 @endif
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/5"></div>
                                 <div class="absolute inset-x-5 bottom-5">
-                                    <p class="font-mono text-sm font-medium text-[#7ec2ff]">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</p>
+                                    <p class="font-mono text-sm font-semibold text-sky-400">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</p>
                                     <h3 class="mt-1 font-display text-xl leading-[1.12] text-white text-balance md:text-2xl">{{ $cat->name }}</h3>
                                 </div>
                                 <span class="cf-card-ring pointer-events-none absolute inset-0"></span>
@@ -204,7 +202,7 @@
                     <div class="swiper-wrapper">
                         @foreach ($latestServices as $service)
                             <div class="swiper-slide flex h-auto">
-                                <a href="{{ route('services.show', $service->slug) }}" data-spotlight class="card card-hover group flex w-full flex-col overflow-hidden">
+                                <a href="{{ route('services.show', $service->slug) }}" data-spotlight class="card card-hover group flex h-full w-full flex-col overflow-hidden">
                                     <div class="relative aspect-[16/10] overflow-hidden bg-navy-100">
                                         @if ($service->image)
                                             <img src="{{ Storage::url($service->image) }}" alt="{{ $service->title }}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
@@ -215,8 +213,9 @@
                                     </div>
                                     <div class="flex flex-1 flex-col p-4">
                                         <p class="eyebrow-muted line-clamp-2 min-h-[2.4em] text-[10px] leading-[1.2]">{{ optional($service->category)->name }}</p>
-                                        <h3 class="mt-2 line-clamp-2 font-display text-base font-semibold leading-snug text-navy">{{ $service->title }}</h3>
-                                        @if ($service->short_description)<p class="mt-1.5 line-clamp-2 text-xs leading-relaxed text-navy-500">{{ $service->short_description }}</p>@endif
+                                        <h3 class="mt-2 line-clamp-2 min-h-[2.75rem] font-display text-base font-semibold leading-snug text-navy">{{ $service->title }}</h3>
+                                        {{-- always reserve 2 lines so every card is the same height --}}
+                                        <p class="mt-1.5 line-clamp-2 min-h-[2.5rem] text-xs leading-relaxed text-navy-500">{{ $service->short_description }}</p>
                                         <div class="mt-auto flex items-end justify-between border-t border-navy-100 pt-3">
                                             <div>
                                                 @if ($service->price > 0)
@@ -338,7 +337,7 @@
             {{-- Background image + dark overlay (kept light enough for the photo to show) --}}
             <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1920&q=80" alt="" loading="lazy"
                  class="absolute inset-0 h-full w-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-b from-navy-950/85 via-navy-950/55 to-navy-950/80"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/88"></div>
             <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
 
             <div class="container relative">

@@ -17,56 +17,57 @@ export default {
         },
         extend: {
             colors: {
-                // Brand palette derived from the Delta Tiga Enam logo
-                // white dominant · blue accent (#1C7DE0) · deep navy sections (#08182F) · cyan highlight · rare gold
+                // Brand palette (client-specified): dark blue #1565c0 · light blue #48cae4 · gold #edae49
                 navy: {
-                    DEFAULT: '#0F2F58', // headings / primary dark text
-                    50: '#EEF3FB',
-                    100: '#DCE7F5',
-                    200: '#B9CDEA',
-                    300: '#8AA8D6',
-                    400: '#4F77B5',
-                    500: '#2C5594',
-                    600: '#173F77',
-                    700: '#0F2F58',
-                    800: '#0B2547',
-                    900: '#0A1B3D',
-                    950: '#08182F', // dark sections (hero band, CTA, footer)
+                    DEFAULT: '#12529b', // headings / primary dark text (readable dark blue)
+                    50: '#eaf1fb',
+                    100: '#cbddf6',
+                    200: '#a3c4ee',
+                    300: '#72a4e4',
+                    400: '#3f82d8',
+                    450: '#2670cb',
+                    500: '#1565c0', // ← client dark blue (anchor)
+                    600: '#1258a8',
+                    700: '#0f4890',
+                    800: '#0d3c78',
+                    900: '#0b3161',
+                    950: '#0a2b52', // darkest — dark sections (hero band, CTA, footer)
                 },
-                // Primary blue accent (logo blue)
+                // Light blue accent
                 sky: {
-                    DEFAULT: '#1C7DE0',
-                    50: '#ECF5FE',
-                    100: '#D2E8FD',
-                    200: '#A8D2FB',
-                    300: '#72B6F7',
-                    400: '#3D93F0',
-                    500: '#1C7DE0',
-                    600: '#1463C2',
-                    700: '#114E9C',
+                    DEFAULT: '#48cae4',
+                    50: '#ebfafd',
+                    100: '#c9f2fb',
+                    200: '#9ae7f6',
+                    300: '#69d8ed',
+                    400: '#48cae4', // ← client light blue
+                    500: '#22b0d0',
+                    600: '#1592b4',
+                    700: '#127491',
                 },
-                // Cyan highlight — gradients & small accents only
+                // Light-blue highlight (gradients & small accents)
                 cyan: {
-                    DEFAULT: '#33CFF7',
-                    400: '#5BD8F9',
-                    500: '#33CFF7',
-                    600: '#15B6E6',
+                    DEFAULT: '#48cae4',
+                    400: '#69d8ed',
+                    500: '#48cae4',
+                    600: '#22b0d0',
                 },
-                // Champagne gold — muted, premium. Used only as a tiny accent.
+                // Gold — accent only
                 gold: {
-                    DEFAULT: '#C2A25A',
-                    soft: '#DBC489',
-                    deep: '#A6863F',
+                    DEFAULT: '#edae49',
+                    soft: '#f6c877',
+                    deep: '#c68a2b',
                 },
-                ink: '#0B1220',
-                mist: '#EAF2FC',
-                paper: '#F6F8FC', // off-white section background for rhythm
+                ink: '#0b2545',
+                mist: '#e8f2fb',
+                paper: '#f3f8fd', // off-white (blue-tinted) section background for rhythm
             },
             fontFamily: {
-                // Only two typefaces site-wide: Didot (headings) + Avenir (body/UI).
-                display: ['"GFS Didot"', 'Didot', 'serif'],
-                sans: ['Avenir', '"Avenir Next"', 'system-ui', 'sans-serif'],
-                mono: ['Avenir', '"Avenir Next"', 'system-ui', 'sans-serif'],
+                // Display / labels / UI chrome — Plus Jakarta Sans (the "main" voice).
+                display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+                mono: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+                // Body & description prose — Figtree.
+                sans: ['Figtree', 'system-ui', 'sans-serif'],
             },
             fontSize: {
                 // Serif display — line-height & tracking tuned for Young Serif's chunky forms.
