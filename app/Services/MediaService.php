@@ -157,8 +157,9 @@ class MediaService
 
     private function qualityFor($image, array $spec): int
     {
-        // Start high; the optimizer + WebP keep files near the KB target.
-        return 82;
+        // Per-profile WebP quality — HD banners/heroes set a higher value for crisp output;
+        // the optimizer + WebP keep files reasonable. Defaults to 82 for content images.
+        return (int) ($spec['quality'] ?? 82);
     }
 
     private function optimize(string $disk, string $path): void

@@ -13,7 +13,7 @@
         <button type="submit" class="btn-primary w-full">{{ $id ? 'Kirim Tautan' : 'Send Reset Link' }}</button>
     </form>
 
-    <p class="mt-8 text-center text-sm text-navy-500">
+    <p class="mt-8 text-center text-sm text-slate-600">
         <a href="{{ route('login') }}" class="font-medium link-underline">{{ $id ? 'Kembali masuk' : 'Back to sign in' }}</a>
     </p>
 </x-auth-layout>

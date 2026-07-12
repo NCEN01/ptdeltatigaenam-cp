@@ -7,7 +7,7 @@
 
     // Repeat clients so a single marquee "half" fills the viewport, then render
     // two identical halves for a seamless, never-ending -50% loop.
-    $repeat = function ($col, $min = 14) {
+    $repeat = function ($col, $min = 16) {
         if (! $col || $col->isEmpty()) {
             return collect();
         }
@@ -19,87 +19,96 @@
         return $out;
     };
 
-    $klien = $repeat($clients, 14);
+    $klien = $repeat($clients, 16);
 
-    // Slightly scattered / tilted arrangement for the partner cards on desktop
-    // (kept straight on smaller screens so the grid stays tidy).
-    $mitraTransforms = [
-        'lg:rotate-[-3deg] lg:translate-y-[8px]',
-        'lg:rotate-[2deg] lg:-translate-y-[8px]',
-        'lg:rotate-[-1.5deg] lg:translate-y-[12px]',
-        'lg:rotate-[2.5deg] lg:translate-y-[4px]',
-        'lg:rotate-[-2deg] lg:-translate-y-[10px]',
-        'lg:rotate-[1.5deg] lg:translate-y-[10px]',
-    ];
+    // Desktop column count grows with the number of partners, so the cards get
+    // smaller automatically as more mitra are added (kept to the wireframe's 3 up to 6).
+    $pCount = $partners->count();
+    $lgCols = match (true) {
+        $pCount <= 6 => 3,
+        $pCount <= 12 => 4,
+        $pCount <= 20 => 5,
+        default => 6,
+    };
 @endphp
 
 @if ($partners->isNotEmpty() || $clients->isNotEmpty())
-    {{-- ONE unified block: Mitra (white, tilted grid) + Klien (blue band) attached below --}}
-    <section class="overflow-hidden bg-white pt-16 md:pt-24 {{ $clients->isEmpty() ? 'pb-16 md:pb-24' : '' }}">
+    {{-- ONE unified section (Mitra + Klien) on a single background image, using the same
+         gradient treatment as the "Alasan Memilih Kami / Keunggulan" band. --}}
+    <section class="relative overflow-hidden bg-navy-950 text-white">
+        <img src="https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?auto=format&fit=crop&w=1920&q=80"
+             alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover">
+        <div class="absolute inset-0 bg-navy-950/82"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/88"></div>
+        <div class="pointer-events-none absolute inset-0 grain opacity-20"></div>
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 
-        {{-- ===================== MITRA — scattered/tilted cards: logo + no. registrasi ===================== --}}
+        {{-- ===================== MITRA — centered; logo box on top, name + reg. number below ===================== --}}
         @if ($partners->isNotEmpty())
-            <div class="container">
+            <div class="relative container pt-14 md:pt-20 {{ $clients->isEmpty() ? 'pb-14 md:pb-20' : 'pb-10 md:pb-12' }}">
                 <div class="text-center" data-aos="fade-up">
-                    <h2 class="text-display-xl font-semibold text-navy text-balance">{{ $isId ? 'Mitra Kami' : 'Our Partners' }}</h2>
-                    <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-navy-450">
-                        {{ $isId ? 'Mitra Yang Mendukung Dan Berkolaborasi Dengan Kami.' : 'Partners who support and collaborate with us.' }}
+                    <h2 class="text-display-xl font-semibold text-white text-balance">{{ $isId ? 'Mitra Kami' : 'Our Partners' }}</h2>
+                    <p class="mx-auto mt-4 max-w-xl text-sm italic leading-relaxed text-white/75 md:text-base">
+                        {{ $isId ? 'Siap berkolaborasi menciptakan tenaga yang berkualitas.' : 'Ready to collaborate in creating quality talent.' }}
                     </p>
                 </div>
 
-                <div class="mx-auto mt-16 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-10">
+                <div class="mitra-grid mx-auto mt-10 max-w-3xl gap-3.5 md:mt-12 md:gap-4" style="--mitra-cols: {{ $lgCols }};">
                     @foreach ($partners as $partner)
-                        <div class="group relative flex aspect-[16/10] flex-col rounded-3xl border border-navy-100 bg-white p-6 shadow-card transition duration-300 will-change-transform hover:z-10 hover:scale-[1.04] hover:shadow-lift {{ $mitraTransforms[$loop->index % count($mitraTransforms)] }}"
-                             data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 90 }}">
-                            {{-- Logo fills the upper area --}}
-                            <div class="flex flex-1 items-center justify-center">
+                        <div class="group flex flex-col rounded-2xl bg-white/10 p-2.5 ring-1 ring-white/15 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:bg-white/[0.16] hover:ring-white/25"
+                             data-aos="fade-up" data-aos-delay="{{ ($loop->index % $lgCols) * 70 }}">
+                            {{-- White logo box (upper area) — logo centered --}}
+                            <div class="flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-xl bg-white p-3">
                                 @if ($partner->logo)
-                                    <img src="{{ Storage::url($partner->logo) }}" alt="{{ $partner->name }}" loading="lazy" class="max-h-16 w-auto max-w-[75%] object-contain">
+                                    <img src="{{ Storage::url($partner->logo) }}" alt="{{ $partner->name }}" loading="lazy" class="max-h-full max-w-full object-contain">
                                 @else
-                                    <span class="text-center font-display text-xl font-semibold text-navy">{{ $partner->name }}</span>
+                                    <span class="text-center font-display text-xs font-bold italic text-navy">{{ $partner->name }}</span>
                                 @endif
                             </div>
-                            {{-- Registration number anchored at the bottom (matches reference) --}}
-                            @if ($partner->registration_number)
-                                <p class="mt-3 text-center font-mono text-sm tracking-wide text-navy-500">{{ $partner->registration_number }}</p>
-                            @endif
+                            {{-- Name + registration number --}}
+                            <div class="mt-2.5 text-center">
+                                <p class="font-display text-[13px] font-bold italic leading-tight text-white text-balance md:text-sm">{{ $partner->name }}</p>
+                                @if ($partner->registration_number)
+                                    <p class="mt-0.5 font-mono text-[11px] text-white/55">{{ $partner->registration_number }}</p>
+                                @endif
+                            </div>
                         </div>
                     @endforeach
                 </div>
             </div>
         @endif
 
-        {{-- ===================== KLIEN — blue band, logos only (no wrapper boxes), scrolls left forever ===================== --}}
+        {{-- ===================== KLIEN — full-width band (same section); marquee runs left, cut off by the heading ===================== --}}
         @if ($clients->isNotEmpty())
-            <div class="relative w-full overflow-hidden py-10 md:py-12 {{ $partners->isNotEmpty() ? 'mt-10 md:mt-14' : '' }}"
-                 style="background: radial-gradient(120% 160% at 12% -20%, #1e78d4 0%, transparent 55%), linear-gradient(155deg, #1565c0 0%, #114f98 50%, #0d3a73 100%);"
-                 data-aos="fade-up">
-                <div class="pointer-events-none absolute inset-0 grain opacity-40"></div>
-                <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"></div>
-
-                <h2 class="relative text-center text-display-lg font-semibold text-white text-balance">{{ $isId ? 'Klien Kami' : 'Our Clients' }}</h2>
-                <p class="relative mx-auto mt-3 max-w-xl text-center text-sm leading-relaxed text-white/80">
-                    {{ $isId ? 'Klien Yang Telah Menggunakan Layanan Kami.' : 'Clients who have used our services.' }}
-                </p>
-
-                <div class="mask-fade-x relative mt-9 overflow-hidden">
-                    <div class="flex w-max items-center gap-12 animate-marquee [will-change:transform] md:gap-16">
-                        @for ($h = 0; $h < 2; $h++)
-                            @foreach ($klien as $client)
-                                @if ($client->logo)
-                                    {{-- logo only: no wrapper box, no filter — shown in its original form --}}
-                                    <img src="{{ Storage::url($client->logo) }}" alt="{{ $client->name }}" loading="lazy"
-                                         class="h-11 w-auto max-w-[160px] shrink-0 rounded-lg object-contain transition duration-300 hover:scale-105 md:h-14"
-                                         aria-hidden="{{ $h ? 'true' : 'false' }}">
-                                @else
-                                    <span class="shrink-0 font-display text-lg font-semibold text-white/90" aria-hidden="{{ $h ? 'true' : 'false' }}">{{ $client->name }}</span>
-                                @endif
-                            @endforeach
-                        @endfor
+            <div class="relative pb-12 md:pb-16 {{ $partners->isNotEmpty() ? '' : 'pt-14 md:pt-20' }}" data-aos="fade-up">
+                <div class="container flex flex-col gap-6 md:flex-row md:items-center md:gap-10 {{ $partners->isNotEmpty() ? 'border-t border-white/10 pt-10 md:pt-12' : '' }}">
+                    {{-- Left: heading + description --}}
+                    <div class="shrink-0 md:w-60 lg:w-72">
+                        <h3 class="font-display text-2xl font-semibold text-white text-balance md:text-3xl">{{ $isId ? 'Klien Kami' : 'Our Clients' }}</h3>
+                        <span class="mt-2.5 block h-0.5 w-10 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
+                        <p class="mt-3 text-sm leading-relaxed text-gold-soft">
+                            {{ $isId ? 'Klien yang telah menggunakan layanan kami.' : 'Clients who have used our services.' }}
+                        </p>
+                    </div>
+                    {{-- Right: logos run left, grayscale → colour on hover, faded near the heading --}}
+                    <div class="mask-fade-left relative min-w-0 flex-1 overflow-hidden">
+                        <div class="flex w-max items-center gap-10 animate-marquee [will-change:transform] md:gap-14">
+                            @for ($h = 0; $h < 2; $h++)
+                                @foreach ($klien as $client)
+                                    @if ($client->logo)
+                                        {{-- No box: grayscale by default, original colour on hover --}}
+                                        <img src="{{ Storage::url($client->logo) }}" alt="{{ $client->name }}" loading="lazy"
+                                             class="h-10 w-auto max-w-[150px] shrink-0 object-contain opacity-70 grayscale transition duration-300 hover:scale-105 hover:opacity-100 hover:grayscale-0 md:h-12"
+                                             aria-hidden="{{ $h ? 'true' : 'false' }}">
+                                    @else
+                                        <span class="shrink-0 text-base font-semibold text-white/60 transition hover:text-white" aria-hidden="{{ $h ? 'true' : 'false' }}">{{ $client->name }}</span>
+                                    @endif
+                                @endforeach
+                            @endfor
+                        </div>
                     </div>
                 </div>
             </div>
         @endif
-
     </section>
 @endif

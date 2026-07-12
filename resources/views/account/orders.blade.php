@@ -18,7 +18,7 @@
             <aside class="lg:col-span-3"><x-account-nav /></aside>
 
             <div class="lg:col-span-9">
-                <a href="{{ route('services.index') }}" class="mb-4 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-navy-400 transition-colors hover:text-navy">
+                <a href="{{ route('services.index') }}" class="mb-4 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-slate-500 transition-colors hover:text-navy">
                     <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     {{ $id ? 'Kembali ke layanan' : 'Back to services' }}
                 </a>
@@ -26,9 +26,9 @@
                     <div class="mb-4 rounded-2xl border border-navy-100 p-6">
                         <div class="flex flex-wrap items-start justify-between gap-4">
                             <div>
-                                <p class="font-mono text-xs text-navy-400">{{ $order->order_number }}</p>
+                                <p class="font-mono text-xs text-slate-500">{{ $order->order_number }}</p>
                                 <h3 class="mt-1 font-display text-lg font-semibold text-navy">{{ optional($order->service)->title ?? ($id ? 'Layanan' : 'Service') }}</h3>
-                                <p class="mt-1 text-sm text-navy-400">{{ $order->created_at->translatedFormat('d M Y, H:i') }}</p>
+                                <p class="mt-1 text-sm text-slate-500">{{ $order->created_at->translatedFormat('d M Y, H:i') }}</p>
                             </div>
                             <div class="text-right">
                                 <span class="inline-block rounded-full border px-3 py-1 text-xs font-medium {{ $statusColor($order->status) }}">
@@ -54,7 +54,7 @@
                 @empty
                     <div class="rounded-3xl border border-dashed border-navy-200 p-12 text-center">
                         <p class="font-display text-xl font-semibold text-navy">{{ $id ? 'Belum ada pesanan' : 'No orders yet' }}</p>
-                        <p class="mt-2 text-navy-500">{{ $id ? 'Mulai jelajahi layanan kami.' : 'Start exploring our services.' }}</p>
+                        <p class="mt-2 text-slate-600">{{ $id ? 'Mulai jelajahi layanan kami.' : 'Start exploring our services.' }}</p>
                         <a href="{{ route('services.index') }}" class="btn-primary mt-6">{{ __('site.cta.explore') }}</a>
                     </div>
                 @endforelse

@@ -34,19 +34,19 @@
                     <div><p class="font-display text-2xl">10+</p><p class="font-mono text-[10px] uppercase tracking-wider text-navy-200">{{ app()->getLocale() === 'id' ? 'Tahun' : 'Years' }}</p></div>
                 </div>
             </div>
-            <p class="relative font-mono text-xs text-navy-300">© {{ now()->year }} PT Delta Tiga Enam</p>
+            <p class="relative font-mono text-xs text-slate-400">© {{ now()->year }} PT Delta Tiga Enam</p>
         </div>
 
         {{-- Form panel --}}
         <div class="flex items-center justify-center px-6 py-12 sm:px-12">
             <div class="w-full max-w-md">
-                <a href="{{ route('home') }}" class="mb-10 inline-flex items-center gap-2 text-sm text-navy-400 hover:text-navy lg:hidden">
+                <a href="{{ route('home') }}" class="mb-10 inline-flex items-center gap-2 text-sm text-slate-500 hover:text-navy lg:hidden">
                     <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-9 w-9">
                     Delta Tiga Enam
                 </a>
 
                 <h1 class="font-display text-3xl font-semibold text-navy">{{ $heading }}</h1>
-                @if ($subheading)<p class="mt-2 text-navy-500">{{ $subheading }}</p>@endif
+                @if ($subheading)<p class="mt-2 text-slate-600">{{ $subheading }}</p>@endif
 
                 @if (session('status'))
                     <div class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800" role="status">{{ session('status') }}</div>

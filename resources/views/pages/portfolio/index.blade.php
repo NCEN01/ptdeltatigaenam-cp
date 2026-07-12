@@ -17,7 +17,7 @@
                     <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $id ? 'Dampak nyata bersama klien kami' : 'Real impact alongside our clients' }}</h2>
                 </div>
                 @if ($portfolios->isNotEmpty())
-                    <p class="font-mono text-sm text-navy-400" data-aos="fade-up">{{ str_pad($portfolios->count(), 2, '0', STR_PAD_LEFT) }} {{ $id ? 'proyek' : 'projects' }}</p>
+                    <p class="font-mono text-sm text-slate-500" data-aos="fade-up">{{ str_pad($portfolios->count(), 2, '0', STR_PAD_LEFT) }} {{ $id ? 'proyek' : 'projects' }}</p>
                 @endif
             </div>
 
@@ -53,7 +53,7 @@
                             <div class="mt-4 flex items-start justify-between gap-3">
                                 <div class="min-w-0">
                                     <h3 class="font-display text-lg font-semibold leading-snug text-navy transition-colors duration-300 group-hover:text-sky-600">{{ $p->title }}</h3>
-                                    <p class="mt-1 flex flex-wrap items-center gap-x-2 text-sm text-navy-400">
+                                    <p class="mt-1 flex flex-wrap items-center gap-x-2 text-sm text-slate-500">
                                         @if ($p->client_name)<span>{{ $p->client_name }}</span>@endif
                                         @if ($p->client_name && $p->project_date)<span class="text-navy-200">·</span>@endif
                                         @if ($p->project_date)<span class="font-mono text-xs">{{ $p->project_date->translatedFormat('Y') }}</span>@endif
@@ -72,7 +72,7 @@
                         <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none"><path d="M4 7h16v12H4z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M4 11h16M9 7V5h6v2" stroke="currentColor" stroke-width="1.4"/></svg>
                     </span>
                     <p class="mt-5 font-display text-lg font-semibold text-navy">{{ $id ? 'Portofolio segera hadir' : 'Portfolio coming soon' }}</p>
-                    <p class="mt-2 text-sm text-navy-500">{{ $id ? 'Kami sedang menyiapkan kisah proyek terbaik untuk ditampilkan di sini.' : 'We are preparing our best project stories to showcase here.' }}</p>
+                    <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Kami sedang menyiapkan kisah proyek terbaik untuk ditampilkan di sini.' : 'We are preparing our best project stories to showcase here.' }}</p>
                 </div>
             @endif
         </div>

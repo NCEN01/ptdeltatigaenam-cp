@@ -21,7 +21,7 @@
         <button type="submit" class="btn-primary w-full">{{ $id ? 'Daftar' : 'Create account' }}</button>
     </form>
 
-    <p class="mt-8 text-center text-sm text-navy-500">
+    <p class="mt-8 text-center text-sm text-slate-600">
         {{ $id ? 'Sudah punya akun?' : 'Already have an account?' }}
         <a href="{{ route('login') }}" class="font-medium link-underline">{{ __('site.nav.login') }}</a>
     </p>

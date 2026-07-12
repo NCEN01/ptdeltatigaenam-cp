@@ -21,12 +21,12 @@
             </span>
 
             <h1 class="mt-8 font-display text-display-lg font-semibold text-navy">{{ $state['title'] }}</h1>
-            <p class="mt-4 text-navy-500">{{ $state['desc'] }}</p>
+            <p class="mt-4 text-slate-600">{{ $state['desc'] }}</p>
 
             <div class="mx-auto mt-8 max-w-sm rounded-3xl border border-navy-100 p-6 text-left">
-                <div class="flex justify-between text-sm"><span class="text-navy-500">{{ $id ? 'Nomor Pesanan' : 'Order Number' }}</span><span class="font-mono text-navy">{{ $order->order_number }}</span></div>
-                <div class="mt-2 flex justify-between text-sm"><span class="text-navy-500">{{ $id ? 'Layanan' : 'Service' }}</span><span class="font-medium text-navy">{{ $order->service?->title }}</span></div>
-                <div class="mt-2 flex justify-between text-sm"><span class="text-navy-500">Total</span><span class="font-display font-semibold text-navy">Rp {{ number_format((float) $order->total_amount, 0, ',', '.') }}</span></div>
+                <div class="flex justify-between text-sm"><span class="text-slate-600">{{ $id ? 'Nomor Pesanan' : 'Order Number' }}</span><span class="font-mono text-navy">{{ $order->order_number }}</span></div>
+                <div class="mt-2 flex justify-between text-sm"><span class="text-slate-600">{{ $id ? 'Layanan' : 'Service' }}</span><span class="font-medium text-navy">{{ $order->service?->title }}</span></div>
+                <div class="mt-2 flex justify-between text-sm"><span class="text-slate-600">Total</span><span class="font-display font-semibold text-navy">Rp {{ number_format((float) $order->total_amount, 0, ',', '.') }}</span></div>
             </div>
 
             <div class="mt-8 flex flex-wrap justify-center gap-3">
@@ -42,7 +42,7 @@
             @if ($order->status !== 'paid' && ! config('midtrans.is_production'))
                 <div class="mx-auto mt-10 max-w-sm rounded-2xl border border-dashed border-emerald-300 bg-emerald-50/50 p-5">
                     <p class="font-mono text-[10px] uppercase tracking-label text-emerald-600">{{ $id ? 'Mode Sandbox' : 'Sandbox Mode' }}</p>
-                    <p class="mt-1.5 text-sm text-navy-500">{{ $id ? 'Sudah bayar di Midtrans tapi status belum berubah? Konfirmasi manual di sini.' : 'Paid on Midtrans but status not updated? Confirm manually here.' }}</p>
+                    <p class="mt-1.5 text-sm text-slate-600">{{ $id ? 'Sudah bayar di Midtrans tapi status belum berubah? Konfirmasi manual di sini.' : 'Paid on Midtrans but status not updated? Confirm manually here.' }}</p>
                     <form method="POST" action="{{ route('checkout.simulate', $order->order_number) }}" class="mt-4">
                         @csrf
                         <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">

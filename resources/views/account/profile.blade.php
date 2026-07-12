@@ -31,7 +31,7 @@
                         </div>
                         <div>
                             <label class="mb-1.5 block text-sm font-medium text-navy">{{ __('site.contact.email') }}</label>
-                            <input type="email" value="{{ $customer->email }}" disabled class="w-full cursor-not-allowed rounded-2xl border border-navy-100 bg-mist px-4 py-3 text-navy-400">
+                            <input type="email" value="{{ $customer->email }}" disabled class="w-full cursor-not-allowed rounded-2xl border border-navy-100 bg-mist px-4 py-3 text-slate-500">
                         </div>
                         <button type="submit" class="btn-primary">{{ $id ? 'Simpan Perubahan' : 'Save Changes' }}</button>
                     </form>

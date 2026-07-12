@@ -28,7 +28,7 @@
                 <h2 class="font-display text-3xl leading-tight text-navy md:text-4xl">{{ $isId ? 'Profil Perusahaan' : 'Company Profile' }}</h2>
                 <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
             </div>
-            <div class="space-y-5 leading-relaxed text-navy-600 lg:col-span-8" data-aos="fade-up" data-aos-delay="80">
+            <div class="space-y-5 leading-relaxed text-slate-700 lg:col-span-8" data-aos="fade-up" data-aos-delay="80">
                 @foreach ($aboutParas as $para)
                     <p class="text-pretty">{{ $para }}</p>
                 @endforeach
@@ -46,7 +46,7 @@
                     <div class="px-2 text-center">
                         <p class="font-display text-4xl md:text-5xl {{ $loop->first ? 'text-gold-deep' : 'text-navy' }}"
                            data-counter="{{ $num }}" data-counter-suffix="{{ $suffix }}">0{{ $suffix }}</p>
-                        <p class="mt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-navy-400 md:text-[11px]">{{ $stat['label'] }}</p>
+                        <p class="mt-2 font-mono text-[10px] uppercase tracking-normal text-slate-500 md:text-[11px]">{{ $stat['label'] }}</p>
                     </div>
                 @endforeach
             </div>
@@ -73,21 +73,19 @@
             <div class="grid items-stretch gap-6 lg:grid-cols-2">
                 {{-- Vision — left/top aligned --}}
                 <div class="rounded-3xl border border-white/10 bg-navy-950/45 p-6 text-left backdrop-blur-md md:p-8" data-aos="fade-up">
-                    <p class="font-mono text-[11px] uppercase tracking-[0.24em] text-gold-soft">{{ $isId ? 'Visi' : 'Vision' }}</p>
-                    <span class="mt-3 block h-0.5 w-10 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
-                    <p class="mt-5 font-display text-xl leading-[1.45] text-white text-pretty md:text-2xl">&ldquo;{{ $vision }}&rdquo;</p>
+                    <p class="font-mono text-base uppercase tracking-normal text-gold-soft md:text-lg">{{ $isId ? 'Visi' : 'Vision' }}</p>
+                    <p class="mt-5 font-display text-base leading-relaxed text-white text-pretty md:text-lg">&ldquo;{{ $vision }}&rdquo;</p>
                 </div>
 
                 {{-- Mission — numbered list, no icon --}}
                 <div class="rounded-3xl border border-white/10 bg-navy-950/45 p-6 backdrop-blur-md md:p-8" data-aos="fade-up" data-aos-delay="80">
-                    <p class="font-mono text-[11px] uppercase tracking-[0.24em] text-gold-soft">{{ $isId ? 'Misi' : 'Mission' }}</p>
-                    <span class="mt-3 block h-0.5 w-10 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
+                    <p class="font-mono text-base uppercase tracking-normal text-gold-soft md:text-lg">{{ $isId ? 'Misi' : 'Mission' }}</p>
                     @if ($missions->isNotEmpty())
                         <ul class="mt-5 space-y-4">
                             @foreach ($missions as $mission)
-                                <li class="flex items-start gap-5 border-b border-white/10 pb-4 last:border-0 last:pb-0">
-                                    <span class="font-display text-2xl leading-none text-gold-soft">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                                    <p class="pt-0.5 leading-relaxed text-white/90">{{ $mission->content }}</p>
+                                <li class="flex items-start gap-3 border-b border-white/10 pb-4 last:border-0 last:pb-0">
+                                    <span class="shrink-0 text-base leading-relaxed text-gold-soft md:text-lg" aria-hidden="true">—</span>
+                                    <p class="text-base leading-relaxed text-white/90 md:text-lg">{{ $mission->content }}</p>
                                 </li>
                             @endforeach
                         </ul>
@@ -98,7 +96,7 @@
     </section>
 
     {{-- ===================== FOUNDER ===================== --}}
-    <section class="relative overflow-hidden bg-navy-950 py-20 text-white md:py-28">
+    <section class="relative overflow-hidden bg-navy-anim py-20 text-white md:py-28">
         <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-40"></div>
         <div class="pointer-events-none absolute inset-0 grain opacity-40"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
@@ -120,10 +118,10 @@
 
                 {{-- Bio --}}
                 <div data-aos="fade-up" data-aos-delay="100">
-                    <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-gold-soft">{{ $founderRole }}</p>
+                    <p class="font-mono text-[11px] uppercase tracking-normal text-gold-soft">{{ $founderRole }}</p>
                     <h3 class="mt-2 font-display text-3xl md:text-4xl">{{ $founderName }}</h3>
                     <p class="mt-6 text-pretty text-lg italic leading-relaxed text-navy-100">"{{ $founderQuote }}"</p>
-                    <p class="mt-6 max-w-xl text-pretty text-sm leading-relaxed text-navy-300">{{ $founderBio }}</p>
+                    <p class="mt-6 max-w-xl text-pretty text-sm leading-relaxed text-slate-400">{{ $founderBio }}</p>
                 </div>
             </div>
         </div>
@@ -140,7 +138,7 @@
                 @foreach ($values as $value)
                     <div class="group border-l-2 border-gold pl-5 transition-colors duration-300 hover:border-sky-500" data-aos="fade-up" data-aos-delay="{{ $loop->index * 70 }}">
                         <h3 class="font-display text-lg text-navy">{{ $value['title'] }}</h3>
-                        <p class="mt-2.5 text-pretty text-sm leading-relaxed text-navy-500">{{ $value['desc'] }}</p>
+                        <p class="mt-2.5 text-pretty text-sm leading-relaxed text-slate-600">{{ $value['desc'] }}</p>
                     </div>
                 @endforeach
             </div>
@@ -161,7 +159,7 @@
                             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M15 9h.01M9 13h.01M15 13h.01M10 21v-4h4v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </span>
                         <h3 class="mt-5 font-display text-xl text-navy">{{ $office['name'] }}</h3>
-                        <p class="mt-3 flex-1 text-sm leading-relaxed text-navy-500">{{ $office['address'] }}</p>
+                        <p class="mt-3 flex-1 text-sm leading-relaxed text-slate-600">{{ $office['address'] }}</p>
                         <p class="mt-5 flex items-center gap-2 border-t border-navy-100 pt-4 text-sm font-medium text-navy">
                             <svg class="h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 24 24" fill="none"><path d="M5 4h4l2 5-3 2a12 12 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
                             {{ $office['phone'] }}

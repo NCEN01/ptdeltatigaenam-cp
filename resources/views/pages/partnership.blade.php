@@ -61,7 +61,7 @@
             <div class="lg:col-span-7" data-aos="fade-up">
                 <p class="eyebrow mb-5"><span class="rule-gold mr-3"></span>{{ $id ? 'Tentang Program' : 'About the Program' }}</p>
                 <h2 class="font-display text-3xl leading-tight text-navy text-balance md:text-4xl">{{ $id ? 'Kemitraan PT Delta Tiga Enam' : 'PT Delta Tiga Enam Partnership' }}</h2>
-                <p class="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-navy-600">{{ $narrative }}</p>
+                <p class="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-slate-700">{{ $narrative }}</p>
             </div>
             <div class="lg:col-span-5" data-aos="fade-left" data-aos-delay="100">
                 <div class="relative h-full overflow-hidden rounded-3xl bg-navy-950 p-8 text-white md:p-10">
@@ -72,7 +72,7 @@
                         <span class="grid h-12 w-12 place-items-center rounded-2xl border border-gold/40 text-gold">
                             <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none"><path d="M4 7h16v13H4zM4 7l3-3h10l3 3M9 12h6" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
                         </span>
-                        <p class="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-gold-soft">{{ $id ? 'Penagihan' : 'Billing' }}</p>
+                        <p class="mt-6 font-mono text-[11px] uppercase tracking-normal text-gold-soft">{{ $id ? 'Penagihan' : 'Billing' }}</p>
                         <p class="mt-3 font-display text-2xl leading-snug text-balance">{{ $id ? 'Tanpa pembayaran online — seluruh kerja sama difinalisasi melalui invoice.' : 'No online payment — every partnership is finalized via invoice.' }}</p>
                         <p class="mt-auto border-t border-white/10 pt-6 text-sm leading-relaxed text-navy-200">{{ $id ? 'Tim kami menyiapkan penawaran resmi setelah presentasi.' : 'Our team prepares a formal offer after the presentation.' }}</p>
                     </div>
@@ -95,7 +95,7 @@
                         <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
                             <span class="grid h-11 w-11 place-items-center rounded-xl bg-navy font-display text-lg text-gold transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                             <h3 class="mt-6 font-display text-lg text-navy">{{ $benefit->title }}</h3>
-                            <p class="mt-2.5 text-pretty text-sm leading-relaxed text-navy-500">{{ $benefit->description }}</p>
+                            <p class="mt-2.5 text-pretty text-sm leading-relaxed text-slate-600">{{ $benefit->description }}</p>
                             <span class="mt-5 block h-0.5 w-0 rounded-full bg-gradient-to-r from-gold to-gold-soft transition-all duration-500 group-hover:w-12"></span>
                         </div>
                     @endforeach
@@ -104,7 +104,7 @@
                         <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
                             <span class="grid h-11 w-11 place-items-center rounded-xl bg-navy font-display text-lg text-gold transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                             <h3 class="mt-6 font-display text-lg text-navy">{{ $item[0] }}</h3>
-                            <p class="mt-2.5 text-pretty text-sm leading-relaxed text-navy-500">{{ $item[1] }}</p>
+                            <p class="mt-2.5 text-pretty text-sm leading-relaxed text-slate-600">{{ $item[1] }}</p>
                             <span class="mt-5 block h-0.5 w-0 rounded-full bg-gradient-to-r from-gold to-gold-soft transition-all duration-500 group-hover:w-12"></span>
                         </div>
                     @endforeach
@@ -123,7 +123,7 @@
                     <div class="max-w-3xl" data-aos="fade-up">
                         <p class="eyebrow mb-4"><span class="rule-gold mr-3"></span>{{ $id ? 'Penawaran Paket' : 'Package Offerings' }}</p>
                         <h2 class="font-display text-3xl text-navy text-balance md:text-4xl">{{ $id ? 'Pilih paket kemitraan Anda' : 'Choose your partnership package' }}</h2>
-                        <p class="mt-4 font-mono text-xs uppercase tracking-[0.2em] text-navy-400">Blue · Silver · Gold · Platinum</p>
+                        <p class="mt-4 font-mono text-xs uppercase tracking-normal text-slate-500">Blue · Silver · Gold · Platinum</p>
                     </div>
 
                     <div class="mt-14 grid items-stretch gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -155,12 +155,12 @@
 
                                 {{-- Body --}}
                                 <div class="flex flex-1 flex-col p-7">
-                                    <p class="font-mono text-[10px] uppercase tracking-wider text-navy-300">{{ $id ? 'Investasi' : 'Investment' }}</p>
+                                    <p class="font-mono text-[10px] uppercase tracking-wider text-slate-400">{{ $id ? 'Investasi' : 'Investment' }}</p>
                                     <p class="mt-1 font-display text-lg text-navy">{{ $package->price ? 'Rp '.number_format((float) $package->price, 0, ',', '.') : ($id ? 'Via penawaran (invoice)' : 'By offer (invoice)') }}</p>
 
                                     <ul class="mt-6 flex-1 space-y-3 border-t border-navy-100 pt-6">
                                         @foreach ($perks as $perk)
-                                            <li class="flex items-start gap-2.5 text-sm text-navy-600">
+                                            <li class="flex items-start gap-2.5 text-sm text-slate-700">
                                                 <svg class="mt-0.5 h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                                 <span>{{ $perk }}</span>
                                             </li>
@@ -184,7 +184,7 @@
                 <div class="mx-auto max-w-2xl text-center">
                     <p class="eyebrow mb-4 inline-flex items-center justify-center"><span class="rule-gold mr-3"></span>{{ $id ? 'Daftar Kemitraan' : 'Partnership Application' }}</p>
                     <h2 class="font-display text-3xl text-navy text-balance md:text-4xl">{{ $id ? 'Mulai kolaborasi' : 'Start a collaboration' }}</h2>
-                    <p class="mx-auto mt-5 max-w-xl text-pretty leading-relaxed text-navy-500">
+                    <p class="mx-auto mt-5 max-w-xl text-pretty leading-relaxed text-slate-600">
                         {{ $id
                             ? 'Isi formulir dan tim PT Delta Tiga Enam akan menghubungi Anda untuk menjadwalkan presentasi serta menyiapkan penawaran. Tanpa pembayaran online — penagihan melalui invoice.'
                             : 'Submit the form and the PT Delta Tiga Enam team will contact you to schedule a presentation and prepare an offer. No online payment — billing via invoice.' }}
@@ -196,7 +196,7 @@
                     @foreach ($steps as $i => $step)
                         <div class="flex flex-col items-center gap-3 text-center">
                             <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-navy font-display text-sm text-gold">{{ $i + 1 }}</span>
-                            <p class="text-sm leading-relaxed text-navy-600">{{ $step }}</p>
+                            <p class="text-sm leading-relaxed text-slate-700">{{ $step }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -256,7 +256,7 @@
                             {{-- C. Scheduling --}}
                             <div class="border-t border-navy-100 pt-10">
                                 <p class="font-mono text-[11px] uppercase tracking-label text-sky-600">C · {{ $id ? 'Penjadwalan Presentasi/Meeting' : 'Presentation/Meeting Scheduling' }}</p>
-                                <p class="mt-2 text-sm text-navy-500">{{ $id ? 'Pilih waktu yang Anda inginkan; tim kami akan mengonfirmasi.' : 'Choose your preferred time; our team will confirm.' }}</p>
+                                <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Pilih waktu yang Anda inginkan; tim kami akan mengonfirmasi.' : 'Choose your preferred time; our team will confirm.' }}</p>
                                 <div class="mt-5 grid gap-5 sm:grid-cols-2">
                                     <div>
                                         <label for="preferred_meeting_at" class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'Waktu Diinginkan' : 'Preferred Time' }}</label>
@@ -280,7 +280,7 @@
 
                         {{-- Footer bar --}}
                         <div class="flex flex-col gap-4 border-t border-navy-100 bg-neutral-50 px-7 py-6 sm:flex-row sm:items-center sm:justify-between md:px-10">
-                            <p class="max-w-sm text-xs leading-relaxed text-navy-400">{{ $id ? 'Dengan mengirim, Anda setuju dihubungi oleh tim PT Delta Tiga Enam. Tanpa pembayaran online.' : 'By submitting, you agree to be contacted by the PT Delta Tiga Enam team. No online payment.' }}</p>
+                            <p class="max-w-sm text-xs leading-relaxed text-slate-500">{{ $id ? 'Dengan mengirim, Anda setuju dihubungi oleh tim PT Delta Tiga Enam. Tanpa pembayaran online.' : 'By submitting, you agree to be contacted by the PT Delta Tiga Enam team. No online payment.' }}</p>
                             <button type="submit" class="btn-blue shrink-0">
                                 {{ __('site.cta.send') }}
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>

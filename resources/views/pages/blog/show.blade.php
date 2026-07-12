@@ -40,11 +40,11 @@
                 <div class="lg:col-span-8">
                     {{-- Meta bar --}}
                     <div class="mb-10 flex flex-wrap items-center justify-between gap-4 border-b border-navy-100 pb-6">
-                        <a href="{{ route('blog.index') }}" class="group inline-flex items-center gap-2 text-sm font-medium text-navy-500 transition-colors hover:text-navy">
+                        <a href="{{ route('blog.index') }}" class="group inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition-colors hover:text-navy">
                             <svg class="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             {{ $id ? 'Kembali ke Blog' : 'Back to Blog' }}
                         </a>
-                        <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-navy-400">
+                        <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-slate-500">
                             @if ($post->category)<span class="text-gold-deep">{{ $post->category->name }}</span><span class="text-navy-200">·</span>@endif
                             <span>{{ optional($post->published_at)->translatedFormat('d M Y') }}</span>
                         </div>
@@ -52,19 +52,19 @@
 
                     {{-- Lead --}}
                     @if ($post->excerpt)
-                        <p class="mb-10 border-l-2 border-gold pl-5 text-lg leading-relaxed text-navy-600 text-pretty">{{ $post->excerpt }}</p>
+                        <p class="mb-10 border-l-2 border-gold pl-5 text-lg leading-relaxed text-slate-700 text-pretty">{{ $post->excerpt }}</p>
                     @endif
 
                     {{-- Body (comfortable reading measure & rhythm) --}}
                     <div class="prose prose-lg max-w-none [hyphens:auto]
                                 prose-headings:font-display prose-headings:font-normal prose-headings:text-navy prose-headings:tracking-tight
-                                prose-p:text-navy-600 prose-p:leading-[1.85] prose-p:text-justify
-                                prose-li:text-navy-600 prose-li:leading-relaxed
+                                prose-p:text-slate-700 prose-p:leading-[1.85] prose-p:text-justify
+                                prose-li:text-slate-700 prose-li:leading-relaxed
                                 prose-a:font-medium prose-a:text-sky-700 prose-a:no-underline hover:prose-a:underline
                                 prose-strong:text-navy
-                                prose-blockquote:border-l-2 prose-blockquote:border-gold prose-blockquote:not-italic prose-blockquote:text-navy-600
+                                prose-blockquote:border-l-2 prose-blockquote:border-gold prose-blockquote:not-italic prose-blockquote:text-slate-700
                                 prose-img:mx-auto prose-img:my-8 prose-img:h-auto prose-img:max-h-[520px] prose-img:w-auto prose-img:rounded-2xl prose-img:shadow-card prose-img:ring-1 prose-img:ring-navy-100
-                                prose-figure:mx-auto prose-figure:text-center prose-figcaption:text-navy-400
+                                prose-figure:mx-auto prose-figure:text-center prose-figcaption:text-slate-500
                                 [&_img]:mx-auto">
                         {!! \App\Helpers\HtmlSanitizer::clean($post->content) !!}
                     </div>
@@ -74,7 +74,7 @@
                         @if ($post->tags->isNotEmpty())
                             <div class="flex flex-wrap gap-2">
                                 @foreach ($post->tags as $tag)
-                                    <span class="rounded-full border border-navy-100 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-navy-500">{{ $tag->name }}</span>
+                                    <span class="rounded-full border border-navy-100 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-slate-600">{{ $tag->name }}</span>
                                 @endforeach
                             </div>
                         @else<span></span>@endif
@@ -101,16 +101,16 @@
                                             </span>
                                             <span class="min-w-0 flex-1">
                                                 <span class="line-clamp-2 font-display text-sm leading-snug text-navy transition-colors duration-200 group-hover:text-sky-700">{{ $mp->title }}</span>
-                                                <span class="mt-1 block font-mono text-[10px] uppercase tracking-wider text-navy-400">{{ optional($mp->published_at)->translatedFormat('d M Y') }}</span>
+                                                <span class="mt-1 block font-mono text-[10px] uppercase tracking-wider text-slate-500">{{ optional($mp->published_at)->translatedFormat('d M Y') }}</span>
                                             </span>
                                         </a>
                                     @endforeach
                                 </div>
                             @else
-                                <p class="text-sm text-navy-400">{{ $id ? 'Belum ada artikel lain.' : 'No other articles yet.' }}</p>
+                                <p class="text-sm text-slate-500">{{ $id ? 'Belum ada artikel lain.' : 'No other articles yet.' }}</p>
                             @endif
 
-                            <a href="{{ route('blog.index') }}" class="mt-5 flex items-center justify-center gap-2 rounded-full border border-navy-200 py-2.5 text-sm font-medium text-navy transition-all duration-200 hover:border-navy hover:bg-navy hover:text-white">
+                            <a href="{{ route('blog.index') }}" class="mt-5 flex items-center justify-center gap-2 rounded-full border border-navy-200 py-2.5 text-sm font-medium text-navy transition-all duration-200 hover:border-gold hover:bg-gold hover:text-navy-950">
                                 {{ $id ? 'Lihat Semua Artikel' : 'View All Articles' }}
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </a>
@@ -137,7 +137,7 @@
                                 @endif
                             </div>
                             <div class="flex flex-1 flex-col p-5">
-                                <p class="font-mono text-[10px] uppercase tracking-wider text-navy-400">{{ optional($r->published_at)->translatedFormat('d M Y') }}</p>
+                                <p class="font-mono text-[10px] uppercase tracking-wider text-slate-500">{{ optional($r->published_at)->translatedFormat('d M Y') }}</p>
                                 <h3 class="mt-2 line-clamp-2 font-display text-lg leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">{{ $r->title }}</h3>
                             </div>
                         </a>

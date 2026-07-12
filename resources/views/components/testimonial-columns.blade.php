@@ -15,8 +15,8 @@
         <div class="container">
             <div class="mx-auto max-w-xl text-center" data-aos="fade-up">
                 <p class="eyebrow mb-4 inline-flex items-center"><span class="rule-gold mr-3"></span>{{ $isId ? 'Testimoni' : 'Testimonials' }}</p>
-                <h2 class="text-display-lg font-normal text-navy text-balance">{{ $isId ? 'Apa kata klien kami' : 'What our clients say' }}</h2>
-                <p class="mt-4 text-pretty text-navy-500">{{ $isId ? 'Cerita dampak dari mereka yang telah bekerja sama dengan kami.' : 'Impact stories from those who have worked with us.' }}</p>
+                <h2 class="text-display-lg font-bold text-navy text-balance">{{ $isId ? 'Apa kata klien kami' : 'What our clients say' }}</h2>
+                <p class="mt-4 text-pretty text-slate-600">{{ $isId ? 'Cerita dampak dari mereka yang telah bekerja sama dengan kami.' : 'Impact stories from those who have worked with us.' }}</p>
             </div>
 
             <div class="mask-fade-y mt-14 flex max-h-[44rem] justify-center gap-6 overflow-hidden" data-aos="fade-up" data-aos-delay="100">
@@ -31,7 +31,7 @@
                                                 <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.2l-4.94 2.6.94-5.5-4-3.9 5.53-.8z"/></svg>
                                             @endfor
                                         </div>
-                                        <blockquote class="mt-4 text-pretty leading-relaxed text-navy-700">“{{ $t->content }}”</blockquote>
+                                        <blockquote class="mt-4 text-pretty leading-relaxed text-slate-800">“{{ $t->content }}”</blockquote>
                                         <figcaption class="mt-6 flex items-center gap-3 border-t border-navy-100 pt-5">
                                             @if ($t->author_photo)
                                                 <img src="{{ Storage::url($t->author_photo) }}" alt="{{ $t->author_name }}" loading="lazy" class="h-10 w-10 rounded-full object-cover">
@@ -40,7 +40,7 @@
                                             @endif
                                             <div>
                                                 <p class="font-medium leading-5 tracking-tight text-navy">{{ $t->author_name }}</p>
-                                                <p class="text-xs leading-5 tracking-tight text-navy-400">{{ $t->author_position }}{{ $t->author_company ? ', '.$t->author_company : '' }}</p>
+                                                <p class="text-xs leading-5 tracking-tight text-slate-500">{{ $t->author_position }}{{ $t->author_company ? ', '.$t->author_company : '' }}</p>
                                             </div>
                                         </figcaption>
                                     </figure>

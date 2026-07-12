@@ -10,7 +10,7 @@
         <x-field name="password" type="password" :label="$id ? 'Kata Sandi' : 'Password'" required />
 
         <div class="flex items-center justify-between">
-            <label class="flex items-center gap-2 text-sm text-navy-600">
+            <label class="flex items-center gap-2 text-sm text-slate-700">
                 <input type="checkbox" name="remember" class="h-4 w-4 rounded border-navy-200 text-navy focus:ring-gold">
                 {{ $id ? 'Ingat saya' : 'Remember me' }}
             </label>
@@ -20,7 +20,7 @@
         <button type="submit" class="btn-primary w-full">{{ __('site.nav.login') }}</button>
     </form>
 
-    <p class="mt-8 text-center text-sm text-navy-500">
+    <p class="mt-8 text-center text-sm text-slate-600">
         {{ $id ? 'Belum punya akun?' : "Don't have an account?" }}
         <a href="{{ route('register') }}" class="font-medium link-underline">{{ $id ? 'Daftar' : 'Sign up' }}</a>
     </p>

@@ -17,7 +17,7 @@
                     <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $id ? 'Jangan lewatkan kegiatan kami' : "Don't miss our events" }}</h2>
                 </div>
                 @if ($agendas->total())
-                    <p class="font-mono text-sm text-navy-400" data-aos="fade-up">{{ str_pad($agendas->total(), 2, '0', STR_PAD_LEFT) }} {{ $id ? 'agenda' : 'events' }}</p>
+                    <p class="font-mono text-sm text-slate-500" data-aos="fade-up">{{ str_pad($agendas->total(), 2, '0', STR_PAD_LEFT) }} {{ $id ? 'agenda' : 'events' }}</p>
                 @endif
             </div>
 
@@ -40,7 +40,7 @@
                             @endif
                         </div>
                         <div class="flex flex-1 flex-col p-6">
-                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] text-navy-400">
+                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] text-slate-500">
                                 @if ($agenda->starts_at)
                                     <span class="inline-flex items-center gap-1.5">
                                         <svg class="h-3.5 w-3.5 text-sky-500" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -55,7 +55,7 @@
                                 @endif
                             </div>
                             <h3 class="mt-3 line-clamp-2 font-display text-xl font-semibold leading-snug text-navy">{{ $agenda->title }}</h3>
-                            @if ($agenda->excerpt)<p class="mt-2 line-clamp-3 text-sm leading-relaxed text-navy-500">{{ $agenda->excerpt }}</p>@endif
+                            @if ($agenda->excerpt)<p class="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600">{{ $agenda->excerpt }}</p>@endif
                         </div>
                     </article>
                 @empty
@@ -64,7 +64,7 @@
                             <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M4 9h16M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
                         </span>
                         <p class="mt-5 font-display text-lg font-semibold text-navy">{{ $id ? 'Belum ada agenda' : 'No agenda yet' }}</p>
-                        <p class="mt-2 text-sm text-navy-500">{{ $id ? 'Agenda & kegiatan terbaru akan tampil di sini.' : 'Our latest agenda and events will appear here.' }}</p>
+                        <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Agenda & kegiatan terbaru akan tampil di sini.' : 'Our latest agenda and events will appear here.' }}</p>
                     </div>
                 @endforelse
             </div>

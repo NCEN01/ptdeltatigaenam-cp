@@ -66,11 +66,11 @@
 @layer components {
     /* Eyebrow / kicker label — mono, spaced, light-blue accent */
     .eyebrow {
-        @apply font-mono text-[11px] uppercase tracking-label text-sky-500;
+        @apply font-mono text-[11px] uppercase tracking-label text-gold-deep;
     }
 
     .eyebrow-muted {
-        @apply font-mono text-[11px] uppercase tracking-label text-navy-300;
+        @apply font-mono text-[11px] uppercase tracking-label text-slate-500;
     }
 
     /* Section rhythm — generous, editorial whitespace */
@@ -98,7 +98,7 @@
     }
 
     .btn-ghost {
-        @apply btn border border-navy-200 text-navy hover:border-navy hover:bg-navy hover:text-white;
+        @apply btn border border-navy-200 text-navy hover:border-gold hover:bg-gold hover:text-navy-950;
     }
 
     .btn-ghost-light {
@@ -119,10 +119,12 @@
                after:h-px after:w-0 after:bg-sky-500 after:transition-all after:duration-300 hover:after:w-full;
     }
 
-    /* Primary CTA — deep-blue gradient (#1565c0 → darker) for confident white-text contrast */
+    /* Primary CTA — light-blue gradient (#48cae4 → #22b0d0) with white label. A soft dark
+       text-shadow lifts the white off the light-blue so it stays legible. */
     .btn-blue {
-        @apply btn bg-gradient-to-r from-navy-500 to-navy-700 text-white shadow-[0_8px_30px_-12px_rgba(21,101,192,0.55)]
-               hover:from-navy-600 hover:to-navy-800 hover:-translate-y-0.5 active:translate-y-0;
+        @apply btn bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold shadow-[0_8px_30px_-12px_rgba(72,202,228,0.6)]
+               hover:from-sky-500 hover:to-sky-600 hover:-translate-y-0.5 active:translate-y-0;
+        text-shadow: 0 1px 6px rgba(1, 30, 49, 0.55);
     }
 
     /* Interactive 3D card — pointer-driven tilt via [data-tilt] (JS sets the CSS vars) */
@@ -278,6 +280,18 @@
         mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
     }
 
+    /* Fade only the left edge — the client marquee looks cut off by the "Klien Kami" heading. */
+    .mask-fade-left {
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 100%);
+        mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 100%);
+    }
+
+    /* Responsive Mitra grid — desktop column count comes from --mitra-cols (set per partner
+       count in the blade), so the cards shrink automatically as more partners are added. */
+    .mitra-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (min-width: 640px) { .mitra-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (min-width: 1024px) { .mitra-grid { grid-template-columns: repeat(var(--mitra-cols, 3), minmax(0, 1fr)); } }
+
     .mask-fade-y {
         mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
     }
@@ -360,10 +374,21 @@
 .hero-carousel .hero-slide-img { transform: scale(1.05); }
 .hero-carousel .swiper-slide-active .hero-slide-img { animation: kenburns 7s ease-out forwards; }
 .hero-carousel.swiper-initialized .swiper-slide:not(.swiper-slide-active) .hero-content { opacity: 0; }
-.hero-carousel .swiper-slide-active .hero-content > * { animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) both; }
-.hero-carousel .swiper-slide-active .hero-content > *:nth-child(2) { animation-delay: 0.12s; }
-.hero-carousel .swiper-slide-active .hero-content > *:nth-child(3) { animation-delay: 0.22s; }
-.hero-carousel .swiper-slide-active .hero-content > *:nth-child(4) { animation-delay: 0.32s; }
+/* First-load hero reveal: each line rises + de-blurs in a gentle, staggered cascade. */
+.hero-carousel .swiper-slide-active .hero-content > * { animation: hero-rise 1s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.hero-carousel .swiper-slide-active .hero-content > *:nth-child(1) { animation-delay: 0.06s; }
+.hero-carousel .swiper-slide-active .hero-content > *:nth-child(2) { animation-delay: 0.18s; }
+.hero-carousel .swiper-slide-active .hero-content > *:nth-child(3) { animation-delay: 0.32s; }
+.hero-carousel .swiper-slide-active .hero-content > *:nth-child(4) { animation-delay: 0.46s; }
+@keyframes hero-rise {
+    0%   { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+    55%  { filter: blur(0); }
+    100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .hero-carousel .swiper-slide-active .hero-content > * { animation: hero-fade 0.5s ease both; }
+    @keyframes hero-fade { from { opacity: 0; } to { opacity: 1; } }
+}
 [data-hero-carousel-pagination] .swiper-pagination-bullet {
     width: 0.5rem; height: 0.5rem; border-radius: 9999px;
     background: rgba(255,255,255,0.45); opacity: 1; transition: all 0.3s ease;
@@ -387,12 +412,16 @@
     left: 50%;
     width: min(80vw, 320px);
     aspect-ratio: 320 / 340;
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
     transform: translate(-50%, -50%);
     transform-style: preserve-3d;
     backface-visibility: hidden;
-    background: #0d3a73;
+    /* Translucent blue card body — the caption panel below the photo is see-through. */
+    background: rgba(10, 47, 94, 0.5);
+    backdrop-filter: blur(6px);
     box-shadow: 0 30px 60px -22px rgba(0, 0, 0, 0.65);
     -webkit-user-drag: none;
     user-select: none;
@@ -419,8 +448,12 @@
 @layer components {
     /* Animated deep-navy gradient — slow, subtle; pauses under reduced-motion. */
     .bg-navy-anim {
-        background: linear-gradient(135deg, #0d3a73 0%, #114f98 28%, #1565c0 50%, #114f98 72%, #0d3a73 100%);
-        background-size: 220% 220%;
+        /* Premium deep-blue "aurora": a luminous #1565c0 band sweeps across a deep navy field,
+           with a soft top-right glow for depth. Edges fall to near-black blue for contrast. */
+        background:
+            radial-gradient(120% 120% at 85% 6%, rgba(38, 128, 222, 0.30) 0%, transparent 55%),
+            linear-gradient(140deg, #061a34 0%, #0b3364 27%, #124f96 46%, #1565c0 53%, #0d4488 66%, #0a2b52 84%, #061626 100%);
+        background-size: 180% 180%, 230% 230%;
     }
     @media (prefers-reduced-motion: no-preference) {
         .bg-navy-anim { animation: gradient-pan 22s ease-in-out infinite; }
@@ -428,7 +461,7 @@
 
     /* Accent-word colours for display headings — solid, high-contrast (no gradient text).
        Emphasis is carried by weight + real italic, not by a fill. */
-    .text-gradient { color: #1565c0; }       /* dark-blue accent on light backgrounds */
+    .text-gradient { color: #15171c; }       /* solid charcoal on light backgrounds (emphasis via italic, not colour) */
     .text-gradient-hero { color: #48cae4; }  /* light-blue accent on dark backgrounds */
     .text-gradient-gold { color: #edae49; }  /* gold accent */
 

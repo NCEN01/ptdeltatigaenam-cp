@@ -16,10 +16,11 @@ return [
 
     'profiles' => [
         'hero' => [
-            'width' => 1920, 'height' => 800, 'fit' => 'cover',
-            'target_kb' => 500, 'max_upload_kb' => 8192,
+            // Full-screen hero — master at 2400px so it stays crisp on 2K/retina displays.
+            'width' => 2400, 'height' => 1000, 'fit' => 'cover',
+            'target_kb' => 700, 'max_upload_kb' => 12288, 'quality' => 90,
             'formats' => ['jpg', 'jpeg', 'png', 'webp'],
-            'responsive' => [1920, 1280, 768, 480],
+            'responsive' => [2400, 1920, 1280, 768, 480],
         ],
         'hero_mobile' => [
             'width' => 800, 'height' => 1000, 'fit' => 'cover',
@@ -28,10 +29,13 @@ return [
             'responsive' => [800, 480],
         ],
         'banner' => [
-            'width' => 1200, 'height' => 400, 'fit' => 'cover',
-            'target_kb' => 300, 'max_upload_kb' => 6144,
+            // Banners render as a full-width hero, so the master must be HD (was 1200 → blurry
+            // when upscaled to a 1920px+ viewport). 2000px stays crisp on 1080p/retina laptops;
+            // srcset serves the small variants to phones so speed stays safe.
+            'width' => 2000, 'height' => 700, 'fit' => 'cover',
+            'target_kb' => 600, 'max_upload_kb' => 12288, 'quality' => 88,
             'formats' => ['jpg', 'jpeg', 'png', 'webp'],
-            'responsive' => [1200, 768, 480],
+            'responsive' => [2000, 1600, 1280, 768, 480],
         ],
         'thumbnail' => [
             'width' => 800, 'height' => 600, 'fit' => 'cover',
@@ -52,10 +56,10 @@ return [
             'responsive' => [1200, 768, 480],
         ],
         'blog_banner' => [
-            'width' => 1600, 'height' => 500, 'fit' => 'cover',
-            'target_kb' => 400, 'max_upload_kb' => 8192,
+            'width' => 2000, 'height' => 625, 'fit' => 'cover',
+            'target_kb' => 550, 'max_upload_kb' => 10240, 'quality' => 88,
             'formats' => ['jpg', 'jpeg', 'png', 'webp'],
-            'responsive' => [1600, 1200, 768],
+            'responsive' => [2000, 1600, 1200, 768],
         ],
         'portfolio' => [
             'width' => 1200, 'height' => 800, 'fit' => 'cover',

@@ -33,7 +33,7 @@
                 <h2 class="mt-4 font-display text-3xl leading-tight text-navy text-balance md:text-4xl">
                     {{ $id ? 'Mari bicarakan kebutuhan Anda' : "Let's talk about your needs" }}
                 </h2>
-                <p class="mt-5 max-w-md text-pretty leading-relaxed text-navy-500">
+                <p class="mt-5 max-w-md text-pretty leading-relaxed text-slate-600">
                     {{ $id
                         ? 'Punya pertanyaan seputar pelatihan, sertifikasi, atau rekrutmen? Isi formulir di samping atau hubungi kami langsung — tim kami siap membantu.'
                         : 'Questions about training, certification, or recruitment? Fill out the form or reach us directly — our team is ready to help.' }}
@@ -44,11 +44,11 @@
                         <{{ $row['href'] ? 'a' : 'div' }} @if ($row['href']) href="{{ $row['href'] }}" @endif
                             @if ($row['href'] && str_starts_with($row['href'], 'http')) target="_blank" rel="noopener" @endif
                             class="group flex items-center gap-4 rounded-2xl border border-navy-100 bg-white p-4 transition-all duration-300 {{ $row['href'] ? 'hover:-translate-y-0.5 hover:border-navy-200 hover:shadow-card' : '' }}">
-                            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-navy text-gold transition-colors duration-300 {{ $row['href'] ? 'group-hover:bg-sky-600 group-hover:text-white' : '' }}">
+                            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-sky-400 text-white transition-colors duration-300 {{ $row['href'] ? 'group-hover:text-gold' : '' }}">
                                 @if ($row['icon'] === 'mail')
                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                                 @elseif ($row['icon'] === 'whatsapp')
-                                    <img src="{{ asset('icons/ic_whatsapp.png') }}" class="h-5 w-5 object-contain" alt="WhatsApp">
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.2 4.79 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.16c-.24.68-1.42 1.31-1.95 1.36-.5.05-.96.24-3.23-.67-2.73-1.08-4.47-3.86-4.6-4.04-.14-.18-1.11-1.48-1.11-2.82 0-1.34.7-2 .95-2.28.24-.27.53-.34.7-.34.18 0 .35 0 .5.01.16.01.38-.06.59.45.22.52.73 1.8.8 1.93.06.13.11.28.02.46-.09.18-.13.29-.26.45-.13.16-.28.36-.4.48-.13.13-.27.28-.12.54.15.26.66 1.09 1.42 1.76.97.87 1.79 1.14 2.05 1.27.26.13.41.11.56-.07.15-.18.65-.76.82-1.02.17-.26.35-.22.59-.13.24.09 1.52.72 1.78.85.26.13.43.2.5.31.06.11.06.64-.18 1.32z"/></svg>
                                 @elseif ($row['icon'] === 'phone')
                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                                 @else
@@ -56,11 +56,11 @@
                                 @endif
                             </span>
                             <div class="min-w-0">
-                                <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-navy-400">{{ $row['label'] }}</p>
+                                <p class="font-mono text-[10px] uppercase tracking-normal text-slate-500">{{ $row['label'] }}</p>
                                 <p class="mt-1 truncate text-sm font-semibold text-navy">{{ $row['value'] }}</p>
                             </div>
                             @if ($row['href'])
-                                <svg class="ml-auto h-4 w-4 shrink-0 text-navy-300 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-sky-600" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg class="ml-auto h-4 w-4 shrink-0 text-slate-400 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-sky-600" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             @endif
                         </{{ $row['href'] ? 'a' : 'div' }}>
                     @endforeach
@@ -94,7 +94,7 @@
                         <x-field name="message" :label="__('site.contact.message')" type="textarea" required />
 
                         <div class="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
-                            <p class="flex items-center gap-2 font-mono text-[11px] text-navy-400">
+                            <p class="flex items-center gap-2 font-mono text-[11px] text-slate-500">
                                 <svg class="h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                                 {{ $id ? 'Data Anda aman & terlindungi.' : 'Your data is safe & protected.' }}
                             </p>
@@ -122,12 +122,12 @@
                 <div class="space-y-3 lg:col-span-5" data-aos="fade-up">
                     @foreach ($offices as $index => $office)
                         <button type="button" x-on:click="activeOffice = {{ $index }}"
-                                class="flex w-full flex-col gap-2 rounded-2xl border bg-white p-5 text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
+                                class="group flex w-full flex-col gap-2 rounded-2xl border bg-white p-5 text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
                                 x-bind:class="activeOffice === {{ $index }} ? 'border-sky-500 shadow-lift' : 'border-navy-100 hover:border-navy-200 hover:shadow-card'">
                             <div class="flex items-center justify-between gap-3">
                                 <div class="flex items-center gap-3">
-                                    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl transition-colors duration-300"
-                                          x-bind:class="activeOffice === {{ $index }} ? 'bg-sky-600 text-white' : 'bg-navy text-gold'">
+                                    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-sky-400 transition-colors duration-300 group-hover:text-gold"
+                                          x-bind:class="activeOffice === {{ $index }} ? 'text-gold' : 'text-white'">
                                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M15 9h.01M9 13h.01M15 13h.01M10 21v-4h4v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                     </span>
                                     <span class="font-display text-[17px] text-navy">{{ $office['name'] }}</span>
@@ -135,8 +135,8 @@
                                 <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-sky-500 transition-transform duration-300"
                                       x-bind:class="activeOffice === {{ $index }} ? 'scale-100' : 'scale-0'"></span>
                             </div>
-                            <p class="text-sm leading-relaxed text-navy-500">{{ $office['address'] }}</p>
-                            <div class="mt-1 flex items-center gap-2 border-t border-navy-100 pt-3 font-mono text-[11px] text-navy-400">
+                            <p class="text-sm leading-relaxed text-slate-600">{{ $office['address'] }}</p>
+                            <div class="mt-1 flex items-center gap-2 border-t border-navy-100 pt-3 font-mono text-[11px] text-slate-500">
                                 <svg class="h-3.5 w-3.5 shrink-0 text-gold-deep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-3 2a12 12 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg>
                                 {{ $office['phone'] }}
                             </div>

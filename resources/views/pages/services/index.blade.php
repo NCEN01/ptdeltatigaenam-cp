@@ -21,7 +21,7 @@
                     <div class="max-w-2xl">
                         <p class="eyebrow mb-3"><span class="rule-gold mr-3"></span>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</p>
                         <h2 class="text-display-lg font-semibold text-navy">{{ $cat->name }}</h2>
-                        @if ($cat->short_description)<p class="mt-3 text-pretty text-navy-500">{{ $cat->short_description }}</p>@endif
+                        @if ($cat->short_description)<p class="mt-3 text-pretty text-slate-600">{{ $cat->short_description }}</p>@endif
                     </div>
                 </div>
 
@@ -41,11 +41,11 @@
                                 </div>
                                 <div class="flex flex-1 flex-col p-6">
                                     <h3 class="font-display text-xl font-semibold text-navy">{{ $service->title }}</h3>
-                                    @if ($service->short_description)<p class="mt-2 line-clamp-2 text-sm text-navy-500">{{ $service->short_description }}</p>@endif
+                                    @if ($service->short_description)<p class="mt-2 line-clamp-2 text-sm text-slate-600">{{ $service->short_description }}</p>@endif
                                     <div class="mt-6 flex items-end justify-between border-t border-navy-100 pt-5">
                                         <div>
                                             @if ($service->price > 0)
-                                                <p class="font-mono text-[10px] uppercase tracking-wider text-navy-300">{{ __('site.common.from') }}</p>
+                                                <p class="font-mono text-[10px] uppercase tracking-wider text-slate-400">{{ __('site.common.from') }}</p>
                                                 <p class="font-display text-lg font-semibold text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
                                             @else
                                                 <p class="font-display text-lg font-semibold text-navy">{{ $id ? 'Hubungi kami' : 'Contact us' }}</p>
@@ -62,7 +62,7 @@
                 @else
                     <div class="mt-10 rounded-3xl border border-dashed border-navy-200 bg-white p-12 text-center">
                         <p class="font-display text-lg font-semibold text-navy">{{ $id ? 'Layanan akan segera hadir' : 'Services coming soon' }}</p>
-                        <p class="mt-2 text-sm text-navy-500">{{ $id ? 'Kami sedang menyiapkan layanan untuk kategori ini.' : 'We are preparing services for this category.' }}</p>
+                        <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Kami sedang menyiapkan layanan untuk kategori ini.' : 'We are preparing services for this category.' }}</p>
                     </div>
                 @endif
             </div>
@@ -75,7 +75,7 @@
                         <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                     </span>
                     <p class="mt-5 font-display text-lg font-semibold text-navy">{{ $id ? 'Belum ada layanan' : 'No services yet' }}</p>
-                    <p class="mt-2 text-sm text-navy-500">{{ $id ? 'Daftar layanan akan ditampilkan di sini setelah tersedia.' : 'Our service catalog will appear here once available.' }}</p>
+                    <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Daftar layanan akan ditampilkan di sini setelah tersedia.' : 'Our service catalog will appear here once available.' }}</p>
                 </div>
             </div>
         </section>

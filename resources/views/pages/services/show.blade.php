@@ -63,7 +63,7 @@
             <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
                 <p class="eyebrow inline-flex items-center justify-center"><span class="rule-gold mr-3"></span>{{ $id ? 'Cara Mendaftar' : 'How to Register' }}</p>
                 <h2 class="mt-4 font-display text-3xl text-navy text-balance md:text-4xl">{{ $id ? 'Daftar mudah dalam 3 langkah' : 'Register easily in 3 steps' }}</h2>
-                <p class="mx-auto mt-4 max-w-xl text-navy-500">{{ $id ? 'Prosesnya cepat & aman — amankan kursi Anda dalam hitungan menit.' : 'Fast & secure — reserve your seat in minutes.' }}</p>
+                <p class="mx-auto mt-4 max-w-xl text-slate-600">{{ $id ? 'Prosesnya cepat & aman — amankan kursi Anda dalam hitungan menit.' : 'Fast & secure — reserve your seat in minutes.' }}</p>
             </div>
 
             <div class="relative mx-auto mt-14 max-w-5xl">
@@ -75,7 +75,7 @@
                         <div class="group relative text-center" data-aos="fade-up" data-aos-delay="{{ $i * 90 }}">
                             {{-- icon + number badge --}}
                             <div class="relative mx-auto grid h-20 w-20 place-items-center">
-                                <span class="grid h-20 w-20 place-items-center rounded-full bg-white text-navy shadow-lift ring-1 ring-navy-100 transition-all duration-300 group-hover:-translate-y-1 group-hover:bg-navy group-hover:text-white">
+                                <span class="grid h-20 w-20 place-items-center rounded-full bg-white text-navy shadow-lift ring-1 ring-navy-100 transition-all duration-300 group-hover:-translate-y-1 group-hover:bg-gold group-hover:text-navy-950">
                                     @if ($step[2] === 'calendar')
                                         <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="16" x="3" y="4" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
                                     @elseif ($step[2] === 'users')
@@ -87,7 +87,7 @@
                                 <span class="absolute -right-1 -top-1 grid h-8 w-8 place-items-center rounded-full bg-gold font-display text-sm text-navy-950 shadow-gold">{{ $i + 1 }}</span>
                             </div>
                             <h3 class="mt-6 font-display text-xl text-navy">{{ $step[0] }}</h3>
-                            <p class="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-navy-500">{{ $step[1] }}</p>
+                            <p class="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-slate-600">{{ $step[1] }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -109,8 +109,8 @@
                 @if ($service->description)
                     <div class="prose prose-lg max-w-none
                                 prose-headings:font-display prose-headings:font-normal prose-headings:text-navy
-                                prose-p:text-navy-600 prose-p:leading-relaxed
-                                prose-li:text-navy-600 prose-a:text-sky-700 prose-a:font-medium prose-strong:text-navy
+                                prose-p:text-slate-700 prose-p:leading-relaxed
+                                prose-li:text-slate-700 prose-a:text-sky-700 prose-a:font-medium prose-strong:text-navy
                                 prose-img:rounded-2xl">
                         {!! \App\Helpers\HtmlSanitizer::clean($service->description) !!}
                     </div>
@@ -119,14 +119,14 @@
                 @if ($service->activities->isNotEmpty())
                     <div class="mt-12">
                         <p class="eyebrow mb-2"><span class="rule-gold mr-3"></span>{{ $id ? 'Materi & Kegiatan' : 'Topics & Activities' }}</p>
-                        <p class="mb-6 text-sm text-navy-500">{{ $id ? 'Rangkaian materi yang dirancang aplikatif dan siap pakai.' : 'A curriculum designed to be practical and ready to apply.' }}</p>
+                        <p class="mb-6 text-sm text-slate-600">{{ $id ? 'Rangkaian materi yang dirancang aplikatif dan siap pakai.' : 'A curriculum designed to be practical and ready to apply.' }}</p>
                         <div class="space-y-3">
                             @foreach ($service->activities as $activity)
                                 <div class="group flex gap-5 rounded-2xl border border-navy-100 bg-white p-6 transition-all duration-300 hover:border-navy-200 hover:shadow-card">
                                     <span class="font-display text-2xl leading-none text-gold-deep">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                                     <div>
                                         <h3 class="font-display text-lg text-navy">{{ $activity->title }}</h3>
-                                        @if ($activity->description)<p class="mt-1.5 text-pretty leading-relaxed text-navy-500">{{ $activity->description }}</p>@endif
+                                        @if ($activity->description)<p class="mt-1.5 text-pretty leading-relaxed text-slate-600">{{ $activity->description }}</p>@endif
                                     </div>
                                 </div>
                             @endforeach
@@ -140,7 +140,7 @@
                 <div class="sticky top-28 overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-lift">
                     {{-- Header --}}
                     <div class="border-b border-navy-100 bg-navy-950 p-6 text-white">
-                        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-gold-soft">{{ $id ? 'Amankan Kursi Anda' : 'Secure Your Seat' }}</p>
+                        <p class="font-mono text-[11px] uppercase tracking-normal text-gold-soft">{{ $id ? 'Amankan Kursi Anda' : 'Secure Your Seat' }}</p>
                         <h3 class="mt-2 font-display text-xl">{{ $id ? 'Pilih jadwal di bawah' : 'Pick a schedule below' }}</h3>
                         <p class="mt-2 text-sm text-navy-200">{{ $id ? 'Kursi terbatas — daftar sekarang sebelum kehabisan.' : 'Limited seats — register now before they’re gone.' }}</p>
                     </div>
@@ -158,14 +158,14 @@
                                     <div>
                                         <p class="font-display text-lg text-navy">{{ $schedule->start_date?->translatedFormat('d M Y') }}</p>
                                         @if ($schedule->start_time)
-                                            <p class="mt-1 font-mono text-xs text-navy-500">
+                                            <p class="mt-1 font-mono text-xs text-slate-600">
                                                 {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }}
                                                 @if ($schedule->end_time) – {{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }} WIB @endif
                                             </p>
                                         @endif
-                                        @if ($schedule->location)<p class="mt-0.5 text-sm text-navy-400">{{ $schedule->location }}</p>@endif
+                                        @if ($schedule->location)<p class="mt-0.5 text-sm text-slate-500">{{ $schedule->location }}</p>@endif
                                     </div>
-                                    <span class="shrink-0 rounded-full bg-navy-50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-navy-500">{{ $service->mode }}</span>
+                                    <span class="shrink-0 rounded-full bg-navy-50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-slate-600">{{ $service->mode }}</span>
                                 </div>
 
                                 @if ($left !== null)
@@ -182,12 +182,12 @@
                                 @endif
 
                                 @if ($schedule->effectivePrice() > 0)
-                                    <p class="mt-3 font-display text-xl text-navy">Rp {{ number_format($schedule->effectivePrice(), 0, ',', '.') }}<span class="text-sm font-normal text-navy-400"> / {{ $id ? 'peserta' : 'person' }}</span></p>
+                                    <p class="mt-3 font-display text-xl text-navy">Rp {{ number_format($schedule->effectivePrice(), 0, ',', '.') }}<span class="text-sm font-normal text-slate-500"> / {{ $id ? 'peserta' : 'person' }}</span></p>
                                 @endif
 
                                 @if ($service->is_purchasable)
                                     @if ($full)
-                                        <button disabled class="mt-4 w-full justify-center !py-2.5 text-sm rounded-full border border-navy-200 bg-navy-50 text-navy-400 cursor-not-allowed font-medium">
+                                        <button disabled class="mt-4 w-full justify-center !py-2.5 text-sm rounded-full border border-navy-200 bg-navy-50 text-slate-500 cursor-not-allowed font-medium">
                                             {{ $id ? 'Kuota Penuh' : 'Fully Booked' }}
                                         </button>
                                     @elseif (Route::has('checkout.create'))
@@ -199,14 +199,14 @@
                             </div>
                         @empty
                             <div class="rounded-2xl border border-dashed border-navy-200 bg-white p-6 text-center">
-                                <p class="text-sm text-navy-500">{{ $id ? 'Belum ada jadwal terbuka. Hubungi kami untuk jadwal khusus atau in-house training.' : 'No open schedules yet. Contact us for a custom or in-house batch.' }}</p>
+                                <p class="text-sm text-slate-600">{{ $id ? 'Belum ada jadwal terbuka. Hubungi kami untuk jadwal khusus atau in-house training.' : 'No open schedules yet. Contact us for a custom or in-house batch.' }}</p>
                                 <a href="{{ route('contact.index') }}" class="btn-blue mt-5 w-full justify-center">{{ __('site.cta.consult') }}</a>
                             </div>
                         @endforelse
                     </div>
 
                     @if ($service->is_purchasable && $service->schedules->isNotEmpty())
-                        <div class="space-y-2 border-t border-navy-100 bg-neutral-50 px-6 py-5 text-xs text-navy-500">
+                        <div class="space-y-2 border-t border-navy-100 bg-neutral-50 px-6 py-5 text-xs text-slate-600">
                             <div class="flex items-center gap-2">
                                 <svg class="h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 24 24" fill="none"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
                                 {{ $id ? 'Pembayaran aman: QRIS, e-wallet, VA, & kartu (Midtrans).' : 'Secure payment: QRIS, e-wallet, VA & card (Midtrans).' }}
@@ -231,7 +231,7 @@
                         <a href="{{ route('services.show', $r->slug) }}" class="group flex h-full flex-col rounded-2xl border border-navy-100 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
                             @if ($r->category)<p class="font-mono text-[10px] uppercase tracking-wider text-gold-deep">{{ $r->category->name }}</p>@endif
                             <h3 class="mt-1.5 font-display text-lg leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">{{ $r->title }}</h3>
-                            @if ($r->short_description)<p class="mt-2 line-clamp-2 text-sm leading-relaxed text-navy-500">{{ $r->short_description }}</p>@endif
+                            @if ($r->short_description)<p class="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">{{ $r->short_description }}</p>@endif
                             <span class="mt-auto flex items-center gap-2 pt-4 text-sm font-medium text-navy">
                                 {{ $id ? 'Lihat detail' : 'View details' }}
                                 <svg class="h-4 w-4 text-gold-deep transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>

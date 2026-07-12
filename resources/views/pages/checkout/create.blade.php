@@ -12,7 +12,7 @@
         <div class="container grid gap-10 lg:grid-cols-12">
             {{-- Form --}}
             <div class="lg:col-span-7">
-                <a href="{{ route('services.show', $service->slug) }}" class="mb-6 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-navy-400 transition-colors hover:text-navy">
+                <a href="{{ route('services.show', $service->slug) }}" class="mb-6 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-slate-500 transition-colors hover:text-navy">
                     <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     {{ $id ? 'Kembali ke detail layanan' : 'Back to service details' }}
                 </a>
@@ -49,7 +49,7 @@
                         <div class="flex flex-wrap items-center justify-between gap-4">
                             <h2 class="font-display text-xl font-semibold text-navy">{{ $id ? 'Data Peserta' : 'Participant Details' }}</h2>
                             <div class="flex items-center gap-3">
-                                <span class="text-sm text-navy-500">{{ $id ? 'Jumlah' : 'Count' }}</span>
+                                <span class="text-sm text-slate-600">{{ $id ? 'Jumlah' : 'Count' }}</span>
                                 <button type="button" data-remove class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 text-navy transition-colors hover:border-navy" aria-label="-">−</button>
                                 <span data-count class="w-8 text-center font-display text-lg font-semibold text-navy">{{ count($rows) }}</span>
                                 <button type="button" data-add class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 text-navy transition-colors hover:border-navy" aria-label="+">+</button>
@@ -67,19 +67,19 @@
                         <div data-list class="mt-5 space-y-4">
                             @foreach ($rows as $i => $p)
                                 <div data-row class="rounded-2xl border border-navy-100 p-5">
-                                    <p class="mb-4 font-mono text-[11px] uppercase tracking-wider text-navy-400">
+                                    <p class="mb-4 font-mono text-[11px] uppercase tracking-wider text-slate-500">
                                         {{ $id ? 'Peserta' : 'Participant' }} <span data-index>{{ $i + 1 }}</span>
                                     </p>
                                     <div class="grid gap-4 sm:grid-cols-2">
                                         <div>
                                             <label class="mb-1.5 block text-sm font-medium text-navy" for="p-name-{{ $i }}">{{ $id ? 'Nama Peserta' : 'Participant Name' }}<span class="text-gold" aria-hidden="true"> *</span></label>
                                             <input data-field="name" id="p-name-{{ $i }}" type="text" name="participants[{{ $i }}][name]" value="{{ $p['name'] ?? '' }}" required
-                                                   class="w-full rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-navy-300 focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold">
+                                                   class="w-full rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold">
                                         </div>
                                         <div>
                                             <label class="mb-1.5 block text-sm font-medium text-navy" for="p-phone-{{ $i }}">{{ $id ? 'No. Telepon' : 'Phone' }}<span class="text-gold" aria-hidden="true"> *</span></label>
                                             <input data-field="phone" id="p-phone-{{ $i }}" type="tel" name="participants[{{ $i }}][phone]" value="{{ $p['phone'] ?? '' }}" required
-                                                   class="w-full rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-navy-300 focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold">
+                                                   class="w-full rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold">
                                         </div>
                                     </div>
                                 </div>
@@ -91,19 +91,19 @@
                         {{-- Blank row template cloned by JS --}}
                         <template data-row-template>
                             <div data-row class="rounded-2xl border border-navy-100 p-5">
-                                <p class="mb-4 font-mono text-[11px] uppercase tracking-wider text-navy-400">
+                                <p class="mb-4 font-mono text-[11px] uppercase tracking-wider text-slate-500">
                                     {{ $id ? 'Peserta' : 'Participant' }} <span data-index>1</span>
                                 </p>
                                 <div class="grid gap-4 sm:grid-cols-2">
                                     <div>
                                         <label class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'Nama Peserta' : 'Participant Name' }}<span class="text-gold" aria-hidden="true"> *</span></label>
                                         <input data-field="name" type="text" name="" required
-                                               class="w-full rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-navy-300 focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold">
+                                               class="w-full rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold">
                                     </div>
                                     <div>
                                         <label class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'No. Telepon' : 'Phone' }}<span class="text-gold" aria-hidden="true"> *</span></label>
                                         <input data-field="phone" type="tel" name="" required
-                                               class="w-full rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-navy-300 focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold">
+                                               class="w-full rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold">
                                     </div>
                                 </div>
                             </div>
@@ -126,17 +126,17 @@
                 <div class="sticky top-28 rounded-3xl border border-navy-100 bg-mist p-7">
                     <p class="eyebrow mb-5">{{ $id ? 'Ringkasan' : 'Summary' }}</p>
                     <div class="space-y-3 text-sm">
-                        <div class="flex justify-between gap-4"><span class="text-navy-500">{{ $id ? 'Layanan' : 'Service' }}</span><span class="text-right font-medium text-navy">{{ $service->title }}</span></div>
-                        <div class="flex justify-between"><span class="text-navy-500">{{ $id ? 'Jadwal' : 'Schedule' }}</span><span class="font-medium text-navy">{{ $schedule->start_date?->translatedFormat('d M Y') }}</span></div>
-                        <div class="flex justify-between"><span class="text-navy-500">Mode</span><span class="font-medium capitalize text-navy">{{ $schedule->mode }}</span></div>
-                        <div class="flex justify-between"><span class="text-navy-500">{{ $id ? 'Harga/peserta' : 'Price/person' }}</span><span class="font-medium text-navy">Rp {{ number_format((float) $unitPrice, 0, ',', '.') }}</span></div>
-                        <div class="flex justify-between border-t border-navy-200/60 pt-3"><span class="text-navy-500">{{ $id ? 'Jumlah peserta' : 'Participants' }}</span><span data-count-mirror class="font-medium text-navy">{{ count($rows) }}</span></div>
+                        <div class="flex justify-between gap-4"><span class="text-slate-600">{{ $id ? 'Layanan' : 'Service' }}</span><span class="text-right font-medium text-navy">{{ $service->title }}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-600">{{ $id ? 'Jadwal' : 'Schedule' }}</span><span class="font-medium text-navy">{{ $schedule->start_date?->translatedFormat('d M Y') }}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-600">Mode</span><span class="font-medium capitalize text-navy">{{ $schedule->mode }}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-600">{{ $id ? 'Harga/peserta' : 'Price/person' }}</span><span class="font-medium text-navy">Rp {{ number_format((float) $unitPrice, 0, ',', '.') }}</span></div>
+                        <div class="flex justify-between border-t border-navy-200/60 pt-3"><span class="text-slate-600">{{ $id ? 'Jumlah peserta' : 'Participants' }}</span><span data-count-mirror class="font-medium text-navy">{{ count($rows) }}</span></div>
                     </div>
                     <div class="mt-5 flex items-end justify-between border-t border-navy-200/60 pt-5">
                         <span class="font-display text-lg font-semibold text-navy">Total</span>
                         <span data-total class="font-display text-2xl font-semibold text-navy">Rp {{ number_format($unit * count($rows), 0, ',', '.') }}</span>
                     </div>
-                    <p class="mt-3 text-xs text-navy-400">{{ $id ? 'Total dihitung otomatis sesuai jumlah peserta.' : 'Total is calculated automatically by participant count.' }}</p>
+                    <p class="mt-3 text-xs text-slate-500">{{ $id ? 'Total dihitung otomatis sesuai jumlah peserta.' : 'Total is calculated automatically by participant count.' }}</p>
                 </div>
             </div>
         </div>

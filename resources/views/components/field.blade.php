@@ -21,7 +21,7 @@
             @if ($invalid) aria-invalid="true" aria-describedby="{{ $name }}-error" @endif
             placeholder="{{ $placeholder }}"
             {{ $attributes->class([
-                'w-full rounded-2xl border bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-navy-300 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-0',
+                'w-full rounded-2xl border bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-0',
                 'border-rose-300' => $invalid,
                 'border-navy-200 focus:border-navy' => ! $invalid,
             ]) }}>{{ $val }}</textarea>
@@ -37,13 +37,13 @@
                 } }}"
                 placeholder="{{ $placeholder }}"
                 {{ $attributes->class([
-                    'w-full rounded-2xl border bg-white px-4 py-3 pr-12 text-navy shadow-sm transition-colors placeholder:text-navy-300 focus:outline-none focus:ring-2 focus:ring-gold',
+                    'w-full rounded-2xl border bg-white px-4 py-3 pr-12 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-gold',
                     'border-rose-300' => $invalid,
                     'border-navy-200 focus:border-navy' => ! $invalid,
                 ]) }}>
             <button type="button"
                 x-on:click="show = !show"
-                class="absolute right-3 top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-lg text-navy-400 transition-colors hover:text-navy"
+                class="absolute right-3 top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-lg text-slate-500 transition-colors hover:text-navy"
                 aria-label="{{ app()->getLocale() === 'id' ? 'Lihat/sembunyikan sandi' : 'Show/hide password' }}"
                 tabindex="-1">
                 {{-- Eye icon — closed --}}
@@ -70,7 +70,7 @@
             } }}"
             placeholder="{{ $placeholder }}"
             {{ $attributes->class([
-                'w-full rounded-2xl border bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-navy-300 focus:outline-none focus:ring-2 focus:ring-gold',
+                'w-full rounded-2xl border bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-gold',
                 'border-rose-300' => $invalid,
                 'border-navy-200 focus:border-navy' => ! $invalid,
             ]) }}>

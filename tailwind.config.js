@@ -19,7 +19,8 @@ export default {
             colors: {
                 // Brand palette (client-specified): dark blue #1565c0 · light blue #48cae4 · gold #edae49
                 navy: {
-                    DEFAULT: '#12529b', // headings / primary dark text (readable dark blue)
+                    DEFAULT: '#15171c', // headings / primary text — solid charcoal near-black (not blue) for a clean, professional read on light sections
+                    blue: '#1565c0',    // the brand dark blue, when a truly-blue accent is wanted
                     50: '#eaf1fb',
                     100: '#cbddf6',
                     200: '#a3c4ee',
@@ -58,7 +59,7 @@ export default {
                     soft: '#f6c877',
                     deep: '#c68a2b',
                 },
-                ink: '#0b2545',
+                ink: '#15171c', // body text — solid charcoal near-black
                 mist: '#e8f2fb',
                 paper: '#f3f8fd', // off-white (blue-tinted) section background for rhythm
             },
@@ -76,7 +77,7 @@ export default {
                 'display-lg': ['clamp(1.85rem, 3.6vw, 2.75rem)', { lineHeight: '1.1', letterSpacing: '-0.005em' }],
             },
             letterSpacing: {
-                label: '0.22em',
+                label: '0em', // small caption / eyebrow labels — normal spacing (no wide tracking)
             },
             boxShadow: {
                 card: '0 1px 2px rgba(10,42,94,0.04), 0 8px 24px -12px rgba(10,42,94,0.18)',

@@ -62,16 +62,16 @@
                         <div class="group relative">
                             <a href="{{ route($item['route']) }}"
                                class="relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300"
-                               :class="scrolled ? '{{ $active ? 'text-navy' : 'text-navy-500 group-hover:text-navy' }}' : '{{ $active ? 'text-white' : 'text-white/75 group-hover:text-white' }}'">
+                               :class="scrolled ? '{{ $active ? 'text-navy' : 'text-slate-600 group-hover:text-navy' }}' : '{{ $active ? 'text-white' : 'text-white/75 group-hover:text-white' }}'">
                                 {{ $item['label'] }}
                                 <svg class="h-3 w-3 transition-transform duration-300 group-hover:rotate-180" viewBox="0 0 12 12" fill="none"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 <span class="pointer-events-none absolute -bottom-0.5 left-1/2 h-0.5 w-5 -translate-x-1/2 origin-center rounded-full bg-sky-500 transition-transform duration-300 ease-out-soft {{ $active ? 'scale-100' : 'scale-0 group-hover:scale-100' }}"></span>
                             </a>
                             <div class="invisible absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 ease-out-soft group-hover:visible group-hover:opacity-100">
                                 <div class="overflow-hidden rounded-2xl border border-navy-100 bg-white p-2 shadow-lift">
-                                    <p class="px-3.5 pb-1.5 pt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-navy-300">{{ $current === 'id' ? 'Kategori Layanan' : 'Service Categories' }}</p>
+                                    <p class="px-3.5 pb-1.5 pt-2 font-mono text-[10px] uppercase tracking-normal text-slate-400">{{ $current === 'id' ? 'Kategori Layanan' : 'Service Categories' }}</p>
                                     @foreach ($serviceCategories as $cat)
-                                        <a href="{{ route('services.index') }}#{{ $cat->slug }}" class="group/it flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-sm text-navy-600 transition-colors hover:bg-mist hover:text-navy">
+                                        <a href="{{ route('services.index') }}#{{ $cat->slug }}" class="group/it flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-sm text-slate-700 transition-colors hover:bg-mist hover:text-navy">
                                             <span>{{ $cat->name }}</span>
                                             <svg class="h-3.5 w-3.5 shrink-0 text-navy-200 transition-all duration-200 group-hover/it:translate-x-0.5 group-hover/it:text-sky-600" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </a>
@@ -87,7 +87,7 @@
                     @else
                         <a href="{{ route($item['route']) }}"
                            class="group relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300"
-                           :class="scrolled ? '{{ $active ? 'text-navy' : 'text-navy-500 hover:text-navy' }}' : '{{ $active ? 'text-white' : 'text-white/75 hover:text-white' }}'">
+                           :class="scrolled ? '{{ $active ? 'text-navy' : 'text-slate-600 hover:text-navy' }}' : '{{ $active ? 'text-white' : 'text-white/75 hover:text-white' }}'">
                             {{ $item['label'] }}
                             <span class="pointer-events-none absolute -bottom-0.5 left-1/2 h-0.5 w-5 -translate-x-1/2 origin-center rounded-full bg-sky-500 transition-transform duration-300 ease-out-soft {{ $active ? 'scale-100' : 'scale-0 group-hover:scale-100' }}"></span>
                         </a>
@@ -101,7 +101,7 @@
                 <div x-data="{ langOpen: false }" class="relative hidden sm:block">
                     <button @click="langOpen = !langOpen" @click.outside="langOpen = false"
                             class="flex items-center gap-1.5 rounded-full px-3 py-2 font-mono text-xs uppercase tracking-wider transition-colors"
-                            :class="scrolled ? 'text-navy-500 hover:text-navy' : 'text-white/80 hover:text-white'"
+                            :class="scrolled ? 'text-slate-600 hover:text-navy' : 'text-white/80 hover:text-white'"
                             aria-label="{{ __('site.common.language') }}">
                         {{ strtoupper($current) }}
                         <svg class="h-3 w-3" viewBox="0 0 12 12" fill="none"><path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -110,9 +110,9 @@
                          class="absolute right-0 mt-2 w-36 overflow-hidden rounded-2xl border border-navy-100 bg-white p-1 shadow-lift">
                         @foreach (Locale::supported() as $loc)
                             <a href="{{ Locale::alternate($loc) }}"
-                               class="flex items-center justify-between rounded-xl px-3 py-2 text-sm transition-colors {{ $loc === $current ? 'bg-mist text-navy' : 'text-navy-500 hover:bg-mist' }}">
+                               class="flex items-center justify-between rounded-xl px-3 py-2 text-sm transition-colors {{ $loc === $current ? 'bg-mist text-navy' : 'text-slate-600 hover:bg-mist' }}">
                                 {{ Locale::label($loc) }}
-                                <span class="font-mono text-[10px] text-navy-300">{{ strtoupper($loc) }}</span>
+                                <span class="font-mono text-[10px] text-slate-400">{{ strtoupper($loc) }}</span>
                             </a>
                         @endforeach
                     </div>
@@ -157,7 +157,7 @@
                     @if ($item['route'] === 'services.index' && $serviceCategories->isNotEmpty())
                         <div class="mb-1 ml-4 flex flex-col gap-0.5 border-l border-navy-100 pl-3">
                             @foreach ($serviceCategories as $cat)
-                                <a href="{{ route('services.index') }}#{{ $cat->slug }}" @click="open = false" class="rounded-lg px-3 py-2 text-sm text-navy-500 transition-colors hover:bg-mist hover:text-navy">{{ $cat->name }}</a>
+                                <a href="{{ route('services.index') }}#{{ $cat->slug }}" @click="open = false" class="rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-mist hover:text-navy">{{ $cat->name }}</a>
                             @endforeach
                         </div>
                     @endif
@@ -167,7 +167,7 @@
                 <div class="flex gap-2">
                     @foreach (Locale::supported() as $loc)
                         <a href="{{ Locale::alternate($loc) }}"
-                           class="flex-1 rounded-full border px-4 py-2.5 text-center font-mono text-xs uppercase tracking-wider {{ $loc === $current ? 'border-navy bg-navy text-white' : 'border-navy-200 text-navy-500' }}">
+                           class="flex-1 rounded-full border px-4 py-2.5 text-center font-mono text-xs uppercase tracking-wider {{ $loc === $current ? 'border-navy bg-navy text-white' : 'border-navy-200 text-slate-600' }}">
                             {{ Locale::label($loc) }}
                         </a>
                     @endforeach

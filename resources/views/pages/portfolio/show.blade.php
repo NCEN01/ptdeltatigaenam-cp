@@ -11,7 +11,7 @@
     <section class="section bg-white">
         <div class="container">
             {{-- Back link --}}
-            <a href="{{ route('portfolio.index') }}" class="group mb-8 inline-flex items-center gap-2 text-sm font-medium text-navy-500 transition-colors hover:text-navy">
+            <a href="{{ route('portfolio.index') }}" class="group mb-8 inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition-colors hover:text-navy">
                 <svg class="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 {{ $id ? 'Kembali ke Portofolio' : 'Back to Portfolio' }}
             </a>
@@ -28,16 +28,16 @@
                 @endif
 
                 @if ($portfolio->short_description)
-                    <p class="mb-8 border-l-2 border-gold pl-5 text-lg leading-relaxed text-navy-600 text-pretty">{{ $portfolio->short_description }}</p>
+                    <p class="mb-8 border-l-2 border-gold pl-5 text-lg leading-relaxed text-slate-700 text-pretty">{{ $portfolio->short_description }}</p>
                 @endif
 
                 @if ($portfolio->content)
                     <div class="prose prose-lg max-w-none [hyphens:auto]
                                 prose-headings:font-display prose-headings:font-normal prose-headings:text-navy
-                                prose-p:text-navy-600 prose-p:leading-[1.85] prose-p:text-justify
-                                prose-li:text-navy-600 prose-a:text-sky-700 prose-a:font-medium prose-a:no-underline hover:prose-a:underline
+                                prose-p:text-slate-700 prose-p:leading-[1.85] prose-p:text-justify
+                                prose-li:text-slate-700 prose-a:text-sky-700 prose-a:font-medium prose-a:no-underline hover:prose-a:underline
                                 prose-strong:text-navy
-                                prose-blockquote:border-l-2 prose-blockquote:border-gold prose-blockquote:not-italic prose-blockquote:text-navy-600
+                                prose-blockquote:border-l-2 prose-blockquote:border-gold prose-blockquote:not-italic prose-blockquote:text-slate-700
                                 prose-img:rounded-2xl prose-img:shadow-card">
                         {!! \App\Helpers\HtmlSanitizer::clean($portfolio->content) !!}
                     </div>
@@ -53,25 +53,25 @@
                         <dl class="divide-y divide-navy-100">
                             @if ($portfolio->client_name)
                                 <div class="flex items-start justify-between gap-4 py-3">
-                                    <dt class="font-mono text-[10px] uppercase tracking-wider text-navy-400">{{ $id ? 'Klien' : 'Client' }}</dt>
+                                    <dt class="font-mono text-[10px] uppercase tracking-wider text-slate-500">{{ $id ? 'Klien' : 'Client' }}</dt>
                                     <dd class="text-right text-sm font-semibold text-navy">{{ $portfolio->client_name }}</dd>
                                 </div>
                             @endif
                             @if ($portfolio->category)
                                 <div class="flex items-start justify-between gap-4 py-3">
-                                    <dt class="font-mono text-[10px] uppercase tracking-wider text-navy-400">{{ $id ? 'Kategori' : 'Category' }}</dt>
+                                    <dt class="font-mono text-[10px] uppercase tracking-wider text-slate-500">{{ $id ? 'Kategori' : 'Category' }}</dt>
                                     <dd class="text-right text-sm font-semibold text-navy">{{ $portfolio->category->name }}</dd>
                                 </div>
                             @endif
                             @if ($portfolio->project_date)
                                 <div class="flex items-start justify-between gap-4 py-3">
-                                    <dt class="font-mono text-[10px] uppercase tracking-wider text-navy-400">{{ $id ? 'Tanggal' : 'Date' }}</dt>
+                                    <dt class="font-mono text-[10px] uppercase tracking-wider text-slate-500">{{ $id ? 'Tanggal' : 'Date' }}</dt>
                                     <dd class="text-right text-sm font-semibold text-navy">{{ $portfolio->project_date->translatedFormat('d M Y') }}</dd>
                                 </div>
                             @endif
                             @if ($portfolio->images->isNotEmpty())
                                 <div class="flex items-start justify-between gap-4 py-3">
-                                    <dt class="font-mono text-[10px] uppercase tracking-wider text-navy-400">{{ $id ? 'Dokumentasi' : 'Gallery' }}</dt>
+                                    <dt class="font-mono text-[10px] uppercase tracking-wider text-slate-500">{{ $id ? 'Dokumentasi' : 'Gallery' }}</dt>
                                     <dd class="text-right text-sm font-semibold text-navy">{{ $portfolio->images->count() }} {{ $id ? 'foto' : 'photos' }}</dd>
                                 </div>
                             @endif
@@ -83,7 +83,7 @@
                         <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-40"></div>
                         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
                         <div class="relative">
-                            <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-gold-soft">{{ $id ? 'Tertarik?' : 'Interested?' }}</p>
+                            <p class="font-mono text-[11px] uppercase tracking-normal text-gold-soft">{{ $id ? 'Tertarik?' : 'Interested?' }}</p>
                             <p class="mt-3 font-display text-xl leading-snug text-balance">{{ $id ? 'Wujudkan proyek serupa untuk organisasi Anda.' : 'Bring a similar project to life for your team.' }}</p>
                             <a href="{{ route('contact.index') }}" class="btn-blue mt-6 w-full justify-center">{{ $id ? 'Konsultasi Gratis' : 'Free Consultation' }}</a>
                         </div>
@@ -101,7 +101,7 @@
                     @foreach ($portfolio->images as $img)
                         <figure class="group mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-navy-100 bg-navy-900 shadow-card" data-aos="fade-up">
                             <img src="{{ $imgUrl($img->image) }}" alt="{{ $img->caption }}" loading="lazy" class="w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">
-                            @if ($img->caption)<figcaption class="bg-white px-4 py-3 text-xs text-navy-500">{{ $img->caption }}</figcaption>@endif
+                            @if ($img->caption)<figcaption class="bg-white px-4 py-3 text-xs text-slate-600">{{ $img->caption }}</figcaption>@endif
                         </figure>
                     @endforeach
                 </div>
