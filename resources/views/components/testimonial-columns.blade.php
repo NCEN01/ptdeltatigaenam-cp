@@ -14,8 +14,7 @@
     <section class="section">
         <div class="container">
             <div class="mx-auto max-w-xl text-center" data-aos="fade-up">
-                <p class="eyebrow mb-4 inline-flex items-center"><span class="rule-gold mr-3"></span>{{ $isId ? 'Testimoni' : 'Testimonials' }}</p>
-                <h2 class="text-display-lg font-bold text-navy text-balance">{{ $isId ? 'Apa kata klien kami' : 'What our clients say' }}</h2>
+                <h2 class="text-display-lg font-bold text-navy text-balance">{{ $isId ? 'Testimoni' : 'Testimonials' }}</h2>
                 <p class="mt-4 text-pretty text-slate-600">{{ $isId ? 'Cerita dampak dari mereka yang telah bekerja sama dengan kami.' : 'Impact stories from those who have worked with us.' }}</p>
             </div>
 

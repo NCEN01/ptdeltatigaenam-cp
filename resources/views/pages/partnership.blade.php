@@ -93,7 +93,7 @@
                 @if (isset($benefits) && $benefits->isNotEmpty())
                     @foreach ($benefits as $benefit)
                         <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
-                            <span class="grid h-11 w-11 place-items-center rounded-xl bg-navy font-display text-lg text-gold transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                            <span class="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-navy-500 to-sky-400 font-display text-lg text-white transition-all duration-300 group-hover:from-navy-600 group-hover:to-navy-500">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                             <h3 class="mt-6 font-display text-lg text-navy">{{ $benefit->title }}</h3>
                             <p class="mt-2.5 text-pretty text-sm leading-relaxed text-slate-600">{{ $benefit->description }}</p>
                             <span class="mt-5 block h-0.5 w-0 rounded-full bg-gradient-to-r from-gold to-gold-soft transition-all duration-500 group-hover:w-12"></span>
@@ -102,7 +102,7 @@
                 @else
                     @foreach ($manfaat as $item)
                         <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
-                            <span class="grid h-11 w-11 place-items-center rounded-xl bg-navy font-display text-lg text-gold transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                            <span class="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-navy-500 to-sky-400 font-display text-lg text-white transition-all duration-300 group-hover:from-navy-600 group-hover:to-navy-500">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                             <h3 class="mt-6 font-display text-lg text-navy">{{ $item[0] }}</h3>
                             <p class="mt-2.5 text-pretty text-sm leading-relaxed text-slate-600">{{ $item[1] }}</p>
                             <span class="mt-5 block h-0.5 w-0 rounded-full bg-gradient-to-r from-gold to-gold-soft transition-all duration-500 group-hover:w-12"></span>
@@ -195,7 +195,7 @@
                 <div class="mx-auto mt-10 grid max-w-3xl gap-5 sm:grid-cols-3">
                     @foreach ($steps as $i => $step)
                         <div class="flex flex-col items-center gap-3 text-center">
-                            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-navy font-display text-sm text-gold">{{ $i + 1 }}</span>
+                            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 font-display text-sm text-white">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
                             <p class="text-sm leading-relaxed text-slate-700">{{ $step }}</p>
                         </div>
                     @endforeach

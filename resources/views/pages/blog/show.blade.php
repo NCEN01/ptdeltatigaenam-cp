@@ -28,12 +28,6 @@
 
         <section class="section bg-white">
             <div class="container">
-                @if ($cover)
-                    <figure class="mb-12 overflow-hidden rounded-3xl shadow-card ring-1 ring-navy-100" data-aos="fade-up">
-                        <img src="{{ $cover }}" alt="{{ $post->title }}" class="aspect-[16/9] w-full object-cover object-center">
-                    </figure>
-                @endif
-
                 <div class="grid gap-10 lg:grid-cols-12 lg:gap-14">
 
                 {{-- Article --}}
@@ -49,6 +43,13 @@
                             <span>{{ optional($post->published_at)->translatedFormat('d M Y') }}</span>
                         </div>
                     </div>
+
+                    {{-- Cover — sits inside the column, aligned to the sidebar and kept compact like the portfolio detail --}}
+                    @if ($cover)
+                        <figure class="mb-10 overflow-hidden rounded-3xl shadow-card ring-1 ring-navy-100" data-aos="fade-up">
+                            <img src="{{ $cover }}" alt="{{ $post->title }}" class="aspect-[16/10] w-full object-cover object-center">
+                        </figure>
+                    @endif
 
                     {{-- Lead --}}
                     @if ($post->excerpt)
@@ -125,7 +126,7 @@
     @if ($related->isNotEmpty())
         <section class="section-sm border-t border-navy-50 bg-neutral-50">
             <div class="container">
-                <p class="eyebrow mb-8" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $id ? 'Artikel terkait' : 'Related articles' }}</p>
+                <p class="kicker mb-8" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $id ? 'Artikel terkait' : 'Related articles' }}</p>
                 <div class="grid gap-6 md:grid-cols-3">
                     @foreach ($related as $r)
                         <a href="{{ route('blog.show', $r->slug) }}" class="group flex h-full flex-col overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card" data-aos="fade-up" data-aos-delay="{{ $loop->index * 80 }}">

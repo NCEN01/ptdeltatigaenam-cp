@@ -28,7 +28,7 @@
                 @endif
 
                 @if ($portfolio->short_description)
-                    <p class="mb-8 border-l-2 border-gold pl-5 text-lg leading-relaxed text-slate-700 text-pretty">{{ $portfolio->short_description }}</p>
+                    <p class="mb-8 border-l-2 border-gold pl-5 text-lg leading-relaxed text-slate-700 text-justify [hyphens:auto]">{{ $portfolio->short_description }}</p>
                 @endif
 
                 @if ($portfolio->content)
@@ -112,7 +112,7 @@
     @if ($related->isNotEmpty())
         <section class="section-sm border-t border-navy-50 bg-neutral-50">
             <div class="container">
-                <p class="eyebrow mb-8" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $id ? 'Proyek lain' : 'More projects' }}</p>
+                <p class="kicker mb-8" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $id ? 'Portofolio terkait' : 'Related portfolio' }}</p>
                 <div class="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($related as $r)
                         <a href="{{ route('portfolio.show', $r->slug) }}" class="group flex h-full flex-col overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">

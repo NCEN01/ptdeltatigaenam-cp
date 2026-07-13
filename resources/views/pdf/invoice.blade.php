@@ -6,23 +6,23 @@
         * { font-family: DejaVu Sans, sans-serif; }
         body { color: #1e293b; font-size: 12px; margin: 0; }
         .wrap { padding: 36px 40px; }
-        .top { width: 100%; border-bottom: 3px solid #1565c0; padding-bottom: 16px; }
+        .top { width: 100%; border-bottom: 3px solid #2b83df; padding-bottom: 16px; }
         .top td { vertical-align: top; }
-        .brand { font-size: 22px; font-weight: bold; color: #1565c0; letter-spacing: .5px; }
+        .brand { font-size: 22px; font-weight: bold; color: #2b83df; letter-spacing: .5px; }
         .muted { color: #64748b; }
-        .doc-title { font-size: 28px; color: #1565c0; font-weight: bold; text-align: right; }
+        .doc-title { font-size: 28px; color: #2b83df; font-weight: bold; text-align: right; }
         .meta { margin-top: 22px; width: 100%; }
         .meta td { vertical-align: top; width: 50%; }
         .label { text-transform: uppercase; font-size: 9px; letter-spacing: 1px; color: #94a3b8; margin-bottom: 4px; }
         table.items { width: 100%; border-collapse: collapse; margin-top: 24px; }
-        table.items th { background: #1565c0; color: #fff; text-align: left; padding: 9px 10px; font-size: 10px; text-transform: uppercase; letter-spacing: .5px; }
+        table.items th { background: #2b83df; color: #fff; text-align: left; padding: 9px 10px; font-size: 10px; text-transform: uppercase; letter-spacing: .5px; }
         table.items td { padding: 9px 10px; border-bottom: 1px solid #e2e8f0; }
         .right { text-align: right; }
         .totals { width: 42%; margin-left: 58%; margin-top: 16px; }
         .totals td { padding: 6px 10px; }
-        .totals .grand { background: #1565c0; color: #fff; font-weight: bold; font-size: 14px; }
+        .totals .grand { background: #2b83df; color: #fff; font-weight: bold; font-size: 14px; }
         .status { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 10px;
-                  text-transform: uppercase; letter-spacing: .5px; border: 1px solid #edae49; color: #c68a2b; }
+                  text-transform: uppercase; letter-spacing: .5px; border: 1px solid #dab45e; color: #b0872f; }
         .foot { margin-top: 40px; padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 10px; }
     </style>
 </head>

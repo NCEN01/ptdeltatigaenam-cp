@@ -3,12 +3,20 @@
 
     $id = app()->getLocale() === 'id';
     $email = 'info@deltatigaenam.com';
-    $website = 'www.deltatigaenam.com';
+    $facebook = 'https://www.facebook.com/61584080990769';
+    $instagram = 'https://www.instagram.com/deltatigaenam?igsh=MTlsbWhlMHYweXBmcA==';
     $linkedin = Setting::get('linkedin_url', 'https://linkedin.com/company/deltatigaenam');
     $year = now()->year;
 
     // Hardcoded office locations (no longer using OfficeLocation model)
     $offices = collect([]);
+
+    // Footer "Layanan" list — mirror the real, active service categories (top 6 by order).
+    $footerServices = \App\Models\ServiceCategory::query()
+        ->where('is_active', true)
+        ->orderBy('sort_order')
+        ->take(6)
+        ->get(['name', 'slug']);
 
     $nav = [
         'about' => __('site.nav.about'),
@@ -94,7 +102,7 @@
 
 {{-- Solid blue-gradient footer: white text, gold sub-headings, gold hover --}}
 <footer class="relative overflow-hidden text-white"
-        style="background: radial-gradient(85% 60% at 88% 0%, rgba(38,128,222,0.22) 0%, transparent 60%), linear-gradient(180deg, #10508f 0%, #0c3f79 38%, #0a2b52 74%, #061626 100%);">
+        style="background: radial-gradient(85% 60% at 88% 0%, rgba(43,131,223,0.22) 0%, transparent 60%), linear-gradient(180deg, #205f9f 0%, #123a6b 38%, #071d38 74%, #071d38 100%);">
     {{-- ambient depth --}}
     <div class="pointer-events-none absolute -left-24 top-40 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl"></div>
     <div class="pointer-events-none absolute -right-24 bottom-24 h-80 w-80 rounded-full bg-navy-500/25 blur-3xl"></div>
@@ -147,8 +155,11 @@
                         <a href="mailto:{{ $email }}" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:text-navy-950 hover:ring-gold-soft" aria-label="Email">
                             <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                         </a>
-                        <a href="https://{{ $website }}" target="_blank" rel="noopener" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:text-navy-950 hover:ring-gold-soft" aria-label="Website">
-                            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        <a href="{{ $facebook }}" target="_blank" rel="noopener" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:text-navy-950 hover:ring-gold-soft" aria-label="Facebook">
+                            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                        <a href="{{ $instagram }}" target="_blank" rel="noopener" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:text-navy-950 hover:ring-gold-soft" aria-label="Instagram">
+                            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
                         </a>
                     </div>
                 </div>
@@ -160,18 +171,15 @@
                             <p class="text-sm font-semibold text-gold">{{ $id ? 'Layanan' : 'Services' }}</p>
                             <span class="mt-2.5 block h-0.5 w-7 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
                             <ul class="mt-5 space-y-3.5 text-sm">
-                                <li><a href="{{ route('services.index') }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
-                                    <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $id ? 'Sertifikasi Kompetensi' : 'Competence Certification' }}
-                                </a></li>
-                                <li><a href="{{ route('services.index') }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
-                                    <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $id ? 'Pelatihan & Pengembangan' : 'Training & Development' }}
-                                </a></li>
-                                <li><a href="{{ route('services.index') }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
-                                    <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $id ? 'Asesmen & Rekrutmen' : 'Assessment & Recruitment' }}
-                                </a></li>
-                                <li><a href="{{ route('services.index') }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
-                                    <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $id ? 'Konsultasi Human Capital' : 'Human Capital Consulting' }}
-                                </a></li>
+                                @forelse ($footerServices as $svc)
+                                    <li><a href="{{ route('services.index') }}#{{ $svc->slug }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
+                                        <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $svc->name }}
+                                    </a></li>
+                                @empty
+                                    <li><a href="{{ route('services.index') }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
+                                        <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $id ? 'Semua Layanan' : 'All Services' }}
+                                    </a></li>
+                                @endforelse
                             </ul>
                         </div>
                         <div>
@@ -208,10 +216,6 @@
                         <li class="flex items-center gap-2.5">
                             <svg class="h-4 w-4 shrink-0 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                             <a href="mailto:{{ $email }}" class="transition-colors hover:text-gold">{{ $email }}</a>
-                        </li>
-                        <li class="flex items-center gap-2.5">
-                            <svg class="h-4 w-4 shrink-0 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                            <a href="https://{{ $website }}" target="_blank" rel="noopener" class="transition-colors hover:text-gold">{{ $website }}</a>
                         </li>
                     </ul>
                 </div>

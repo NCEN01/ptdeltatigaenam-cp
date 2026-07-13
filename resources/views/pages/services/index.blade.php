@@ -15,18 +15,18 @@
     </x-page-header>
 
     @forelse ($categories as $cat)
-        <section id="{{ $cat->slug }}" class="section scroll-mt-28 {{ $loop->odd ? '' : 'bg-mist' }}">
+        <section id="{{ $cat->slug }}" class="scroll-mt-28 py-14 md:py-20 {{ $loop->odd ? '' : 'bg-mist' }}">
             <div class="container">
-                <div class="flex flex-col gap-4 border-b border-navy-100 pb-8 md:flex-row md:items-end md:justify-between">
+                <div class="flex flex-col gap-4 border-b border-navy-100 pb-6 md:flex-row md:items-end md:justify-between">
                     <div class="max-w-2xl">
-                        <p class="eyebrow mb-3"><span class="rule-gold mr-3"></span>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</p>
-                        <h2 class="text-display-lg font-semibold text-navy">{{ $cat->name }}</h2>
+                        <p class="mb-3 font-mono text-[11px] uppercase tracking-normal text-gold-deep"><span class="rule-gold mr-3"></span>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</p>
+                        <h2 class="text-3xl font-semibold text-navy md:text-4xl">{{ $cat->name }}</h2>
                         @if ($cat->short_description)<p class="mt-3 text-pretty text-slate-600">{{ $cat->short_description }}</p>@endif
                     </div>
                 </div>
 
                 @if ($cat->services->isNotEmpty())
-                    <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-stagger>
+                    <div class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3" data-stagger>
                         @foreach ($cat->services as $service)
                             <a href="{{ route('services.show', $service->slug) }}" class="card card-hover group flex flex-col overflow-hidden" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
                                 <div class="relative aspect-[3/2] overflow-hidden bg-navy-100">

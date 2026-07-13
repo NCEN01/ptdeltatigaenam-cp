@@ -138,11 +138,16 @@
             {{-- Purchase panel --}}
             <div class="lg:col-span-5" id="daftar">
                 <div class="sticky top-28 overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-lift">
-                    {{-- Header --}}
-                    <div class="border-b border-navy-100 bg-navy-950 p-6 text-white">
-                        <p class="font-mono text-[11px] uppercase tracking-normal text-gold-soft">{{ $id ? 'Amankan Kursi Anda' : 'Secure Your Seat' }}</p>
-                        <h3 class="mt-2 font-display text-xl">{{ $id ? 'Pilih jadwal di bawah' : 'Pick a schedule below' }}</h3>
-                        <p class="mt-2 text-sm text-navy-200">{{ $id ? 'Kursi terbatas — daftar sekarang sebelum kehabisan.' : 'Limited seats — register now before they’re gone.' }}</p>
+                    {{-- Header — same aurora/blue-gradient treatment as the hero above --}}
+                    <div class="relative overflow-hidden border-b border-navy-100 bg-navy-950 p-6 text-white">
+                        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-60"></div>
+                        <div class="pointer-events-none absolute inset-0 grain opacity-40"></div>
+                        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
+                        <div class="relative">
+                            <p class="font-mono text-[11px] uppercase tracking-normal text-gold-soft">{{ $id ? 'Amankan Kursi Anda' : 'Secure Your Seat' }}</p>
+                            <h3 class="mt-2 font-display text-xl">{{ $id ? 'Pilih jadwal di bawah' : 'Pick a schedule below' }}</h3>
+                            <p class="mt-2 text-sm text-navy-200">{{ $id ? 'Kursi terbatas — daftar sekarang sebelum kehabisan.' : 'Limited seats — register now before they’re gone.' }}</p>
+                        </div>
                     </div>
 
                     {{-- Schedules --}}
@@ -225,17 +230,26 @@
     @if ($related->isNotEmpty())
         <section class="section-sm border-t border-navy-50 bg-white">
             <div class="container">
-                <p class="eyebrow mb-8" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $id ? 'Layanan terkait' : 'Related services' }}</p>
+                <p class="kicker mb-8" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $id ? 'Layanan terkait' : 'Related services' }}</p>
                 <div class="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($related as $r)
-                        <a href="{{ route('services.show', $r->slug) }}" class="group flex h-full flex-col rounded-2xl border border-navy-100 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
-                            @if ($r->category)<p class="font-mono text-[10px] uppercase tracking-wider text-gold-deep">{{ $r->category->name }}</p>@endif
-                            <h3 class="mt-1.5 font-display text-lg leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">{{ $r->title }}</h3>
-                            @if ($r->short_description)<p class="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">{{ $r->short_description }}</p>@endif
-                            <span class="mt-auto flex items-center gap-2 pt-4 text-sm font-medium text-navy">
-                                {{ $id ? 'Lihat detail' : 'View details' }}
-                                <svg class="h-4 w-4 text-gold-deep transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            </span>
+                        <a href="{{ route('services.show', $r->slug) }}" class="group flex h-full flex-col overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
+                            <div class="relative aspect-[3/2] overflow-hidden bg-navy-100">
+                                @if ($r->image)
+                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($r->image) }}" alt="{{ $r->title }}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                                @else
+                                    <div class="h-full w-full bg-gradient-to-br from-navy-200 to-navy-100"></div>
+                                @endif
+                            </div>
+                            <div class="flex flex-1 flex-col p-6">
+                                @if ($r->category)<p class="font-mono text-[10px] uppercase tracking-wider text-gold-deep">{{ $r->category->name }}</p>@endif
+                                <h3 class="mt-1.5 font-display text-lg leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">{{ $r->title }}</h3>
+                                @if ($r->short_description)<p class="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">{{ $r->short_description }}</p>@endif
+                                <span class="mt-auto flex items-center gap-2 pt-4 text-sm font-medium text-navy">
+                                    {{ $id ? 'Lihat detail' : 'View details' }}
+                                    <svg class="h-4 w-4 text-gold-deep transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
+                            </div>
                         </a>
                     @endforeach
                 </div>

@@ -56,7 +56,6 @@ class PortfolioResource extends Resource
                 Forms\Components\RichEditor::make('content.id')->label('Konten (ID)'),
                 Forms\Components\RichEditor::make('content.en')->label('Konten (EN)'),
                 MediaUpload::for('cover_image', 'portfolio', 'portfolio')->label('Cover')->columnSpanFull(),
-                Forms\Components\Toggle::make('is_featured')->label('Unggulan')->default(false),
                 Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
             ])->columns(2),
 
@@ -77,7 +76,6 @@ class PortfolioResource extends Resource
             Tables\Columns\TextColumn::make('title')->label('Judul')->searchable()->wrap(),
             Tables\Columns\TextColumn::make('client_name')->label('Klien'),
             Tables\Columns\TextColumn::make('category.name')->label('Kategori')->badge(),
-            Tables\Columns\IconColumn::make('is_featured')->label('Unggulan')->boolean(),
             Tables\Columns\ToggleColumn::make('is_active')->label('Aktif'),
         ])->actions([
             Tables\Actions\EditAction::make(),

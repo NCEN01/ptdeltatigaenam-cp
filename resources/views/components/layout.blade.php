@@ -24,7 +24,7 @@
     @if (request()->isSecure() || request()->header('X-Forwarded-Proto') === 'https')
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     @endif
-    <meta name="theme-color" content="#1565c0">
+    <meta name="theme-color" content="#2b83df">
     <title>{{ $pageTitle }}</title>
     <meta name="description" content="{{ $desc }}">
 
@@ -92,7 +92,7 @@
                 x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
                 x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2"
                 @click="toTop()" aria-label="{{ $locale === 'id' ? 'Kembali ke atas' : 'Back to top' }}"
-                class="grid h-12 w-12 place-items-center rounded-full bg-sky-400 text-white shadow-lift ring-1 ring-white/20 transition hover:-translate-y-0.5 hover:text-gold active:scale-95">
+                class="grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white shadow-lift ring-1 ring-white/20 transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95">
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
         </button>
 
@@ -110,7 +110,7 @@
             </div>
             <a href="https://wa.me/62818834766?text={{ rawurlencode($locale === 'id' ? 'Halo Delta Tiga Enam, saya butuh bantuan.' : 'Hello Delta Tiga Enam, I need some help.') }}"
                target="_blank" rel="noopener" aria-label="WhatsApp"
-               class="grid h-12 w-12 place-items-center rounded-full bg-sky-400 text-white shadow-[0_10px_30px_-8px_rgba(72,202,228,0.6)] ring-1 ring-white/20 transition hover:-translate-y-0.5 hover:text-gold active:scale-95">
+               class="grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white shadow-[0_10px_30px_-8px_rgba(43,131,223,0.55)] ring-1 ring-white/20 transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95">
                 <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.2 4.79 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.16c-.24.68-1.42 1.31-1.95 1.36-.5.05-.96.24-3.23-.67-2.73-1.08-4.47-3.86-4.6-4.04-.14-.18-1.11-1.48-1.11-2.82 0-1.34.7-2 .95-2.28.24-.27.53-.34.7-.34.18 0 .35 0 .5.01.16.01.38-.06.59.45.22.52.73 1.8.8 1.93.06.13.11.28.02.46-.09.18-.13.29-.26.45-.13.16-.28.36-.4.48-.13.13-.27.28-.12.54.15.26.66 1.09 1.42 1.76.97.87 1.79 1.14 2.05 1.27.26.13.41.11.56-.07.15-.18.65-.76.82-1.02.17-.26.35-.22.59-.13.24.09 1.52.72 1.78.85.26.13.43.2.5.31.06.11.06.64-.18 1.32z"/></svg>
             </a>
         </div>

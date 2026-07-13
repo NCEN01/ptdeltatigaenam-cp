@@ -17,51 +17,52 @@ export default {
         },
         extend: {
             colors: {
-                // Brand palette (client-specified): dark blue #1565c0 · light blue #48cae4 · gold #edae49
+                // OFFICIAL LOGO PALETTE — blue #2b83df -> cyan #38e9fa; gold #dab45e/#edd68a; muted #82bdd6; derived navy darks.
                 navy: {
-                    DEFAULT: '#15171c', // headings / primary text — solid charcoal near-black (not blue) for a clean, professional read on light sections
-                    blue: '#1565c0',    // the brand dark blue, when a truly-blue accent is wanted
-                    50: '#eaf1fb',
-                    100: '#cbddf6',
-                    200: '#a3c4ee',
-                    300: '#72a4e4',
-                    400: '#3f82d8',
-                    450: '#2670cb',
-                    500: '#1565c0', // ← client dark blue (anchor)
-                    600: '#1258a8',
-                    700: '#0f4890',
-                    800: '#0d3c78',
-                    900: '#0b3161',
-                    950: '#0a2b52', // darkest — dark sections (hero band, CTA, footer)
+                    DEFAULT: '#0e2237', // headings / body text on light — bluish charcoal (AA ~15:1 on white)
+                    blue: '#2b83df',    // logo primary blue
+                    50: '#eef5fd',
+                    100: '#d7e9fb',
+                    200: '#b2d4f5',
+                    300: '#7fb6ee',
+                    400: '#4d96e6',
+                    450: '#3a86dd',
+                    500: '#2b83df', // ← logo primary blue (anchor)
+                    600: '#205f9f',
+                    700: '#164a7d',
+                    800: '#123a6b', // derived darken
+                    900: '#0b2b52', // derived darken — dark sections
+                    950: '#071d38', // darkest — hero band / footer base
+                    muted: '#82bdd6', // captions/labels on dark backgrounds
                 },
                 // Light blue accent
                 sky: {
-                    DEFAULT: '#48cae4',
-                    50: '#ebfafd',
-                    100: '#c9f2fb',
-                    200: '#9ae7f6',
-                    300: '#69d8ed',
-                    400: '#48cae4', // ← client light blue
-                    500: '#22b0d0',
-                    600: '#1592b4',
-                    700: '#127491',
+                    DEFAULT: '#34d3f4',
+                    50: '#e9fbff',
+                    100: '#c8f5fe',
+                    200: '#8fe6fb',
+                    300: '#38e9fa',
+                    400: '#34d3f4', // ← client light blue
+                    500: '#23b7dc',
+                    600: '#1d96b6',
+                    700: '#1a7893',
                 },
                 // Light-blue highlight (gradients & small accents)
                 cyan: {
-                    DEFAULT: '#48cae4',
-                    400: '#69d8ed',
-                    500: '#48cae4',
-                    600: '#22b0d0',
+                    DEFAULT: '#34d3f4',
+                    400: '#38e9fa',
+                    500: '#34d3f4',
+                    600: '#23b7dc',
                 },
                 // Gold — accent only
                 gold: {
-                    DEFAULT: '#edae49',
-                    soft: '#f6c877',
-                    deep: '#c68a2b',
+                    DEFAULT: '#dab45e',
+                    soft: '#edd68a',
+                    deep: '#b0872f',
                 },
-                ink: '#15171c', // body text — solid charcoal near-black
-                mist: '#e8f2fb',
-                paper: '#f3f8fd', // off-white (blue-tinted) section background for rhythm
+                ink: '#0e2237', // body text — solid charcoal near-black
+                mist: '#eaf3fb',
+                paper: '#f2f8fd', // off-white (blue-tinted) section background for rhythm
             },
             fontFamily: {
                 // Display / labels / UI chrome — Plus Jakarta Sans (the "main" voice).

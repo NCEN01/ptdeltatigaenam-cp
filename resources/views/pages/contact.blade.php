@@ -44,7 +44,7 @@
                         <{{ $row['href'] ? 'a' : 'div' }} @if ($row['href']) href="{{ $row['href'] }}" @endif
                             @if ($row['href'] && str_starts_with($row['href'], 'http')) target="_blank" rel="noopener" @endif
                             class="group flex items-center gap-4 rounded-2xl border border-navy-100 bg-white p-4 transition-all duration-300 {{ $row['href'] ? 'hover:-translate-y-0.5 hover:border-navy-200 hover:shadow-card' : '' }}">
-                            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-sky-400 text-white transition-colors duration-300 {{ $row['href'] ? 'group-hover:text-gold' : '' }}">
+                            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-navy-500 to-sky-400 text-white transition-all duration-300 {{ $row['href'] ? 'group-hover:from-navy-600 group-hover:to-navy-500' : '' }}">
                                 @if ($row['icon'] === 'mail')
                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                                 @elseif ($row['icon'] === 'whatsapp')
@@ -126,8 +126,8 @@
                                 x-bind:class="activeOffice === {{ $index }} ? 'border-sky-500 shadow-lift' : 'border-navy-100 hover:border-navy-200 hover:shadow-card'">
                             <div class="flex items-center justify-between gap-3">
                                 <div class="flex items-center gap-3">
-                                    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-sky-400 transition-colors duration-300 group-hover:text-gold"
-                                          x-bind:class="activeOffice === {{ $index }} ? 'text-gold' : 'text-white'">
+                                    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br text-white transition-all duration-300 group-hover:from-navy-600 group-hover:to-navy-500"
+                                          x-bind:class="activeOffice === {{ $index }} ? 'from-navy-600 to-navy-500' : 'from-navy-500 to-sky-400'">
                                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M15 9h.01M9 13h.01M15 13h.01M10 21v-4h4v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                     </span>
                                     <span class="font-display text-[17px] text-navy">{{ $office['name'] }}</span>

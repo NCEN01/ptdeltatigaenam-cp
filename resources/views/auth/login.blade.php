@@ -4,7 +4,7 @@
     :heading="$id ? 'Selamat datang kembali' : 'Welcome back'"
     :subheading="$id ? 'Masuk untuk mengelola pesanan Anda.' : 'Sign in to manage your orders.'">
 
-    <form method="POST" action="{{ route('login') }}" class="space-y-5">
+    <form method="POST" action="{{ route('login') }}" class="auth-form space-y-5">
         @csrf
         <x-field name="email" type="email" :label="__('site.contact.email')" required />
         <x-field name="password" type="password" :label="$id ? 'Kata Sandi' : 'Password'" required />
@@ -17,10 +17,10 @@
             <a href="{{ route('password.request') }}" class="text-sm link-underline">{{ $id ? 'Lupa kata sandi?' : 'Forgot password?' }}</a>
         </div>
 
-        <button type="submit" class="btn-primary w-full">{{ __('site.nav.login') }}</button>
+        <button type="submit" class="btn-blue w-full">{{ __('site.nav.login') }}</button>
     </form>
 
-    <p class="mt-8 text-center text-sm text-slate-600">
+    <p class="auth-anim mt-8 text-center text-sm text-slate-600 [animation-delay:420ms]">
         {{ $id ? 'Belum punya akun?' : "Don't have an account?" }}
         <a href="{{ route('register') }}" class="font-medium link-underline">{{ $id ? 'Daftar' : 'Sign up' }}</a>
     </p>

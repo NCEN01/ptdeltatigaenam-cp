@@ -70,22 +70,22 @@
                 <h2 class="mt-4 font-display text-3xl md:text-4xl">{{ $isId ? 'Visi & Misi' : 'Vision & Mission' }}</h2>
             </div>
 
-            <div class="grid items-stretch gap-6 lg:grid-cols-2">
-                {{-- Vision — left/top aligned --}}
-                <div class="rounded-3xl border border-white/10 bg-navy-950/45 p-6 text-left backdrop-blur-md md:p-8" data-aos="fade-up">
-                    <p class="font-mono text-base uppercase tracking-normal text-gold-soft md:text-lg">{{ $isId ? 'Visi' : 'Vision' }}</p>
-                    <p class="mt-5 font-display text-base leading-relaxed text-white text-pretty md:text-lg">&ldquo;{{ $vision }}&rdquo;</p>
+            <div class="grid items-stretch gap-5 lg:grid-cols-2">
+                {{-- Vision — same glass/blur as the "Portofolio Kami" cards; text sized like the Company Profile body --}}
+                <div class="rounded-2xl border border-white/10 bg-white/[0.06] p-5 text-left backdrop-blur-sm md:p-6" data-aos="fade-up">
+                    <p class="font-mono text-base uppercase tracking-normal text-gold-soft">{{ $isId ? 'Visi' : 'Vision' }}</p>
+                    <p class="mt-5 font-display text-base leading-relaxed text-white text-pretty">&ldquo;{{ $vision }}&rdquo;</p>
                 </div>
 
                 {{-- Mission — numbered list, no icon --}}
-                <div class="rounded-3xl border border-white/10 bg-navy-950/45 p-6 backdrop-blur-md md:p-8" data-aos="fade-up" data-aos-delay="80">
-                    <p class="font-mono text-base uppercase tracking-normal text-gold-soft md:text-lg">{{ $isId ? 'Misi' : 'Mission' }}</p>
+                <div class="rounded-2xl border border-white/10 bg-white/[0.06] p-5 backdrop-blur-sm md:p-6" data-aos="fade-up" data-aos-delay="80">
+                    <p class="font-mono text-base uppercase tracking-normal text-gold-soft">{{ $isId ? 'Misi' : 'Mission' }}</p>
                     @if ($missions->isNotEmpty())
                         <ul class="mt-5 space-y-4">
                             @foreach ($missions as $mission)
                                 <li class="flex items-start gap-3 border-b border-white/10 pb-4 last:border-0 last:pb-0">
-                                    <span class="shrink-0 text-base leading-relaxed text-gold-soft md:text-lg" aria-hidden="true">—</span>
-                                    <p class="text-base leading-relaxed text-white/90 md:text-lg">{{ $mission->content }}</p>
+                                    <span class="shrink-0 text-base leading-relaxed text-gold-soft" aria-hidden="true">—</span>
+                                    <p class="text-base leading-relaxed text-white/90">{{ $mission->content }}</p>
                                 </li>
                             @endforeach
                         </ul>
@@ -96,74 +96,54 @@
     </section>
 
     {{-- ===================== FOUNDER ===================== --}}
-    <section class="relative overflow-hidden bg-navy-anim py-20 text-white md:py-28">
-        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-40"></div>
-        <div class="pointer-events-none absolute inset-0 grain opacity-40"></div>
+    <section class="relative overflow-hidden bg-navy-anim py-20 text-white md:py-24 lg:flex lg:min-h-[88vh] lg:items-center">
+        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-35"></div>
+        <div class="pointer-events-none absolute inset-0 grain opacity-30"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
-        <div class="container relative">
-            <div class="text-center" data-aos="fade-up">
-                <h2 class="font-display text-3xl md:text-4xl">{{ $isId ? 'Pendiri' : 'Founder' }}</h2>
-                <span class="mx-auto mt-4 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
-            </div>
 
-            <div class="mt-14 grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
-                {{-- Portrait --}}
-                <div class="relative mx-auto w-full max-w-md" data-aos="fade-up">
-                    <div class="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lift">
+        <div class="container relative">
+            <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+                {{-- Portrait — substantial, balanced, with a gold backing card jutting out top-left --}}
+                <div class="relative mx-auto w-full max-w-md lg:col-span-5 lg:mx-0" data-aos="fade-right">
+                    {{-- Gold backing card — offset behind the photo so it peeks out on the top & left --}}
+                    <div class="pointer-events-none absolute -left-4 -top-4 h-full w-full rounded-3xl bg-gradient-to-br from-gold to-gold-soft md:-left-6 md:-top-6"></div>
+                    {{-- Photo (front layer) --}}
+                    <div class="relative aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 shadow-lift">
                         <img src="{{ asset('images/pendiri.png') }}" alt="{{ $founderName }}" class="h-full w-full object-cover object-top">
-                        <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-navy-950/70 to-transparent"></div>
+                        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/55 via-transparent to-transparent"></div>
                     </div>
-                    <div class="absolute -bottom-4 right-6 grid h-16 w-16 place-items-center rounded-xl bg-gold font-display text-4xl leading-none text-navy-950 shadow-lift">”</div>
+                    <div class="absolute -bottom-4 -right-4 grid h-14 w-14 place-items-center rounded-2xl bg-navy-950 font-display text-4xl leading-none text-gold shadow-lift ring-1 ring-gold/40">&rdquo;</div>
                 </div>
 
                 {{-- Bio --}}
-                <div data-aos="fade-up" data-aos-delay="100">
-                    <p class="font-mono text-[11px] uppercase tracking-normal text-gold-soft">{{ $founderRole }}</p>
-                    <h3 class="mt-2 font-display text-3xl md:text-4xl">{{ $founderName }}</h3>
-                    <p class="mt-6 text-pretty text-lg italic leading-relaxed text-navy-100">"{{ $founderQuote }}"</p>
-                    <p class="mt-6 max-w-xl text-pretty text-sm leading-relaxed text-slate-400">{{ $founderBio }}</p>
+                <div class="lg:col-span-7" data-aos="fade-left" data-aos-delay="100">
+                    <p class="eyebrow text-gold-soft"><span class="rule-gold mr-3 from-gold"></span>{{ $isId ? 'Pendiri' : 'Founder' }}</p>
+                    <h2 class="mt-5 font-display text-4xl font-bold leading-[1.05] text-balance md:text-5xl">{{ $founderName }}</h2>
+                    <p class="mt-3 font-mono text-xs uppercase tracking-normal text-navy-muted">{{ $founderRole }}</p>
+                    <p class="mt-8 text-pretty text-xl italic leading-relaxed text-white/90 md:text-2xl">&ldquo;{{ $founderQuote }}&rdquo;</p>
+                    <span class="mt-8 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
+                    <p class="mt-8 max-w-2xl text-pretty text-base leading-relaxed text-navy-100/85">{{ $founderBio }}</p>
                 </div>
             </div>
         </div>
     </section>
 
     {{-- ===================== VALUES ===================== --}}
-    <section class="section-sm border-t border-navy-50 bg-white">
+    <section class="section border-t border-navy-50 bg-paper">
         <div class="container">
-            <div class="text-center" data-aos="fade-up">
-                <h2 class="font-display text-3xl text-navy md:text-4xl">{{ $isId ? 'Nilai Kami' : 'Our Values' }}</h2>
-                <span class="mx-auto mt-4 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
+            <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
+                <p class="eyebrow inline-flex items-center justify-center"><span class="rule-gold mr-3"></span>{{ $isId ? 'Prinsip Kami' : 'What We Stand For' }}</p>
+                <h2 class="mt-4 font-display text-4xl font-bold text-navy text-balance md:text-5xl">{{ $isId ? 'Nilai Kami' : 'Our Values' }}</h2>
+                <p class="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-slate-600">
+                    {{ $isId ? 'Prinsip yang memandu cara kami bekerja dan melayani setiap klien.' : 'The principles that guide how we work and serve every client.' }}
+                </p>
             </div>
-            <div class="mt-14 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="mx-auto mt-14 grid max-w-6xl gap-5 sm:grid-cols-2 md:mt-16 lg:grid-cols-4">
                 @foreach ($values as $value)
-                    <div class="group border-l-2 border-gold pl-5 transition-colors duration-300 hover:border-sky-500" data-aos="fade-up" data-aos-delay="{{ $loop->index * 70 }}">
-                        <h3 class="font-display text-lg text-navy">{{ $value['title'] }}</h3>
-                        <p class="mt-2.5 text-pretty text-sm leading-relaxed text-slate-600">{{ $value['desc'] }}</p>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    {{-- ===================== OFFICES ===================== --}}
-    <section class="section-sm border-t border-navy-50 bg-neutral-50">
-        <div class="container">
-            <div class="text-center" data-aos="fade-up">
-                <h2 class="font-display text-3xl text-navy md:text-4xl">{{ $isId ? 'Kantor Kami' : 'Our Offices' }}</h2>
-                <span class="mx-auto mt-4 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
-            </div>
-            <div class="mt-12 grid gap-6 md:grid-cols-3">
-                @foreach ($offices as $office)
-                    <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift" data-aos="fade-up" data-aos-delay="{{ $loop->index * 80 }}">
-                        <span class="grid h-11 w-11 place-items-center rounded-xl bg-navy text-gold transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">
-                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M15 9h.01M9 13h.01M15 13h.01M10 21v-4h4v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </span>
-                        <h3 class="mt-5 font-display text-xl text-navy">{{ $office['name'] }}</h3>
-                        <p class="mt-3 flex-1 text-sm leading-relaxed text-slate-600">{{ $office['address'] }}</p>
-                        <p class="mt-5 flex items-center gap-2 border-t border-navy-100 pt-4 text-sm font-medium text-navy">
-                            <svg class="h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 24 24" fill="none"><path d="M5 4h4l2 5-3 2a12 12 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-                            {{ $office['phone'] }}
-                        </p>
+                    <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-navy-200 hover:shadow-lift md:p-7" data-aos="fade-up" data-aos-delay="{{ $loop->index * 70 }}">
+                        <span class="block h-0.5 w-8 rounded-full bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:w-12"></span>
+                        <h3 class="mt-5 font-display text-lg font-semibold text-navy">{{ $value['title'] }}</h3>
+                        <p class="mt-2.5 flex-1 text-pretty text-sm leading-relaxed text-slate-600">{{ $value['desc'] }}</p>
                     </div>
                 @endforeach
             </div>

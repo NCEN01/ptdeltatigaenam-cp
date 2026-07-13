@@ -47,7 +47,7 @@
         @if ($partners->isNotEmpty())
             <div class="relative container pt-14 md:pt-20 {{ $clients->isEmpty() ? 'pb-14 md:pb-20' : 'pb-10 md:pb-12' }}">
                 <div class="text-center" data-aos="fade-up">
-                    <h2 class="text-display-xl font-semibold text-white text-balance">{{ $isId ? 'Mitra Kami' : 'Our Partners' }}</h2>
+                    <h2 class="text-display-lg font-semibold text-white text-balance">{{ $isId ? 'Mitra Kami' : 'Our Partners' }}</h2>
                     <p class="mx-auto mt-4 max-w-xl text-sm italic leading-relaxed text-white/75 md:text-base">
                         {{ $isId ? 'Siap berkolaborasi menciptakan tenaga yang berkualitas.' : 'Ready to collaborate in creating quality talent.' }}
                     </p>
@@ -78,30 +78,32 @@
             </div>
         @endif
 
-        {{-- ===================== KLIEN — full-width band (same section); marquee runs left, cut off by the heading ===================== --}}
+        {{-- ===================== KLIEN — clean white logo band: the logos' white backgrounds blend
+             in (no boxes), shown grayscale and revealing their colour on hover ===================== --}}
         @if ($clients->isNotEmpty())
-            <div class="relative pb-12 md:pb-16 {{ $partners->isNotEmpty() ? '' : 'pt-14 md:pt-20' }}" data-aos="fade-up">
-                <div class="container flex flex-col gap-6 md:flex-row md:items-center md:gap-10 {{ $partners->isNotEmpty() ? 'border-t border-white/10 pt-10 md:pt-12' : '' }}">
+            <div class="relative bg-white pb-11 pt-10 md:pb-12 md:pt-12" data-aos="fade-up">
+                <div class="container flex flex-col gap-6 md:flex-row md:items-center md:gap-10">
                     {{-- Left: heading + description --}}
                     <div class="shrink-0 md:w-60 lg:w-72">
-                        <h3 class="font-display text-2xl font-semibold text-white text-balance md:text-3xl">{{ $isId ? 'Klien Kami' : 'Our Clients' }}</h3>
+                        <h3 class="font-display text-2xl font-bold text-navy text-balance md:text-3xl">{{ $isId ? 'Klien Kami' : 'Our Clients' }}</h3>
                         <span class="mt-2.5 block h-0.5 w-10 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
-                        <p class="mt-3 text-sm leading-relaxed text-gold-soft">
+                        <p class="mt-3 text-sm leading-relaxed text-slate-600">
                             {{ $isId ? 'Klien yang telah menggunakan layanan kami.' : 'Clients who have used our services.' }}
                         </p>
                     </div>
-                    {{-- Right: logos run left, grayscale → colour on hover, faded near the heading --}}
-                    <div class="mask-fade-left relative min-w-0 flex-1 overflow-hidden">
+                    {{-- Right: logos run left, grayscale → colour on hover. Fade both edges (clean on
+                         mobile where it stacks full-width; near the heading on desktop). --}}
+                    <div class="mask-fade-x relative w-full min-w-0 flex-1 overflow-hidden">
                         <div class="flex w-max items-center gap-10 animate-marquee [will-change:transform] md:gap-14">
                             @for ($h = 0; $h < 2; $h++)
                                 @foreach ($klien as $client)
                                     @if ($client->logo)
-                                        {{-- No box: grayscale by default, original colour on hover --}}
+                                        {{-- White logo bg blends into the white band; grayscale by default, colour on hover --}}
                                         <img src="{{ Storage::url($client->logo) }}" alt="{{ $client->name }}" loading="lazy"
                                              class="h-10 w-auto max-w-[150px] shrink-0 object-contain opacity-70 grayscale transition duration-300 hover:scale-105 hover:opacity-100 hover:grayscale-0 md:h-12"
                                              aria-hidden="{{ $h ? 'true' : 'false' }}">
                                     @else
-                                        <span class="shrink-0 text-base font-semibold text-white/60 transition hover:text-white" aria-hidden="{{ $h ? 'true' : 'false' }}">{{ $client->name }}</span>
+                                        <span class="shrink-0 text-base font-semibold text-slate-500 transition hover:text-navy" aria-hidden="{{ $h ? 'true' : 'false' }}">{{ $client->name }}</span>
                                     @endif
                                 @endforeach
                             @endfor

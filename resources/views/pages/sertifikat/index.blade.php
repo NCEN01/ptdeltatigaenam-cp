@@ -36,7 +36,7 @@
             <div class="mt-10 grid gap-6 sm:grid-cols-3" data-aos="fade-up" data-aos-delay="80">
                 @foreach ($trust as $item)
                     <div class="group rounded-2xl border border-navy-100 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
-                        <span class="grid h-11 w-11 place-items-center rounded-xl bg-sky-400 text-white transition-colors duration-300 group-hover:text-gold">
+                        <span class="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-navy-500 to-sky-400 text-white transition-all duration-300 group-hover:from-navy-600 group-hover:to-navy-500">
                             @if ($item['i'] === 'shield')
                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             @elseif ($item['i'] === 'check')
@@ -83,7 +83,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-[920px] text-left text-sm">
                         <thead>
-                            <tr class="bg-sky-400 text-white">
+                            <tr class="bg-navy-anim text-white">
                                 <th class="px-5 py-4 font-mono text-[11px] font-medium uppercase tracking-wider">{{ $id ? 'No. UJK' : 'Reg. No.' }}</th>
                                 <th class="px-5 py-4 font-mono text-[11px] font-medium uppercase tracking-wider">{{ $id ? 'Peserta' : 'Participant' }}</th>
                                 <th class="px-5 py-4 font-mono text-[11px] font-medium uppercase tracking-wider">{{ $id ? 'Nama Perusahaan' : 'Company' }}</th>

@@ -31,11 +31,12 @@
                             @else
                                 <div class="absolute inset-0 aurora opacity-60"></div>
                             @endif
-                            {{-- date badge --}}
+                            {{-- date badge — the nearest/front-most agenda is highlighted in gold to spotlight its time --}}
                             @if ($agenda->starts_at)
-                                <div class="absolute left-4 top-4 z-10 rounded-2xl bg-white/95 px-3.5 py-2 text-center shadow-card backdrop-blur">
-                                    <p class="font-display text-2xl font-semibold leading-none text-navy">{{ $agenda->starts_at->format('d') }}</p>
-                                    <p class="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-sky-600">{{ $agenda->starts_at->translatedFormat('M Y') }}</p>
+                                @php $isNearest = $loop->first && $agendas->onFirstPage(); @endphp
+                                <div class="absolute left-4 top-4 z-10 rounded-2xl px-3.5 py-2 text-center shadow-card backdrop-blur {{ $isNearest ? 'bg-gradient-to-br from-gold to-gold-soft ring-1 ring-white/50' : 'bg-white/95' }}">
+                                    <p class="font-display text-2xl font-semibold leading-none {{ $isNearest ? 'text-navy-950' : 'text-navy' }}">{{ $agenda->starts_at->format('d') }}</p>
+                                    <p class="mt-0.5 font-mono text-[10px] uppercase tracking-wider {{ $isNearest ? 'text-navy-950/70' : 'text-sky-600' }}">{{ $agenda->starts_at->translatedFormat('M Y') }}</p>
                                 </div>
                             @endif
                         </div>
@@ -54,8 +55,9 @@
                                     </span>
                                 @endif
                             </div>
-                            <h3 class="mt-3 line-clamp-2 font-display text-xl font-semibold leading-snug text-navy">{{ $agenda->title }}</h3>
-                            @if ($agenda->excerpt)<p class="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600">{{ $agenda->excerpt }}</p>@endif
+                            <h3 class="mt-3 line-clamp-2 min-h-[3.5rem] font-display text-xl font-semibold leading-snug text-navy">{{ $agenda->title }}</h3>
+                            {{-- always reserve 3 lines so every card ends up the same height --}}
+                            <p class="mt-2 line-clamp-3 min-h-[4rem] text-sm leading-relaxed text-slate-600">{{ $agenda->excerpt }}</p>
                         </div>
                     </article>
                 @empty
