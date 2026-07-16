@@ -21,8 +21,10 @@
     $nav = [
         'about' => __('site.nav.about'),
         'services.index' => __('site.nav.services'),
+        'certificates.index' => __('site.nav.certificates'),
         'portfolio.index' => __('site.nav.portfolio'),
         'blog.index' => __('site.nav.blog'),
+        'agenda.index' => __('site.nav.agenda'),
         'partnership.index' => __('site.nav.partnership'),
         'contact.index' => __('site.nav.contact'),
     ];

@@ -78,8 +78,35 @@
                 </form>
             </div>
 
-            {{-- Table --}}
-            <div class="overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card" data-aos="fade-up">
+            {{-- Mobile: card list — neat on small screens instead of a wide horizontal-scroll table --}}
+            <div class="space-y-3 md:hidden" data-aos="fade-up">
+                @forelse ($certificates as $c)
+                    <div class="rounded-2xl border border-navy-100 bg-white p-4 shadow-card">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="min-w-0">
+                                <p class="truncate font-display font-semibold text-navy">{{ $c->participant_name }}</p>
+                                <p class="mt-0.5 truncate text-xs text-slate-600">{{ $c->company_name ?: '—' }}</p>
+                            </div>
+                            @if ($c->qualification)
+                                <span class="inline-flex shrink-0 rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-[11px] font-medium text-sky-700">{{ $c->qualification }}</span>
+                            @endif
+                        </div>
+                        <dl class="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-navy-50 pt-3 text-xs">
+                            <div class="min-w-0"><dt class="font-mono text-[10px] uppercase tracking-wider text-slate-400">{{ $id ? 'No. UJK' : 'Reg. No.' }}</dt><dd class="truncate font-mono text-slate-600">{{ $c->ujk_number ?: '—' }}</dd></div>
+                            <div class="min-w-0"><dt class="font-mono text-[10px] uppercase tracking-wider text-slate-400">{{ $id ? 'No. Sertifikat' : 'Cert. No.' }}</dt><dd class="truncate font-mono text-slate-600">{{ $c->certificate_number ?: '—' }}</dd></div>
+                            <div class="col-span-2"><dt class="font-mono text-[10px] uppercase tracking-wider text-slate-400">{{ $id ? 'Tgl. Berakhir' : 'Expiry Date' }}</dt><dd class="text-slate-700">{{ $c->expires_at?->translatedFormat('d M Y') ?: '—' }}</dd></div>
+                        </dl>
+                    </div>
+                @empty
+                    <div class="rounded-2xl border border-dashed border-navy-200 bg-white p-8 text-center">
+                        <p class="font-display font-semibold text-navy">{{ $id ? 'Data tidak ditemukan' : 'No records found' }}</p>
+                        <p class="mt-1 text-xs text-slate-600">{{ $q !== '' ? ($id ? 'Coba kata kunci lain atau bersihkan filter.' : 'Try another keyword or clear the filter.') : ($id ? 'Data pemegang sertifikat akan tampil di sini.' : 'Records will appear here.') }}</p>
+                    </div>
+                @endforelse
+            </div>
+
+            {{-- Table (tablet & desktop) --}}
+            <div class="hidden overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card md:block" data-aos="fade-up">
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-[920px] text-left text-sm">
                         <thead>
@@ -123,7 +150,7 @@
             </div>
 
             @if ($certificates->hasPages())
-                <div class="mt-8">{{ $certificates->links() }}</div>
+                <div class="mt-8">{{ $certificates->links('pagination.brand') }}</div>
             @endif
 
             {{-- Inline CTA — the "selling" nudge --}}

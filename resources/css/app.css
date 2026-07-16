@@ -438,6 +438,59 @@
     .auth-anim, .auth-form > * { animation: none; }
 }
 
+/* ── First-visit intro / splash (logo + company name, ~3.3s, once per browser session) ── */
+.intro-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: grid;
+    place-items: center;
+    background:
+        radial-gradient(120% 120% at 85% 8%, rgba(43,131,223,0.28) 0%, transparent 55%),
+        linear-gradient(140deg, #071d38 0%, #0b2b52 42%, #123a6b 72%, #071d38 100%);
+}
+.intro-screen.is-done {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease, visibility 0s linear 0.6s;
+}
+.intro-inner { display: flex; flex-direction: column; align-items: center; gap: 0.9rem; }
+.intro-logo {
+    width: 76px; height: 76px;
+    opacity: 0;
+    filter: drop-shadow(0 8px 30px rgba(52, 211, 244, 0.28));
+    animation: intro-pop 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+}
+.intro-name {
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: clamp(1.15rem, 4.5vw, 1.6rem);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: #ffffff;
+    opacity: 0;
+    animation: intro-rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards;
+}
+.intro-line {
+    display: block; height: 2px; width: 0;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, #dab45e, #edd68a);
+    opacity: 0;
+    animation: intro-line 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.95s forwards;
+}
+@keyframes intro-pop {
+    0%   { opacity: 0; transform: scale(0.8) translateY(8px); }
+    60%  { opacity: 1; }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes intro-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes intro-line { from { width: 0; opacity: 0; } to { width: 68px; opacity: 1; } }
+/* Repeat visits within the same session: hidden from the very first paint (class set in <head>). */
+.intro-seen .intro-screen { display: none !important; }
+/* NOTE: intentionally NOT gated behind `prefers-reduced-motion` — this marketing site keeps
+   animations ON globally (see `reduceMotion = false` in app.js). Gating it made the splash
+   appear static on desktops that have OS "reduce motion" enabled, unlike the rest of the site. */
+
 /* ── Category coverflow (drag + snap 3D) ── */
 .cf-stage {
     position: relative;
@@ -507,6 +560,13 @@
     .text-gradient { color: #0e2237; }       /* solid charcoal on light backgrounds (emphasis via italic, not colour) */
     .text-gradient-hero {  /* blue→cyan gradient accent (matches the primary button) — dark backgrounds */
         background: linear-gradient(100deg, #2b83df 0%, #34d3f4 55%, #38e9fa 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+    }
+    .text-gradient-white-navy {  /* white → light-blue horizontal gradient, left→right (hero italic line) */
+        background: linear-gradient(90deg, #ffffff 0%, #ffffff 18%, #bcdcfa 55%, #6fb0ec 100%);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;

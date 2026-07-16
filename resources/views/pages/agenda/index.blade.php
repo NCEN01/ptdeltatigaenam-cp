@@ -15,6 +15,15 @@
                 <div class="max-w-2xl">
                     <p class="eyebrow mb-4" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $id ? 'Agenda Terbaru' : 'Latest Agenda' }}</p>
                     <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $id ? 'Jangan lewatkan kegiatan kami' : "Don't miss our events" }}</h2>
+                    <p class="mt-4 text-pretty leading-relaxed text-slate-600" data-aos="fade-up">
+                        {{ $id
+                            ? 'Ikuti kelas pelatihan, sertifikasi kompetensi, dan seminar terbaru dari kami. Punya pertanyaan seputar jadwal, materi, atau pendaftaran?'
+                            : 'Join our latest training classes, competency certifications, and seminars. Have questions about the schedule, materials, or registration?' }}
+                    </p>
+                    <a href="{{ route('contact.index') }}" class="btn-blue mt-6" data-aos="fade-up">
+                        {{ $id ? 'Tanya Seputar Agenda' : 'Ask About the Agenda' }}
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
                 </div>
                 @if ($agendas->total())
                     <p class="font-mono text-sm text-slate-500" data-aos="fade-up">{{ str_pad($agendas->total(), 2, '0', STR_PAD_LEFT) }} {{ $id ? 'agenda' : 'events' }}</p>

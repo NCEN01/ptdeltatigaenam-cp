@@ -18,6 +18,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{-- Intro splash shows once per browser session — decide before first paint so later pages never flash it --}}
+    <script>try{if(sessionStorage.getItem('dte_intro'))document.documentElement.classList.add('intro-seen');}catch(e){}</script>
     {{-- Behind an HTTPS tunnel/proxy (e.g. ngrok) the page is HTTPS but some URLs may still
          be http — tell the browser to upgrade them so nothing is blocked as mixed content.
          Only emitted on secure/forwarded-https requests so local http isn't affected. --}}
@@ -45,11 +47,33 @@
 
     <link rel="icon" href="{{ asset('images/logodelta36.png') }}" type="image/png">
     <link rel="apple-touch-icon" href="{{ asset('images/logodelta36.png') }}">
-    <link rel="manifest" href="{{ asset('build/manifest.webmanifest') }}">
+    {{-- PWA manifest dinonaktifkan sementara selama fase redesign (VitePWA selfDestroying).
+         Aktifkan lagi saat PWA dihidupkan: <link rel="manifest" href="{{ asset('manifest.webmanifest') }}"> --}}
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-dvh bg-white text-ink antialiased">
+    {{-- ── First-visit intro splash: logo + company name (~3.3s, once per browser session) ── --}}
+    <div id="intro" class="intro-screen" role="presentation" aria-hidden="true">
+        <div class="intro-inner">
+            <img src="{{ asset('images/logodelta36.png') }}" alt="" width="76" height="76" class="intro-logo">
+            <p class="intro-name">PT Delta Tiga Enam</p>
+            <span class="intro-line"></span>
+        </div>
+    </div>
+    <script>
+        (function () {
+            var el = document.getElementById('intro');
+            if (!el) return;
+            var seen = false;
+            try { seen = !!sessionStorage.getItem('dte_intro'); if (!seen) sessionStorage.setItem('dte_intro', '1'); } catch (e) {}
+            if (seen) { el.remove(); return; }          // already shown this session → skip
+            document.documentElement.style.overflow = 'hidden';
+            setTimeout(function () { el.classList.add('is-done'); document.documentElement.style.overflow = ''; }, 2800);
+            setTimeout(function () { el.remove(); }, 3500);
+        })();
+    </script>
+
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-navy focus:px-5 focus:py-2 focus:text-white">
         {{ __('site.nav.home') }}
     </a>
@@ -85,7 +109,9 @@
     <x-partials.footer />
 
     {{-- Floating helpers (all pages): scroll-to-top (upper) + WhatsApp with "Butuh bantuan?" bubble (lower) --}}
-    <div x-data="floatingHelpers()"
+    <div x-data="floatingHelpers()" x-show="!$store.ui.navOpen"
+         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
          class="fixed bottom-5 left-4 z-[130] flex flex-col items-start gap-3 print:hidden">
         {{-- Scroll to top — appears after ~1 screen --}}
         <button type="button" x-cloak x-show="showTop"

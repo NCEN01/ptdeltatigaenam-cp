@@ -12,6 +12,9 @@ import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
 
 window.Alpine = Alpine;
+// Shared UI state (e.g. mobile nav open) so decoupled components — like the floating
+// WhatsApp / scroll-to-top helpers — can react to it.
+Alpine.store('ui', { navOpen: false });
 Alpine.start();
 
 gsap.registerPlugin(ScrollTrigger);
@@ -205,19 +208,24 @@ document.querySelectorAll('[data-carousel]').forEach((el) => {
     try {
         const prevEl = el.parentElement.querySelector('[data-carousel-prev]');
         const nextEl = el.parentElement.querySelector('[data-carousel-next]');
-        new Swiper(el, {
-            modules: [Autoplay, Navigation, Pagination],
+        const hasNav = !!(prevEl && nextEl);
+        const config = {
+            // Only load the Navigation module when arrow buttons exist — passing
+            // `navigation: undefined` while the module is active crashes Swiper
+            // (it reads params.navigation.enabled on an undefined object).
+            modules: hasNav ? [Autoplay, Navigation, Pagination] : [Autoplay, Pagination],
             slidesPerView: 1.2,
             spaceBetween: 16,
             autoplay: reduceMotion ? false : { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
             pagination: { el: el.parentElement.querySelector('[data-carousel-pagination]'), clickable: true },
-            navigation: (prevEl && nextEl) ? { prevEl, nextEl } : undefined,
             breakpoints: {
                 640: { slidesPerView: 2, spaceBetween: 18 },
                 1024: { slidesPerView: 3, spaceBetween: 20 },
                 1280: { slidesPerView: 4, spaceBetween: 20 },
             },
-        });
+        };
+        if (hasNav) config.navigation = { prevEl, nextEl };
+        new Swiper(el, config);
     } catch (e) { console.error('[carousel]', e); }
 });
 

@@ -7,7 +7,18 @@
         :subtitle="$id ? 'Dari konsultasi manajemen hingga sertifikasi kompetensi — dirancang untuk hasil yang terukur.' : 'From management consulting to competency certification — designed for measurable outcomes.'"
         placement="services"
         image="photo-1524178232363-1fb2b075b655">
-        <nav class="mt-10 flex flex-wrap gap-2" aria-label="Categories">
+        {{-- Mobile: auto-running marquee of categories (pauses on touch/hover so chips stay tappable) --}}
+        <div class="mask-fade-x mt-8 overflow-hidden sm:hidden">
+            <div class="flex w-max gap-2 animate-marquee [will-change:transform] hover:[animation-play-state:paused]">
+                @for ($h = 0; $h < 2; $h++)
+                    @foreach ($categories as $cat)
+                        <a href="#{{ $cat->slug }}" @if ($h === 1) aria-hidden="true" tabindex="-1" @endif class="shrink-0 whitespace-nowrap rounded-full border border-white/15 px-4 py-2 text-sm text-navy-100 transition-colors hover:border-gold hover:text-gold">{{ $cat->name }}</a>
+                    @endforeach
+                @endfor
+            </div>
+        </div>
+        {{-- Tablet & desktop: wrap --}}
+        <nav class="mt-10 hidden flex-wrap gap-2 sm:flex" aria-label="Categories">
             @foreach ($categories as $cat)
                 <a href="#{{ $cat->slug }}" class="rounded-full border border-white/15 px-4 py-2 text-sm text-navy-100 transition-colors hover:border-gold hover:text-gold">{{ $cat->name }}</a>
             @endforeach

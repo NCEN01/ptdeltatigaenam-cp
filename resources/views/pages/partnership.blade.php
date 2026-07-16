@@ -192,11 +192,11 @@
                 </div>
 
                 {{-- Steps --}}
-                <div class="mx-auto mt-10 grid max-w-3xl gap-5 sm:grid-cols-3">
+                <div class="mx-auto mt-10 grid max-w-3xl grid-cols-3 gap-3 sm:gap-5">
                     @foreach ($steps as $i => $step)
-                        <div class="flex flex-col items-center gap-3 text-center">
-                            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 font-display text-sm text-white">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
-                            <p class="text-sm leading-relaxed text-slate-700">{{ $step }}</p>
+                        <div class="flex flex-col items-center gap-2 text-center md:gap-3">
+                            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 font-display text-xs text-white md:h-10 md:w-10 md:text-sm">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                            <p class="text-xs leading-relaxed text-slate-700 md:text-sm">{{ $step }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -223,7 +223,7 @@
                             <input type="text" name="website_url" tabindex="-1" autocomplete="off">
                         </div>
 
-                        <div class="space-y-10 p-7 md:p-10">
+                        <div class="space-y-8 p-5 sm:p-7 md:space-y-10 md:p-10">
                             {{-- A. Company info --}}
                             <div>
                                 <p class="font-mono text-[11px] uppercase tracking-label text-sky-600">A · {{ $id ? 'Informasi Perusahaan' : 'Company Information' }}</p>
@@ -240,7 +240,7 @@
                             </div>
 
                             {{-- B. Package --}}
-                            <div class="border-t border-navy-100 pt-10">
+                            <div class="border-t border-navy-100 pt-8 md:pt-10">
                                 <p class="font-mono text-[11px] uppercase tracking-label text-sky-600">B · {{ $id ? 'Pilihan Paket' : 'Package Choice' }}</p>
                                 <div class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                                     @foreach ($packages as $package)
@@ -254,23 +254,23 @@
                             </div>
 
                             {{-- C. Scheduling --}}
-                            <div class="border-t border-navy-100 pt-10">
+                            <div class="border-t border-navy-100 pt-8 md:pt-10">
                                 <p class="font-mono text-[11px] uppercase tracking-label text-sky-600">C · {{ $id ? 'Penjadwalan Presentasi/Meeting' : 'Presentation/Meeting Scheduling' }}</p>
                                 <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Pilih waktu yang Anda inginkan; tim kami akan mengonfirmasi.' : 'Choose your preferred time; our team will confirm.' }}</p>
                                 <div class="mt-5 grid gap-5 sm:grid-cols-2">
-                                    <div>
+                                    <div class="min-w-0">
                                         <label for="preferred_meeting_at" class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'Waktu Diinginkan' : 'Preferred Time' }}</label>
-                                        <input type="datetime-local" id="preferred_meeting_at" name="preferred_meeting_at" value="{{ old('preferred_meeting_at') }}" class="w-full rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                        <input type="datetime-local" id="preferred_meeting_at" name="preferred_meeting_at" value="{{ old('preferred_meeting_at') }}" class="w-full min-w-0 rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500">
                                     </div>
-                                    <div>
+                                    <div class="min-w-0">
                                         <label for="alternative_meeting_at" class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'Waktu Alternatif' : 'Alternative Time' }}</label>
-                                        <input type="datetime-local" id="alternative_meeting_at" name="alternative_meeting_at" value="{{ old('alternative_meeting_at') }}" class="w-full rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                        <input type="datetime-local" id="alternative_meeting_at" name="alternative_meeting_at" value="{{ old('alternative_meeting_at') }}" class="w-full min-w-0 rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500">
                                     </div>
                                 </div>
                             </div>
 
                             {{-- D. Notes --}}
-                            <div class="border-t border-navy-100 pt-10">
+                            <div class="border-t border-navy-100 pt-8 md:pt-10">
                                 <p class="font-mono text-[11px] uppercase tracking-label text-sky-600">D · {{ $id ? 'Catatan Tambahan' : 'Additional Notes' }}</p>
                                 <div class="mt-5">
                                     <x-field name="notes" type="textarea" :label="$id ? 'Catatan' : 'Notes'" />
@@ -279,7 +279,7 @@
                         </div>
 
                         {{-- Footer bar --}}
-                        <div class="flex flex-col gap-4 border-t border-navy-100 bg-neutral-50 px-7 py-6 sm:flex-row sm:items-center sm:justify-between md:px-10">
+                        <div class="flex flex-col gap-4 border-t border-navy-100 bg-neutral-50 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-7 sm:py-6 md:px-10">
                             <p class="max-w-sm text-xs leading-relaxed text-slate-500">{{ $id ? 'Dengan mengirim, Anda setuju dihubungi oleh tim PT Delta Tiga Enam. Tanpa pembayaran online.' : 'By submitting, you agree to be contacted by the PT Delta Tiga Enam team. No online payment.' }}</p>
                             <button type="submit" class="btn-blue shrink-0">
                                 {{ __('site.cta.send') }}

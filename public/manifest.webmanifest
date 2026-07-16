@@ -1,0 +1,16 @@
+{
+    "name": "PT Delta Tiga Enam",
+    "short_name": "Delta Tiga Enam",
+    "description": "Human capital, corporate training & professional certification.",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#071d38",
+    "theme_color": "#2b83df",
+    "lang": "id",
+    "icons": [
+        { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+        { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+        { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    ]
+}

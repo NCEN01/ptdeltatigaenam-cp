@@ -53,6 +53,54 @@
         </div>
     </section>
 
+    {{-- ===================== COMPANY PROFILE (PDF DOWNLOAD) ===================== --}}
+    @php
+        $cpUrl = asset('documents/company-profile.pdf');
+        $cpPath = public_path('documents/company-profile.pdf');
+        $cpSize = is_file($cpPath) ? number_format(filesize($cpPath) / 1048576, 1).' MB · PDF' : 'PDF';
+    @endphp
+    <section class="bg-white pb-14 md:pb-20 lg:pb-24">
+        <div class="container">
+            <div class="group relative mx-auto max-w-4xl overflow-hidden rounded-3xl border border-navy-100 bg-gradient-to-br from-white via-white to-mist p-7 shadow-lift transition-shadow duration-300 hover:shadow-2xl md:p-10" data-aos="fade-up">
+                {{-- soft ambient glows --}}
+                <div class="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-gold/10 blur-3xl"></div>
+                <div class="pointer-events-none absolute -left-16 -bottom-16 h-44 w-44 rounded-full bg-sky-400/10 blur-3xl"></div>
+
+                <div class="relative flex flex-col items-start gap-7 md:flex-row md:items-center md:justify-between md:gap-10">
+                    <div class="flex items-center gap-5">
+                        {{-- Stylised PDF page (tilts + lifts on hover) --}}
+                        <div class="relative shrink-0">
+                            <div class="grid h-24 w-[4.5rem] place-items-center rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 shadow-lift ring-1 ring-white/10 transition-transform duration-300 ease-out-soft group-hover:-translate-y-1 group-hover:-rotate-3">
+                                <svg class="h-9 w-9 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
+                            </div>
+                            <span class="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-md bg-gold px-2.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-navy-950 shadow-gold">PDF</span>
+                        </div>
+                        <div>
+                            <p class="mb-2 font-mono text-[11px] uppercase tracking-normal text-gold-deep">{{ $isId ? 'Dokumen Resmi' : 'Official Document' }}</p>
+                            <h2 class="font-display text-2xl font-bold leading-tight text-navy md:text-3xl">{{ $isId ? 'Profil Perusahaan' : 'Company Profile' }}</h2>
+                            <p class="mt-2.5 max-w-md text-pretty text-sm leading-relaxed text-slate-600">{{ $isId ? 'Pelajari layanan, nilai, dan rekam jejak PT Delta Tiga Enam secara lengkap dalam satu dokumen.' : 'Explore the services, values, and full track record of PT Delta Tiga Enam in one document.' }}</p>
+                            <p class="mt-3 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                                {{ $cpSize }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex w-full shrink-0 flex-col gap-3 sm:flex-row md:w-auto">
+                        <a href="{{ $cpUrl }}" target="_blank" rel="noopener" class="btn-ghost justify-center">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+                            {{ $isId ? 'Lihat' : 'View' }}
+                        </a>
+                        <a href="{{ $cpUrl }}" download class="btn-blue justify-center">
+                            {{ $isId ? 'Unduh PDF' : 'Download PDF' }}
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     {{-- ===================== VISION & MISSION ===================== --}}
     <section class="relative overflow-hidden py-14 text-white md:py-20">
         {{-- Background image + overlay --}}

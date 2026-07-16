@@ -18,6 +18,7 @@
 
 <header
     x-data="{ scrolled: false, open: false, navHidden: false, lastScrollY: 0 }"
+    x-effect="$store.ui.navOpen = open"
     x-init="
         scrolled = window.scrollY > 24;
         lastScrollY = window.scrollY;
@@ -136,7 +137,9 @@
         </div>
     </div>
 
-    {{-- Mobile overlay --}}
+    {{-- Mobile overlay — teleported to <body> so the header's transform (hide-on-scroll) doesn't
+         trap its position:fixed, which previously collapsed the panel to the navbar height (empty menu). --}}
+    <template x-teleport="body">
     <div x-show="open" x-cloak x-transition.opacity class="fixed inset-0 z-[110] lg:hidden">
         <div class="absolute inset-0 bg-navy-950/60 backdrop-blur-sm" @click="open = false"></div>
         <div x-show="open" x-transition:enter="transition ease-out-soft duration-300"
@@ -150,16 +153,28 @@
             </div>
             <nav class="flex flex-col gap-1 overflow-y-auto" aria-label="Mobile">
                 @foreach ($nav as $item)
-                    <a href="{{ route($item['route']) }}"
-                       class="rounded-2xl px-4 py-3.5 font-display text-xl text-navy transition-colors hover:bg-mist {{ request()->routeIs($item['route']) ? 'bg-mist' : '' }}">
-                        {{ $item['label'] }}
-                    </a>
                     @if ($item['route'] === 'services.index' && $serviceCategories->isNotEmpty())
-                        <div class="mb-1 ml-4 flex flex-col gap-0.5 border-l border-navy-100 pl-3">
-                            @foreach ($serviceCategories as $cat)
-                                <a href="{{ route('services.index') }}#{{ $cat->slug }}" @click="open = false" class="rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-mist hover:text-navy">{{ $cat->name }}</a>
-                            @endforeach
+                        {{-- Layanan — tap untuk buka/tutup kategori (dropdown, seperti di desktop) --}}
+                        <div x-data="{ svcOpen: {{ request()->routeIs('services.*') ? 'true' : 'false' }} }">
+                            <button type="button" @click="svcOpen = !svcOpen"
+                                    class="flex w-full items-center justify-between rounded-2xl px-4 py-3.5 text-left font-display text-xl text-navy transition-colors hover:bg-mist {{ request()->routeIs($item['route']) ? 'bg-mist' : '' }}">
+                                {{ $item['label'] }}
+                                <svg class="h-4 w-4 shrink-0 text-slate-400 transition-transform duration-300" :class="svcOpen && 'rotate-180'" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                            <div x-show="svcOpen" x-cloak
+                                 x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0"
+                                 class="ml-4 mt-0.5 flex flex-col gap-0.5 border-l border-navy-100 pl-3">
+                                @foreach ($serviceCategories as $cat)
+                                    <a href="{{ route('services.index') }}#{{ $cat->slug }}" @click="open = false" class="rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-mist hover:text-navy">{{ $cat->name }}</a>
+                                @endforeach
+                                <a href="{{ route('services.index') }}" @click="open = false" class="rounded-lg px-3 py-2 text-sm font-medium text-sky-600 transition-colors hover:bg-mist">{{ $current === 'id' ? 'Lihat Semua Layanan' : 'View All Services' }}</a>
+                            </div>
                         </div>
+                    @else
+                        <a href="{{ route($item['route']) }}"
+                           class="rounded-2xl px-4 py-3.5 font-display text-xl text-navy transition-colors hover:bg-mist {{ request()->routeIs($item['route']) ? 'bg-mist' : '' }}">
+                            {{ $item['label'] }}
+                        </a>
                     @endif
                 @endforeach
             </nav>
@@ -180,4 +195,5 @@
             </div>
         </div>
     </div>
+    </template>
 </header>

@@ -72,8 +72,16 @@
                                         {{ $slide['cat'] }}
                                     </span>
                                 @endif
-                                @php $hw = preg_split('/\s+/', trim($slide['title'])); $ha = count($hw) ? array_pop($hw) : ''; $hl = implode(' ', $hw); @endphp
-                                <h1 class="font-display font-bold leading-[1.08] text-balance [font-size:clamp(2.15rem,5.1vw,3.9rem)] {{ empty($slide['cat']) ? '' : 'mt-6' }}">{{ $hl }}@if ($hl) @endif<span class="italic-accent font-medium text-gradient-hero">{{ $ha }}</span></h1>
+                                @php
+                                    $hw = preg_split('/\s+/', trim($slide['title']));
+                                    $mid = max(1, (int) floor(count($hw) / 2));
+                                    $hl = implode(' ', array_slice($hw, 0, $mid));   // baris 1 — tebal
+                                    $ha = implode(' ', array_slice($hw, $mid));       // baris 2 — italic
+                                @endphp
+                                <h1 class="font-display font-bold leading-[1.12] text-balance [font-size:clamp(2.15rem,5.1vw,3.9rem)] {{ empty($slide['cat']) ? '' : 'mt-6' }}">
+                                    <span class="block">{{ $hl }}</span>
+                                    @if ($ha !== '')<span class="italic-accent block font-normal leading-[1.28] pb-[0.16em] text-gradient-white-navy">{{ $ha }}</span>@endif
+                                </h1>
                                 <p class="mt-6 max-w-xl text-[15px] font-normal leading-relaxed text-white/90 text-pretty md:text-lg">{{ $slide['desc'] }}</p>
                                 <div class="mt-10">
                                     <a href="{{ $slide['link'] }}" class="btn border border-gold text-gold hover:border-gold hover:bg-gold hover:text-white hover:shadow-gold">{{ $slide['btn_text'] }}</a>
@@ -267,7 +275,22 @@
             </div>
 
             {{-- Numbered row --}}
-            <div class="mt-16 grid grid-cols-2 gap-y-8 border-t border-white/10 pt-8 sm:grid-cols-4 lg:grid-cols-7 lg:gap-y-0 lg:divide-x lg:divide-white/10">
+            {{-- Mobile/tablet: auto-running marquee so users notice there are more than 2 (swipe not needed) --}}
+            <div class="mask-fade-x mt-14 overflow-hidden border-t border-white/10 pt-8 lg:hidden">
+                <div class="flex w-max gap-3 animate-marquee [will-change:transform]">
+                    @for ($h = 0; $h < 2; $h++)
+                        @foreach ($reasons as $i => $r)
+                            <div class="w-[210px] shrink-0 rounded-2xl border border-white/10 bg-white/[0.05] p-4" aria-hidden="{{ $h === 1 ? 'true' : 'false' }}">
+                                <p class="font-mono text-lg text-gold-soft">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}.</p>
+                                <p class="mt-3 font-display text-[15px] leading-snug text-white">{{ $r }}</p>
+                            </div>
+                        @endforeach
+                    @endfor
+                </div>
+            </div>
+
+            {{-- Desktop: 7-column divided row --}}
+            <div class="mt-16 hidden border-t border-white/10 pt-8 lg:grid lg:grid-cols-7 lg:divide-x lg:divide-white/10">
                 @foreach ($reasons as $i => $r)
                     <div class="lg:px-5" data-aos="fade-up" data-aos-delay="{{ $i * 55 }}">
                         <p class="font-mono text-lg text-gold-soft">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}.</p>
@@ -511,8 +534,12 @@
 
                     <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none gap-6 overflow-x-auto scroll-smooth pb-4 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                         @foreach ($upcomingAgendas as $agenda)
+                            @php
+                                $isPast = $agenda->starts_at->isPast();
+                                $isNearest = $loop->first && ! $isPast; // first upcoming = soonest
+                            @endphp
                             <a href="{{ route('agenda.index') }}" data-spotlight
-                               class="group relative flex min-w-0 shrink-0 basis-[80%] snap-start flex-col overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-card transition-all duration-500 ease-out-soft hover:-translate-y-1.5 hover:border-navy-200 hover:shadow-lift sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)] lg:basis-[calc((100%_-_4.5rem)/4)]">
+                               class="group relative flex min-w-0 shrink-0 basis-[80%] snap-start flex-col overflow-hidden rounded-3xl border bg-white shadow-card transition-all duration-500 ease-out-soft hover:-translate-y-1.5 hover:shadow-lift sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)] lg:basis-[calc((100%_-_4.5rem)/4)] {{ $isNearest ? 'border-gold/60 ring-1 ring-gold/40' : 'border-navy-100 hover:border-navy-200' }}">
 
                             {{-- Media (compact) --}}
                             <div class="relative aspect-[16/10] overflow-hidden bg-navy-900">
@@ -526,15 +553,20 @@
                                 <div class="absolute inset-0 bg-gradient-to-t from-navy-950/55 via-navy-950/5 to-transparent"></div>
 
                                 {{-- Compact date badge --}}
-                                <div class="absolute left-3 top-3 flex w-11 flex-col items-center rounded-xl bg-white/95 py-1.5 text-center shadow-lift ring-1 ring-white/60 backdrop-blur">
-                                    <span class="font-display text-lg font-semibold leading-none text-navy">{{ $agenda->starts_at->format('d') }}</span>
-                                    <span class="font-mono text-[9px] font-bold uppercase tracking-normal text-gold-deep">{{ $agenda->starts_at->translatedFormat('M') }}</span>
+                                <div class="absolute left-3 top-3 flex w-11 flex-col items-center rounded-xl py-1.5 text-center shadow-lift ring-1 backdrop-blur {{ $isNearest ? 'bg-gradient-to-br from-gold to-gold-soft ring-gold-soft/70' : 'bg-white/95 ring-white/60' }}">
+                                    <span class="font-display text-lg font-semibold leading-none {{ $isNearest ? 'text-navy-950' : 'text-navy' }}">{{ $agenda->starts_at->format('d') }}</span>
+                                    <span class="font-mono text-[9px] font-bold uppercase tracking-normal {{ $isNearest ? 'text-navy-950/70' : ($isPast ? 'text-slate-400' : 'text-gold-deep') }}">{{ $agenda->starts_at->translatedFormat('M') }}</span>
                                 </div>
 
-                                {{-- Status pill --}}
-                                <span class="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-sky-600/90 px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-normal text-white shadow-lift backdrop-blur">
-                                    <span class="h-1 w-1 rounded-full bg-white/90"></span>
-                                    {{ $isId ? 'Akan Datang' : 'Upcoming' }}
+                                {{-- Status pill — Segera Hadir (terdekat) / Akan Datang / Selesai (lewat) --}}
+                                @php
+                                    if ($isPast)      { $pillBg = 'bg-slate-500/90 text-white'; $pillDot = 'bg-white/80'; $pillText = $isId ? 'Selesai' : 'Ended'; }
+                                    elseif ($isNearest) { $pillBg = 'bg-gold text-navy-950';    $pillDot = 'bg-navy-950/70'; $pillText = $isId ? 'Segera Hadir' : 'Coming Soon'; }
+                                    else              { $pillBg = 'bg-sky-600/90 text-white';  $pillDot = 'bg-white/90';   $pillText = $isId ? 'Akan Datang' : 'Upcoming'; }
+                                @endphp
+                                <span class="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-normal shadow-lift backdrop-blur {{ $pillBg }}">
+                                    <span class="h-1 w-1 rounded-full {{ $pillDot }}"></span>
+                                    {{ $pillText }}
                                 </span>
                             </div>
 

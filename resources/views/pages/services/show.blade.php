@@ -66,28 +66,28 @@
                 <p class="mx-auto mt-4 max-w-xl text-slate-600">{{ $id ? 'Prosesnya cepat & aman — amankan kursi Anda dalam hitungan menit.' : 'Fast & secure — reserve your seat in minutes.' }}</p>
             </div>
 
-            <div class="relative mx-auto mt-14 max-w-5xl">
-                {{-- connecting line (desktop) --}}
-                <div class="pointer-events-none absolute inset-x-[16%] top-10 hidden h-0.5 bg-gradient-to-r from-navy-100 via-gold-soft/60 to-navy-100 md:block"></div>
+            <div class="relative mx-auto mt-10 max-w-5xl md:mt-14">
+                {{-- connecting line — spans the icon centers on every screen --}}
+                <div class="pointer-events-none absolute inset-x-[16%] top-7 h-0.5 bg-gradient-to-r from-navy-100 via-gold-soft/60 to-navy-100 md:top-10"></div>
 
-                <div class="grid gap-10 md:grid-cols-3">
+                <div class="grid grid-cols-3 gap-2 sm:gap-6 md:gap-10">
                     @foreach ($steps as $i => $step)
                         <div class="group relative text-center" data-aos="fade-up" data-aos-delay="{{ $i * 90 }}">
                             {{-- icon + number badge --}}
-                            <div class="relative mx-auto grid h-20 w-20 place-items-center">
-                                <span class="grid h-20 w-20 place-items-center rounded-full bg-white text-navy shadow-lift ring-1 ring-navy-100 transition-all duration-300 group-hover:-translate-y-1 group-hover:bg-gold group-hover:text-navy-950">
+                            <div class="relative mx-auto grid h-14 w-14 place-items-center md:h-20 md:w-20">
+                                <span class="grid h-14 w-14 place-items-center rounded-full bg-white text-navy shadow-lift ring-1 ring-navy-100 transition-all duration-300 group-hover:-translate-y-1 group-hover:bg-gold group-hover:text-navy-950 md:h-20 md:w-20">
                                     @if ($step[2] === 'calendar')
-                                        <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="16" x="3" y="4" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
+                                        <svg class="h-6 w-6 md:h-8 md:w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="16" x="3" y="4" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
                                     @elseif ($step[2] === 'users')
-                                        <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
+                                        <svg class="h-6 w-6 md:h-8 md:w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
                                     @else
-                                        <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+                                        <svg class="h-6 w-6 md:h-8 md:w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
                                     @endif
                                 </span>
-                                <span class="absolute -right-1 -top-1 grid h-8 w-8 place-items-center rounded-full bg-gold font-display text-sm text-navy-950 shadow-gold">{{ $i + 1 }}</span>
+                                <span class="absolute -right-1 -top-1 grid h-6 w-6 place-items-center rounded-full bg-gold font-display text-xs text-navy-950 shadow-gold md:h-8 md:w-8 md:text-sm">{{ $i + 1 }}</span>
                             </div>
-                            <h3 class="mt-6 font-display text-xl text-navy">{{ $step[0] }}</h3>
-                            <p class="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-slate-600">{{ $step[1] }}</p>
+                            <h3 class="mt-3 font-display text-sm font-semibold leading-tight text-navy md:mt-6 md:text-xl md:font-normal">{{ $step[0] }}</h3>
+                            <p class="mx-auto mt-1.5 max-w-xs text-xs leading-relaxed text-slate-600 md:mt-2 md:text-sm">{{ $step[1] }}</p>
                         </div>
                     @endforeach
                 </div>

@@ -40,7 +40,17 @@ class SitemapController extends Controller
             }
         }
 
-        $xml = view('sitemap', ['urls' => $urls])->render();
+        // Build the XML directly (no Blade view — a .blade.php that outputs XML confuses editors/linters).
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
+        foreach ($urls as $url) {
+            $xml .= '    <url>'."\n";
+            $xml .= '        <loc>'.e($url['loc']).'</loc>'."\n";
+            $xml .= '        <changefreq>weekly</changefreq>'."\n";
+            $xml .= '        <priority>'.$url['priority'].'</priority>'."\n";
+            $xml .= '    </url>'."\n";
+        }
+        $xml .= '</urlset>'."\n";
 
         return response($xml, 200)->header('Content-Type', 'application/xml');
     }
