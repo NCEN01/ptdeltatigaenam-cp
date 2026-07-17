@@ -4,8 +4,8 @@
 
 
     // Founder (structural content — editable here in the view).
-    $founderRole = $isId ? 'Direktur Utama' : 'Managing Director';
-    $founderName = 'Dani Taupan';
+    $founderRole = $isId ? 'CEO Delta Tiga Enam' : 'CEO of Delta Tiga Enam';
+    $founderName = 'Dani Taupan Ramdani, S.T., M.M., Ph.D (Cand.)';
     $founderQuote = $isId
         ? 'Membangun bangsa dimulai dari membangun manusianya. Di Delta Tiga Enam, kami berkomitmen menjadi jembatan bagi talenta Indonesia menuju standar dunia.'
         : 'Building a nation begins with building its people. At Delta Tiga Enam, we are committed to bridging Indonesian talent toward world-class standards.';
@@ -30,7 +30,7 @@
             </div>
             <div class="space-y-5 leading-relaxed text-slate-700 lg:col-span-8" data-aos="fade-up" data-aos-delay="80">
                 @foreach ($aboutParas as $para)
-                    <p class="text-pretty">{{ $para }}</p>
+                    <p class="text-justify [hyphens:auto]">{{ $para }}</p>
                 @endforeach
             </div>
         </div>
@@ -122,7 +122,7 @@
                 {{-- Vision — same glass/blur as the "Portofolio Kami" cards; text sized like the Company Profile body --}}
                 <div class="rounded-2xl border border-white/10 bg-white/[0.06] p-5 text-left backdrop-blur-sm md:p-6" data-aos="fade-up">
                     <p class="font-mono text-base uppercase tracking-normal text-gold-soft">{{ $isId ? 'Visi' : 'Vision' }}</p>
-                    <p class="mt-5 font-display text-base leading-relaxed text-white text-pretty">&ldquo;{{ $vision }}&rdquo;</p>
+                    <p class="mt-5 font-display text-base leading-relaxed text-white text-justify [hyphens:auto]">&ldquo;{{ $vision }}&rdquo;</p>
                 </div>
 
                 {{-- Mission — numbered list, no icon --}}
@@ -133,7 +133,7 @@
                             @foreach ($missions as $mission)
                                 <li class="flex items-start gap-3 border-b border-white/10 pb-4 last:border-0 last:pb-0">
                                     <span class="shrink-0 text-base leading-relaxed text-gold-soft" aria-hidden="true">—</span>
-                                    <p class="text-base leading-relaxed text-white/90">{{ $mission->content }}</p>
+                                    <p class="text-base leading-relaxed text-white/90 text-justify [hyphens:auto]">{{ $mission->content }}</p>
                                 </li>
                             @endforeach
                         </ul>
@@ -160,17 +160,19 @@
                         <img src="{{ asset('images/pendiri.png') }}" alt="{{ $founderName }}" class="h-full w-full object-cover object-top">
                         <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/55 via-transparent to-transparent"></div>
                     </div>
-                    <div class="absolute -bottom-4 -right-4 grid h-14 w-14 place-items-center rounded-2xl bg-navy-950 font-display text-4xl leading-none text-gold shadow-lift ring-1 ring-gold/40">&rdquo;</div>
                 </div>
 
                 {{-- Bio --}}
                 <div class="lg:col-span-7" data-aos="fade-left" data-aos-delay="100">
                     <p class="eyebrow text-gold-soft"><span class="rule-gold mr-3 from-gold"></span>{{ $isId ? 'Pendiri' : 'Founder' }}</p>
-                    <h2 class="mt-5 font-display text-4xl font-bold leading-[1.05] text-balance md:text-5xl">{{ $founderName }}</h2>
-                    <p class="mt-3 font-mono text-xs uppercase tracking-normal text-navy-muted">{{ $founderRole }}</p>
-                    <p class="mt-8 text-pretty text-xl italic leading-relaxed text-white/90 md:text-2xl">&ldquo;{{ $founderQuote }}&rdquo;</p>
-                    <span class="mt-8 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
-                    <p class="mt-8 max-w-2xl text-pretty text-base leading-relaxed text-navy-100/85">{{ $founderBio }}</p>
+
+                    <h2 class="mt-5 font-display text-2xl font-bold leading-tight text-white text-balance md:text-3xl">{{ $founderName }}</h2>
+                    <p class="mt-2.5 font-mono text-[11px] uppercase tracking-wider text-gold-soft">{{ $founderRole }}</p>
+
+                    {{-- Quote --}}
+                    <p class="mt-9 max-w-2xl text-pretty text-xl font-light italic leading-relaxed text-white md:text-2xl">&ldquo;{{ $founderQuote }}&rdquo;</p>
+                    <span class="mt-7 block h-0.5 w-16 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
+                    <p class="mt-7 max-w-xl text-pretty text-[15px] leading-[1.8] text-navy-100/80">{{ $founderBio }}</p>
                 </div>
             </div>
         </div>
@@ -186,14 +188,20 @@
                     {{ $isId ? 'Prinsip yang memandu cara kami bekerja dan melayani setiap klien.' : 'The principles that guide how we work and serve every client.' }}
                 </p>
             </div>
-            <div class="mx-auto mt-14 grid max-w-6xl gap-5 sm:grid-cols-2 md:mt-16 lg:grid-cols-4">
-                @foreach ($values as $value)
-                    <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-navy-200 hover:shadow-lift md:p-7" data-aos="fade-up" data-aos-delay="{{ $loop->index * 70 }}">
-                        <span class="block h-0.5 w-8 rounded-full bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:w-12"></span>
-                        <h3 class="mt-5 font-display text-lg font-semibold text-navy">{{ $value['title'] }}</h3>
-                        <p class="mt-2.5 flex-1 text-pretty text-sm leading-relaxed text-slate-600">{{ $value['desc'] }}</p>
+
+            {{-- Value strip — inside the container so left/right padding matches the other sections; swipeable on mobile, 5-up on desktop --}}
+            <div class="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mt-14 lg:grid lg:grid-cols-5 lg:gap-0 lg:overflow-hidden lg:rounded-3xl lg:pb-0 lg:shadow-lift" data-aos="fade-up">
+            @foreach ($values as $i => $value)
+                <div class="group flex min-w-[72%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl shadow-card sm:min-w-[44%] lg:min-w-0 lg:rounded-none lg:shadow-none">
+                    <div class="relative aspect-[4/5] overflow-hidden bg-navy-100 lg:aspect-square">
+                        <img src="{{ asset('images/values/'.$value['img'].'.jpg') }}" alt="" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
                     </div>
-                @endforeach
+                    <div class="flex flex-1 flex-col items-center px-4 py-6 text-center text-white {{ $i % 2 === 0 ? 'bg-[#0e1f4d]' : 'bg-[#3a55a8]' }} md:px-5 md:py-7">
+                        <h3 class="font-display text-base font-bold italic md:text-lg">{{ $value['title'] }}</h3>
+                        <p class="mt-2.5 text-[13px] leading-relaxed text-white/85">{{ $value['desc'] }}</p>
+                    </div>
+                </div>
+            @endforeach
             </div>
         </div>
     </section>

@@ -230,8 +230,16 @@
                                         <div class="mt-auto flex items-end justify-between border-t border-navy-100 pt-3">
                                             <div>
                                                 @if ($service->price > 0)
-                                                    <p class="font-mono text-[9px] uppercase tracking-wider text-slate-400">{{ __('site.common.from') }}</p>
-                                                    <p class="font-display text-base font-semibold text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
+                                                    @if ($service->hasDiscount())
+                                                        <p class="flex flex-wrap items-center gap-1.5">
+                                                            <span class="font-mono text-[10px] text-slate-400 line-through">Rp {{ number_format((float) $service->discount_original_price, 0, ',', '.') }}</span>
+                                                            <span class="rounded bg-rose-100 px-1 py-0.5 font-mono text-[9px] font-bold text-rose-600">-{{ $service->discountPercent() }}%</span>
+                                                        </p>
+                                                        <p class="font-display text-base font-semibold text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
+                                                    @else
+                                                        <p class="font-mono text-[9px] uppercase tracking-wider text-slate-400">{{ __('site.common.from') }}</p>
+                                                        <p class="font-display text-base font-semibold text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
+                                                    @endif
                                                 @else
                                                     <p class="font-display text-sm font-semibold text-navy">{{ $isId ? 'Hubungi kami' : 'Contact us' }}</p>
                                                 @endif

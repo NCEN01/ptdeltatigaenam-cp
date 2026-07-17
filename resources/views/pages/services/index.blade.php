@@ -56,8 +56,16 @@
                                     <div class="mt-6 flex items-end justify-between border-t border-navy-100 pt-5">
                                         <div>
                                             @if ($service->price > 0)
-                                                <p class="font-mono text-[10px] uppercase tracking-wider text-slate-400">{{ __('site.common.from') }}</p>
-                                                <p class="font-display text-lg font-semibold text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
+                                                @if ($service->hasDiscount())
+                                                    <p class="flex flex-wrap items-center gap-1.5">
+                                                        <span class="font-mono text-[11px] text-slate-400 line-through">Rp {{ number_format((float) $service->discount_original_price, 0, ',', '.') }}</span>
+                                                        <span class="rounded bg-rose-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-rose-600">-{{ $service->discountPercent() }}%</span>
+                                                    </p>
+                                                    <p class="font-display text-lg font-semibold text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
+                                                @else
+                                                    <p class="font-mono text-[10px] uppercase tracking-wider text-slate-400">{{ __('site.common.from') }}</p>
+                                                    <p class="font-display text-lg font-semibold text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
+                                                @endif
                                             @else
                                                 <p class="font-display text-lg font-semibold text-navy">{{ $id ? 'Hubungi kami' : 'Contact us' }}</p>
                                             @endif

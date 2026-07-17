@@ -57,7 +57,13 @@ class ServiceResource extends Resource
             ])->columns(2),
 
             Forms\Components\Section::make('Harga & Detail')->schema([
-                Forms\Components\TextInput::make('price')->label('Harga per Peserta (IDR)')->numeric()->default(0)->prefix('Rp'),
+                Forms\Components\TextInput::make('price')->label('Harga per Peserta (IDR)')->numeric()->default(0)->prefix('Rp')
+                    ->helperText('Harga asli yang ditagih. Diskon di bawah hanya untuk tampilan — tidak mengubah harga ini.'),
+                Forms\Components\Toggle::make('discount_active')->label('Tampilkan Diskon (tampilan saja)')->default(false)->live(),
+                Forms\Components\TextInput::make('discount_original_price')->label('Harga Sebelum Diskon (dicoret)')->numeric()->prefix('Rp')
+                    ->helperText('Harga "coret" yang lebih tinggi dari harga asli. Persentase "Hemat" dihitung otomatis.')
+                    ->visible(fn (Forms\Get $get) => (bool) $get('discount_active'))
+                    ->required(fn (Forms\Get $get) => (bool) $get('discount_active')),
                 Forms\Components\TextInput::make('duration')->label('Durasi')->placeholder('2 hari'),
                 Forms\Components\TextInput::make('location')->label('Lokasi')->placeholder('Cilegon'),
                 Forms\Components\Select::make('mode')->options(['offline' => 'Offline', 'online' => 'Online', 'hybrid' => 'Hybrid'])->default('offline'),

@@ -14,8 +14,8 @@ class PageController extends Controller
 
         // Load from settings database with static fallbacks
         $about = Setting::getLocalized('company_about') ?: ($id
-            ? 'PT Delta Tiga Enam adalah lembaga pelatihan dan penyelenggara sertifikasi profesi yang berfokus pada pengembangan human capital. Sejak berdiri, kami mendampingi perusahaan dan individu untuk meningkatkan kompetensi melalui pelatihan berbasis kebutuhan industri, konsultasi manajemen, pengelolaan sumber daya manusia, serta layanan headhunter yang terintegrasi. Didukung tim profesional berpengalaman dan jaringan mitra yang luas, kami berkomitmen menghadirkan solusi human capital yang terukur, berkelanjutan, dan berdampak nyata bagi pertumbuhan organisasi.'
-            : 'PT Delta Tiga Enam is a training institution and professional certification provider focused on human capital development. We help companies and individuals build competencies through industry-driven training, management consulting, human resource management, and integrated headhunter services. Backed by an experienced professional team and a wide partner network, we are committed to delivering measurable, sustainable human capital solutions that create real impact on organizational growth.');
+            ? "Delta Tiga Enam adalah lembaga pelatihan dan penyelenggara sertifikasi profesi yang berkomitmen untuk meningkatkan kompetensi tenaga kerja di berbagai industri. Selain itu, kami juga menyediakan layanan konsultasi manajemen, pengelolaan human capital, serta proses seleksi dan rekrutmen eksekutif (headhunter).\n\nDengan pendekatan yang komprehensif, kami membantu individu dan perusahaan dalam mengembangkan keterampilan, meningkatkan daya saing, dan memastikan standar profesional yang lebih tinggi.\n\nDidukung oleh tenaga ahli berpengalaman di bidangnya, kami menghadirkan solusi yang terintegrasi dan disesuaikan dengan kebutuhan klien, baik dalam hal pelatihan, sertifikasi, konsultasi manajemen, pengelolaan human capital, maupun proses seleksi dan rekrutmen eksekutif (headhunter).\n\nKami berupaya memberikan layanan terbaik yang tidak hanya relevan dengan perkembangan industri, tetapi juga berdampak nyata bagi pertumbuhan bisnis dan karier profesional."
+            : "Delta Tiga Enam is a training institution and professional certification provider committed to improving workforce competencies across various industries. We also provide management consulting, human capital management, and executive selection & recruitment (headhunter) services.\n\nWith a comprehensive approach, we help individuals and companies develop skills, strengthen competitiveness, and ensure higher professional standards.\n\nSupported by experienced experts in their respective fields, we deliver integrated solutions tailored to each client's needs — whether in training, certification, management consulting, human capital management, or executive selection & recruitment (headhunter).\n\nWe strive to deliver the best services that are not only relevant to industry developments, but also create real impact on business growth and professional careers.");
 
         $vision = Setting::getLocalized('company_vision') ?: ($id
             ? 'Menjadi mitra strategis terdepan dalam transformasi human capital yang berkelanjutan, serta turut membangun sumber daya manusia Indonesia yang unggul, kompeten, dan berdaya saing global.'
@@ -63,16 +63,19 @@ class PageController extends Controller
             ];
         }
 
+        // Core values (DELTA) — name stays in English; description is localized. Image = Unsplash id.
         $values = $id ? [
-            ['title' => 'Profesionalisme', 'desc' => 'Standar kerja tinggi dan layanan yang terukur di setiap penugasan.'],
-            ['title' => 'Integritas', 'desc' => 'Kejujuran dan komitmen yang kami pegang dalam setiap kerja sama.'],
-            ['title' => 'Inovasi', 'desc' => 'Pendekatan dan program yang terus berkembang mengikuti kebutuhan industri.'],
-            ['title' => 'Kolaborasi', 'desc' => 'Kemitraan jangka panjang yang tumbuh bersama klien dan talenta.'],
+            ['title' => 'Dinamis', 'desc' => 'Selalu adaptif terhadap perubahan dan inovasi dalam dunia kerja.', 'img' => 'dynamic'],
+            ['title' => 'Keunggulan', 'desc' => 'Unggul dalam setiap layanan yang diberikan.', 'img' => 'excellence'],
+            ['title' => 'Terdepan', 'desc' => 'Pionir dalam pengembangan solusi human capital yang inovatif.', 'img' => 'leading'],
+            ['title' => 'Transenden', 'desc' => 'Melampaui ekspektasi klien dan memberikan nilai tambah yang berkelanjutan.', 'img' => 'transcendent'],
+            ['title' => 'Aksi', 'desc' => 'Berorientasi pada hasil dan tindakan nyata untuk mencapai tujuan.', 'img' => 'action'],
         ] : [
-            ['title' => 'Professionalism', 'desc' => 'High working standards and measurable service in every engagement.'],
-            ['title' => 'Integrity', 'desc' => 'Honesty and commitment we uphold in every partnership.'],
-            ['title' => 'Innovation', 'desc' => 'Approaches and programs that evolve with industry needs.'],
-            ['title' => 'Collaboration', 'desc' => 'Long-term partnerships that grow alongside clients and talent.'],
+            ['title' => 'Dynamic', 'desc' => 'Always adaptive to change and innovation in the world of work.', 'img' => 'dynamic'],
+            ['title' => 'Excellence', 'desc' => 'Excelling in every service we deliver.', 'img' => 'excellence'],
+            ['title' => 'Leading', 'desc' => 'A pioneer in developing innovative human capital solutions.', 'img' => 'leading'],
+            ['title' => 'Transcendent', 'desc' => 'Exceeding client expectations and delivering sustainable added value.', 'img' => 'transcendent'],
+            ['title' => 'Action', 'desc' => 'Results-oriented, with real action to achieve goals.', 'img' => 'action'],
         ];
 
         // Hardcoded office locations

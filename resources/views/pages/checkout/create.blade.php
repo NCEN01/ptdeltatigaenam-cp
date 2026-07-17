@@ -9,14 +9,15 @@
     <x-page-header :eyebrow="$id ? 'Pemesanan' : 'Checkout'" :title="$service->title" />
 
     <section class="section">
-        <div class="container grid gap-10 lg:grid-cols-12">
-            {{-- Form --}}
-            <div class="lg:col-span-7">
-                <a href="{{ route('services.show', $service->slug) }}" class="mb-6 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-slate-500 transition-colors hover:text-navy">
-                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    {{ $id ? 'Kembali ke detail layanan' : 'Back to service details' }}
-                </a>
-                <form method="POST" action="{{ route('checkout.store') }}" class="space-y-6">
+        <div class="container">
+            <a href="{{ route('services.show', $service->slug) }}" class="mb-8 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-slate-500 transition-colors hover:text-navy">
+                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {{ $id ? 'Kembali ke detail layanan' : 'Back to service details' }}
+            </a>
+            <div class="grid gap-8 lg:grid-cols-12 lg:items-start lg:gap-10">
+                {{-- Form --}}
+                <div class="lg:col-span-7">
+                    <form method="POST" action="{{ route('checkout.store') }}" class="space-y-6">
                     @csrf
                     <input type="hidden" name="service_schedule_id" value="{{ $schedule->id }}">
 
@@ -121,22 +122,37 @@
                 </form>
             </div>
 
-            {{-- Summary --}}
-            <div class="lg:col-span-5">
-                <div class="sticky top-28 rounded-3xl border border-navy-100 bg-mist p-7">
-                    <p class="eyebrow mb-5">{{ $id ? 'Ringkasan' : 'Summary' }}</p>
-                    <div class="space-y-3 text-sm">
-                        <div class="flex justify-between gap-4"><span class="text-slate-600">{{ $id ? 'Layanan' : 'Service' }}</span><span class="text-right font-medium text-navy">{{ $service->title }}</span></div>
-                        <div class="flex justify-between"><span class="text-slate-600">{{ $id ? 'Jadwal' : 'Schedule' }}</span><span class="font-medium text-navy">{{ $schedule->start_date?->translatedFormat('d M Y') }}</span></div>
-                        <div class="flex justify-between"><span class="text-slate-600">Mode</span><span class="font-medium capitalize text-navy">{{ $schedule->mode }}</span></div>
-                        <div class="flex justify-between"><span class="text-slate-600">{{ $id ? 'Harga/peserta' : 'Price/person' }}</span><span class="font-medium text-navy">Rp {{ number_format((float) $unitPrice, 0, ',', '.') }}</span></div>
-                        <div class="flex justify-between border-t border-navy-200/60 pt-3"><span class="text-slate-600">{{ $id ? 'Jumlah peserta' : 'Participants' }}</span><span data-count-mirror class="font-medium text-navy">{{ count($rows) }}</span></div>
+                {{-- Summary --}}
+                <div class="lg:col-span-5">
+                    <div class="rounded-3xl border border-navy-100 bg-mist p-6 md:p-7 lg:sticky lg:top-28">
+                        <p class="eyebrow mb-5">{{ $id ? 'Ringkasan' : 'Summary' }}</p>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between gap-4"><span class="text-slate-600">{{ $id ? 'Layanan' : 'Service' }}</span><span class="text-right font-medium text-navy">{{ $service->title }}</span></div>
+                            <div class="flex justify-between gap-4"><span class="text-slate-600">{{ $id ? 'Jadwal' : 'Schedule' }}</span><span class="text-right font-medium text-navy">{{ $schedule->start_date?->translatedFormat('d M Y') }}</span></div>
+                            <div class="flex justify-between"><span class="text-slate-600">Mode</span><span class="font-medium capitalize text-navy">{{ $schedule->mode }}</span></div>
+                            <div class="flex justify-between gap-4">
+                                <span class="text-slate-600">{{ $id ? 'Harga/peserta' : 'Price/person' }}</span>
+                                <span class="text-right">
+                                    @if ($service->hasDiscount())
+                                        <span class="mr-1.5 font-mono text-xs text-slate-400 line-through">Rp {{ number_format((float) $service->discount_original_price, 0, ',', '.') }}</span>
+                                    @endif
+                                    <span class="font-medium text-navy">Rp {{ number_format((float) $unitPrice, 0, ',', '.') }}</span>
+                                </span>
+                            </div>
+                            @if ($service->hasDiscount())
+                                <div class="flex justify-between"><span class="text-slate-600">{{ $id ? 'Diskon' : 'Discount' }}</span><span class="font-semibold text-rose-600">{{ $id ? 'Hemat' : 'Save' }} {{ $service->discountPercent() }}%</span></div>
+                            @endif
+                            <div class="flex justify-between border-t border-navy-200/60 pt-3"><span class="text-slate-600">{{ $id ? 'Jumlah peserta' : 'Participants' }}</span><span data-count-mirror class="font-medium text-navy">{{ count($rows) }}</span></div>
+                        </div>
+                        <div class="mt-5 flex items-end justify-between border-t border-navy-200/60 pt-5">
+                            <span class="font-display text-lg font-semibold text-navy">Total</span>
+                            <span data-total class="font-display text-2xl font-semibold text-navy">Rp {{ number_format($unit * count($rows), 0, ',', '.') }}</span>
+                        </div>
+                        <p class="mt-3 text-xs text-slate-500">{{ $id ? 'Total dihitung otomatis sesuai jumlah peserta.' : 'Total is calculated automatically by participant count.' }}</p>
+                        @if ($service->hasDiscount())
+                            <p class="mt-3 rounded-xl bg-gold/10 px-3 py-2.5 text-xs leading-relaxed text-gold-deep">{{ $id ? 'Harga promo berlaku terbatas, harga akan naik setelah periode promo berakhir.' : 'Promo price for a limited time, the price will rise after the promo ends.' }}</p>
+                        @endif
                     </div>
-                    <div class="mt-5 flex items-end justify-between border-t border-navy-200/60 pt-5">
-                        <span class="font-display text-lg font-semibold text-navy">Total</span>
-                        <span data-total class="font-display text-2xl font-semibold text-navy">Rp {{ number_format($unit * count($rows), 0, ',', '.') }}</span>
-                    </div>
-                    <p class="mt-3 text-xs text-slate-500">{{ $id ? 'Total dihitung otomatis sesuai jumlah peserta.' : 'Total is calculated automatically by participant count.' }}</p>
                 </div>
             </div>
         </div>

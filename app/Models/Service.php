@@ -23,12 +23,38 @@ class Service extends Model
     {
         return [
             'price' => 'decimal:2',
+            'discount_active' => 'boolean',
+            'discount_original_price' => 'decimal:2',
             'is_purchasable' => 'boolean',
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
             'quota' => 'integer',
             'seats_taken' => 'integer',
         ];
+    }
+
+    /**
+     * Display-only discount: `price` is the real (charged) price; when active,
+     * `discount_original_price` is a higher "before" price shown struck-through.
+     */
+    public function hasDiscount(): bool
+    {
+        return $this->discount_active
+            && $this->discount_original_price !== null
+            && (float) $this->discount_original_price > (float) $this->price
+            && (float) $this->price > 0;
+    }
+
+    public function discountPercent(): int
+    {
+        if (! $this->hasDiscount()) {
+            return 0;
+        }
+
+        $before = (float) $this->discount_original_price;
+        $now = (float) $this->price;
+
+        return (int) round((($before - $now) / $before) * 100);
     }
 
     public function category(): BelongsTo

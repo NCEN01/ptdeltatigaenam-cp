@@ -6,6 +6,7 @@ use App\Models\Setting;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -49,6 +50,9 @@ class ManageSettings extends Page implements HasForms
             'company_about' => Setting::get('company_about') ?: ['id' => '', 'en' => ''],
             'company_vision' => Setting::get('company_vision') ?: ['id' => '', 'en' => ''],
             'partnership_intro' => Setting::get('partnership_intro') ?: ['id' => '', 'en' => ''],
+            'services_promo_active' => (bool) Setting::get('services_promo_active'),
+            'services_promo_title' => Setting::get('services_promo_title') ?: ['id' => '', 'en' => ''],
+            'services_promo_subtitle' => Setting::get('services_promo_subtitle') ?: ['id' => '', 'en' => ''],
         ]);
     }
 
@@ -75,6 +79,16 @@ class ManageSettings extends Page implements HasForms
                 Textarea::make('partnership_intro.id')->label('Intro Kemitraan (ID)')->required()->maxLength(1000)->rows(3),
                 Textarea::make('partnership_intro.en')->label('Intro Kemitraan (EN)')->nullable()->maxLength(1000)->rows(3),
             ])->columns(2),
+
+            Section::make('Promo Diskon Layanan (banner)')
+                ->description('Info promo yang tampil di pojok kanan bawah banner halaman Layanan. Hanya tampilan.')
+                ->schema([
+                    Toggle::make('services_promo_active')->label('Tampilkan info promo di banner Layanan')->live()->columnSpanFull(),
+                    TextInput::make('services_promo_title.id')->label('Judul Promo (ID)')->maxLength(60)->placeholder('Diskon Spesial')->visible(fn ($get) => (bool) $get('services_promo_active')),
+                    TextInput::make('services_promo_title.en')->label('Judul Promo (EN)')->maxLength(60)->placeholder('Special Discount')->visible(fn ($get) => (bool) $get('services_promo_active')),
+                    TextInput::make('services_promo_subtitle.id')->label('Keterangan (ID)')->maxLength(120)->placeholder('Berlaku hari ini — harga naik setelahnya.')->visible(fn ($get) => (bool) $get('services_promo_active')),
+                    TextInput::make('services_promo_subtitle.en')->label('Keterangan (EN)')->maxLength(120)->placeholder('Today only — prices go up afterwards.')->visible(fn ($get) => (bool) $get('services_promo_active')),
+                ])->columns(2),
         ])->statePath('data');
     }
 
@@ -90,6 +104,9 @@ class ManageSettings extends Page implements HasForms
         $this->put('company_about', json_encode($data['company_about']), 'json', 'general');
         $this->put('company_vision', json_encode($data['company_vision']), 'json', 'general');
         $this->put('partnership_intro', json_encode($data['partnership_intro']), 'json', 'partnership');
+        $this->put('services_promo_active', ! empty($data['services_promo_active']) ? '1' : '0', 'text', 'services');
+        $this->put('services_promo_title', json_encode($data['services_promo_title'] ?? ['id' => '', 'en' => '']), 'json', 'services');
+        $this->put('services_promo_subtitle', json_encode($data['services_promo_subtitle'] ?? ['id' => '', 'en' => '']), 'json', 'services');
 
         Notification::make()->title('Pengaturan disimpan')->success()->send();
     }

@@ -41,13 +41,22 @@
                 <div class="rounded-3xl border border-white/10 bg-white/[0.05] p-7 backdrop-blur-xl">
                     <p class="font-mono text-[10px] uppercase tracking-label text-gold-soft">{{ $id ? 'Investasi' : 'Investment' }}</p>
                     @if ($service->price > 0)
-                        <p class="mt-2 font-display text-4xl">Rp {{ number_format((float) $service->price, 0, ',', '.') }}<span class="text-base font-normal text-navy-200"> / {{ $id ? 'peserta' : 'person' }}</span></p>
+                        @if ($service->hasDiscount())
+                            <div class="mt-2 flex flex-wrap items-center gap-2.5">
+                                <span class="font-display text-xl text-white/45 line-through">Rp {{ number_format((float) $service->discount_original_price, 0, ',', '.') }}</span>
+                                <span class="rounded-md bg-gold px-2 py-0.5 font-mono text-[11px] font-bold uppercase tracking-wide text-navy-950">{{ $id ? 'Hemat' : 'Save' }} {{ $service->discountPercent() }}%</span>
+                            </div>
+                            <p class="mt-1 font-display text-4xl text-white">Rp {{ number_format((float) $service->price, 0, ',', '.') }}<span class="text-base font-normal text-navy-200"> / {{ $id ? 'peserta' : 'person' }}</span></p>
+                            <p class="mt-2.5 text-xs leading-relaxed text-gold-soft">{{ $id ? 'Harga promo berlaku terbatas, harga akan naik setelah periode promo berakhir.' : 'Promo price for a limited time, the price will rise after the promo ends.' }}</p>
+                        @else
+                            <p class="mt-2 font-display text-4xl">Rp {{ number_format((float) $service->price, 0, ',', '.') }}<span class="text-base font-normal text-navy-200"> / {{ $id ? 'peserta' : 'person' }}</span></p>
+                        @endif
                     @else
                         <p class="mt-2 font-display text-3xl">{{ $id ? 'Hubungi kami' : 'Contact us' }}</p>
                     @endif
                     @if ($service->is_purchasable && $scheduleCount)
                         <a href="#daftar" class="btn-blue mt-6 w-full justify-center">{{ $id ? 'Daftar Sekarang' : 'Register Now' }}</a>
-                        <p class="mt-4 text-center text-xs text-gold-soft">{{ $id ? '🔥 Kursi terbatas — jangan lewatkan kesempatan ini!' : '🔥 Limited seats — don’t miss this opportunity!' }}</p>
+                        <p class="mt-4 text-center text-xs text-gold-soft">{{ $id ? '🔥 Kursi terbatas, jangan lewatkan kesempatan ini!' : '🔥 Limited seats, don’t miss this opportunity!' }}</p>
                     @else
                         <a href="{{ route('contact.index') }}" class="btn-blue mt-6 w-full justify-center">{{ __('site.cta.consult') }}</a>
                     @endif
