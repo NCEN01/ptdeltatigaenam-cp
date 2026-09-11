@@ -323,25 +323,30 @@
                         </a>
                     </div>
 
-                    {{-- Right: carousel --}}
-                    <div class="lg:col-span-8" data-hscroll data-hscroll-auto>
+                    {{-- Right: carousel. Same Swiper mechanism, cards, peek and dots as the
+                         "Terus Membaca" rail on an article page, capped at 3-up because this
+                         one lives in a two-thirds column. --}}
+                    <div class="lg:col-span-8">
                         <div class="mb-6 flex items-center gap-3">
-                            <button type="button" data-hscroll-prev class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
+                            <button type="button" data-carousel-prev class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95 disabled:pointer-events-none disabled:opacity-35" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
-                            <button type="button" data-hscroll-next class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95" aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
+                            <button type="button" data-carousel-next class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95 disabled:pointer-events-none disabled:opacity-35" aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                         </div>
-                        {{-- Same <x-blog-card> the blog index and article rail use, so the
-                             three surfaces read as one design instead of three variants. --}}
-                        <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none items-stretch gap-6 overflow-x-auto scroll-smooth pb-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                            @foreach ($posts as $post)
-                                <div class="min-w-0 shrink-0 basis-[76%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)]">
-                                    <x-blog-card :post="$post" :animate="false" />
-                                </div>
-                            @endforeach
+
+                        <div class="swiper swiper-equal-height" data-carousel data-carousel-max="3">
+                            <div class="swiper-wrapper items-stretch">
+                                @foreach ($posts as $post)
+                                    <div class="swiper-slide h-auto">
+                                        <x-blog-card :post="$post" :animate="false" />
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
+
+                        <div class="mt-8 flex justify-center gap-2" data-carousel-pagination></div>
                     </div>
                 </div>
             </div>

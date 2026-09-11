@@ -315,19 +315,23 @@ document.querySelectorAll('[data-carousel]').forEach((el) => {
         // Opt out with data-carousel-autoplay="false" — a browsing rail the reader
         // is choosing from shouldn't move on its own.
         const autoplayOff = el.dataset.carouselAutoplay === 'false';
+        // Cap with data-carousel-max for carousels that sit in a narrow column —
+        // the default 4-up would squeeze the cards there.
+        const maxPerView = parseFloat(el.dataset.carouselMax) || Infinity;
+        const cap = (n) => Math.min(n, maxPerView);
         const config = {
             // Only load the Navigation module when arrow buttons exist — passing
             // `navigation: undefined` while the module is active crashes Swiper
             // (it reads params.navigation.enabled on an undefined object).
             modules: hasNav ? [Autoplay, Navigation, Pagination] : [Autoplay, Pagination],
-            slidesPerView: 1.2,
+            slidesPerView: cap(1.2),
             spaceBetween: 16,
             autoplay: (reduceMotion || autoplayOff) ? false : { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
             pagination: { el: el.parentElement.querySelector('[data-carousel-pagination]'), clickable: true },
             breakpoints: {
-                640: { slidesPerView: 2, spaceBetween: 18 },
-                1024: { slidesPerView: 3, spaceBetween: 20 },
-                1280: { slidesPerView: 4, spaceBetween: 20 },
+                640: { slidesPerView: cap(2), spaceBetween: 18 },
+                1024: { slidesPerView: cap(3), spaceBetween: 20 },
+                1280: { slidesPerView: cap(4), spaceBetween: 20 },
             },
         };
         if (hasNav) config.navigation = { prevEl, nextEl };
