@@ -333,27 +333,13 @@
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                         </div>
-                        <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none gap-6 overflow-x-auto scroll-smooth pb-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        {{-- Same <x-blog-card> the blog index and article rail use, so the
+                             three surfaces read as one design instead of three variants. --}}
+                        <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none items-stretch gap-6 overflow-x-auto scroll-smooth pb-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             @foreach ($posts as $post)
-                                @php $bimg = $post->featured_image ? (str_starts_with($post->featured_image, 'http') ? $post->featured_image : Storage::url($post->featured_image)) : null; @endphp
-                                {{-- flex-col + mt-auto on the image keeps every cover pinned to the
-                                     same baseline, whatever the title and category above them do. --}}
-                                <a href="{{ route('blog.show', $post->slug) }}" data-spotlight class="group flex min-w-0 shrink-0 basis-[82%] snap-start flex-col overflow-hidden rounded-2xl sm:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)]">
-                                    <p class="font-mono text-lg text-slate-400">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}.</p>
-                                    <h3 class="mt-2 line-clamp-2 min-h-[3.25rem] font-display text-lg leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">{{ $post->title }}</h3>
-                                    {{-- Always rendered: an omitted category used to shift the whole card up a line. --}}
-                                    <p class="mt-1 min-h-[1rem] font-mono text-[10px] uppercase tracking-wider text-gold-deep">{{ optional($post->category)->name }}</p>
-                                    <p class="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-slate-400">{{ optional($post->published_at)->translatedFormat('d M Y') }}</p>
-                                    <div class="mt-auto pt-4">
-                                        <div class="relative aspect-[4/3] overflow-hidden rounded-2xl border border-navy-100 bg-navy-900">
-                                            @if ($bimg)
-                                                <img src="{{ $bimg }}" alt="{{ $post->title }}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">
-                                            @else
-                                                <div class="absolute inset-0 aurora opacity-60"></div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </a>
+                                <div class="min-w-0 shrink-0 basis-[85%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)]">
+                                    <x-blog-card :post="$post" :animate="false" />
+                                </div>
                             @endforeach
                         </div>
                     </div>
