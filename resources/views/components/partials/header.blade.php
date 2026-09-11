@@ -7,11 +7,11 @@
     $nav = [
         ['route' => 'about', 'label' => __('site.nav.about')],
         ['route' => 'services.index', 'label' => __('site.nav.services')],
+        ['route' => 'partnership.index', 'label' => __('site.nav.partnership')],
         ['route' => 'certificates.index', 'label' => __('site.nav.certificates')],
         ['route' => 'portfolio.index', 'label' => __('site.nav.portfolio')],
         ['route' => 'blog.index', 'label' => __('site.nav.blog')],
         ['route' => 'agenda.index', 'label' => __('site.nav.agenda')],
-        ['route' => 'partnership.index', 'label' => __('site.nav.partnership')],
         ['route' => 'contact.index', 'label' => __('site.nav.contact')],
     ];
 @endphp
