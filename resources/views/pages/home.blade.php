@@ -341,7 +341,13 @@
 
                         <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none items-stretch gap-6 overflow-x-auto scroll-smooth pb-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             @foreach ($posts as $post)
-                                <div class="min-w-0 shrink-0 basis-[76%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)]">
+                                {{-- Card width is matched to the "Terus Membaca" rail on an article
+                                     page so both surfaces show the same size card. That rail spans the
+                                     full container; this one sits in an 8/12 column, so it fits fewer
+                                     cards per view to land on the same width:
+                                       lg  → column ~608px / 2 cards  ≈ 292px (rail: 307px)
+                                       xl  → column ~768px / 2.5      ≈ 288px (rail: 285px) --}}
+                                <div class="min-w-0 shrink-0 basis-[76%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_1.5rem)/2)] xl:basis-[calc((100%_-_3rem)/2.5)]">
                                     <x-blog-card :post="$post" :animate="false" />
                                 </div>
                             @endforeach
