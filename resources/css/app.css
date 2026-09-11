@@ -13,6 +13,9 @@
         --cursor-x: 50%;
         --cursor-y: 50%;
 
+        /* Arrow glyph used as a mask by .btn-flow (filled path so masking is reliable). */
+        --flow-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.75 7.25h6.44L6.47 4.53l1.06-1.06L12.06 8l-4.53 4.53-1.06-1.06 2.72-2.72H2.75z'/%3E%3C/svg%3E");
+
         /* ── Official logo palette — single source of colour (mirrors tailwind theme) ── */
         --logo-blue-600: #2b83df;  /* primary blue */
         --logo-blue-500: #2d9de6;
@@ -126,19 +129,22 @@
     }
 
     .btn-primary {
-        @apply btn bg-navy text-white shadow-card hover:bg-navy-800 hover:shadow-lift hover:-translate-y-0.5 active:translate-y-0;
+        @apply btn bg-navy text-white shadow-card hover:shadow-lift hover:-translate-y-0.5 active:translate-y-0;
     }
 
     .btn-gold {
-        @apply btn bg-gold text-ink shadow-gold hover:bg-gold-soft hover:-translate-y-0.5 active:translate-y-0;
+        @apply btn bg-gold text-ink shadow-gold hover:-translate-y-0.5 active:translate-y-0;
     }
 
+    /* Outline button. The flow animation itself lives outside @layer components
+       (see "Flow button motion" below) so Tailwind cannot purge its pseudo-element
+       rules — `@apply` copies declarations, not separate ::before/::after rules. */
     .btn-ghost {
-        @apply btn border border-navy-200 text-navy hover:border-gold hover:bg-gold hover:text-navy-950;
+        @apply btn border-[1.5px] border-navy/30 bg-transparent text-navy;
     }
 
     .btn-ghost-light {
-        @apply btn border border-white/25 text-white hover:bg-white hover:text-navy;
+        @apply btn border-[1.5px] border-white/30 text-white;
     }
 
     /* Cards — soft layered shadow, hairline border */
@@ -159,7 +165,7 @@
        across the whole site. Soft dark text-shadow keeps white legible on the cyan end. */
     .btn-blue {
         @apply btn bg-gradient-to-r from-navy-500 to-sky-400 text-white font-semibold shadow-[0_10px_30px_-12px_rgba(43,131,223,0.6)]
-               hover:from-navy-600 hover:to-navy-500 hover:-translate-y-0.5 active:translate-y-0;
+               hover:-translate-y-0.5 active:translate-y-0;
         text-shadow: 0 1px 6px rgba(7,29,56, 0.55);
     }
 
@@ -427,9 +433,175 @@
     55%  { filter: blur(0); }
     100% { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
+/* ── Flow button motion ──────────────────────────────────────────────────────
+ * Outline button that fills from the centre on hover, morphing from pill to a
+ * softer radius. Ported from a React reference and recoloured to the brand navy
+ * (a full gold fill contradicted "gold as a rare accent" in PRODUCT.md).
+ *
+ * Deliberately OUTSIDE @layer components: Tailwind purges component rules whose
+ * class never appears in markup, and `@apply` copies declarations only — not the
+ * separate ::before / ::after rules an effect like this needs.
+ *
+ * The fill is scaled, never resized: animating width/height is layout work.
+ *
+ * Two tiers:
+ *   .btn-ghost — fill + radius morph. Safe on every existing outline button,
+ *                whose inner markup varies (bare text, text + svg, ...).
+ *   .btn-flow  — adds the sweeping arrow and label shift. Opt-in, for buttons
+ *                whose label is wrapped in an element we control.
+ */
+.btn-ghost,
+.btn-ghost-light,
+.btn-flow,
+.btn-primary,
+.btn-blue,
+.btn-gold {
+    transition: color .45s ease, border-color .45s ease, box-shadow .3s ease,
+                transform .2s ease, border-radius .6s cubic-bezier(.23, 1, .32, 1);
+}
+
+.btn-ghost::before,
+.btn-ghost-light::before,
+.btn-flow::before,
+.btn-primary::before,
+.btn-blue::before,
+.btn-gold::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 9999px;
+    background: #0e2237;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform .8s cubic-bezier(.19, 1, .22, 1), opacity .6s ease;
+    z-index: 0;
+}
+
+/* Per-family fill colour — always a shade of the button's own family, never a
+   foreign hue, so the sweep reads as depth rather than a colour change. */
+.btn-ghost-light::before { background: #ffffff; }
+.btn-primary::before     { background: #123a6b; }
+/* navy-600, not the logo blue: white on #205f9f is 6.6:1 (AA), while white on
+   #2b83df is only 3.9:1. The resting gradient still fails — see notes. */
+.btn-blue::before        { background: #205f9f; }
+.btn-gold::before        { background: #edd68a; }
+
+/* Keep labels and icons above the expanding fill. */
+.btn-ghost > *,
+.btn-ghost-light > *,
+.btn-flow > *,
+.btn-primary > *,
+.btn-blue > *,
+.btn-gold > * {
+    position: relative;
+    z-index: 2;
+}
+
+.btn-ghost:hover, .btn-ghost:focus-visible,
+.btn-ghost-light:hover, .btn-ghost-light:focus-visible,
+.btn-flow:hover, .btn-flow:focus-visible,
+.btn-primary:hover, .btn-primary:focus-visible,
+.btn-blue:hover, .btn-blue:focus-visible,
+.btn-gold:hover, .btn-gold:focus-visible {
+    border-radius: .75rem;
+}
+
+/* Only the outline families flip their label/border against the new fill. */
+.btn-ghost:hover, .btn-ghost:focus-visible,
+.btn-flow:hover, .btn-flow:focus-visible {
+    border-color: transparent;
+    color: #fff;
+}
+
+.btn-ghost-light:hover,
+.btn-ghost-light:focus-visible {
+    border-color: transparent;
+    color: #0e2237;
+}
+
+.btn-ghost:hover::before, .btn-ghost:focus-visible::before,
+.btn-ghost-light:hover::before, .btn-ghost-light:focus-visible::before,
+.btn-flow:hover::before, .btn-flow:focus-visible::before,
+.btn-primary:hover::before, .btn-primary:focus-visible::before,
+.btn-blue:hover::before, .btn-blue:focus-visible::before,
+.btn-gold:hover::before, .btn-gold:focus-visible::before {
+    transform: translate(-50%, -50%) scale(18);
+    opacity: 1;
+}
+
+/* ── .btn-flow only: arrow sweeps in from the left, label steps aside ── */
+.btn-flow {
+    padding-left: 2.75rem;
+}
+
+.btn-flow::after {
+    content: '';
+    position: absolute;
+    left: -1.25rem;
+    width: 1rem;
+    height: 1rem;
+    background: currentColor;
+    -webkit-mask: var(--flow-arrow) center / contain no-repeat;
+    mask: var(--flow-arrow) center / contain no-repeat;
+    pointer-events: none;
+    transition: left .8s cubic-bezier(.34, 1.56, .64, 1);
+    z-index: 2;
+}
+
+.btn-flow > * {
+    transition: transform .8s cubic-bezier(.23, 1, .32, 1);
+}
+
+.btn-flow:hover::after,
+.btn-flow:focus-visible::after {
+    left: 1.25rem;
+}
+
+.btn-flow:hover > *,
+.btn-flow:focus-visible > * {
+    transform: translateX(.4rem);
+}
+
+/* Brand-blue fill instead of navy. */
+.btn-flow-blue::before { background: #2b83df; }
+
+/* Dark sections: white fill, navy label on hover. */
+.btn-flow-light { border-color: rgba(255, 255, 255, .3); color: #fff; }
+.btn-flow-light::before { background: #fff; }
+.btn-flow-light:hover,
+.btn-flow-light:focus-visible { color: #0e2237; }
+
 @media (prefers-reduced-motion: reduce) {
     .hero-carousel .swiper-slide-active .hero-content > * { animation: hero-fade 0.5s ease both; }
     @keyframes hero-fade { from { opacity: 0; } to { opacity: 1; } }
+
+    /*
+     * Flow buttons keep the state change but drop the travel: the fill crossfades
+     * in place, the label stays put, and the arrow does not fly in.
+     */
+    .btn-ghost::before, .btn-ghost-light::before, .btn-flow::before,
+    .btn-primary::before, .btn-blue::before, .btn-gold::before {
+        transform: translate(-50%, -50%) scale(18);
+        opacity: 0;
+        transition: opacity .2s ease;
+    }
+    .btn-ghost:hover::before, .btn-ghost:focus-visible::before,
+    .btn-ghost-light:hover::before, .btn-ghost-light:focus-visible::before,
+    .btn-flow:hover::before, .btn-flow:focus-visible::before,
+    .btn-primary:hover::before, .btn-primary:focus-visible::before,
+    .btn-blue:hover::before, .btn-blue:focus-visible::before,
+    .btn-gold:hover::before, .btn-gold:focus-visible::before { opacity: 1; }
+
+    .btn-flow::after { display: none; }
+    .btn-flow { padding-left: 1.75rem; }
+
+    .btn-flow > * { transition: none; }
+    .btn-flow:hover > *,
+    .btn-flow:focus-visible > * { transform: none; }
 }
 /*
  * Equal-height carousel slides.
