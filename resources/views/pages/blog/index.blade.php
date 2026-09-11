@@ -42,27 +42,7 @@
             @if ($posts->count())
                 <div class="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($posts as $post)
-                        <a href="{{ route('blog.show', $post->slug) }}" data-spotlight class="group flex h-full flex-col overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 70 }}">
-                            <div class="relative aspect-[16/10] shrink-0 overflow-hidden bg-navy-900">
-                                @if ($imgUrl($post->featured_image))
-                                    <img src="{{ $imgUrl($post->featured_image) }}" alt="{{ $post->title }}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">
-                                @else
-                                    <div class="absolute inset-0 aurora opacity-60"></div>
-                                @endif
-                                @if ($post->category)
-                                    <span class="absolute left-4 top-4 rounded-full bg-white/90 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-navy backdrop-blur">{{ $post->category->name }}</span>
-                                @endif
-                            </div>
-                            <div class="flex flex-1 flex-col p-6">
-                                <p class="font-mono text-[11px] uppercase tracking-wider text-slate-500">{{ optional($post->published_at)->translatedFormat('d M Y') }}</p>
-                                <h3 class="mt-2.5 line-clamp-2 min-h-[3.25rem] font-display text-lg leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">{{ $post->title }}</h3>
-                                <p class="mt-2 line-clamp-3 text-pretty text-sm leading-relaxed text-slate-600">{{ $post->excerpt }}</p>
-                                <span class="mt-auto flex items-center gap-2 border-t border-navy-100 pt-4 text-sm font-medium text-navy">
-                                    {{ $id ? 'Baca artikel' : 'Read article' }}
-                                    <svg class="h-4 w-4 text-gold-deep transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                </span>
-                            </div>
-                        </a>
+                        <x-blog-card :post="$post" :delay="($loop->index % 3) * 70" />
                     @endforeach
                 </div>
             @else
@@ -79,7 +59,7 @@
             @endif
 
             @if ($posts->hasPages())
-                <div class="mt-14">{{ $posts->links() }}</div>
+                <div class="mt-16">{{ $posts->links('pagination.brand') }}</div>
             @endif
         </div>
     </section>

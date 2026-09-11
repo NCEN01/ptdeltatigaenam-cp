@@ -45,8 +45,10 @@ class BlogPostResource extends Resource
                 Forms\Components\TextInput::make('slug')->required()->maxLength(280)->unique(ignoreRecord: true),
                 Forms\Components\Textarea::make('excerpt.id')->label('Ringkasan (ID)')->rows(2),
                 Forms\Components\Textarea::make('excerpt.en')->label('Ringkasan (EN)')->rows(2),
-                Forms\Components\RichEditor::make('content.id')->label('Konten (ID)')->columnSpanFull(),
-                Forms\Components\RichEditor::make('content.en')->label('Konten (EN)')->columnSpanFull(),
+                Forms\Components\RichEditor::make('content.id')->label('Konten (ID)')->columnSpanFull()
+                    ->helperText('Judul bagian memakai Heading 2 / Heading 3 akan otomatis masuk ke Daftar Isi artikel. Baris yang seluruhnya ditebalkan juga dianggap judul bagian.'),
+                Forms\Components\RichEditor::make('content.en')->label('Konten (EN)')->columnSpanFull()
+                    ->helperText('Heading 2 / Heading 3 sections automatically build the article table of contents.'),
             ])->columns(2),
 
             Forms\Components\Section::make('Media')->schema([
@@ -55,6 +57,12 @@ class BlogPostResource extends Resource
             ])->columns(2),
 
             Forms\Components\Section::make('Publikasi')->schema([
+                Forms\Components\TextInput::make('location')
+                    ->label('Lokasi')
+                    ->maxLength(160)
+                    ->placeholder('Jakarta Selatan, Indonesia')
+                    ->helperText('Lokasi kegiatan atau peliputan artikel. Tampil di kartu blog dan halaman artikel.')
+                    ->columnSpanFull(),
                 Forms\Components\Select::make('blog_category_id')->relationship('category', 'slug')
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)->searchable()->preload()->label('Kategori'),
                 Forms\Components\Select::make('tags')->relationship('tags', 'slug')
@@ -80,6 +88,8 @@ class BlogPostResource extends Resource
             Tables\Columns\ImageColumn::make('featured_image')->disk('public')->label('')->size(60),
             Tables\Columns\TextColumn::make('title')->label('Judul')->searchable()->wrap(),
             Tables\Columns\TextColumn::make('category.name')->label('Kategori')->badge(),
+            Tables\Columns\TextColumn::make('location')->label('Lokasi')->icon('heroicon-m-map-pin')
+                ->placeholder('—')->searchable()->toggleable(),
             Tables\Columns\TextColumn::make('status')->badge()->colors([
                 'gray' => 'draft', 'success' => 'published', 'warning' => 'archived',
             ]),

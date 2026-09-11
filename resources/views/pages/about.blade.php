@@ -189,19 +189,62 @@
                 </p>
             </div>
 
-            {{-- Value strip — inside the container so left/right padding matches the other sections; swipeable on mobile, 5-up on desktop --}}
-            <div class="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mt-14 lg:grid lg:grid-cols-5 lg:gap-0 lg:overflow-hidden lg:rounded-3xl lg:pb-0 lg:shadow-lift" data-aos="fade-up">
-            @foreach ($values as $i => $value)
-                <div class="group flex min-w-[72%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl shadow-card sm:min-w-[44%] lg:min-w-0 lg:rounded-none lg:shadow-none">
-                    <div class="relative aspect-[4/5] overflow-hidden bg-navy-100 lg:aspect-square">
-                        <img src="{{ asset('images/values/'.$value['img'].'.jpg') }}" alt="" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+            {{-- Value strip — interactive carousel on mobile (swipe + tappable dots + arrows), 5-up grid on desktop --}}
+            <div class="mt-10 md:mt-14" data-aos="fade-up"
+                 x-data="{
+                    active: 0,
+                    n: {{ count($values) }},
+                    step() {
+                        const t = this.$refs.track, f = t.firstElementChild;
+                        if (! f) return t.clientWidth;
+                        const gap = parseFloat(getComputedStyle(t).columnGap || '0') || 0;
+                        return f.getBoundingClientRect().width + gap;
+                    },
+                    sync() {
+                        const t = this.$refs.track;
+                        this.active = Math.min(this.n - 1, Math.max(0, Math.round(t.scrollLeft / this.step())));
+                    },
+                    go(i) {
+                        i = Math.min(this.n - 1, Math.max(0, i));
+                        this.$refs.track.scrollTo({ left: this.step() * i, behavior: 'smooth' });
+                    },
+                 }">
+                <div x-ref="track" @scroll.passive="sync()"
+                     class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-5 lg:gap-0 lg:overflow-hidden lg:rounded-3xl lg:pb-0 lg:shadow-lift">
+                @foreach ($values as $i => $value)
+                    <div class="group flex w-[80%] min-w-[80%] max-w-[80%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl shadow-card sm:w-[46%] sm:min-w-[46%] sm:max-w-[46%] lg:w-auto lg:min-w-0 lg:max-w-none lg:rounded-none lg:shadow-none">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-navy-100 sm:aspect-[4/5] lg:aspect-square">
+                            <img src="{{ asset('images/values/'.$value['img'].'.jpg') }}" alt="" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                        <div class="flex flex-1 flex-col justify-center px-4 py-6 text-center text-white {{ $i % 2 === 0 ? 'bg-navy-900' : 'bg-navy-600' }} md:px-5 md:py-7">
+                            <h3 class="w-full font-display text-base font-bold italic md:text-lg">{{ $value['title'] }}</h3>
+                            <p class="mx-auto mt-2.5 w-full max-w-[34ch] text-[13px] leading-relaxed text-white/85">{{ $value['desc'] }}</p>
+                        </div>
                     </div>
-                    <div class="flex flex-1 flex-col items-center px-4 py-6 text-center text-white {{ $i % 2 === 0 ? 'bg-[#0e1f4d]' : 'bg-[#3a55a8]' }} md:px-5 md:py-7">
-                        <h3 class="font-display text-base font-bold italic md:text-lg">{{ $value['title'] }}</h3>
-                        <p class="mt-2.5 text-[13px] leading-relaxed text-white/85">{{ $value['desc'] }}</p>
-                    </div>
+                @endforeach
                 </div>
-            @endforeach
+
+                {{-- Mobile controls: prev / dots / next — clear swipe affordance (hidden on desktop grid) --}}
+                <div class="mt-6 flex items-center justify-center gap-4 lg:hidden">
+                    <button type="button" @click="go(active - 1)" :disabled="active === 0"
+                            class="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-navy-200 text-navy transition enabled:hover:border-gold enabled:hover:text-gold disabled:opacity-30"
+                            aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <div class="flex items-center gap-2">
+                        @foreach ($values as $i => $value)
+                            <button type="button" @click="go({{ $i }})"
+                                    :class="active === {{ $i }} ? 'w-6 bg-navy' : 'w-2.5 bg-navy-200'"
+                                    class="h-2.5 rounded-full transition-all duration-300"
+                                    aria-label="{{ ($isId ? 'Nilai' : 'Value').' '.($i + 1) }}"></button>
+                        @endforeach
+                    </div>
+                    <button type="button" @click="go(active + 1)" :disabled="active === n - 1"
+                            class="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-navy-200 text-navy transition enabled:hover:border-gold enabled:hover:text-gold disabled:opacity-30"
+                            aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </div>
             </div>
         </div>
     </section>

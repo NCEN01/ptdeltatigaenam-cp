@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Filament\Resources\OrderResource;
+use Filament\Notifications\Actions\Action;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,25 +21,79 @@ class Order extends Model
     protected static function booted(): void
     {
         static::updated(function (Order $order): void {
-            if (! $order->wasChanged('status') || ! $order->service_schedule_id) {
-                return;
-            }
-
-            $schedule = $order->schedule;
-            if (! $schedule) {
+            if (! $order->wasChanged('status')) {
                 return;
             }
 
             $wasPaid = $order->getOriginal('status') === 'paid';
             $isPaid = $order->status === 'paid';
-            $seats = (int) $order->quantity;
 
+            // Keep the schedule's seats_taken in sync on paid enter/leave.
+            if ($order->service_schedule_id && ($schedule = $order->schedule)) {
+                $seats = (int) $order->quantity;
+
+                if ($isPaid && ! $wasPaid) {
+                    $schedule->increment('seats_taken', $seats);
+                } elseif ($wasPaid && ! $isPaid) {
+                    $schedule->decrement('seats_taken', min((int) $schedule->seats_taken, $seats));
+                }
+            }
+
+            // A purchase just completed → let the admins know in the panel.
             if ($isPaid && ! $wasPaid) {
-                $schedule->increment('seats_taken', $seats);
-            } elseif ($wasPaid && ! $isPaid) {
-                $schedule->decrement('seats_taken', min((int) $schedule->seats_taken, $seats));
+                $order->notifyAdminsOfPurchase();
             }
         });
+    }
+
+    /**
+     * Send an in-panel (database) notification to transaction admins when a
+     * customer completes a purchase. Called from the paid transition above so
+     * it covers every payment path (Snap return, sandbox sim, and webhook).
+     * Wrapped defensively — a notification hiccup must never break checkout.
+     */
+    public function notifyAdminsOfPurchase(): void
+    {
+        try {
+            $recipients = User::query()
+                ->where('is_active', true)
+                ->role(['super_admin', 'admin_transaksi'])
+                ->get();
+
+            if ($recipients->isEmpty()) {
+                return;
+            }
+
+            $amount = 'Rp '.number_format((float) $this->total_amount, 0, ',', '.');
+            $serviceName = $this->service?->title ?? '—';
+
+            $notification = Notification::make()
+                ->title('Pembelian baru diterima')
+                ->icon('heroicon-o-banknotes')
+                ->iconColor('success')
+                ->body("{$this->customer_name} membeli \"{$serviceName}\" · {$amount} · {$this->order_number}");
+
+            try {
+                $notification->actions([
+                    Action::make('view')
+                        ->label('Lihat pesanan')
+                        ->url(OrderResource::getUrl('view', ['record' => $this->getKey()]))
+                        ->markAsRead(),
+                ]);
+            } catch (\Throwable $e) {
+                // getUrl() needs a panel context; skip the button if unavailable.
+            }
+
+            // Write synchronously (notifyNow) instead of sendToDatabase(): Filament's
+            // DatabaseNotification is ShouldQueue, so with QUEUE_CONNECTION=database it
+            // would sit in the jobs table until a worker runs. notifyNow bypasses the
+            // queue so the bell updates immediately after a purchase.
+            foreach ($recipients as $recipient) {
+                $recipient->notifyNow($notification->toDatabase());
+            }
+        } catch (\Throwable $e) {
+            report($e);
+        }
     }
 
     protected function casts(): array

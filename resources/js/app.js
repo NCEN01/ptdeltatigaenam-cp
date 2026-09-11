@@ -15,6 +15,109 @@ window.Alpine = Alpine;
 // Shared UI state (e.g. mobile nav open) so decoupled components — like the floating
 // WhatsApp / scroll-to-top helpers — can react to it.
 Alpine.store('ui', { navOpen: false });
+
+// Article table of contents: highlights the section currently under the reading line
+// and tracks how far through the body the reader is.
+Alpine.data('articleToc', (ids = []) => ({
+    active: '',
+    progress: 0,
+    ticking: false,
+    headings: [],
+    body: null,
+    onScroll: null,
+    // Collapsed on small screens so the list doesn't push the article down;
+    // the desktop sidebar forces it open with a `lg:!block` override.
+    expanded: window.matchMedia('(min-width: 1024px)').matches,
+
+    init() {
+        this.onScroll = () => {
+            if (this.ticking) return;
+            this.ticking = true;
+            requestAnimationFrame(() => {
+                this.measure();
+                this.ticking = false;
+            });
+        };
+        window.addEventListener('scroll', this.onScroll, { passive: true });
+        window.addEventListener('resize', this.onScroll, { passive: true });
+
+        this.$nextTick(() => {
+            // Resolve the element set once — it never changes for the life of the page.
+            this.body = document.getElementById('article-body');
+            this.headings = ids.map((id) => document.getElementById(id)).filter(Boolean);
+            this.measure();
+        });
+    },
+
+    destroy() {
+        window.removeEventListener('scroll', this.onScroll);
+        window.removeEventListener('resize', this.onScroll);
+    },
+
+    measure() {
+        if (this.body) {
+            const rect = this.body.getBoundingClientRect();
+            const span = rect.height - window.innerHeight;
+            this.progress = span > 0
+                ? Math.min(100, Math.max(0, (-rect.top / span) * 100))
+                : (rect.top <= 0 ? 100 : 0);
+        }
+
+        if (!this.headings.length) return;
+
+        // At the very bottom the closing section is what's on screen.
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+            this.active = this.headings[this.headings.length - 1].id;
+            return;
+        }
+
+        // Walk backwards: the first heading already past the reading line is the active one.
+        const line = 140;
+        for (let i = this.headings.length - 1; i >= 0; i--) {
+            if (this.headings[i].getBoundingClientRect().top <= line) {
+                this.active = this.headings[i].id;
+                return;
+            }
+        }
+        this.active = this.headings[0].id;
+    },
+}));
+
+// Share menu: native sheet on mobile, explicit network links elsewhere, clipboard fallback.
+Alpine.data('shareArticle', (url = '', title = '') => ({
+    url,
+    title,
+    copied: false,
+    get canShareNatively() {
+        return typeof navigator !== 'undefined' && !!navigator.share;
+    },
+    async copy() {
+        try {
+            await navigator.clipboard.writeText(this.url);
+        } catch {
+            const field = document.createElement('textarea');
+            field.value = this.url;
+            field.setAttribute('readonly', '');
+            field.style.position = 'fixed';
+            field.style.opacity = '0';
+            document.body.appendChild(field);
+            field.select();
+            document.execCommand('copy');
+            field.remove();
+        }
+        this.copied = true;
+        setTimeout(() => { this.copied = false; }, 2200);
+    },
+    async shareNatively() {
+        if (!this.canShareNatively) return;
+        try {
+            await navigator.share({ title: this.title, url: this.url });
+        } catch {
+            // Reader dismissed the sheet — nothing to report.
+        }
+    },
+}));
+
 Alpine.start();
 
 gsap.registerPlugin(ScrollTrigger);
@@ -209,6 +312,9 @@ document.querySelectorAll('[data-carousel]').forEach((el) => {
         const prevEl = el.parentElement.querySelector('[data-carousel-prev]');
         const nextEl = el.parentElement.querySelector('[data-carousel-next]');
         const hasNav = !!(prevEl && nextEl);
+        // Opt out with data-carousel-autoplay="false" — a browsing rail the reader
+        // is choosing from shouldn't move on its own.
+        const autoplayOff = el.dataset.carouselAutoplay === 'false';
         const config = {
             // Only load the Navigation module when arrow buttons exist — passing
             // `navigation: undefined` while the module is active crashes Swiper
@@ -216,7 +322,7 @@ document.querySelectorAll('[data-carousel]').forEach((el) => {
             modules: hasNav ? [Autoplay, Navigation, Pagination] : [Autoplay, Pagination],
             slidesPerView: 1.2,
             spaceBetween: 16,
-            autoplay: reduceMotion ? false : { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
+            autoplay: (reduceMotion || autoplayOff) ? false : { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
             pagination: { el: el.parentElement.querySelector('[data-carousel-pagination]'), clickable: true },
             breakpoints: {
                 640: { slidesPerView: 2, spaceBetween: 18 },
@@ -352,6 +458,10 @@ if (!reduceMotion) {
 //  SMOOTH INTERNAL LINK SCROLLING (offset header)
 // ═══════════════════════════════════════════
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    // Opted-out links (e.g. the article table of contents) scroll via CSS scroll-margin
+    // instead — running both would start two competing scroll animations per click.
+    if (anchor.hasAttribute('data-no-smooth')) return;
+
     anchor.addEventListener('click', function (e) {
         const href = this.getAttribute('href');
         if (href === '#') return;

@@ -38,6 +38,23 @@ class BlogPost extends Model
         return $this->belongsToMany(BlogTag::class, 'blog_post_tag');
     }
 
+    /**
+     * Estimated reading time in whole minutes, at ~200 words per minute.
+     * Uses a unicode split so Indonesian copy isn't undercounted.
+     */
+    public function readingMinutes(): int
+    {
+        $text = trim(strip_tags((string) $this->content));
+
+        if ($text === '') {
+            return 1;
+        }
+
+        $words = preg_split('/\s+/u', $text, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        return max(1, (int) ceil(count($words) / 200));
+    }
+
     public function scopePublished($query)
     {
         return $query->where('status', 'published')

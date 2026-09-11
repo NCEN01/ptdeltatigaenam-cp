@@ -36,12 +36,14 @@
     "
     class="fixed inset-x-0 top-0 z-[100] will-change-transform transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
     :class="{
-        'py-2': scrolled,
-        'py-4': !scrolled,
         '-translate-y-full opacity-0': navHidden,
         'translate-y-0 opacity-100': !navHidden
     }"
 >
+    {{-- Announcement / promo ribbon — flush to the top edge, rides with the nav on hide/show --}}
+    <x-partials.promo-bar />
+
+    <div class="transition-all duration-500 ease-out-soft" :class="scrolled ? 'py-2' : 'py-4'">
     <div class="container">
         <div
             class="flex items-center justify-between rounded-full border px-4 py-2.5 transition-all duration-500 ease-out-soft md:px-5"
@@ -135,6 +137,7 @@
                 </button>
             </div>
         </div>
+    </div>
     </div>
 
     {{-- Mobile overlay — teleported to <body> so the header's transform (hide-on-scroll) doesn't

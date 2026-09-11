@@ -56,7 +56,7 @@
     {{-- ── First-visit intro splash: logo + company name (~3.3s, once per browser session) ── --}}
     <div id="intro" class="intro-screen" role="presentation" aria-hidden="true">
         <div class="intro-inner">
-            <img src="{{ asset('images/logodelta36.png') }}" alt="" width="76" height="76" class="intro-logo">
+            <img src="{{ asset('images/logodelta36.png') }}" alt="" width="62" height="62" class="intro-logo">
             <p class="intro-name">PT Delta Tiga Enam</p>
             <span class="intro-line"></span>
         </div>
@@ -112,7 +112,7 @@
     <div x-data="floatingHelpers()" x-show="!$store.ui.navOpen"
          x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
          x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-         class="fixed bottom-5 left-4 z-[130] flex flex-col items-start gap-3 print:hidden">
+         class="fixed bottom-5 right-4 z-[130] flex flex-col items-end gap-3 print:hidden">
         {{-- Scroll to top — appears after ~1 screen --}}
         <button type="button" x-cloak x-show="showTop"
                 x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
@@ -125,14 +125,14 @@
         {{-- WhatsApp + help bubble --}}
         <div class="relative" @mouseenter="showBubble = true">
             <div x-cloak x-show="showBubble"
-                 x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-2" x-transition:enter-end="opacity-100 translate-x-0"
+                 x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-x-2" x-transition:enter-end="opacity-100 translate-x-0"
                  x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                 class="absolute bottom-1/2 left-[4.5rem] flex translate-y-1/2 items-center gap-2 whitespace-nowrap rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-navy shadow-lift ring-1 ring-navy-100">
+                 class="absolute bottom-1/2 right-[4.5rem] flex translate-y-1/2 items-center gap-2 whitespace-nowrap rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-navy shadow-lift ring-1 ring-navy-100">
                 <span>{{ $locale === 'id' ? 'Butuh bantuan?' : 'Need help?' }}</span>
                 <button type="button" @click.stop="showBubble = false" aria-label="{{ $locale === 'id' ? 'Tutup' : 'Close' }}" class="text-slate-400 transition-colors hover:text-navy">
                     <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
                 </button>
-                <span class="absolute right-full top-1/2 -translate-y-1/2 border-8 border-transparent border-r-white"></span>
+                <span class="absolute left-full top-1/2 -translate-y-1/2 border-8 border-transparent border-l-white"></span>
             </div>
             <a href="https://wa.me/62818834766?text={{ rawurlencode($locale === 'id' ? 'Halo Delta Tiga Enam, saya butuh bantuan.' : 'Hello Delta Tiga Enam, I need some help.') }}"
                target="_blank" rel="noopener" aria-label="WhatsApp"
