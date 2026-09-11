@@ -337,7 +337,7 @@
                              three surfaces read as one design instead of three variants. --}}
                         <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none items-stretch gap-6 overflow-x-auto scroll-smooth pb-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             @foreach ($posts as $post)
-                                <div class="min-w-0 shrink-0 basis-[85%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)]">
+                                <div class="min-w-0 shrink-0 basis-[76%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)]">
                                     <x-blog-card :post="$post" :animate="false" />
                                 </div>
                             @endforeach
