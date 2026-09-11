@@ -26,7 +26,9 @@
 
         <section class="section bg-white">
             <div class="container">
-                <div class="grid gap-10 lg:grid-cols-12 lg:gap-14">
+                {{-- No row gap below lg: the sidebar's contents are either hidden or
+                     fixed there, so it collapses to zero height and the gap would show. --}}
+                <div class="grid gap-10 max-lg:gap-y-0 lg:grid-cols-12 lg:gap-14">
 
                     {{-- Sidebar: table of contents + share. Sits above the body on mobile. --}}
                     <aside class="order-1 lg:order-2 lg:col-span-4">

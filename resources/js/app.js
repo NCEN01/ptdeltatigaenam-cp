@@ -18,18 +18,28 @@ Alpine.store('ui', { navOpen: false });
 
 // Article table of contents: highlights the section currently under the reading line
 // and tracks how far through the body the reader is.
-Alpine.data('articleToc', (ids = []) => ({
+Alpine.data('articleToc', (items = []) => ({
+    items,
     active: '',
     progress: 0,
     ticking: false,
     headings: [],
     body: null,
     onScroll: null,
-    // Collapsed on small screens so the list doesn't push the article down;
-    // the desktop sidebar forces it open with a `lg:!block` override.
-    expanded: window.matchMedia('(min-width: 1024px)').matches,
+    // Mobile only: the floating reading bar starts collapsed, and only shows
+    // itself while the article body is actually on screen.
+    expanded: false,
+    barVisible: false,
+
+    /** Title of the section currently under the reading line. */
+    get activeLabel() {
+        const current = this.items.find((item) => item.id === this.active);
+
+        return current ? current.text : (this.items[0]?.text ?? '');
+    },
 
     init() {
+        const ids = this.items.map((item) => item.id);
         this.onScroll = () => {
             if (this.ticking) return;
             this.ticking = true;
@@ -61,6 +71,11 @@ Alpine.data('articleToc', (ids = []) => ({
             this.progress = span > 0
                 ? Math.min(100, Math.max(0, (-rect.top / span) * 100))
                 : (rect.top <= 0 ? 100 : 0);
+
+            // Mobile bar only earns its space while the body is genuinely being read.
+            const wasVisible = this.barVisible;
+            this.barVisible = rect.top < 120 && rect.bottom > 240;
+            if (wasVisible && !this.barVisible) this.expanded = false;
         }
 
         if (!this.headings.length) return;
