@@ -14,12 +14,6 @@
         ['value' => $expiredCount, 'label' => $id ? 'Kedaluwarsa' : 'Expired', 'tone' => $expiredCount > 0 ? 'text-rose-700' : 'text-slate-500'],
     ];
 
-    /* Satu definisi untuk teks masa berlaku. Formatnya berbeda per tempat —
-       kartu mobile punya ruang untuk nama bulan penuh, sel tabel tidak — tetapi
-       teks penggantinya saat tanpa tanggal harus tetap sama. */
-    $validUntil = fn ($cert, string $format) => $cert->expires_at?->translatedFormat($format)
-        ?: ($id ? 'Tanpa batas waktu' : 'No expiry');
-
     $proof = $id ? [
         ['Diakui secara nasional', 'Sertifikat diterbitkan melalui skema BNSP bersama LSP mitra, sehingga berlaku untuk audit pelanggan, tender, dan persyaratan regulasi.'],
         ['Diuji, bukan sekadar dilatih', 'Setiap nama di daftar ini melewati uji kompetensi bersama asesor — pada pekerjaan dan peralatan yang benar-benar mereka tangani.'],
@@ -57,8 +51,8 @@
                 <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
                 <p class="mt-5 max-w-xl text-pretty leading-relaxed text-slate-600">
                     {{ $id
-                        ? 'Masukkan nama peserta, nama perusahaan, atau nomor sertifikat. Hasilnya menunjukkan kualifikasi yang diuji beserta masa berlakunya.'
-                        : 'Enter a participant name, company name, or certificate number. Results show the qualification assessed and how long it remains valid.' }}
+                        ? 'Masukkan nama peserta, nama perusahaan, atau nomor sertifikat. Hasilnya menunjukkan kualifikasi yang diuji beserta status keberlakuannya.'
+                        : 'Enter a participant name, company name, or certificate number. Results show the qualification assessed and whether it is still valid.' }}
                 </p>
 
                 <form method="GET" action="{{ route('certificates.index') }}" class="mt-8">
@@ -133,8 +127,8 @@
                             <span class="mt-3 inline-flex rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-xs font-medium text-sky-700">{{ $c->qualification }}</span>
                         @endif
 
-                        {{-- Urutan dan label sama dengan tabel: No. UJK, No. Sertifikat,
-                             lalu Tgl. Berakhir. --}}
+                        {{-- Urutan dan label sama dengan tabel: No. UJK lalu No. Sertifikat.
+                             Tgl. Berakhir dihapus di kedua tata letak. --}}
                         <dl class="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-navy-50 pt-3 text-xs">
                             <div class="min-w-0">
                                 <dt class="text-[11px] text-slate-500">{{ $id ? 'No. UJK' : 'Reg. No.' }}</dt>
@@ -143,10 +137,6 @@
                             <div class="min-w-0">
                                 <dt class="text-[11px] text-slate-500">{{ $id ? 'No. Sertifikat' : 'Certificate No.' }}</dt>
                                 <dd class="truncate font-mono text-slate-700">{{ $c->certificate_number ?: '—' }}</dd>
-                            </div>
-                            <div class="col-span-2">
-                                <dt class="text-[11px] text-slate-500">{{ $id ? 'Tgl. Berakhir' : 'Expiry Date' }}</dt>
-                                <dd class="text-slate-700">{{ $validUntil($c, 'd M Y') }}</dd>
                             </div>
                         </dl>
                     </article>
@@ -158,7 +148,7 @@
                  kepala tabelnya: dari isian navy-anim menjadi terang. --}}
             <div class="hidden overflow-hidden rounded-2xl border border-navy-100 md:block">
                 <div class="overflow-x-auto">
-                    <table class="w-full min-w-[920px] text-left text-sm">
+                    <table class="w-full min-w-[800px] text-left text-sm">
                         <caption class="sr-only">{{ $id ? 'Daftar pemegang sertifikat kompetensi' : 'List of competency certificate holders' }}</caption>
                         <thead>
                             <tr class="border-b border-navy-100 bg-neutral-50 text-navy">
@@ -167,26 +157,26 @@
                                 <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Nama Perusahaan' : 'Company' }}</th>
                                 <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'No. Sertifikat' : 'Certificate No.' }}</th>
                                 <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Kualifikasi' : 'Qualification' }}</th>
-                                <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Tgl. Berakhir' : 'Expiry Date' }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-navy-50">
                             @foreach ($certificates as $c)
                                 <tr class="transition-colors duration-150 hover:bg-neutral-50/70">
                                     <td class="whitespace-nowrap px-5 py-4 font-mono text-slate-500">{{ $c->ujk_number ?: '—' }}</td>
-                                    <td class="px-5 py-4 font-medium text-navy">{{ $c->participant_name }}</td>
+                                    {{-- Status menempel pada nama, sama seperti kartu mobile.
+                                         Kolom Tgl. Berakhir dihapus, tetapi penanda berlaku /
+                                         kedaluwarsa tetap perlu ada: tanpanya halaman ini
+                                         berhenti menjadi alat verifikasi. --}}
+                                    <td class="px-5 py-4">
+                                        <span class="font-medium text-navy">{{ $c->participant_name }}</span>
+                                        <x-certificate-status :expires-at="$c->expires_at" class="ml-2 align-middle" />
+                                    </td>
                                     <td class="px-5 py-4 text-slate-700">{{ $c->company_name ?: '—' }}</td>
                                     <td class="whitespace-nowrap px-5 py-4 font-mono text-xs text-slate-600">{{ $c->certificate_number ?: '—' }}</td>
                                     <td class="px-5 py-4">
                                         @if ($c->qualification)
                                             <span class="inline-flex rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-xs font-medium text-sky-700">{{ $c->qualification }}</span>
                                         @else — @endif
-                                    </td>
-                                    {{-- Tanggalnya tetap seperti semula; status hanya ditambahkan
-                                         di bawahnya, di kolom yang memang membahas masa berlaku. --}}
-                                    <td class="px-5 py-4">
-                                        <p class="whitespace-nowrap text-slate-700">{{ $validUntil($c, 'd M Y') }}</p>
-                                        <x-certificate-status :expires-at="$c->expires_at" class="mt-1.5" />
                                     </td>
                                 </tr>
                             @endforeach
