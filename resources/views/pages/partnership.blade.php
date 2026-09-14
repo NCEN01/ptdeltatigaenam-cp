@@ -68,9 +68,9 @@
                 @php
                     [$narrativeLead, $narrativeRest] = array_pad(preg_split('/(?<=\.)\s+/', $narrative, 2), 2, '');
                 @endphp
-                <p class="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-navy md:text-xl">{{ $narrativeLead }}</p>
+                <p class="mt-7 max-w-2xl text-lg leading-relaxed text-navy [hyphens:auto] sm:text-justify md:text-xl">{{ $narrativeLead }}</p>
                 @if ($narrativeRest !== '')
-                    <p class="mt-5 max-w-2xl text-pretty leading-relaxed text-slate-600">{{ $narrativeRest }}</p>
+                    <p class="mt-5 max-w-2xl leading-relaxed text-slate-600 [hyphens:auto] sm:text-justify">{{ $narrativeRest }}</p>
                 @endif
             </div>
             <div class="lg:col-span-5" data-aos="fade-left" data-aos-delay="100">
