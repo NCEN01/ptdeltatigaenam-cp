@@ -97,6 +97,70 @@
             </div>
         </div>
 
+        {{-- Client proof for THIS project. The relation, the CMS field and the eager load
+             already existed; only the render was missing, so every request fetched these
+             rows and discarded them. Ratings come from the same record the admin fills in. --}}
+        @php
+            $quotes = $portfolio->testimonials->where('is_active', true)->sortBy('sort_order');
+            $avgRating = $quotes->whereNotNull('rating')->avg('rating');
+        @endphp
+        @if ($quotes->isNotEmpty())
+            <div class="container mt-16">
+                <div class="flex flex-col gap-5 border-b border-navy-100 pb-7 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <h2 class="font-display text-2xl font-semibold text-navy md:text-3xl">{{ $id ? 'Kata klien tentang proyek ini' : 'What the client said' }}</h2>
+                        <span class="mt-4 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
+                    </div>
+
+                    {{-- Aggregate only earns its place once there is more than one voice. --}}
+                    @if ($avgRating && $quotes->count() > 1)
+                        <div class="flex items-center gap-3">
+                            <div class="flex gap-0.5" aria-hidden="true">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <svg class="h-4 w-4 {{ $i <= round($avgRating) ? 'text-gold' : 'text-navy-200' }}" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.2l-4.94 2.6.94-5.5-4-3.9 5.53-.8z"/></svg>
+                                @endfor
+                            </div>
+                            <p class="font-mono text-sm text-slate-500">
+                                <span class="font-bold tabular-nums text-navy">{{ number_format($avgRating, 1) }}</span>/5
+                                <span class="mx-1 text-navy-200">·</span>{{ $quotes->count() }} {{ $id ? 'ulasan' : 'reviews' }}
+                            </p>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="mt-8 grid gap-6 lg:grid-cols-2">
+                    @foreach ($quotes as $quote)
+                        <figure class="card flex h-full flex-col p-7 md:p-8" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 2) * 80 }}">
+                            @if ($quote->rating)
+                                <div class="flex gap-0.5" role="img"
+                                     aria-label="{{ $quote->rating }} {{ $id ? 'dari 5 bintang' : 'out of 5 stars' }}">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <svg class="h-4 w-4 {{ $i <= $quote->rating ? 'text-gold' : 'text-navy-200' }}" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 1.6l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.2l-4.94 2.6.94-5.5-4-3.9 5.53-.8z"/></svg>
+                                    @endfor
+                                </div>
+                            @endif
+
+                            <blockquote class="mt-5 flex-1">
+                                <p class="text-pretty leading-relaxed text-slate-700">&ldquo;{{ $quote->content }}&rdquo;</p>
+                            </blockquote>
+
+                            <figcaption class="mt-6 flex items-center gap-3 border-t border-navy-100 pt-5">
+                                @if ($quote->author_photo)
+                                    <img src="{{ $imgUrl($quote->author_photo) }}" alt="" loading="lazy" class="h-11 w-11 shrink-0 rounded-full object-cover">
+                                @else
+                                    <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-sky-100 font-display text-sky-700" aria-hidden="true">{{ \Illuminate\Support\Str::substr($quote->author_name, 0, 1) }}</span>
+                                @endif
+                                <span class="min-w-0">
+                                    <span class="block font-display text-[15px] font-semibold leading-tight text-navy">{{ $quote->author_name }}</span>
+                                    <span class="mt-0.5 block text-xs leading-snug text-slate-500">{{ collect([$quote->author_position, $quote->author_company])->filter()->implode(' · ') }}</span>
+                                </span>
+                            </figcaption>
+                        </figure>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
         {{-- Gallery (masonry) --}}
         @if ($portfolio->images->isNotEmpty())
             <div class="container mt-16">
