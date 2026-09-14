@@ -130,57 +130,63 @@
                         </div>
 
                         @if ($c->qualification)
-                            <p class="mt-3 text-sm font-medium text-sky-800">{{ $c->qualification }}</p>
+                            <span class="mt-3 inline-flex rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-xs font-medium text-sky-700">{{ $c->qualification }}</span>
                         @endif
 
+                        {{-- Urutan dan label sama dengan tabel: No. UJK, No. Sertifikat,
+                             lalu Tgl. Berakhir. --}}
                         <dl class="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-navy-50 pt-3 text-xs">
+                            <div class="min-w-0">
+                                <dt class="text-[11px] text-slate-500">{{ $id ? 'No. UJK' : 'Reg. No.' }}</dt>
+                                <dd class="truncate font-mono text-slate-700">{{ $c->ujk_number ?: '—' }}</dd>
+                            </div>
                             <div class="min-w-0">
                                 <dt class="text-[11px] text-slate-500">{{ $id ? 'No. Sertifikat' : 'Certificate No.' }}</dt>
                                 <dd class="truncate font-mono text-slate-700">{{ $c->certificate_number ?: '—' }}</dd>
                             </div>
-                            <div class="min-w-0">
-                                <dt class="text-[11px] text-slate-500">{{ $id ? 'No. UJK' : 'Reg. No.' }}</dt>
-                                <dd class="truncate font-mono text-slate-500">{{ $c->ujk_number ?: '—' }}</dd>
-                            </div>
                             <div class="col-span-2">
-                                <dt class="text-[11px] text-slate-500">{{ $id ? 'Berlaku sampai' : 'Valid until' }}</dt>
-                                <dd class="text-slate-700">{{ $validUntil($c, 'd F Y') }}</dd>
+                                <dt class="text-[11px] text-slate-500">{{ $id ? 'Tgl. Berakhir' : 'Expiry Date' }}</dt>
+                                <dd class="text-slate-700">{{ $validUntil($c, 'd M Y') }}</dd>
                             </div>
                         </dl>
                     </article>
                 @endforeach
             </div>
 
-            {{-- Tabel (tablet & desktop). Nama+perusahaan dan kedua nomor
-                 digabung per sel: enam kolom sempit memaksa geser horizontal,
-                 padahal keduanya memang satu kesatuan informasi. --}}
+            {{-- Tabel (tablet & desktop). Keenam kolom asli dipertahankan apa
+                 adanya — urutan, judul, dan isi selnya. Yang berubah hanya
+                 kepala tabelnya: dari isian navy-anim menjadi terang. --}}
             <div class="hidden overflow-hidden rounded-2xl border border-navy-100 md:block">
                 <div class="overflow-x-auto">
-                    <table class="w-full min-w-[720px] text-left text-sm">
+                    <table class="w-full min-w-[920px] text-left text-sm">
                         <caption class="sr-only">{{ $id ? 'Daftar pemegang sertifikat kompetensi' : 'List of competency certificate holders' }}</caption>
                         <thead>
                             <tr class="border-b border-navy-100 bg-neutral-50 text-navy">
-                                <th scope="col" class="px-5 py-3.5 text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Peserta' : 'Participant' }}</th>
-                                <th scope="col" class="px-5 py-3.5 text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Kualifikasi' : 'Qualification' }}</th>
-                                <th scope="col" class="px-5 py-3.5 text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Nomor' : 'Numbers' }}</th>
-                                <th scope="col" class="px-5 py-3.5 text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Masa Berlaku' : 'Validity' }}</th>
+                                <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'No. UJK' : 'Reg. No.' }}</th>
+                                <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Peserta' : 'Participant' }}</th>
+                                <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Nama Perusahaan' : 'Company' }}</th>
+                                <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'No. Sertifikat' : 'Certificate No.' }}</th>
+                                <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Kualifikasi' : 'Qualification' }}</th>
+                                <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Tgl. Berakhir' : 'Expiry Date' }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-navy-50">
                             @foreach ($certificates as $c)
                                 <tr class="transition-colors duration-150 hover:bg-neutral-50/70">
+                                    <td class="whitespace-nowrap px-5 py-4 font-mono text-slate-500">{{ $c->ujk_number ?: '—' }}</td>
+                                    <td class="px-5 py-4 font-medium text-navy">{{ $c->participant_name }}</td>
+                                    <td class="px-5 py-4 text-slate-700">{{ $c->company_name ?: '—' }}</td>
+                                    <td class="whitespace-nowrap px-5 py-4 font-mono text-xs text-slate-600">{{ $c->certificate_number ?: '—' }}</td>
                                     <td class="px-5 py-4">
-                                        <p class="font-medium text-navy">{{ $c->participant_name }}</p>
-                                        <p class="mt-0.5 text-xs text-slate-500">{{ $c->company_name ?: '—' }}</p>
+                                        @if ($c->qualification)
+                                            <span class="inline-flex rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-xs font-medium text-sky-700">{{ $c->qualification }}</span>
+                                        @else — @endif
                                     </td>
-                                    <td class="px-5 py-4 text-slate-700">{{ $c->qualification ?: '—' }}</td>
+                                    {{-- Tanggalnya tetap seperti semula; status hanya ditambahkan
+                                         di bawahnya, di kolom yang memang membahas masa berlaku. --}}
                                     <td class="px-5 py-4">
-                                        <p class="whitespace-nowrap font-mono text-xs text-slate-700">{{ $c->certificate_number ?: '—' }}</p>
-                                        <p class="mt-0.5 whitespace-nowrap font-mono text-[11px] text-slate-500">{{ $c->ujk_number ?: '—' }}</p>
-                                    </td>
-                                    <td class="px-5 py-4">
-                                        <x-certificate-status :expires-at="$c->expires_at" />
-                                        <p class="mt-1.5 whitespace-nowrap text-xs text-slate-500">{{ $validUntil($c, 'd M Y') }}</p>
+                                        <p class="whitespace-nowrap text-slate-700">{{ $validUntil($c, 'd M Y') }}</p>
+                                        <x-certificate-status :expires-at="$c->expires_at" class="mt-1.5" />
                                     </td>
                                 </tr>
                             @endforeach
