@@ -63,19 +63,21 @@ class PageController extends Controller
             ];
         }
 
-        // Core values (DELTA) — name stays in English; description is localized. Image = Unsplash id.
+        // Core values spell DELTA. `letter` carries the acronym so it survives translation:
+        // the Indonesian titles are Dinamis/Keunggulan/Terdepan/Transenden/Aksi (D-K-T-T-A),
+        // which would otherwise hide the wordplay the section is built on.
         $values = $id ? [
-            ['title' => 'Dinamis', 'desc' => 'Selalu adaptif terhadap perubahan dan inovasi dalam dunia kerja.', 'img' => 'dynamic'],
-            ['title' => 'Keunggulan', 'desc' => 'Unggul dalam setiap layanan yang diberikan.', 'img' => 'excellence'],
-            ['title' => 'Terdepan', 'desc' => 'Pionir dalam pengembangan solusi human capital yang inovatif.', 'img' => 'leading'],
-            ['title' => 'Transenden', 'desc' => 'Melampaui ekspektasi klien dan memberikan nilai tambah yang berkelanjutan.', 'img' => 'transcendent'],
-            ['title' => 'Aksi', 'desc' => 'Berorientasi pada hasil dan tindakan nyata untuk mencapai tujuan.', 'img' => 'action'],
+            ['letter' => 'D', 'title' => 'Dinamis', 'desc' => 'Selalu adaptif terhadap perubahan dan inovasi dalam dunia kerja.', 'img' => 'dynamic'],
+            ['letter' => 'E', 'title' => 'Keunggulan', 'desc' => 'Unggul dalam setiap layanan yang diberikan.', 'img' => 'excellence'],
+            ['letter' => 'L', 'title' => 'Terdepan', 'desc' => 'Pionir dalam pengembangan solusi human capital yang inovatif.', 'img' => 'leading'],
+            ['letter' => 'T', 'title' => 'Transenden', 'desc' => 'Melampaui ekspektasi klien dan memberikan nilai tambah yang berkelanjutan.', 'img' => 'transcendent'],
+            ['letter' => 'A', 'title' => 'Aksi', 'desc' => 'Berorientasi pada hasil dan tindakan nyata untuk mencapai tujuan.', 'img' => 'action'],
         ] : [
-            ['title' => 'Dynamic', 'desc' => 'Always adaptive to change and innovation in the world of work.', 'img' => 'dynamic'],
-            ['title' => 'Excellence', 'desc' => 'Excelling in every service we deliver.', 'img' => 'excellence'],
-            ['title' => 'Leading', 'desc' => 'A pioneer in developing innovative human capital solutions.', 'img' => 'leading'],
-            ['title' => 'Transcendent', 'desc' => 'Exceeding client expectations and delivering sustainable added value.', 'img' => 'transcendent'],
-            ['title' => 'Action', 'desc' => 'Results-oriented, with real action to achieve goals.', 'img' => 'action'],
+            ['letter' => 'D', 'title' => 'Dynamic', 'desc' => 'Always adaptive to change and innovation in the world of work.', 'img' => 'dynamic'],
+            ['letter' => 'E', 'title' => 'Excellence', 'desc' => 'Excelling in every service we deliver.', 'img' => 'excellence'],
+            ['letter' => 'L', 'title' => 'Leading', 'desc' => 'A pioneer in developing innovative human capital solutions.', 'img' => 'leading'],
+            ['letter' => 'T', 'title' => 'Transcendent', 'desc' => 'Exceeding client expectations and delivering sustainable added value.', 'img' => 'transcendent'],
+            ['letter' => 'A', 'title' => 'Action', 'desc' => 'Results-oriented, with real action to achieve goals.', 'img' => 'action'],
         ];
 
         // Hardcoded office locations

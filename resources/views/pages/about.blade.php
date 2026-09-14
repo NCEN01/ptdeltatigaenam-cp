@@ -112,31 +112,45 @@
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
 
         <div class="container relative">
-            {{-- Heading --}}
-            <div class="mx-auto mb-8 max-w-2xl text-center" data-aos="fade-up">
-                <p class="eyebrow inline-flex items-center justify-center"><span class="rule-gold mr-3"></span>{{ $isId ? 'Arah & Komitmen' : 'Direction & Commitment' }}</p>
-                <h2 class="mt-4 font-display text-3xl md:text-4xl">{{ $isId ? 'Visi & Misi' : 'Vision & Mission' }}</h2>
+            <div class="mb-10 max-w-2xl" data-aos="fade-up">
+                <h2 class="font-display text-3xl md:text-4xl">{{ $isId ? 'Visi & Misi' : 'Vision & Mission' }}</h2>
             </div>
 
-            <div class="grid items-stretch gap-5 lg:grid-cols-2">
-                {{-- Vision — same glass/blur as the "Portofolio Kami" cards; text sized like the Company Profile body --}}
-                <div class="rounded-2xl border border-white/10 bg-white/[0.06] p-5 text-left backdrop-blur-sm md:p-6" data-aos="fade-up">
-                    <p class="font-mono text-base uppercase tracking-normal text-gold-soft">{{ $isId ? 'Visi' : 'Vision' }}</p>
-                    <p class="mt-5 font-display text-base leading-relaxed text-white text-justify [hyphens:auto]">&ldquo;{{ $vision }}&rdquo;</p>
+            {{-- Asymmetric 2fr/3fr rather than two matching glass boxes: the vision is one
+                 statement and the mission is a list, so giving them identical containers
+                 flattened the difference and buried the vision at body size. --}}
+            <div class="grid items-start gap-10 lg:grid-cols-5 lg:gap-14">
+
+                {{-- Vision: set as the statement it is, not as body copy in a card. --}}
+                <div class="lg:col-span-2" data-aos="fade-up">
+                    <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-gold-soft">{{ $isId ? 'Visi' : 'Vision' }}</p>
+                    <span class="mt-4 block h-px w-12 bg-gold-soft/60" aria-hidden="true"></span>
+                    <blockquote class="mt-6">
+                        <p class="font-display text-xl font-semibold leading-[1.45] text-white text-pretty md:text-2xl">
+                            &ldquo;{{ $vision }}&rdquo;
+                        </p>
+                    </blockquote>
                 </div>
 
-                {{-- Mission — numbered list, no icon --}}
-                <div class="rounded-2xl border border-white/10 bg-white/[0.06] p-5 backdrop-blur-sm md:p-6" data-aos="fade-up" data-aos-delay="80">
-                    <p class="font-mono text-base uppercase tracking-normal text-gold-soft">{{ $isId ? 'Misi' : 'Mission' }}</p>
+                {{-- Mission: numbered so the count reads at a glance; the em-dash bullets gave
+                     no sense of how many commitments there are. --}}
+                <div class="lg:col-span-3" data-aos="fade-up" data-aos-delay="80">
+                    <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-gold-soft">{{ $isId ? 'Misi' : 'Mission' }}</p>
+                    <span class="mt-4 block h-px w-12 bg-gold-soft/60" aria-hidden="true"></span>
+
                     @if ($missions->isNotEmpty())
-                        <ul class="mt-5 space-y-4">
+                        <ol class="mt-6 divide-y divide-white/10 border-y border-white/10">
                             @foreach ($missions as $mission)
-                                <li class="flex items-start gap-3 border-b border-white/10 pb-4 last:border-0 last:pb-0">
-                                    <span class="shrink-0 text-base leading-relaxed text-gold-soft" aria-hidden="true">—</span>
-                                    <p class="text-base leading-relaxed text-white/90 text-justify [hyphens:auto]">{{ $mission->content }}</p>
+                                <li class="group flex items-start gap-4 py-4 transition-colors duration-300 md:gap-5">
+                                    <span class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-white/[0.07] font-mono text-[11px] font-bold tabular-nums text-gold-soft ring-1 ring-white/10 transition-colors duration-300 group-hover:bg-white/[0.14]">
+                                        {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
+                                    </span>
+                                    {{-- Left-aligned on phones: justified text in a narrow column opens
+                                         rivers of white space between words. --}}
+                                    <p class="text-[15px] leading-relaxed text-white/90 text-left sm:text-justify [hyphens:auto]">{{ $mission->content }}</p>
                                 </li>
                             @endforeach
-                        </ul>
+                        </ol>
                     @endif
                 </div>
             </div>
@@ -182,10 +196,21 @@
     <section class="section border-t border-navy-50 bg-paper">
         <div class="container">
             <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
-                <p class="eyebrow inline-flex items-center justify-center"><span class="rule-gold mr-3"></span>{{ $isId ? 'Prinsip Kami' : 'What We Stand For' }}</p>
-                <h2 class="mt-4 font-display text-4xl font-bold text-navy text-balance md:text-5xl">{{ $isId ? 'Nilai Kami' : 'Our Values' }}</h2>
+                <h2 class="font-display text-4xl font-bold text-navy text-balance md:text-5xl">{{ $isId ? 'Nilai Kami' : 'Our Values' }}</h2>
                 <p class="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-slate-600">
                     {{ $isId ? 'Prinsip yang memandu cara kami bekerja dan melayani setiap klien.' : 'The principles that guide how we work and serve every client.' }}
+                </p>
+
+                {{-- Spell the acronym out: the five values are D-E-L-T-A, the company's own name.
+                     The Indonesian titles translate away from it, so without this the wordplay
+                     is invisible to half the audience. --}}
+                <p class="mt-7 flex items-center justify-center gap-2 sm:gap-3" aria-hidden="true">
+                    @foreach ($values as $value)
+                        <span class="font-display text-2xl font-bold tracking-[0.1em] text-navy-200 sm:text-3xl">{{ $value['letter'] }}</span>
+                        @unless ($loop->last)
+                            <span class="h-1 w-1 rounded-full bg-gold-soft"></span>
+                        @endunless
+                    @endforeach
                 </p>
             </div>
 
@@ -215,9 +240,16 @@
                     <div class="group flex w-[80%] min-w-[80%] max-w-[80%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl shadow-card sm:w-[46%] sm:min-w-[46%] sm:max-w-[46%] lg:w-auto lg:min-w-0 lg:max-w-none lg:rounded-none lg:shadow-none">
                         <div class="relative aspect-[4/3] overflow-hidden bg-navy-100 sm:aspect-[4/5] lg:aspect-square">
                             <img src="{{ asset('images/values/'.$value['img'].'.jpg') }}" alt="" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/70 via-navy-950/10 to-transparent"></div>
+                            {{-- The acronym letter, outlined so it reads as a mark rather than a caption. --}}
+                            <span class="pointer-events-none absolute bottom-3 left-4 font-display text-5xl font-bold leading-none text-transparent transition-all duration-500 ease-out-soft group-hover:text-gold-soft/25 md:text-6xl"
+                                  style="-webkit-text-stroke: 1px rgba(237,214,138,.55);" aria-hidden="true">{{ $value['letter'] }}</span>
                         </div>
-                        <div class="flex flex-1 flex-col justify-center px-4 py-6 text-center text-white {{ $i % 2 === 0 ? 'bg-navy-900' : 'bg-navy-600' }} md:px-5 md:py-7">
-                            <h3 class="w-full font-display text-base font-bold italic md:text-lg">{{ $value['title'] }}</h3>
+                        {{-- One navy for all five: the previous odd/even navy-900 / navy-600 zebra
+                             carried no meaning, it just striped the strip. --}}
+                        <div class="flex flex-1 flex-col justify-center bg-navy-900 px-4 py-6 text-center text-white transition-colors duration-300 group-hover:bg-navy-800 md:px-5 md:py-7">
+                            <h3 class="w-full font-display text-base font-bold md:text-lg">{{ $value['title'] }}</h3>
+                            <span class="mx-auto mt-2 block h-px w-8 bg-gold-soft/50 transition-all duration-300 group-hover:w-12" aria-hidden="true"></span>
                             <p class="mx-auto mt-2.5 w-full max-w-[34ch] text-[13px] leading-relaxed text-white/85">{{ $value['desc'] }}</p>
                         </div>
                     </div>
