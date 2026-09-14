@@ -12,7 +12,14 @@
     ];
 @endphp
 
-<x-layout :title="$id ? 'Daftar Pemegang Sertifikat' : 'Certificate Holders'">
+{{-- Judul dan deskripsi mengikuti maksud pencarian orang yang mendarat di sini.
+     Sebelumnya deskripsi tidak diisi sama sekali, sehingga layout memakai
+     tagline umum perusahaan — sama persis dengan belasan halaman lain. --}}
+<x-layout
+    :title="$id ? 'Cek Keaslian Sertifikat Kompetensi' : 'Verify a Competency Certificate'"
+    :description="$id
+        ? 'Cek keaslian sertifikat kompetensi BNSP terbitan PT Delta Tiga Enam. Masukkan nama peserta, nama perusahaan, atau nomor sertifikat untuk melihat kualifikasi yang diuji dan status berlakunya.'
+        : 'Verify BNSP competency certificates issued by PT Delta Tiga Enam. Enter a participant name, company, or certificate number to see the qualification assessed and whether it is still valid.'">
     <x-page-header
         :title="$id ? 'Pemegang Sertifikat' : 'Certificate Holders'"
         :subtitle="$id ? 'Bukti nyata kompetensi — para profesional yang telah lulus sertifikasi resmi bersama kami.' : 'Real proof of competency — professionals who have earned official certification with us.'"
@@ -33,43 +40,43 @@
          kini muncul sebagai keterangan tenang tepat di atas daftarnya. --}}
     <section class="section-sm border-b border-navy-50 bg-neutral-50">
         <div class="container">
-            {{-- Seluruh blok dibungkus satu kotak putih. Isian di dalamnya polos
-                 lagi — kotak di dalam kotak hanya menumpuk bingkai tanpa
-                 menambah kejelasan. Kolom isiannya diberi isian neutral-50 agar
-                 batasnya tetap terbaca di atas panel yang putih. --}}
-            <div class="max-w-3xl rounded-2xl border border-navy-100 bg-white p-7 md:p-10">
-                {{-- font-display dan text-balance tidak ditulis di sini: app.css
-                     sudah memberikannya ke seluruh h1–h4. --}}
+            {{-- Tanpa kotak pembungkus. Yang berbingkai hanya kolom isiannya, dan
+                 karena putih di atas seksi abu-abu muda, ia menonjol sendiri —
+                 itulah elemen yang memang harus paling terlihat di sini. --}}
+            <div class="max-w-2xl">
+                {{-- Judul memuat kata yang benar-benar diketik orang saat mencari
+                     ("cek keaslian sertifikat kompetensi"), bukan nama fitur.
+                     font-display dan text-balance tidak ditulis: app.css sudah
+                     memberikannya ke seluruh h1–h4. --}}
                 <h2 class="text-3xl leading-tight text-navy md:text-4xl">
-                    {{ $id ? 'Ragu dengan sebuah sertifikat? Cek di sini.' : 'Unsure about a certificate? Check it here.' }}
+                    {{ $id ? 'Cek Keaslian Sertifikat Kompetensi' : 'Verify a Competency Certificate' }}
                 </h2>
                 <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
-                <p class="mt-5 text-pretty leading-relaxed text-slate-600">
-                    {{ $id
-                        ? 'Cukup ketik nama peserta, nama perusahaannya, atau nomor sertifikatnya. Sekali cari, Anda langsung melihat kualifikasi apa yang diuji dan apakah sertifikatnya masih berlaku hari ini.'
-                        : 'Just type the participant\'s name, their company, or the certificate number. One search shows you which qualification was assessed and whether the certificate is still valid today.' }}
+                <p class="mt-6 font-display text-xl leading-snug text-navy md:text-2xl">
+                    {{ $id ? 'Satu nama, satu nomor — langsung terbukti.' : 'One name, one number — proof on the spot.' }}
                 </p>
-
-                <form method="GET" action="{{ route('certificates.index') }}" class="mt-8">
-                    <label for="cert-q" class="sr-only">{{ $id ? 'Nama peserta, perusahaan, atau nomor sertifikat' : 'Participant name, company, or certificate number' }}</label>
-                    <div class="flex flex-col gap-3 sm:flex-row">
-                        <div class="relative flex-1">
-                            <svg class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-                            {{-- Placeholder tidak diterjemahkan: isinya contoh nama dan nomor. --}}
-                            <input id="cert-q" type="search" name="q" value="{{ $q }}" autocomplete="off"
-                                   placeholder="Ahmad Fauzi · PT Baja Perkasa · DTE/BNSP/2026/1000"
-                                   class="w-full rounded-xl border border-navy-200 bg-neutral-50 py-3.5 pl-11 pr-4 text-[15px] text-navy transition-colors duration-200 placeholder:text-slate-500 focus:border-sky-600 focus:bg-white">
-                        </div>
-                        <button type="submit" class="btn-blue shrink-0 justify-center !py-3.5 sm:!px-8">{{ $id ? 'Periksa' : 'Check' }}</button>
-                    </div>
-                    <p class="mt-3 text-xs text-slate-500">
-                        {{ $id
-                            ? 'Sebagian nama atau sebagian nomor sudah cukup — tidak harus lengkap.'
-                            : 'Part of a name or part of a number is enough — it does not have to be complete.' }}
-                    </p>
-                </form>
-
             </div>
+
+            {{-- Formulir sengaja lebih lebar dari kolom teksnya: bilah pencarian
+                 menjadi benda paling menonjol di seksi ini tanpa perlu dikotakkan. --}}
+            <form method="GET" action="{{ route('certificates.index') }}" class="mt-8 max-w-3xl">
+                <label for="cert-q" class="sr-only">{{ $id ? 'Nama peserta, perusahaan, atau nomor sertifikat' : 'Participant name, company, or certificate number' }}</label>
+                <div class="flex flex-col gap-3 sm:flex-row">
+                    <div class="relative flex-1">
+                        <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                        {{-- Placeholder tidak diterjemahkan: isinya contoh nama dan nomor. --}}
+                        <input id="cert-q" type="search" name="q" value="{{ $q }}" autocomplete="off"
+                               placeholder="Ahmad Fauzi · PT Baja Perkasa · DTE/BNSP/2026/1000"
+                               class="w-full rounded-xl border border-navy-200 bg-white py-4 pl-12 pr-4 text-base text-navy transition-colors duration-200 placeholder:text-slate-500 focus:border-sky-600">
+                    </div>
+                    <button type="submit" class="btn-blue shrink-0 justify-center !py-4 sm:!px-9">{{ $id ? 'Periksa' : 'Check' }}</button>
+                </div>
+                <p class="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600">
+                    {{ $id
+                        ? 'Sebagian nama atau sebagian nomor sudah cukup. Hasilnya menampilkan kualifikasi yang diuji dan apakah sertifikatnya masih berlaku hari ini.'
+                        : 'Part of a name or part of a number is enough. Results show the qualification assessed and whether the certificate is still valid today.' }}
+                </p>
+            </form>
         </div>
     </section>
 
