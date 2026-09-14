@@ -47,6 +47,27 @@ class CertificateController extends Controller
             'certificates' => $certificates,
             'q' => $q,
             'expiredCount' => $expiredCount,
+            'suggestions' => $this->topQualifications(),
         ]);
+    }
+
+    /**
+     * Kualifikasi yang paling banyak dipegang, untuk pintasan pencarian.
+     *
+     * Sengaja dihitung dari seluruh data aktif, bukan dari hasil pencarian yang
+     * sedang tampil: gunanya justru menawarkan jalan keluar ketika pencarian
+     * pengunjung tidak membuahkan apa-apa.
+     *
+     * @return \Illuminate\Support\Collection<int, string>
+     */
+    private function topQualifications()
+    {
+        return CertificateHolder::active()
+            ->whereNotNull('qualification')
+            ->where('qualification', '!=', '')
+            ->groupBy('qualification')
+            ->orderByRaw('COUNT(*) DESC')
+            ->limit(4)
+            ->pluck('qualification');
     }
 }

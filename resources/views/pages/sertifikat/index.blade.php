@@ -38,20 +38,22 @@
          apa-apa; dan "Terdaftar 25" membantah klaim situs sendiri yang menulis
          "500+ Profesional Terlatih" di beranda serta halaman Tentang. Jumlahnya
          kini muncul sebagai keterangan tenang tepat di atas daftarnya. --}}
-    <section class="section-sm border-b border-navy-50 bg-neutral-50">
-        <div class="container">
-            {{-- Tanpa kotak pembungkus. Yang berbingkai hanya kolom isiannya, dan
-                 karena putih di atas seksi abu-abu muda, ia menonjol sendiri —
-                 itulah elemen yang memang harus paling terlihat di sini. --}}
+    {{-- Latar putih dengan sapuan cahaya lembut, bukan blok abu rata: memberi
+         kedalaman tanpa isian warna, dan kolom pencarian yang putih justru makin
+         menonjol di atasnya. Pola yang sama sudah dipakai halaman Layanan. --}}
+    <section class="section-sm relative overflow-hidden border-b border-navy-50 bg-white">
+        <div class="pointer-events-none absolute inset-0 aurora-light opacity-80"></div>
+
+        <div class="container relative">
             <div class="max-w-2xl">
                 {{-- Judul memuat kata yang benar-benar diketik orang saat mencari
                      ("cek keaslian sertifikat kompetensi"), bukan nama fitur.
                      font-display dan text-balance tidak ditulis: app.css sudah
                      memberikannya ke seluruh h1–h4. --}}
-                <h2 class="text-3xl leading-tight text-navy md:text-4xl">
+                <h2 class="text-3xl leading-tight text-navy md:text-5xl">
                     {{ $id ? 'Cek Keaslian Sertifikat Kompetensi' : 'Verify a Competency Certificate' }}
                 </h2>
-                <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
+                <span class="mt-6 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
                 <p class="mt-6 font-display text-xl leading-snug text-navy md:text-2xl">
                     {{ $id ? 'Satu nama. Satu nomor. Langsung terbukti.' : 'One name. One number. Proof on the spot.' }}
                 </p>
@@ -59,24 +61,43 @@
 
             {{-- Formulir sengaja lebih lebar dari kolom teksnya: bilah pencarian
                  menjadi benda paling menonjol di seksi ini tanpa perlu dikotakkan. --}}
-            <form method="GET" action="{{ route('certificates.index') }}" class="mt-8 max-w-3xl">
+            <form method="GET" action="{{ route('certificates.index') }}" class="mt-9 max-w-3xl">
                 <label for="cert-q" class="sr-only">{{ $id ? 'Nama peserta, perusahaan, atau nomor sertifikat' : 'Participant name, company, or certificate number' }}</label>
                 <div class="flex flex-col gap-3 sm:flex-row">
                     <div class="relative flex-1">
-                        <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                        <svg class="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
                         {{-- Placeholder tidak diterjemahkan: isinya contoh nama dan nomor. --}}
                         <input id="cert-q" type="search" name="q" value="{{ $q }}" autocomplete="off"
                                placeholder="Ahmad Fauzi · PT Baja Perkasa · DTE/BNSP/2026/1000"
-                               class="w-full rounded-xl border border-navy-200 bg-white py-4 pl-12 pr-4 text-base text-navy transition-colors duration-200 placeholder:text-slate-500 focus:border-sky-600">
+                               class="w-full rounded-2xl border border-navy-200 bg-white py-5 pl-14 pr-5 text-base text-navy transition-colors duration-200 placeholder:text-slate-500 focus:border-sky-600">
                     </div>
-                    <button type="submit" class="btn-blue shrink-0 justify-center !py-4 sm:!px-9">{{ $id ? 'Periksa' : 'Check' }}</button>
+                    <button type="submit" class="btn-blue shrink-0 justify-center !rounded-2xl !py-5 sm:!px-10">{{ $id ? 'Periksa' : 'Check' }}</button>
                 </div>
-                <p class="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600">
+                <p class="mt-4 max-w-2xl text-sm leading-relaxed text-slate-600">
                     {{ $id
                         ? 'Sebagian nama atau sebagian nomor sudah cukup. Hasilnya menampilkan kualifikasi yang diuji dan apakah sertifikatnya masih berlaku hari ini.'
                         : 'Part of a name or part of a number is enough. Results show the qualification assessed and whether the certificate is still valid today.' }}
                 </p>
             </form>
+
+            {{-- Pintasan dari kualifikasi yang paling banyak dipegang. Bukan hiasan:
+                 pengunjung yang belum tahu harus mengetik apa jadi punya titik
+                 mulai, dan seksi ini menunjukkan isi daftarnya tanpa diklaim. --}}
+            @if ($suggestions->isNotEmpty())
+                <div class="mt-7 flex flex-wrap items-center gap-2 text-sm">
+                    <span class="mr-1 text-slate-500">{{ $id ? 'Cari cepat:' : 'Quick search:' }}</span>
+                    @foreach ($suggestions as $suggestion)
+                        @php $active = $q === $suggestion; @endphp
+                        <a href="{{ route('certificates.index', ['q' => $suggestion]) }}"
+                           @if ($active) aria-current="true" @endif
+                           class="rounded-full border px-3.5 py-1.5 font-medium transition-colors duration-200 {{ $active
+                               ? 'border-navy bg-navy text-white'
+                               : 'border-navy-200 bg-white text-navy hover:border-sky-600 hover:text-sky-700' }}">
+                            {{ $suggestion }}
+                        </a>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </section>
 
