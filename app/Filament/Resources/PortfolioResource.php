@@ -31,8 +31,11 @@ class PortfolioResource extends Resource
 
     public static function form(Form $form): Form
     {
+        // Dikelompokkan mengikuti pola BlogPostResource (Konten -> Media -> Detail),
+        // menggantikan satu seksi berisi 13 field campur aduk. Editor konten diberi
+        // lebar penuh; sebelumnya terjepit di satu kolom.
         return $form->schema([
-            Forms\Components\Section::make('Proyek')->schema([
+            Forms\Components\Section::make('Proyek (ID/EN)')->schema([
                 Forms\Components\TextInput::make('title.id')
                     ->label('Judul (ID)')
                     ->required()
@@ -42,13 +45,30 @@ class PortfolioResource extends Resource
                 Forms\Components\TextInput::make('title.en')
                     ->label('Judul (EN)')
                     ->maxLength(280),
-                Forms\Components\TextInput::make('slug')->required()->maxLength(280)->unique(ignoreRecord: true),
+                Forms\Components\TextInput::make('slug')
+                    ->label('Slug')
+                    ->required()
+                    ->maxLength(280)
+                    ->unique(ignoreRecord: true)
+                    ->helperText('Terisi otomatis dari Judul (ID) saat membuat baru.')
+                    ->columnSpanFull(),
+                Forms\Components\Textarea::make('short_description.id')->label('Deskripsi Singkat (ID)')->rows(3),
+                Forms\Components\Textarea::make('short_description.en')->label('Deskripsi Singkat (EN)')->rows(3),
+                Forms\Components\RichEditor::make('content.id')->label('Konten (ID)')->columnSpanFull(),
+                Forms\Components\RichEditor::make('content.en')->label('Konten (EN)')->columnSpanFull(),
+            ])->columns(2),
+
+            Forms\Components\Section::make('Media')->schema([
+                MediaUpload::for('cover_image', 'portfolio', 'portfolio')->label('Cover')->columnSpanFull(),
+            ]),
+
+            Forms\Components\Section::make('Detail Proyek')->schema([
                 Forms\Components\TextInput::make('client_name')->label('Nama Klien')->maxLength(200),
                 Forms\Components\TextInput::make('location')
                     ->label('Lokasi')
                     ->maxLength(160)
                     ->placeholder('Jakarta Selatan, Indonesia')
-                    ->helperText('Lokasi pelaksanaan proyek. Tampil di kartu portofolio dan halaman detailnya.'),
+                    ->helperText('Tampil di kartu portofolio dan halaman detailnya.'),
                 Forms\Components\Select::make('service_category_id')
                     ->relationship('category', 'slug')
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)
@@ -56,12 +76,11 @@ class PortfolioResource extends Resource
                     ->searchable()
                     ->label('Kategori'),
                 Forms\Components\DatePicker::make('project_date')->label('Tanggal Proyek'),
-                Forms\Components\Textarea::make('short_description.id')->label('Deskripsi Singkat (ID)')->rows(2),
-                Forms\Components\Textarea::make('short_description.en')->label('Deskripsi Singkat (EN)')->rows(2),
-                Forms\Components\RichEditor::make('content.id')->label('Konten (ID)'),
-                Forms\Components\RichEditor::make('content.en')->label('Konten (EN)'),
-                MediaUpload::for('cover_image', 'portfolio', 'portfolio')->label('Cover')->columnSpanFull(),
-                Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
+                Forms\Components\Toggle::make('is_active')
+                    ->label('Aktif')
+                    ->default(true)
+                    ->helperText('Nonaktif berarti proyek ini tidak tampil di situs.')
+                    ->columnSpanFull(),
             ])->columns(2),
 
             Forms\Components\Section::make('Galeri')->schema([
