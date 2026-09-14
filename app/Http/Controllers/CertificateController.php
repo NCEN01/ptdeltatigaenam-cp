@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CertificateHolder;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -48,6 +49,14 @@ class CertificateController extends Controller
             'q' => $q,
             'expiredCount' => $expiredCount,
             'suggestions' => $this->topQualifications(),
+            // Foto untuk blok ajakan di bawah. Diambil dari program sertifikasi
+            // yang memang dituju tombolnya, bukan gambar hiasan lepas — kalau
+            // programnya belum punya gambar, bloknya tampil tanpa foto.
+            'ctaService' => Service::where('is_active', true)
+                ->whereHas('category', fn ($query) => $query->where('slug', 'sertifikasi-kompetensi'))
+                ->whereNotNull('image')
+                ->orderBy('sort_order')
+                ->first(['slug', 'title', 'image']),
         ]);
     }
 

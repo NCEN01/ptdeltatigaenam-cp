@@ -1,4 +1,6 @@
 @php
+    use Illuminate\Support\Facades\Storage;
+
     $id = app()->getLocale() === 'id';
 
     $proof = $id ? [
@@ -239,16 +241,20 @@
     <section class="section-sm border-t border-navy-50 bg-neutral-50">
         <div class="container grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div class="lg:col-span-7">
-                <h2 class="font-display text-2xl text-navy text-balance md:text-3xl">
+                <h2 class="text-2xl text-navy md:text-4xl">
                     {{ $id ? 'Kenapa daftar ini kami buka' : 'Why we publish this list' }}
                 </h2>
-                <span class="mt-4 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
+                <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
 
-                <dl class="mt-8 divide-y divide-navy-100 border-t border-navy-100">
+                {{-- Judul tiap butir dibesarkan dan jaraknya dilonggarkan supaya
+                     daftar ini terbaca sebagai tiga argumen, bukan tiga baris
+                     keterangan. Tetap dipisah garis rambut: isinya argumen, dan
+                     argumen tidak perlu dikotakkan satu per satu. --}}
+                <dl class="mt-9 divide-y divide-navy-200 border-t border-navy-200">
                     @foreach ($proof as [$title, $body])
-                        <div class="py-5">
-                            <dt class="font-display text-lg text-navy">{{ $title }}</dt>
-                            <dd class="mt-1.5 max-w-[65ch] text-pretty text-sm leading-relaxed text-slate-600">{{ $body }}</dd>
+                        <div class="py-7">
+                            <dt class="font-display text-xl font-semibold leading-snug text-navy md:text-2xl">{{ $title }}</dt>
+                            <dd class="mt-2.5 max-w-[62ch] text-pretty leading-relaxed text-slate-600">{{ $body }}</dd>
                         </div>
                     @endforeach
                 </dl>
@@ -262,10 +268,27 @@
                  melorot bersama bloknya alih-alih membatasi kolom. --}}
             <div class="lg:col-span-5 lg:border-l lg:border-navy-200 lg:pl-10">
                 <div class="border-t border-navy-200 pt-8 lg:sticky lg:top-28 lg:border-t-0 lg:pt-0">
-                    <p class="font-display text-xl leading-snug text-navy text-balance md:text-2xl">
+                    {{-- Satu foto nyata dari program yang memang dituju tombolnya.
+                         Seksi ini sebelumnya teks semua; foto memberinya bobot
+                         tanpa perlu kotak atau isian warna. --}}
+                    @if ($ctaService?->image)
+                        @php
+                            $ctaImage = str_starts_with($ctaService->image, 'http')
+                                ? $ctaService->image
+                                : Storage::url($ctaService->image);
+                        @endphp
+                        <a href="{{ route('services.show', $ctaService->slug) }}" class="group mb-7 block overflow-hidden rounded-2xl">
+                            <img src="{{ $ctaImage }}"
+                                 alt="{{ $id ? 'Pelaksanaan program '.$ctaService->title : $ctaService->title.' in progress' }}"
+                                 loading="lazy" decoding="async"
+                                 class="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out-soft group-hover:scale-[1.04]">
+                        </a>
+                    @endif
+
+                    <p class="font-display text-xl font-semibold leading-snug text-navy text-balance md:text-2xl">
                         {{ $id ? 'Ingin nama Anda ada di daftar ini?' : 'Want your name on this list?' }}
                     </p>
-                    <p class="mt-3 max-w-[65ch] text-sm leading-relaxed text-slate-600">
+                    <p class="mt-3 text-sm leading-relaxed text-slate-600">
                         {{ $id
                             ? 'Uji kompetensi dapat digelar di tempat kerja Anda, mengikuti pola sif, tanpa menghentikan produksi.'
                             : 'Assessment can run at your workplace, around your shift pattern, without stopping production.' }}
