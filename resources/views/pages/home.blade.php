@@ -65,7 +65,11 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-transparent to-navy-950/30"></div>
 
                         <div class="container relative flex min-h-[100svh] items-center">
-                            <div class="hero-content max-w-2xl py-28 text-white">
+                            {{-- Asymmetric padding instead of py-28: the box keeps roughly the same
+                                 height so the flex centring is undisturbed, but the heading, copy and
+                                 CTA all sit lower — clear of the fixed header and better balanced
+                                 against the stats ledger pinned to the bottom of the slide. --}}
+                            <div class="hero-content max-w-2xl pb-20 pt-32 text-white md:pb-16 md:pt-40">
                                 @if (! empty($slide['cat']))
                                     <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 font-mono text-[11px] font-medium uppercase tracking-normal text-white backdrop-blur">
                                         <svg class="h-3.5 w-3.5 text-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg>
