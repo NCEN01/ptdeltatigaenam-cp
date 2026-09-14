@@ -2,11 +2,16 @@
     $id = app()->getLocale() === 'id';
 
     /* Angka ringkasan. Ditulis sebagai daftar supaya barisnya dirender satu kali,
-       bukan tiga blok markup yang hampir sama. */
+       bukan tiga blok markup yang hampir sama.
+
+       Hanya angka kedaluwarsa yang diberi warna, dan hanya kalau memang ada —
+       nol yang dimerahkan menakut-nakuti tanpa sebab. Nol diredupkan ke
+       slate-500 (4,6:1), bukan navy-200: navy-200 dibuat untuk latar gelap dan
+       hanya berkontras 1,5:1 di atas latar terang ini. */
     $figures = [
-        ['value' => $certificates->total(), 'label' => $id ? 'Terdaftar' : 'Registered', 'tone' => 'text-white'],
-        ['value' => $validCount, 'label' => $id ? 'Masih berlaku' : 'Currently valid', 'tone' => 'text-sky-300'],
-        ['value' => $expiredCount, 'label' => $id ? 'Kedaluwarsa' : 'Expired', 'tone' => 'text-navy-200'],
+        ['value' => $certificates->total(), 'label' => $id ? 'Terdaftar' : 'Registered'],
+        ['value' => $validCount, 'label' => $id ? 'Masih berlaku' : 'Currently valid'],
+        ['value' => $expiredCount, 'label' => $id ? 'Kedaluwarsa' : 'Expired', 'tone' => $expiredCount > 0 ? 'text-rose-700' : 'text-slate-500'],
     ];
 
     /* Satu definisi untuk teks masa berlaku. Formatnya berbeda per tempat —
@@ -37,53 +42,64 @@
          Halaman ini dipakai orang untuk satu hal: memeriksa apakah sebuah
          sertifikat benar ada dan masih berlaku. Jadi pencarian yang dulu
          terselip sebagai baris alat kecil kini memimpin halaman, ditemani
-         angka nyata yang dihitung dari data — bukan klaim. --}}
-    <section class="relative overflow-hidden bg-navy-950 py-14 text-white md:py-20">
-        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-55"></div>
-        <div class="pointer-events-none absolute inset-0 grain opacity-40"></div>
-        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
+         angka nyata yang dihitung dari data — bukan klaim.
 
-        <div class="container relative grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-14">
+         Permukaannya sedikit turun: ini area alat, bukan isi. Kolom pencarian
+         yang putih jadi menonjol di atasnya tanpa perlu isian warna. --}}
+    <section class="section-sm border-b border-navy-50 bg-neutral-50">
+        <div class="container grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-16">
             <div class="lg:col-span-7">
-                <h2 class="font-display text-3xl leading-tight text-balance md:text-4xl">
+                {{-- font-display dan text-balance tidak ditulis di sini: app.css
+                     sudah memberikannya ke seluruh h1–h4. --}}
+                <h2 class="text-3xl leading-tight text-navy md:text-4xl">
                     {{ $id ? 'Periksa keabsahan sebuah sertifikat' : 'Check whether a certificate is genuine' }}
                 </h2>
-                <p class="mt-4 max-w-xl text-pretty leading-relaxed text-navy-100">
+                <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
+                <p class="mt-5 max-w-xl text-pretty leading-relaxed text-slate-600">
                     {{ $id
                         ? 'Masukkan nama peserta, nama perusahaan, atau nomor sertifikat. Hasilnya menunjukkan kualifikasi yang diuji beserta masa berlakunya.'
                         : 'Enter a participant name, company name, or certificate number. Results show the qualification assessed and how long it remains valid.' }}
                 </p>
 
-                <form method="GET" action="{{ route('certificates.index') }}" class="mt-7">
+                <form method="GET" action="{{ route('certificates.index') }}" class="mt-8">
                     <label for="cert-q" class="sr-only">{{ $id ? 'Kata kunci pencarian sertifikat' : 'Certificate search keyword' }}</label>
                     <div class="flex flex-col gap-3 sm:flex-row">
                         <div class="relative flex-1">
-                            <svg class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-200" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                            <svg class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                            {{-- Tanpa focus:outline-none / ring sendiri: app.css sudah punya
+                                 :focus-visible bercincin sky-500 penuh. Cincin /30 buatan saya
+                                 hanya berkontras 1,3:1 dan justru menimpa yang lebih kuat. --}}
                             <input id="cert-q" type="search" name="q" value="{{ $q }}" autocomplete="off"
                                    placeholder="{{ $id ? 'mis. Ahmad Fauzi, PT Baja Perkasa, DTE/BNSP/…' : 'e.g. Ahmad Fauzi, PT Baja Perkasa, DTE/BNSP/…' }}"
-                                   class="w-full rounded-xl border border-white/15 bg-white/[0.07] py-3.5 pl-11 pr-4 text-[15px] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-colors duration-200 placeholder:text-navy-200/80 focus:border-sky-400 focus:bg-white/[0.12] focus:outline-none focus:ring-2 focus:ring-sky-400/60">
+                                   class="w-full rounded-xl border border-navy-200 bg-white py-3.5 pl-11 pr-4 text-[15px] text-navy transition-colors duration-200 placeholder:text-slate-500 focus:border-sky-500">
                         </div>
                         <button type="submit" class="btn-blue shrink-0 justify-center !py-3.5 sm:!px-8">{{ $id ? 'Cari' : 'Search' }}</button>
                     </div>
                 </form>
 
                 @if ($q !== '')
-                    <p class="mt-4 text-sm text-navy-100">
+                    <p class="mt-4 text-sm text-slate-600">
                         {{ $id ? 'Menampilkan hasil untuk' : 'Showing results for' }}
-                        <span class="font-semibold text-white">&ldquo;{{ $q }}&rdquo;</span>
-                        <span class="mx-2 text-navy-200" aria-hidden="true">·</span>
-                        <a href="{{ route('certificates.index') }}" class="font-medium text-sky-300 underline underline-offset-4 transition-colors hover:text-white">{{ $id ? 'tampilkan semua' : 'show all' }}</a>
+                        <span class="font-semibold text-navy">&ldquo;{{ $q }}&rdquo;</span>
+                        <span class="mx-2 text-slate-400" aria-hidden="true">·</span>
+                        {{-- Bukan .link-underline: kelas itu inline-flex tanpa garis saat diam,
+                             jadi tautan di tengah kalimat tidak bisa membungkus dan hanya
+                             dibedakan warna — 1,5:1 terhadap teks sekitarnya. --}}
+                        <a href="{{ route('certificates.index') }}" class="font-medium text-sky-700 underline underline-offset-4 transition-colors hover:text-navy">{{ $id ? 'tampilkan semua' : 'show all' }}</a>
                     </p>
                 @endif
             </div>
 
             {{-- Angka dipisah garis tipis, bukan dikotakkan jadi kartu — tiga kotak
-                 berjajar justru menyaingi perhatian dari kolom pencarian. --}}
-            <dl class="divide-y divide-white/10 border-t border-white/10 lg:col-span-5 lg:border-t-0">
+                 berjajar justru menyaingi perhatian dari kolom pencarian. Angkanya
+                 sengaja besar: inilah bukti yang dibawa halaman ini. --}}
+            {{-- divide-navy-200, bukan -100: garisnya adalah seluruh premis tata
+                 letak ini, dan navy-100 di atas neutral-50 hanya 1,2:1. --}}
+            <dl class="divide-y divide-navy-200 border-t border-navy-200 lg:col-span-5 lg:border-t-0">
                 @foreach ($figures as $figure)
-                    <div class="flex items-baseline justify-between gap-6 py-3.5 lg:py-4">
-                        <dt class="text-sm text-navy-100">{{ $figure['label'] }}</dt>
-                        <dd class="font-display text-2xl tabular-nums {{ $figure['tone'] }} md:text-3xl">{{ $figure['value'] }}</dd>
+                    <div class="flex items-baseline justify-between gap-6 py-4 lg:py-5">
+                        <dt class="text-sm text-slate-600">{{ $figure['label'] }}</dt>
+                        <dd class="font-display text-3xl leading-none tabular-nums {{ $figure['tone'] ?? 'text-navy' }} md:text-4xl">{{ $figure['value'] }}</dd>
                     </div>
                 @endforeach
             </dl>
@@ -119,15 +135,15 @@
 
                         <dl class="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-navy-50 pt-3 text-xs">
                             <div class="min-w-0">
-                                <dt class="text-[11px] text-slate-400">{{ $id ? 'No. Sertifikat' : 'Certificate No.' }}</dt>
+                                <dt class="text-[11px] text-slate-500">{{ $id ? 'No. Sertifikat' : 'Certificate No.' }}</dt>
                                 <dd class="truncate font-mono text-slate-700">{{ $c->certificate_number ?: '—' }}</dd>
                             </div>
                             <div class="min-w-0">
-                                <dt class="text-[11px] text-slate-400">{{ $id ? 'No. UJK' : 'Reg. No.' }}</dt>
+                                <dt class="text-[11px] text-slate-500">{{ $id ? 'No. UJK' : 'Reg. No.' }}</dt>
                                 <dd class="truncate font-mono text-slate-500">{{ $c->ujk_number ?: '—' }}</dd>
                             </div>
                             <div class="col-span-2">
-                                <dt class="text-[11px] text-slate-400">{{ $id ? 'Berlaku sampai' : 'Valid until' }}</dt>
+                                <dt class="text-[11px] text-slate-500">{{ $id ? 'Berlaku sampai' : 'Valid until' }}</dt>
                                 <dd class="text-slate-700">{{ $validUntil($c, 'd F Y') }}</dd>
                             </div>
                         </dl>
@@ -160,7 +176,7 @@
                                     <td class="px-5 py-4 text-slate-700">{{ $c->qualification ?: '—' }}</td>
                                     <td class="px-5 py-4">
                                         <p class="whitespace-nowrap font-mono text-xs text-slate-700">{{ $c->certificate_number ?: '—' }}</p>
-                                        <p class="mt-0.5 whitespace-nowrap font-mono text-[11px] text-slate-400">{{ $c->ujk_number ?: '—' }}</p>
+                                        <p class="mt-0.5 whitespace-nowrap font-mono text-[11px] text-slate-500">{{ $c->ujk_number ?: '—' }}</p>
                                     </td>
                                     <td class="px-5 py-4">
                                         <x-certificate-status :expires-at="$c->expires_at" />
@@ -201,23 +217,25 @@
                 </dl>
             </div>
 
-            <div class="lg:col-span-5">
-                <div class="relative overflow-hidden rounded-2xl bg-navy-950 p-8 text-white lg:sticky lg:top-28">
-                    <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-40"></div>
-                    <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
-                    <div class="relative">
-                        <p class="font-display text-xl leading-snug text-balance md:text-2xl">
-                            {{ $id ? 'Ingin nama Anda ada di daftar ini?' : 'Want your name on this list?' }}
-                        </p>
-                        <p class="mt-3 text-sm leading-relaxed text-navy-100">
-                            {{ $id
-                                ? 'Uji kompetensi dapat digelar di tempat kerja Anda, mengikuti pola sif, tanpa menghentikan produksi.'
-                                : 'Assessment can run at your workplace, around your shift pattern, without stopping production.' }}
-                        </p>
-                        <div class="mt-6 flex flex-col gap-3 sm:flex-row lg:flex-col">
-                            <a href="{{ route('services.index') }}" class="btn-blue justify-center">{{ $id ? 'Lihat Program Sertifikasi' : 'View Certification Programs' }}</a>
-                            <a href="{{ route('contact.index') }}" class="btn-ghost-light justify-center">{{ $id ? 'Konsultasi Gratis' : 'Free Consultation' }}</a>
-                        </div>
+            {{-- Bukan panel berwarna: hanya blok teks yang menempel di kolomnya,
+                 dipisahkan garis rambut. Isian gelap di sini akan menyaingi
+                 daftar sertifikatnya sendiri, padahal daftar itulah isi halaman. --}}
+            {{-- Garis kolom ada di pembungkus yang meregang setinggi baris, bukan
+                 di elemen sticky — kalau ditempel di yang sticky, garisnya ikut
+                 melorot bersama bloknya alih-alih membatasi kolom. --}}
+            <div class="lg:col-span-5 lg:border-l lg:border-navy-200 lg:pl-10">
+                <div class="border-t border-navy-200 pt-8 lg:sticky lg:top-28 lg:border-t-0 lg:pt-0">
+                    <p class="font-display text-xl leading-snug text-navy text-balance md:text-2xl">
+                        {{ $id ? 'Ingin nama Anda ada di daftar ini?' : 'Want your name on this list?' }}
+                    </p>
+                    <p class="mt-3 max-w-[65ch] text-sm leading-relaxed text-slate-600">
+                        {{ $id
+                            ? 'Uji kompetensi dapat digelar di tempat kerja Anda, mengikuti pola sif, tanpa menghentikan produksi.'
+                            : 'Assessment can run at your workplace, around your shift pattern, without stopping production.' }}
+                    </p>
+                    <div class="mt-6 flex flex-col gap-3 sm:flex-row lg:flex-col">
+                        <a href="{{ route('services.index') }}" class="btn-blue justify-center">{{ $id ? 'Lihat Program Sertifikasi' : 'View Certification Programs' }}</a>
+                        <a href="{{ route('contact.index') }}" class="btn-ghost justify-center">{{ $id ? 'Konsultasi Gratis' : 'Free Consultation' }}</a>
                     </div>
                 </div>
             </div>
