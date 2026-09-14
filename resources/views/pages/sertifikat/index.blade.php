@@ -22,47 +22,51 @@
     {{-- ===================== PENCARIAN =====================
          Halaman ini dipakai orang untuk satu hal: memeriksa apakah sebuah
          sertifikat benar ada dan masih berlaku. Jadi pencarian yang dulu
-         terselip sebagai baris alat kecil kini memimpin halaman, ditemani
-         Permukaannya sedikit turun: ini area alat, bukan isi. Kolom pencarian
-         yang putih jadi menonjol di atasnya tanpa perlu isian warna.
+         terselip sebagai baris alat kecil kini memimpin halaman.
 
-         Blok tiga angka besar (Terdaftar / Masih berlaku / Kedaluwarsa) dihapus
-         dari sini. Dua sebabnya nyata: saat orang mencari — yaitu saat halaman
-         ini bekerja — angkanya berbunyi "1 1 0" atau "0 0 0", tiga angka
-         terbesar di layar untuk mengatakan nyaris tidak ada apa-apa; dan
-         "Terdaftar 25" membantah klaim situs sendiri yang menulis "500+
-         Profesional Terlatih" di beranda serta halaman Tentang. Jumlahnya kini
-         muncul sebagai keterangan tenang tepat di atas daftarnya. --}}
+         Blok tiga angka besar (Terdaftar / Masih berlaku / Kedaluwarsa) pernah
+         berdiri di sini lalu dihapus. Dua sebabnya nyata: saat orang mencari —
+         yaitu saat halaman ini bekerja — angkanya berbunyi "1 1 0" atau
+         "0 0 0", tiga angka terbesar di layar untuk mengatakan nyaris tidak ada
+         apa-apa; dan "Terdaftar 25" membantah klaim situs sendiri yang menulis
+         "500+ Profesional Terlatih" di beranda serta halaman Tentang. Jumlahnya
+         kini muncul sebagai keterangan tenang tepat di atas daftarnya. --}}
     <section class="section-sm border-b border-navy-50 bg-neutral-50">
         <div class="container">
-            <div class="max-w-2xl">
+            {{-- Seluruh blok dibungkus satu kotak putih. Isian di dalamnya polos
+                 lagi — kotak di dalam kotak hanya menumpuk bingkai tanpa
+                 menambah kejelasan. Kolom isiannya diberi isian neutral-50 agar
+                 batasnya tetap terbaca di atas panel yang putih. --}}
+            <div class="max-w-3xl rounded-2xl border border-navy-100 bg-white p-7 md:p-10">
                 {{-- font-display dan text-balance tidak ditulis di sini: app.css
                      sudah memberikannya ke seluruh h1–h4. --}}
                 <h2 class="text-3xl leading-tight text-navy md:text-4xl">
-                    {{ $id ? 'Periksa keabsahan sebuah sertifikat' : 'Check whether a certificate is genuine' }}
+                    {{ $id ? 'Ragu dengan sebuah sertifikat? Cek di sini.' : 'Unsure about a certificate? Check it here.' }}
                 </h2>
                 <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
-                <p class="mt-5 max-w-xl text-pretty leading-relaxed text-slate-600">
+                <p class="mt-5 text-pretty leading-relaxed text-slate-600">
                     {{ $id
-                        ? 'Masukkan nama peserta, nama perusahaan, atau nomor sertifikat. Hasilnya menunjukkan kualifikasi yang diuji beserta status keberlakuannya.'
-                        : 'Enter a participant name, company name, or certificate number. Results show the qualification assessed and whether it is still valid.' }}
+                        ? 'Cukup ketik nama peserta, nama perusahaannya, atau nomor sertifikatnya. Sekali cari, Anda langsung melihat kualifikasi apa yang diuji dan apakah sertifikatnya masih berlaku hari ini.'
+                        : 'Just type the participant\'s name, their company, or the certificate number. One search shows you which qualification was assessed and whether the certificate is still valid today.' }}
                 </p>
 
-                {{-- Satu instrumen utuh: kolom isian dan tombolnya berbagi satu
-                     bingkai, bukan dua kotak bersebelahan. Cincin fokus dipasang
-                     di bingkainya (focus-within) memakai sky-600 penuh — 3,5:1,
-                     memenuhi syarat penanda fokus; sky-500 beralfa tidak. --}}
-                <form method="GET" action="{{ route('certificates.index') }}" class="mt-8 max-w-xl">
-                    <label for="cert-q" class="sr-only">{{ $id ? 'Kata kunci pencarian sertifikat' : 'Certificate search keyword' }}</label>
-                    <div class="flex flex-col gap-2 rounded-2xl border border-navy-200 bg-white p-2 transition-colors duration-200 focus-within:border-sky-600 focus-within:ring-2 focus-within:ring-sky-600 sm:flex-row sm:items-center">
+                <form method="GET" action="{{ route('certificates.index') }}" class="mt-8">
+                    <label for="cert-q" class="sr-only">{{ $id ? 'Nama peserta, perusahaan, atau nomor sertifikat' : 'Participant name, company, or certificate number' }}</label>
+                    <div class="flex flex-col gap-3 sm:flex-row">
                         <div class="relative flex-1">
-                            <svg class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                            <svg class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                            {{-- Placeholder tidak diterjemahkan: isinya contoh nama dan nomor. --}}
                             <input id="cert-q" type="search" name="q" value="{{ $q }}" autocomplete="off"
-                                   placeholder="{{ $id ? 'mis. Ahmad Fauzi, PT Baja Perkasa, DTE/BNSP/…' : 'e.g. Ahmad Fauzi, PT Baja Perkasa, DTE/BNSP/…' }}"
-                                   class="w-full border-0 bg-transparent py-2.5 pl-10 pr-2 text-[15px] text-navy placeholder:text-slate-500 focus:outline-none">
+                                   placeholder="Ahmad Fauzi · PT Baja Perkasa · DTE/BNSP/2026/1000"
+                                   class="w-full rounded-xl border border-navy-200 bg-neutral-50 py-3.5 pl-11 pr-4 text-[15px] text-navy transition-colors duration-200 placeholder:text-slate-500 focus:border-sky-600 focus:bg-white">
                         </div>
-                        <button type="submit" class="btn-blue shrink-0 justify-center !rounded-xl !py-3 sm:!px-8">{{ $id ? 'Cari' : 'Search' }}</button>
+                        <button type="submit" class="btn-blue shrink-0 justify-center !py-3.5 sm:!px-8">{{ $id ? 'Periksa' : 'Check' }}</button>
                     </div>
+                    <p class="mt-3 text-xs text-slate-500">
+                        {{ $id
+                            ? 'Sebagian nama atau sebagian nomor sudah cukup — tidak harus lengkap.'
+                            : 'Part of a name or part of a number is enough — it does not have to be complete.' }}
+                    </p>
                 </form>
 
             </div>
