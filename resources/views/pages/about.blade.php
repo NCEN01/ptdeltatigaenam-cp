@@ -175,28 +175,53 @@
 
         <div class="container relative">
             <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
-                {{-- Portrait — substantial, balanced, with a gold backing card jutting out top-left --}}
+                {{-- Portrait --}}
                 <div class="relative mx-auto w-full max-w-md lg:col-span-5 lg:mx-0" data-aos="fade-right">
-                    {{-- Gold backing card — offset behind the photo so it peeks out on the top & left --}}
-                    <div class="pointer-events-none absolute -left-4 -top-4 h-full w-full rounded-3xl bg-gradient-to-br from-gold to-gold-soft md:-left-6 md:-top-6"></div>
-                    {{-- Photo (front layer) --}}
-                    <div class="relative aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 shadow-lift">
-                        <img src="{{ asset('images/pendiri.png') }}" alt="{{ $founderName }}" class="h-full w-full object-cover object-top">
-                        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/55 via-transparent to-transparent"></div>
+                    {{-- An outlined frame rather than the solid gold slab that used to sit here:
+                         a 450x560 block of gold was by far the largest gold surface on the site,
+                         against the "gold as a small touch" rule. Same layered depth, hairline area. --}}
+                    <div class="pointer-events-none absolute -left-4 -top-4 h-full w-full rounded-2xl border-2 border-gold/70 md:-left-6 md:-top-6" aria-hidden="true"></div>
+
+                    <div class="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 shadow-lift">
+                        {{-- WebP first: the PNG is 1.7 MB for a photograph with no transparency,
+                             the WebP is 53 KB. Dimensions are declared to avoid layout shift. --}}
+                        <picture>
+                            <source srcset="{{ asset('images/pendiri.webp') }}" type="image/webp">
+                            <img src="{{ asset('images/pendiri.png') }}" alt="{{ $founderName }}"
+                                 width="1082" height="1454" loading="lazy" decoding="async"
+                                 class="h-full w-full object-cover object-top">
+                        </picture>
+                        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/75 via-navy-950/10 to-transparent"></div>
+
+                        {{-- Name plate on the portrait: on mobile the bio sits far below the photo,
+                             so the face arrives without a caption. --}}
+                        <div class="absolute inset-x-0 bottom-0 p-5 lg:hidden">
+                            <p class="font-display text-base font-bold leading-tight text-white">{{ $founderName }}</p>
+                            <p class="mt-1 font-mono text-[10px] uppercase tracking-wider text-gold-soft">{{ $founderRole }}</p>
+                        </div>
                     </div>
                 </div>
 
                 {{-- Bio --}}
                 <div class="lg:col-span-7" data-aos="fade-left" data-aos-delay="100">
-                    <p class="eyebrow text-gold-soft"><span class="rule-gold mr-3 from-gold"></span>{{ $isId ? 'Pendiri' : 'Founder' }}</p>
+                    {{-- .kicker is styled for light backgrounds and .eyebrow is display:none
+                         site-wide, so this label is set inline to read on the dark band. --}}
+                    <p class="inline-flex items-center text-[11px] font-bold uppercase tracking-[0.22em] text-gold-soft">
+                        <span class="mr-3 inline-block h-px w-10 bg-gold-soft/70 align-middle" aria-hidden="true"></span>
+                        {{ $isId ? 'Pendiri' : 'Founder' }}
+                    </p>
 
                     <h2 class="mt-5 font-display text-2xl font-bold leading-tight text-white text-balance md:text-3xl">{{ $founderName }}</h2>
                     <p class="mt-2.5 font-mono text-[11px] uppercase tracking-wider text-gold-soft">{{ $founderRole }}</p>
 
-                    {{-- Quote --}}
-                    <p class="mt-9 max-w-2xl text-pretty text-xl font-light italic leading-relaxed text-white md:text-2xl">&ldquo;{{ $founderQuote }}&rdquo;</p>
-                    <span class="mt-7 block h-0.5 w-16 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
-                    <p class="mt-7 max-w-xl text-pretty text-[15px] leading-[1.8] text-navy-100/80">{{ $founderBio }}</p>
+                    {{-- Quote. Not font-light: light weight on a dark background reads thinner
+                         still, and this is the line the section is built around. --}}
+                    <blockquote class="mt-9 max-w-2xl">
+                        <p class="text-pretty text-xl italic leading-[1.6] text-white md:text-2xl">&ldquo;{{ $founderQuote }}&rdquo;</p>
+                    </blockquote>
+                    <span class="mt-7 block h-0.5 w-16 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
+                    {{-- Full navy-100, not navy-100/80: the extra transparency only cost contrast. --}}
+                    <p class="mt-7 max-w-xl text-pretty text-[15px] leading-[1.8] text-navy-100">{{ $founderBio }}</p>
                 </div>
             </div>
         </div>
