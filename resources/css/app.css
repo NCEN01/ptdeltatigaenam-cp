@@ -133,8 +133,10 @@
         @apply btn bg-gold text-ink shadow-gold hover:bg-gold-soft hover:-translate-y-0.5 active:translate-y-0;
     }
 
+    /* Navy fill, not gold: a solid gold button is the loudest possible use of an accent
+       that PRODUCT.md reserves for small touches ("emas sangat sedikit"). */
     .btn-ghost {
-        @apply btn border border-navy-200 text-navy hover:border-gold hover:bg-gold hover:text-navy-950;
+        @apply btn border border-navy-200 text-navy hover:border-navy hover:bg-navy hover:text-white;
     }
 
     .btn-ghost-light {

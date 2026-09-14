@@ -30,23 +30,29 @@
             </div>
             <div class="space-y-5 leading-relaxed text-slate-700 lg:col-span-8" data-aos="fade-up" data-aos-delay="80">
                 @foreach ($aboutParas as $para)
-                    <p class="text-justify [hyphens:auto]">{{ $para }}</p>
+                    {{-- The opening paragraph carries the pitch, so it gets a lead size instead of
+                         disappearing into an undifferentiated wall of body copy.
+                         Justified only from sm up: in a narrow column it opens rivers of space. --}}
+                    <p class="text-left [hyphens:auto] sm:text-justify {{ $loop->first ? 'text-lg leading-relaxed text-navy md:text-xl' : '' }}">{{ $para }}</p>
                 @endforeach
             </div>
         </div>
 
         {{-- Stats --}}
         <div class="container mt-16">
-            <div class="grid grid-cols-2 gap-y-10 sm:grid-cols-4" data-aos="fade-up">
+            {{-- Hairline dividers, matching the hero stats ledger. Every figure is navy: the
+                 first one used to be gold for no reason other than being first. --}}
+            <div class="grid grid-cols-2 gap-y-10 sm:grid-cols-4 sm:gap-y-0 sm:divide-x sm:divide-navy-100" data-aos="fade-up">
                 @foreach ($stats as $stat)
                     @php
                         $num = (int) filter_var($stat['value'], FILTER_SANITIZE_NUMBER_INT);
                         $suffix = str_replace((string) $num, '', (string) $stat['value']);
                     @endphp
-                    <div class="px-2 text-center">
-                        <p class="font-display text-4xl md:text-5xl {{ $loop->first ? 'text-gold-deep' : 'text-navy' }}"
+                    <div class="group px-2 text-center sm:px-5">
+                        <p class="font-display text-4xl text-navy transition-colors duration-300 group-hover:text-sky-600 md:text-5xl"
                            data-counter="{{ $num }}" data-counter-suffix="{{ $suffix }}">0{{ $suffix }}</p>
-                        <p class="mt-2 font-mono text-[10px] uppercase tracking-normal text-slate-500 md:text-[11px]">{{ $stat['label'] }}</p>
+                        <span class="mx-auto mt-3 block h-px w-8 bg-gold-soft/70 transition-all duration-300 group-hover:w-12" aria-hidden="true"></span>
+                        <p class="mt-3 font-mono text-[10px] uppercase tracking-normal text-slate-500 md:text-[11px]">{{ $stat['label'] }}</p>
                     </div>
                 @endforeach
             </div>
@@ -61,7 +67,11 @@
     @endphp
     <section class="bg-white pb-14 md:pb-20 lg:pb-24">
         <div class="container">
-            <div class="group relative mx-auto max-w-4xl overflow-hidden rounded-3xl border border-navy-100 bg-gradient-to-br from-white via-white to-mist p-7 shadow-lift transition-shadow duration-300 hover:shadow-2xl md:p-10" data-aos="fade-up">
+            {{-- shadow-card at rest, not shadow-lift: a 1px border paired with a 48px-blur
+                 shadow is the "ghost card" look. One or the other, and hover-shadow-2xl was
+                 a Tailwind default that sits outside this site's shadow scale.
+                 Radius 2xl to match every other card. --}}
+            <div class="group relative mx-auto max-w-4xl overflow-hidden rounded-2xl border border-navy-100 bg-gradient-to-br from-white via-white to-mist p-7 shadow-card transition-shadow duration-300 hover:shadow-lift md:p-10" data-aos="fade-up">
                 {{-- soft ambient glows --}}
                 <div class="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-gold/10 blur-3xl"></div>
                 <div class="pointer-events-none absolute -left-16 -bottom-16 h-44 w-44 rounded-full bg-sky-400/10 blur-3xl"></div>
