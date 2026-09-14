@@ -13,11 +13,11 @@
         <div class="container">
             <div class="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                 <div class="max-w-2xl">
-                    <p class="eyebrow mb-4" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $id ? 'Karya Pilihan' : 'Selected Work' }}</p>
                     <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $id ? 'Dampak nyata bersama klien kami' : 'Real impact alongside our clients' }}</h2>
                 </div>
-                @if ($portfolios->isNotEmpty())
-                    <p class="font-mono text-sm text-slate-500" data-aos="fade-up">{{ str_pad($portfolios->count(), 2, '0', STR_PAD_LEFT) }} {{ $id ? 'proyek' : 'projects' }}</p>
+                {{-- total(), not count(): count() would report only the projects on this page. --}}
+                @if ($portfolios->total())
+                    <p class="font-mono text-sm text-slate-500" data-aos="fade-up">{{ str_pad($portfolios->total(), 2, '0', STR_PAD_LEFT) }} {{ $id ? 'proyek' : 'projects' }}</p>
                 @endif
             </div>
 
@@ -66,13 +66,18 @@
                         </a>
                     @endforeach
                 </div>
+
+                @if ($portfolios->hasPages())
+                    <div class="mt-16">{{ $portfolios->links('pagination.brand') }}</div>
+                @endif
             @else
-                <div class="rounded-3xl border border-dashed border-navy-200 bg-mist p-16 text-center" data-aos="fade-up">
+                <div class="rounded-2xl border border-dashed border-navy-200 bg-mist p-16 text-center" data-aos="fade-up">
                     <span class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-navy text-gold">
                         <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none"><path d="M4 7h16v12H4z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M4 11h16M9 7V5h6v2" stroke="currentColor" stroke-width="1.4"/></svg>
                     </span>
                     <p class="mt-5 font-display text-lg font-semibold text-navy">{{ $id ? 'Portofolio segera hadir' : 'Portfolio coming soon' }}</p>
                     <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Kami sedang menyiapkan kisah proyek terbaik untuk ditampilkan di sini.' : 'We are preparing our best project stories to showcase here.' }}</p>
+                    <a href="{{ route('contact.index') }}" class="btn-blue mt-6">{{ $id ? 'Diskusikan Proyek Anda' : 'Discuss Your Project' }}</a>
                 </div>
             @endif
         </div>

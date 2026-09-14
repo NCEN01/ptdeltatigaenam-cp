@@ -22,22 +22,26 @@
             <div class="lg:col-span-8">
                 {{-- Cover — sits with the details, aligned to the sidebar --}}
                 @if ($coverUrl)
-                    <figure class="mb-8 overflow-hidden rounded-3xl shadow-card ring-1 ring-navy-100" data-aos="fade-up">
+                    <figure class="mb-8 overflow-hidden rounded-2xl shadow-card ring-1 ring-navy-100" data-aos="fade-up">
                         <img src="{{ $coverUrl }}" alt="{{ $portfolio->title }}" class="aspect-[16/10] w-full object-cover object-center">
                     </figure>
                 @endif
 
                 @if ($portfolio->short_description)
-                    <p class="mb-8 border-l-2 border-gold pl-5 text-lg leading-relaxed text-slate-700 text-justify [hyphens:auto]">{{ $portfolio->short_description }}</p>
+                    {{-- Lead paragraph, no gold side-stripe: a coloured left border reads as a
+                         leftover callout rather than a decision. Size carries the emphasis.
+                         Justify only from sm — it opens rivers in a narrow column. --}}
+                    <p class="mb-8 text-lg leading-relaxed text-navy [hyphens:auto] sm:text-justify">{{ $portfolio->short_description }}</p>
                 @endif
 
                 @if ($portfolio->content)
                     <div class="prose prose-lg max-w-none [hyphens:auto]
                                 prose-headings:font-display prose-headings:font-normal prose-headings:text-navy
-                                prose-p:text-slate-700 prose-p:leading-[1.85] prose-p:text-justify
+                                prose-p:text-slate-700 prose-p:leading-[1.85]
+                                prose-p:text-left sm:prose-p:text-justify
                                 prose-li:text-slate-700 prose-a:text-sky-700 prose-a:font-medium prose-a:no-underline hover:prose-a:underline
                                 prose-strong:text-navy
-                                prose-blockquote:border-l-2 prose-blockquote:border-gold prose-blockquote:not-italic prose-blockquote:text-slate-700
+                                prose-blockquote:border-0 prose-blockquote:bg-navy-50/70 prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:rounded-xl prose-blockquote:not-italic prose-blockquote:text-navy
                                 prose-img:rounded-2xl prose-img:shadow-card">
                         {!! \App\Helpers\HtmlSanitizer::clean($portfolio->content) !!}
                     </div>
@@ -48,8 +52,8 @@
             <aside class="lg:col-span-4">
                 <div class="space-y-6 lg:sticky lg:top-28">
                     {{-- Facts --}}
-                    <div class="rounded-3xl border border-navy-100 bg-neutral-50 p-6">
-                        <p class="eyebrow mb-5"><span class="rule-gold mr-3"></span>{{ $id ? 'Detail Proyek' : 'Project Details' }}</p>
+                    <div class="rounded-2xl border border-navy-100 bg-neutral-50 p-6">
+                        <p class="kicker mb-5"><span class="rule-gold mr-3"></span>{{ $id ? 'Detail Proyek' : 'Project Details' }}</p>
                         <dl class="divide-y divide-navy-100">
                             @if ($portfolio->client_name)
                                 <div class="flex items-start justify-between gap-4 py-3">
@@ -79,7 +83,7 @@
                     </div>
 
                     {{-- CTA --}}
-                    <div class="relative overflow-hidden rounded-3xl bg-navy-950 p-7 text-white">
+                    <div class="relative overflow-hidden rounded-2xl bg-navy-950 p-7 text-white">
                         <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-40"></div>
                         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
                         <div class="relative">
@@ -96,11 +100,14 @@
         {{-- Gallery (masonry) --}}
         @if ($portfolio->images->isNotEmpty())
             <div class="container mt-16">
-                <p class="eyebrow mb-8" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $id ? 'Galeri Proyek' : 'Project Gallery' }}</p>
+                {{-- Was .eyebrow, which is display:none site-wide — the gallery shipped with no
+                     heading at all, so the photos appeared without introduction. --}}
+                <h2 class="font-display text-2xl font-semibold text-navy md:text-3xl" data-aos="fade-up">{{ $id ? 'Galeri Proyek' : 'Project Gallery' }}</h2>
+                <span class="mt-4 mb-8 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
                 <div class="columns-1 gap-4 sm:columns-2 lg:columns-3">
                     @foreach ($portfolio->images as $img)
                         <figure class="group mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-navy-100 bg-navy-900 shadow-card" data-aos="fade-up">
-                            <img src="{{ $imgUrl($img->image) }}" alt="{{ $img->caption }}" loading="lazy" class="w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">
+                            <img src="{{ $imgUrl($img->image) }}" alt="{{ $img->caption ?: $portfolio->title }}" loading="lazy" decoding="async" class="w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">
                             @if ($img->caption)<figcaption class="bg-white px-4 py-3 text-xs text-slate-600">{{ $img->caption }}</figcaption>@endif
                         </figure>
                     @endforeach
