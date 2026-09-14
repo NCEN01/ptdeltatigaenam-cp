@@ -60,7 +60,18 @@
         <div class="container grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div class="lg:col-span-7" data-aos="fade-up">
                 <h2 class="font-display text-3xl leading-tight text-navy text-balance md:text-4xl">{{ $id ? 'Kemitraan PT Delta Tiga Enam' : 'PT Delta Tiga Enam Partnership' }}</h2>
-                <p class="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-slate-700">{{ $narrative }}</p>
+                <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
+
+                {{-- The opening sentence is lifted to lead size so the block has an entry
+                     point. Split on the first sentence boundary — the wording is untouched,
+                     only its weight changes. --}}
+                @php
+                    [$narrativeLead, $narrativeRest] = array_pad(preg_split('/(?<=\.)\s+/', $narrative, 2), 2, '');
+                @endphp
+                <p class="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-navy md:text-xl">{{ $narrativeLead }}</p>
+                @if ($narrativeRest !== '')
+                    <p class="mt-5 max-w-2xl text-pretty leading-relaxed text-slate-600">{{ $narrativeRest }}</p>
+                @endif
             </div>
             <div class="lg:col-span-5" data-aos="fade-left" data-aos-delay="100">
                 <div class="relative h-full overflow-hidden rounded-2xl bg-navy-950 p-8 text-white md:p-10">
@@ -146,20 +157,37 @@
                                 }
                                 $perks = (!empty($dbFeatures) && is_array($dbFeatures)) ? $dbFeatures : $meta['perks'];
                             @endphp
-                            <div class="group relative flex flex-col overflow-hidden rounded-2xl border bg-white shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-lift {{ $package->is_highlighted ? 'border-gold' : 'border-navy-100' }}"
+                            {{-- The recommended tier is raised and ringed at rest, not only on
+                                 hover: a badge alone does not draw the eye on a row of four
+                                 equally sized towers. --}}
+                            <div class="group relative flex flex-col overflow-hidden rounded-2xl border bg-white transition-all duration-300 hover:-translate-y-2 hover:shadow-lift
+                                        {{ $package->is_highlighted
+                                            ? 'border-gold shadow-lift lg:-translate-y-4'
+                                            : 'border-navy-100 shadow-card' }}"
                                  data-aos="fade-up" data-aos-delay="{{ $loop->index * 90 }}">
-                                @if ($package->is_highlighted)
-                                    <span class="absolute right-5 top-5 z-10 rounded-full bg-gold px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-navy-950 shadow-gold">{{ $id ? 'Populer' : 'Popular' }}</span>
-                                @endif
 
                                 {{-- Gradient header --}}
                                 <div class="relative overflow-hidden bg-gradient-to-br {{ $tierStyle[$package->tier] ?? 'from-navy-700 to-navy-950' }} p-7 text-white">
                                     <div class="pointer-events-none absolute inset-0 grain opacity-40"></div>
                                     <div class="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/10 blur-xl"></div>
-                                    <p class="relative font-mono text-[10px] uppercase tracking-label text-white/70">{{ $id ? 'Paket' : 'Package' }}</p>
+                                    <div class="relative flex items-center justify-between gap-3">
+                                        <p class="font-mono text-[10px] uppercase tracking-label text-white/70">{{ $id ? 'Paket' : 'Package' }}</p>
+                                        @if ($package->is_highlighted)
+                                            <span class="shrink-0 rounded-full bg-white px-2.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-navy-950">{{ $id ? 'Populer' : 'Popular' }}</span>
+                                        @endif
+                                    </div>
                                     <h3 class="relative mt-2 font-display text-3xl">{{ $package->name }}</h3>
                                     {{-- min-height reserves 2 lines so every colored header box is the same size --}}
                                     <p class="relative mt-3 line-clamp-2 min-h-[2.85rem] text-sm leading-relaxed text-white/85">{{ $tagline }}</p>
+
+                                    {{-- Each tier includes the one below it ("Seluruh manfaat Silver"),
+                                         but that progression was only stated in prose. These bars show
+                                         where the package sits at a glance. --}}
+                                    <div class="relative mt-5 flex items-center gap-1.5" aria-hidden="true">
+                                        @for ($lvl = 1; $lvl <= $packages->count(); $lvl++)
+                                            <span class="h-1 flex-1 rounded-full {{ $lvl <= $loop->iteration ? 'bg-white/85' : 'bg-white/20' }}"></span>
+                                        @endfor
+                                    </div>
                                 </div>
 
                                 {{-- Body --}}
@@ -170,7 +198,7 @@
                                     <ul class="mt-6 flex-1 space-y-3 border-t border-navy-100 pt-6">
                                         @foreach ($perks as $perk)
                                             <li class="flex items-start gap-2.5 text-sm text-slate-700">
-                                                <svg class="mt-0.5 h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                <svg class="mt-0.5 h-4 w-4 shrink-0 text-sky-600" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                                 <span>{{ $perk }}</span>
                                             </li>
                                         @endforeach
