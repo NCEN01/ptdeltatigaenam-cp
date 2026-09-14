@@ -16,6 +16,11 @@ class AgendaController extends Controller
                 ->orderByRaw('CASE WHEN starts_at >= NOW() THEN starts_at END ASC')
                 ->orderByDesc('starts_at')
                 ->paginate(9),
+
+            // Counted across the whole set, not just the current page, so the summary
+            // stays honest when every published event has already happened.
+            'upcomingCount' => Agenda::published()->where('starts_at', '>=', now())->count(),
+            'pastCount' => Agenda::published()->where('starts_at', '<', now())->count(),
         ]);
     }
 }
