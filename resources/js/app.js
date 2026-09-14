@@ -16,16 +16,68 @@ window.Alpine = Alpine;
 // WhatsApp / scroll-to-top helpers — can react to it.
 Alpine.store('ui', { navOpen: false });
 
+// ── Shared scroll-spy helpers ────────────────────────────────────────────────
+// Used by the article table of contents and the services category nav. Both need
+// "which anchored section am I in", so the walk lives here rather than twice.
+
+/** id of the last element whose top has crossed `line`, else the first one. */
+function activeSectionId(els, line) {
+    for (let i = els.length - 1; i >= 0; i--) {
+        if (els[i].getBoundingClientRect().top <= line) return els[i].id;
+    }
+
+    return els[0]?.id ?? '';
+}
+
+/** rAF-throttled scroll+resize listener. Returns the detach function. */
+function onScrollFrame(handler) {
+    let ticking = false;
+    const listener = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => { handler(); ticking = false; });
+    };
+    window.addEventListener('scroll', listener, { passive: true });
+    window.addEventListener('resize', listener, { passive: true });
+
+    return () => {
+        window.removeEventListener('scroll', listener);
+        window.removeEventListener('resize', listener);
+    };
+}
+
+// Services page: highlights the category chip for the section you are reading.
+Alpine.data('sectionNav', (ids = []) => ({
+    active: ids[0] ?? '',
+    sections: [],
+    detach: null,
+
+    init() {
+        this.detach = onScrollFrame(() => this.measure());
+        this.$nextTick(() => {
+            this.sections = ids.map((id) => document.getElementById(id)).filter(Boolean);
+            this.measure();
+        });
+    },
+
+    destroy() {
+        this.detach?.();
+    },
+
+    measure() {
+        if (this.sections.length) this.active = activeSectionId(this.sections, 160);
+    },
+}));
+
 // Article table of contents: highlights the section currently under the reading line
 // and tracks how far through the body the reader is.
 Alpine.data('articleToc', (items = []) => ({
     items,
     active: '',
     progress: 0,
-    ticking: false,
     headings: [],
     body: null,
-    onScroll: null,
+    detach: null,
     // Mobile only: the floating reading bar starts collapsed, and only shows
     // itself while the article body is actually on screen.
     expanded: false,
@@ -40,16 +92,7 @@ Alpine.data('articleToc', (items = []) => ({
 
     init() {
         const ids = this.items.map((item) => item.id);
-        this.onScroll = () => {
-            if (this.ticking) return;
-            this.ticking = true;
-            requestAnimationFrame(() => {
-                this.measure();
-                this.ticking = false;
-            });
-        };
-        window.addEventListener('scroll', this.onScroll, { passive: true });
-        window.addEventListener('resize', this.onScroll, { passive: true });
+        this.detach = onScrollFrame(() => this.measure());
 
         this.$nextTick(() => {
             // Resolve the element set once — it never changes for the life of the page.
@@ -60,8 +103,7 @@ Alpine.data('articleToc', (items = []) => ({
     },
 
     destroy() {
-        window.removeEventListener('scroll', this.onScroll);
-        window.removeEventListener('resize', this.onScroll);
+        this.detach?.();
     },
 
     measure() {
@@ -86,15 +128,7 @@ Alpine.data('articleToc', (items = []) => ({
             return;
         }
 
-        // Walk backwards: the first heading already past the reading line is the active one.
-        const line = 140;
-        for (let i = this.headings.length - 1; i >= 0; i--) {
-            if (this.headings[i].getBoundingClientRect().top <= line) {
-                this.active = this.headings[i].id;
-                return;
-            }
-        }
-        this.active = this.headings[0].id;
+        this.active = activeSectionId(this.headings, 140);
     },
 }));
 
