@@ -112,20 +112,37 @@
                         <span class="mt-4 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
                     </div>
 
-                    {{-- Aggregate only earns its place once there is more than one voice. --}}
-                    @if ($avgRating && $quotes->count() > 1)
-                        <div class="flex items-center gap-3">
-                            <div class="flex gap-0.5" aria-hidden="true">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <svg class="h-4 w-4 {{ $i <= round($avgRating) ? 'text-gold' : 'text-navy-200' }}" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.2l-4.94 2.6.94-5.5-4-3.9 5.53-.8z"/></svg>
-                                @endfor
+                    <div class="flex items-center gap-5">
+                        {{-- Aggregate only earns its place once there is more than one voice. --}}
+                        @if ($avgRating && $quotes->count() > 1)
+                            <div class="flex items-center gap-3">
+                                <div class="flex gap-0.5" aria-hidden="true">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <svg class="h-4 w-4 {{ $i <= round($avgRating) ? 'text-gold' : 'text-navy-200' }}" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.2l-4.94 2.6.94-5.5-4-3.9 5.53-.8z"/></svg>
+                                    @endfor
+                                </div>
+                                <p class="font-mono text-sm text-slate-500">
+                                    <span class="font-bold tabular-nums text-navy">{{ number_format($avgRating, 1) }}</span>/5
+                                    <span class="mx-1 text-navy-200">·</span>{{ $quotes->count() }} {{ $id ? 'ulasan' : 'reviews' }}
+                                </p>
                             </div>
-                            <p class="font-mono text-sm text-slate-500">
-                                <span class="font-bold tabular-nums text-navy">{{ number_format($avgRating, 1) }}</span>/5
-                                <span class="mx-1 text-navy-200">·</span>{{ $quotes->count() }} {{ $id ? 'ulasan' : 'reviews' }}
-                            </p>
+                        @endif
+
+                        {{-- Same arrow treatment as the "Terus Membaca" rail. Swiper disables them
+                             when every card already fits, and the disabled: classes fade them out. --}}
+                        <div class="flex shrink-0 items-center gap-2">
+                            <button type="button" data-carousel-prev
+                                    aria-label="{{ $id ? 'Testimoni sebelumnya' : 'Previous testimonials' }}"
+                                    class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95 disabled:pointer-events-none disabled:opacity-35">
+                                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                            <button type="button" data-carousel-next
+                                    aria-label="{{ $id ? 'Testimoni berikutnya' : 'Next testimonials' }}"
+                                    class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95 disabled:pointer-events-none disabled:opacity-35">
+                                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
                         </div>
-                    @endif
+                    </div>
                 </div>
 
                 {{-- One row with dots, like the "Terus Membaca" rail on an article page.
