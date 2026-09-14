@@ -6,6 +6,9 @@ use App\Models\Agenda;
 
 class AgendaController extends Controller
 {
+    /** Two rows of three cards per page, matching the blog index. */
+    private const PER_PAGE = 6;
+
     public function index()
     {
         return view('pages.agenda.index', [
@@ -15,7 +18,7 @@ class AgendaController extends Controller
                 ->orderByRaw('starts_at >= NOW() DESC')
                 ->orderByRaw('CASE WHEN starts_at >= NOW() THEN starts_at END ASC')
                 ->orderByDesc('starts_at')
-                ->paginate(9),
+                ->paginate(self::PER_PAGE),
 
             // Counted across the whole set, not just the current page, so the summary
             // stays honest when every published event has already happened.
