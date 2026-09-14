@@ -6,7 +6,11 @@
 @endphp
 
 <x-layout :title="$portfolio->title" :description="$portfolio->short_description" :ogImage="$coverUrl">
-    <x-page-header :eyebrow="$portfolio->category?->name" :title="$portfolio->title" />
+    {{-- The cover becomes the hero. It used to sit as a small figure inside the content
+         column while the header fell back to the generic aurora, so the strongest asset on
+         the page was shown small in one place and not at all in the other. --}}
+    <x-page-header :eyebrow="$portfolio->category?->name" :title="$portfolio->title"
+                   :subtitle="$portfolio->client_name" :image="$coverUrl" />
 
     <section class="section bg-white">
         <div class="container">
@@ -20,13 +24,6 @@
 
             {{-- Main content --}}
             <div class="lg:col-span-8">
-                {{-- Cover — sits with the details, aligned to the sidebar --}}
-                @if ($coverUrl)
-                    <figure class="mb-8 overflow-hidden rounded-2xl shadow-card ring-1 ring-navy-100" data-aos="fade-up">
-                        <img src="{{ $coverUrl }}" alt="{{ $portfolio->title }}" class="aspect-[16/10] w-full object-cover object-center">
-                    </figure>
-                @endif
-
                 @if ($portfolio->short_description)
                     {{-- Lead paragraph, no gold side-stripe: a coloured left border reads as a
                          leftover callout rather than a decision. Size carries the emphasis.
@@ -96,6 +93,37 @@
             </aside>
             </div>
         </div>
+
+        {{-- Client voice. The relation was already eager-loaded in the controller but never
+             rendered, so this data was fetched and discarded on every request. --}}
+        @php $quotes = $portfolio->testimonials->where('is_active', true); @endphp
+        @if ($quotes->isNotEmpty())
+            <div class="container mt-16">
+                <div class="grid gap-6 lg:grid-cols-2">
+                    @foreach ($quotes as $quote)
+                        <figure class="relative overflow-hidden rounded-2xl bg-navy-950 p-8 text-white md:p-10" data-aos="fade-up">
+                            <div class="pointer-events-none absolute inset-0 aurora opacity-30"></div>
+                            <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
+                            <div class="relative">
+                                <svg class="h-8 w-8 text-gold-soft/60" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.5 5C6.5 6.6 4.7 9.4 4.7 12.7c0 3.2 1.9 5.3 4.4 5.3 2.2 0 3.8-1.6 3.8-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.8.1-1 .2.3-1.6 1.6-3.2 3.4-4.2L9.5 5zm9.6 0c-3 1.6-4.8 4.4-4.8 7.7 0 3.2 1.9 5.3 4.4 5.3 2.2 0 3.8-1.6 3.8-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.8.1-1 .2.3-1.6 1.6-3.2 3.4-4.2L19.1 5z"/></svg>
+                                <blockquote class="mt-5">
+                                    <p class="text-pretty text-lg leading-relaxed text-white md:text-xl">{{ $quote->content }}</p>
+                                </blockquote>
+                                <figcaption class="mt-7 flex items-center gap-4 border-t border-white/10 pt-6">
+                                    @if ($quote->author_photo)
+                                        <img src="{{ $imgUrl($quote->author_photo) }}" alt="" loading="lazy" class="h-11 w-11 shrink-0 rounded-full object-cover ring-1 ring-white/20">
+                                    @endif
+                                    <span class="min-w-0">
+                                        <span class="block font-display text-base font-semibold text-white">{{ $quote->author_name }}</span>
+                                        <span class="mt-0.5 block text-sm text-navy-200">{{ collect([$quote->author_position, $quote->author_company])->filter()->implode(' · ') }}</span>
+                                    </span>
+                                </figcaption>
+                            </div>
+                        </figure>
+                    @endforeach
+                </div>
+            </div>
+        @endif
 
         {{-- Gallery (masonry) --}}
         @if ($portfolio->images->isNotEmpty())
