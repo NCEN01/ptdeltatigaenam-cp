@@ -128,36 +128,46 @@
                     @endif
                 </div>
 
-                <div class="mt-8 grid gap-6 lg:grid-cols-2">
-                    @foreach ($quotes as $quote)
-                        <figure class="card flex h-full flex-col p-7 md:p-8" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 2) * 80 }}">
-                            @if ($quote->rating)
-                                <div class="flex gap-0.5" role="img"
-                                     aria-label="{{ $quote->rating }} {{ $id ? 'dari 5 bintang' : 'out of 5 stars' }}">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <svg class="h-4 w-4 {{ $i <= $quote->rating ? 'text-gold' : 'text-navy-200' }}" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 1.6l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.2l-4.94 2.6.94-5.5-4-3.9 5.53-.8z"/></svg>
-                                    @endfor
-                                </div>
-                            @endif
+                {{-- One row with dots, like the "Terus Membaca" rail on an article page.
+                     Capped at 2 per view so a quote keeps a readable measure; Swiper's
+                     watchOverflow hides the dots by itself when everything already fits,
+                     so two testimonials still render as a plain pair. --}}
+                <div class="swiper swiper-equal-height mt-8" data-carousel data-carousel-max="2" data-carousel-autoplay="false">
+                    <div class="swiper-wrapper items-stretch">
+                        @foreach ($quotes as $quote)
+                            <div class="swiper-slide h-auto">
+                                <figure class="card flex h-full flex-col p-7 md:p-8">
+                                    @if ($quote->rating)
+                                        <div class="flex gap-0.5" role="img"
+                                             aria-label="{{ $quote->rating }} {{ $id ? 'dari 5 bintang' : 'out of 5 stars' }}">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <svg class="h-4 w-4 {{ $i <= $quote->rating ? 'text-gold' : 'text-navy-200' }}" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 1.6l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.2l-4.94 2.6.94-5.5-4-3.9 5.53-.8z"/></svg>
+                                            @endfor
+                                        </div>
+                                    @endif
 
-                            <blockquote class="mt-5 flex-1">
-                                <p class="text-pretty leading-relaxed text-slate-700">&ldquo;{{ $quote->content }}&rdquo;</p>
-                            </blockquote>
+                                    <blockquote class="mt-5 flex-1">
+                                        <p class="text-pretty leading-relaxed text-slate-700">&ldquo;{{ $quote->content }}&rdquo;</p>
+                                    </blockquote>
 
-                            <figcaption class="mt-6 flex items-center gap-3 border-t border-navy-100 pt-5">
-                                @if ($quote->author_photo)
-                                    <img src="{{ $imgUrl($quote->author_photo) }}" alt="" loading="lazy" class="h-11 w-11 shrink-0 rounded-full object-cover">
-                                @else
-                                    <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-sky-100 font-display text-sky-700" aria-hidden="true">{{ \Illuminate\Support\Str::substr($quote->author_name, 0, 1) }}</span>
-                                @endif
-                                <span class="min-w-0">
-                                    <span class="block font-display text-[15px] font-semibold leading-tight text-navy">{{ $quote->author_name }}</span>
-                                    <span class="mt-0.5 block text-xs leading-snug text-slate-500">{{ collect([$quote->author_position, $quote->author_company])->filter()->implode(' · ') }}</span>
-                                </span>
-                            </figcaption>
-                        </figure>
-                    @endforeach
+                                    <figcaption class="mt-6 flex items-center gap-3 border-t border-navy-100 pt-5">
+                                        @if ($quote->author_photo)
+                                            <img src="{{ $imgUrl($quote->author_photo) }}" alt="" loading="lazy" class="h-11 w-11 shrink-0 rounded-full object-cover">
+                                        @else
+                                            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-sky-100 font-display text-sky-700" aria-hidden="true">{{ \Illuminate\Support\Str::substr($quote->author_name, 0, 1) }}</span>
+                                        @endif
+                                        <span class="min-w-0">
+                                            <span class="block font-display text-[15px] font-semibold leading-tight text-navy">{{ $quote->author_name }}</span>
+                                            <span class="mt-0.5 block text-xs leading-snug text-slate-500">{{ collect([$quote->author_position, $quote->author_company])->filter()->implode(' · ') }}</span>
+                                        </span>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
+                {{-- Outside .swiper: anything inside it is clipped by Swiper's overflow:hidden. --}}
+                <div class="mt-8 flex justify-center gap-2" data-carousel-pagination></div>
             </div>
         @endif
 
