@@ -95,15 +95,30 @@
                     : collect($manfaat)->map(fn ($m) => ['title' => $m[0], 'desc' => $m[1]]);
             @endphp
 
-            <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                @foreach ($benefitCards as $card)
-                    <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
-                        <span class="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-navy-500 to-sky-400 font-display text-lg text-white transition-all duration-300 group-hover:from-navy-600 group-hover:to-navy-500">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                        <h3 class="mt-6 font-display text-lg text-navy">{{ $card['title'] }}</h3>
-                        <p class="mt-2.5 text-pretty text-sm leading-relaxed text-slate-600">{{ $card['desc'] }}</p>
-                        <span class="mt-5 block h-0.5 w-0 rounded-full bg-gradient-to-r from-gold to-gold-soft transition-all duration-500 group-hover:w-12"></span>
-                    </div>
-                @endforeach
+            {{-- One surface split by hairlines instead of six floating cards. Six identical
+                 boxes read as a stock card grid — the exact pattern PRODUCT.md lists as an
+                 anti-reference — and the boxes added nothing: nothing here is elevated above
+                 anything else. The dividers come from a 1px grid gap over a tinted background,
+                 which stays correct at any column count without nth-child juggling. --}}
+            <div class="mt-12 overflow-hidden rounded-2xl border border-navy-100" data-aos="fade-up">
+                <div class="grid gap-px bg-navy-100 sm:grid-cols-2">
+                    @foreach ($benefitCards as $card)
+                        <div class="group relative flex gap-5 bg-white p-7 transition-colors duration-300 hover:bg-navy-50/70 md:gap-6 md:p-9
+                                    {{ $loop->last && $benefitCards->count() % 2 !== 0 ? 'sm:col-span-2' : '' }}">
+
+                            {{-- The numeral carries the rhythm now, so it is set large rather than
+                                 shrunk into a chip. --}}
+                            <span class="shrink-0 font-display text-3xl font-bold leading-none tabular-nums text-navy-200 transition-colors duration-300 group-hover:text-sky-500 md:text-4xl"
+                                  aria-hidden="true">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+
+                            <div class="min-w-0">
+                                <h3 class="font-display text-lg font-semibold leading-snug text-navy text-balance">{{ $card['title'] }}</h3>
+                                <span class="mt-3 block h-px w-8 bg-gold-soft/70 transition-all duration-500 ease-out-soft group-hover:w-14" aria-hidden="true"></span>
+                                <p class="mt-3 text-pretty text-sm leading-relaxed text-slate-600">{{ $card['desc'] }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
     </section>
