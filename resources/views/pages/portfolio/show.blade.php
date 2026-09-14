@@ -67,6 +67,12 @@
                                     <dd class="text-right text-sm font-semibold text-navy">{{ $portfolio->category->name }}</dd>
                                 </div>
                             @endif
+                            @if ($portfolio->location)
+                                <div class="flex items-start justify-between gap-4 py-3">
+                                    <dt class="font-mono text-[10px] uppercase tracking-wider text-slate-500">{{ $id ? 'Lokasi' : 'Location' }}</dt>
+                                    <dd class="text-right text-sm font-semibold text-navy">{{ $portfolio->location }}</dd>
+                                </div>
+                            @endif
                             @if ($portfolio->project_date)
                                 <div class="flex items-start justify-between gap-4 py-3">
                                     <dt class="font-mono text-[10px] uppercase tracking-wider text-slate-500">{{ $id ? 'Tanggal' : 'Date' }}</dt>

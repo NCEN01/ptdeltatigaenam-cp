@@ -44,6 +44,11 @@ class PortfolioResource extends Resource
                     ->maxLength(280),
                 Forms\Components\TextInput::make('slug')->required()->maxLength(280)->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('client_name')->label('Nama Klien')->maxLength(200),
+                Forms\Components\TextInput::make('location')
+                    ->label('Lokasi')
+                    ->maxLength(160)
+                    ->placeholder('Jakarta Selatan, Indonesia')
+                    ->helperText('Lokasi pelaksanaan proyek. Tampil di kartu portofolio dan halaman detailnya.'),
                 Forms\Components\Select::make('service_category_id')
                     ->relationship('category', 'slug')
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)
@@ -75,6 +80,8 @@ class PortfolioResource extends Resource
             Tables\Columns\ImageColumn::make('cover_image')->disk('public')->label('')->size(60),
             Tables\Columns\TextColumn::make('title')->label('Judul')->searchable()->wrap(),
             Tables\Columns\TextColumn::make('client_name')->label('Klien'),
+            Tables\Columns\TextColumn::make('location')->label('Lokasi')->icon('heroicon-m-map-pin')
+                ->placeholder('—')->searchable()->toggleable(),
             Tables\Columns\TextColumn::make('category.name')->label('Kategori')->badge(),
             Tables\Columns\ToggleColumn::make('is_active')->label('Aktif'),
         ])->actions([

@@ -56,10 +56,12 @@
                             <div class="mt-4 flex items-start justify-between gap-3">
                                 <div class="min-w-0">
                                     <h3 class="font-display text-lg font-semibold leading-snug text-navy transition-colors duration-300 group-hover:text-sky-600">{{ $p->title }}</h3>
-                                    <p class="mt-1 flex flex-wrap items-center gap-x-2 text-sm text-slate-500">
+                                    <p class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-slate-500">
                                         @if ($p->client_name)<span>{{ $p->client_name }}</span>@endif
-                                        @if ($p->client_name && $p->project_date)<span class="text-navy-200">·</span>@endif
+                                        @if ($p->client_name && $p->project_date)<span class="text-navy-200" aria-hidden="true">·</span>@endif
                                         @if ($p->project_date)<span class="font-mono text-xs">{{ $p->project_date->translatedFormat('Y') }}</span>@endif
+                                        {{-- Reuses the same pin treatment as the blog cards. --}}
+                                        <x-meta-location :value="$p->location" :separator="(bool) ($p->client_name || $p->project_date)" class="text-xs" />
                                     </p>
                                 </div>
                                 <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full border border-navy-200 text-navy transition-all duration-300 group-hover:-rotate-45 group-hover:border-sky-500 group-hover:bg-sky-500 group-hover:text-white">
