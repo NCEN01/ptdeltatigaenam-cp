@@ -83,13 +83,37 @@ class PortfolioResource extends Resource
                     ->columnSpanFull(),
             ])->columns(2),
 
-            Forms\Components\Section::make('Galeri')->schema([
-                Forms\Components\Repeater::make('images')->relationship()->label('Foto Galeri')->schema([
-                    MediaUpload::for('image', 'portfolio', 'portfolio/gallery')->label('Foto')->required(),
-                    Forms\Components\TextInput::make('caption.id')->label('Keterangan (ID)'),
-                    Forms\Components\TextInput::make('caption.en')->label('Keterangan (EN)'),
-                ])->columns(3)->collapsible()->defaultItems(0),
-            ])->collapsed(),
+            // Bukan lagi "Galeri": di situs bagian ini bernama "Dokumentasi Kegiatan",
+            // jadi nama di CMS dibuat sama persis supaya admin tahu apa yang ia sunting.
+            Forms\Components\Section::make('Dokumentasi Kegiatan')
+                ->description('Foto-foto pelaksanaan kegiatan. Tampil di bagian bawah halaman portofolio ini. Boleh dikosongkan bila belum ada dokumentasi.')
+                ->schema([
+                    Forms\Components\Repeater::make('images')
+                        ->relationship()
+                        ->label('Daftar Foto')
+                        ->addActionLabel('Tambah Foto Dokumentasi')
+                        // Tanpa ini setiap baris yang dilipat hanya bertuliskan "Images",
+                        // sehingga admin harus membuka satu per satu untuk tahu isinya.
+                        ->itemLabel(fn (array $state): string => filled($state['caption']['id'] ?? null)
+                            ? Str::limit($state['caption']['id'], 60)
+                            : 'Foto tanpa keterangan')
+                        // Relasi images() sudah orderBy('sort_order'), tetapi repeater tidak
+                        // pernah menuliskan kolom itu — semua foto tersimpan sort_order 0 dan
+                        // urutan hasil seretan tidak bertahan. orderColumn() menyimpannya.
+                        ->orderColumn('sort_order')
+                        ->reorderableWithButtons()
+                        ->schema([
+                            MediaUpload::for('image', 'portfolio', 'portfolio/gallery')->label('Foto')->required(),
+                            Forms\Components\TextInput::make('caption.id')
+                                ->label('Keterangan (ID)')
+                                ->maxLength(200)
+                                ->placeholder('Sesi diskusi kelompok, hari ke-2')
+                                ->helperText('Keterangan singkat di bawah foto. Boleh dikosongkan.'),
+                            Forms\Components\TextInput::make('caption.en')
+                                ->label('Keterangan (EN)')
+                                ->maxLength(200),
+                        ])->columns(3)->collapsible()->defaultItems(0),
+                ])->collapsible(),
         ]);
     }
 

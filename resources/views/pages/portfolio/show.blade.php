@@ -81,7 +81,7 @@
                             @endif
                             @if ($portfolio->images->isNotEmpty())
                                 <div class="flex items-start justify-between gap-4 py-3">
-                                    <dt class="font-mono text-[10px] uppercase tracking-wider text-slate-500">{{ $id ? 'Dokumentasi' : 'Gallery' }}</dt>
+                                    <dt class="font-mono text-[10px] uppercase tracking-wider text-slate-500">{{ $id ? 'Dokumentasi' : 'Documentation' }}</dt>
                                     <dd class="text-right text-sm font-semibold text-navy">{{ $portfolio->images->count() }} {{ $id ? 'foto' : 'photos' }}</dd>
                                 </div>
                             @endif
@@ -194,12 +194,14 @@
             </div>
         @endif
 
-        {{-- Gallery (masonry) --}}
+        {{-- Documentation photos (masonry) --}}
         @if ($portfolio->images->isNotEmpty())
             <div class="container mt-16">
-                {{-- Was .eyebrow, which is display:none site-wide — the gallery shipped with no
-                     heading at all, so the photos appeared without introduction. --}}
-                <h2 class="font-display text-2xl font-semibold text-navy md:text-3xl" data-aos="fade-up">{{ $id ? 'Galeri Proyek' : 'Project Gallery' }}</h2>
+                {{-- Was .eyebrow, which is display:none site-wide — this section shipped with no
+                     heading at all, so the photos appeared without introduction.
+                     "Dokumentasi Kegiatan", not "Galeri": these are records of what happened
+                     on the ground, and the sidebar fact row already says "Dokumentasi". --}}
+                <h2 class="font-display text-2xl font-semibold text-navy md:text-3xl" data-aos="fade-up">{{ $id ? 'Dokumentasi Kegiatan' : 'Activity Documentation' }}</h2>
                 <span class="mt-4 mb-8 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
                 <div class="columns-1 gap-4 sm:columns-2 lg:columns-3">
                     @foreach ($portfolio->images as $img)
