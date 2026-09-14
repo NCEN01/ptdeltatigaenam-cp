@@ -3,11 +3,11 @@
 
     $proof = $id ? [
         ['Diakui secara nasional', 'Sertifikat diterbitkan melalui skema BNSP bersama LSP mitra, sehingga berlaku untuk audit pelanggan, tender, dan persyaratan regulasi.'],
-        ['Diuji, bukan sekadar dilatih', 'Setiap nama di daftar ini melewati uji kompetensi bersama asesor — pada pekerjaan dan peralatan yang benar-benar mereka tangani.'],
+        ['Diuji, bukan sekadar dilatih', 'Setiap nama di daftar ini melewati uji kompetensi bersama asesor, pada pekerjaan dan peralatan yang benar-benar mereka tangani.'],
         ['Dapat ditelusuri siapa pun', 'Nomor sertifikat dan nomor uji kompetensi terbuka di halaman ini, jadi pemberi kerja bisa memverifikasinya sendiri.'],
     ] : [
         ['Nationally recognised', 'Certificates are issued under the BNSP scheme with our partner assessment bodies, so they hold up for customer audits, tenders, and regulatory requirements.'],
-        ['Assessed, not just trained', 'Every name here passed an assessment with a certified assessor — on the work and equipment they actually handle.'],
+        ['Assessed, not just trained', 'Every name here passed an assessment with a certified assessor, on the work and equipment they actually handle.'],
         ['Open to verification', 'Certificate and assessment numbers are published on this page, so any employer can check them directly.'],
     ];
 @endphp
@@ -22,7 +22,7 @@
         : 'Verify BNSP competency certificates issued by PT Delta Tiga Enam. Enter a participant name, company, or certificate number to see the qualification assessed and whether it is still valid.'">
     <x-page-header
         :title="$id ? 'Pemegang Sertifikat' : 'Certificate Holders'"
-        :subtitle="$id ? 'Bukti nyata kompetensi — para profesional yang telah lulus sertifikasi resmi bersama kami.' : 'Real proof of competency — professionals who have earned official certification with us.'"
+        :subtitle="$id ? 'Bukti nyata kompetensi. Para profesional yang telah lulus sertifikasi resmi bersama kami.' : 'Real proof of competency. Professionals who have earned official certification with us.'"
         placement="certificate"
         image="photo-1524178232363-1fb2b075b655" />
 
@@ -53,7 +53,7 @@
                 </h2>
                 <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
                 <p class="mt-6 font-display text-xl leading-snug text-navy md:text-2xl">
-                    {{ $id ? 'Satu nama, satu nomor — langsung terbukti.' : 'One name, one number — proof on the spot.' }}
+                    {{ $id ? 'Satu nama. Satu nomor. Langsung terbukti.' : 'One name. One number. Proof on the spot.' }}
                 </p>
             </div>
 

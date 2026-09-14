@@ -692,7 +692,7 @@
                         ],
                         [
                             'q' => 'Apa manfaat bekerja sama dengan konsultan human capital seperti Delta Tiga Enam?',
-                            'a' => 'Sebagai konsultan human capital, kami membantu perusahaan mengelola SDM secara strategis — mulai dari pemetaan kompetensi, peningkatan produktivitas, hingga efisiensi rekrutmen. Anda mendapatkan pendampingan ahli sehingga setiap keputusan terkait talenta menjadi lebih terukur, hemat biaya, dan berdampak langsung pada kinerja organisasi.',
+                            'a' => 'Sebagai konsultan human capital, kami membantu perusahaan mengelola SDM secara strategis, mulai dari pemetaan kompetensi, peningkatan produktivitas, hingga efisiensi rekrutmen. Anda mendapatkan pendampingan ahli sehingga setiap keputusan terkait talenta menjadi lebih terukur, hemat biaya, dan berdampak langsung pada kinerja organisasi.',
                         ],
                         [
                             'q' => 'Apakah sertifikasi kompetensi dari Delta Tiga Enam resmi?',
@@ -717,7 +717,7 @@
                         ],
                         [
                             'q' => 'What are the benefits of working with a human capital consultant like Delta Tiga Enam?',
-                            'a' => 'As a human capital consultant, we help companies manage their workforce strategically — from competency mapping and productivity improvement to more efficient recruitment. You gain expert guidance so every talent-related decision becomes measurable, cost-effective, and directly impacts organizational performance.',
+                            'a' => 'As a human capital consultant, we help companies manage their workforce strategically, from competency mapping and productivity improvement to more efficient recruitment. You gain expert guidance so every talent-related decision becomes measurable, cost-effective, and directly impacts organizational performance.',
                         ],
                         [
                             'q' => 'Are the competence certifications official?',

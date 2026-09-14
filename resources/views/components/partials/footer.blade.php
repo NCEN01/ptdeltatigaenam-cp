@@ -83,7 +83,7 @@
         'agenda' => [
             $id ? 'Agenda' : 'Agenda',
             $id ? 'Ikuti agenda & pelatihan mendatang.' : 'Join our upcoming events & training.',
-            $id ? 'Jangan lewatkan program pelatihan dan sertifikasi kami — hubungi kami untuk info & pendaftaran.' : "Don't miss our training and certification programs — contact us for info & registration.",
+            $id ? 'Jangan lewatkan program pelatihan dan sertifikasi kami. Hubungi kami untuk info & pendaftaran.' : "Don't miss our training and certification programs. Contact us for info & registration.",
             $id ? 'Hubungi Kami' : 'Contact Us', 'contact.index',
         ],
         'partnership' => [

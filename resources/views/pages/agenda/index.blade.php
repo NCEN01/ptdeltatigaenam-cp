@@ -102,12 +102,16 @@
                                         {{ $agenda->starts_at->translatedFormat('H:i') }}{{ $agenda->ends_at ? '–'.$agenda->ends_at->translatedFormat('H:i') : '' }}
                                     </span>
                                 @endif
-                                @if ($agenda->location)
-                                    <span class="inline-flex min-w-0 items-center gap-1.5">
-                                        <svg class="h-3.5 w-3.5 shrink-0 {{ $isPast ? 'text-slate-400' : 'text-sky-500' }}" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.2 7-11a7 7 0 10-14 0c0 5.8 7 11 7 11z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.5"/></svg>
-                                        <span class="truncate">{{ $agenda->location }}</span>
-                                    </span>
-                                @endif
+                                {{-- Komponen yang sama dengan kartu blog dan portofolio,
+                                     supaya lokasi berwarna sama di seluruh situs. Agenda
+                                     yang sudah lewat tetap diredupkan seperti elemen lain
+                                     di kartunya. --}}
+                                <x-meta-location
+                                    :value="$agenda->location"
+                                    :separator="false"
+                                    :tone="$isPast ? 'text-slate-400' : 'text-gold-deep'"
+                                    size="h-3.5 w-3.5"
+                                    class="gap-1.5" />
                             </div>
 
                             <h3 class="mt-3 line-clamp-2 min-h-[3.5rem] font-display text-xl font-semibold leading-snug text-navy">{{ $agenda->title }}</h3>

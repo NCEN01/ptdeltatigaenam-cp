@@ -111,8 +111,8 @@ class TestimonialSeeder extends Seeder
                 'portfolio' => 'sertifikasi-kompetensi-operator-produksi',
                 'rating' => 5,
                 'quote' => [
-                    'id' => 'Dua ratus empat puluh operator tersertifikasi tanpa satu jam pun produksi berhenti. Itu yang paling saya hargai — mereka menyesuaikan jadwal uji dengan pola sif kami.',
-                    'en' => 'Two hundred and forty operators certified without a single production hour lost. That is what I valued most — they fitted the assessment schedule to our shift pattern.',
+                    'id' => 'Dua ratus empat puluh operator tersertifikasi tanpa satu jam pun produksi berhenti. Itu yang paling saya hargai. Mereka menyesuaikan jadwal uji dengan pola sif kami.',
+                    'en' => 'Two hundred and forty operators certified without a single production hour lost. That is what I valued most. They fitted the assessment schedule to our shift pattern.',
                 ],
             ],
             [

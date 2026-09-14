@@ -4,7 +4,7 @@
     <x-page-header
         :eyebrow="__('site.home.services_kicker')"
         :title="__('site.home.services_title')"
-        :subtitle="$id ? 'Dari konsultasi manajemen hingga sertifikasi kompetensi — dirancang untuk hasil yang terukur.' : 'From management consulting to competency certification — designed for measurable outcomes.'"
+        :subtitle="$id ? 'Dari konsultasi manajemen hingga sertifikasi kompetensi, dirancang untuk hasil yang terukur.' : 'From management consulting to competency certification, designed for measurable outcomes.'"
         placement="services"
         image="photo-1524178232363-1fb2b075b655">
         {{-- Category jump-nav. Highlights the section you are currently reading, so on a page

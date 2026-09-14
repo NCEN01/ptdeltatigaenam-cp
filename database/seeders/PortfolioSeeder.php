@@ -365,8 +365,8 @@ class PortfolioSeeder extends Seeder
                     'en' => 'A third of key post-holders would retire within three years, yet the bank had no picture of who was ready to step up and who still needed preparing.',
                 ],
                 'approach' => [
-                    'id' => 'Setiap karyawan dinilai pada dua sumbu — kinerja saat ini dan potensi jangka panjang — lalu ditempatkan pada kisi sembilan kotak yang menjadi dasar keputusan pengembangan.',
-                    'en' => 'Every employee was rated on two axes — current performance and long-term potential — then placed on a nine-box grid that guided development decisions.',
+                    'id' => 'Setiap karyawan dinilai pada dua sumbu, yaitu kinerja saat ini dan potensi jangka panjang, lalu ditempatkan pada kisi sembilan kotak yang menjadi dasar keputusan pengembangan.',
+                    'en' => 'Every employee was rated on two axes, current performance and long-term potential, then placed on a nine-box grid that guided development decisions.',
                 ],
                 'scope' => [
                     ['id' => 'Penilaian potensi dan kinerja atas 310 karyawan.', 'en' => 'Potential and performance review of 310 employees.'],
@@ -534,7 +534,7 @@ class PortfolioSeeder extends Seeder
                 ],
                 'challenge' => [
                     'id' => 'Uraian tugas banyak jabatan sudah tidak sesuai praktik sehari-hari, dan sebagian tanggung jawab tumpang tindih antarunit. Ini menjadi temuan berulang pada penilaian akreditasi sebelumnya.',
-                    'en' => 'Many job descriptions no longer matched daily practice and some responsibilities overlapped between units — a repeat finding in the previous accreditation review.',
+                    'en' => 'Many job descriptions no longer matched daily practice and some responsibilities overlapped between units, a repeat finding in the previous accreditation review.',
                 ],
                 'approach' => [
                     'id' => 'Kami menelusuri apa yang benar-benar dikerjakan tiap unit lebih dulu, baru menulis ulang uraian tugas dari kenyataan itu, bukan dari struktur di atas kertas.',

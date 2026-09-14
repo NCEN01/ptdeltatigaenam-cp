@@ -9,7 +9,7 @@
     use App\Models\Setting;
 
     $siteName = Setting::get('site_name', 'PT Delta Tiga Enam');
-    $pageTitle = $title ? $title.' — '.$siteName : $siteName;
+    $pageTitle = $title ? $title.' | '.$siteName : $siteName;
     $desc = $description ?: Setting::getLocalized('company_tagline', null, 'Human capital, pelatihan & sertifikasi profesi.');
     $locale = Locale::current();
 @endphp

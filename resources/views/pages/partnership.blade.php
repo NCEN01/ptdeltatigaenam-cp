@@ -26,14 +26,14 @@
         ['Penghematan Biaya', 'Dengan potongan harga untuk pelatihan publik dan sertifikasi, perusahaan dapat menghemat anggaran dan meningkatkan efisiensi.'],
         ['Sertifikasi dan Pengakuan Kompetensi', 'Peserta pelatihan mendapatkan sertifikat yang diakui secara profesional, meningkatkan kredibilitas dan kompetensi di industri.'],
         ['Prioritas Layanan untuk Mitra Premium', 'Mitra Gold dan Platinum mendapatkan prioritas jadwal pelatihan dan layanan konsultasi tambahan.'],
-        ['Peningkatan Kinerja Perusahaan', 'Dengan SDM yang lebih terlatih dan kompeten, perusahaan dapat mencapai target lebih efisien dan efektif — menjadikan SDM sebagai aset strategis menghadapi persaingan.'],
+        ['Peningkatan Kinerja Perusahaan', 'Dengan SDM yang lebih terlatih dan kompeten, perusahaan dapat mencapai target lebih efisien dan efektif, menjadikan SDM sebagai aset strategis menghadapi persaingan.'],
     ] : [
         ['Improve HR Competency & Productivity', 'Delivers relevant new knowledge and skills, helping the company optimize work processes and improve human capital performance.'],
         ['Customizable Training Solutions', 'Companies can tailor training topics, such as case-study based training, with flexible scheduling.'],
         ['Cost Savings', 'With discounts on public training and certification, companies save budget and improve efficiency.'],
         ['Certification & Competency Recognition', 'Participants earn professionally recognized certificates, boosting credibility and competency in the industry.'],
         ['Priority Service for Premium Partners', 'Gold and Platinum partners receive priority training schedules and additional consulting services.'],
-        ['Improved Company Performance', 'With a better-trained, more competent workforce, the company reaches its targets more efficiently — making people a strategic asset.'],
+        ['Improved Company Performance', 'With a better-trained, more competent workforce, the company reaches its targets more efficiently, making people a strategic asset.'],
     ];
 
     $narrative = $id
@@ -83,7 +83,7 @@
                             <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none"><path d="M4 7h16v13H4zM4 7l3-3h10l3 3M9 12h6" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
                         </span>
                         <p class="mt-6 font-mono text-[11px] uppercase tracking-normal text-gold-soft">{{ $id ? 'Penagihan' : 'Billing' }}</p>
-                        <p class="mt-3 font-display text-2xl leading-snug text-balance">{{ $id ? 'Tanpa pembayaran online — seluruh kerja sama difinalisasi melalui invoice.' : 'No online payment — every partnership is finalized via invoice.' }}</p>
+                        <p class="mt-3 font-display text-2xl leading-snug text-balance">{{ $id ? 'Tanpa pembayaran online. Seluruh kerja sama difinalisasi melalui invoice.' : 'No online payment. Every partnership is finalized via invoice.' }}</p>
                         <p class="mt-auto border-t border-white/10 pt-6 text-sm leading-relaxed text-navy-200">{{ $id ? 'Tim kami menyiapkan penawaran resmi setelah presentasi.' : 'Our team prepares a formal offer after the presentation.' }}</p>
                     </div>
                 </div>
@@ -222,8 +222,8 @@
                     <h2 class="font-display text-3xl text-navy text-balance md:text-4xl">{{ $id ? 'Mulai kolaborasi' : 'Start a collaboration' }}</h2>
                     <p class="mx-auto mt-5 max-w-xl text-pretty leading-relaxed text-slate-600">
                         {{ $id
-                            ? 'Isi formulir dan tim PT Delta Tiga Enam akan menghubungi Anda untuk menjadwalkan presentasi serta menyiapkan penawaran. Tanpa pembayaran online — penagihan melalui invoice.'
-                            : 'Submit the form and the PT Delta Tiga Enam team will contact you to schedule a presentation and prepare an offer. No online payment — billing via invoice.' }}
+                            ? 'Isi formulir dan tim PT Delta Tiga Enam akan menghubungi Anda untuk menjadwalkan presentasi serta menyiapkan penawaran. Tanpa pembayaran online, penagihan melalui invoice.'
+                            : 'Submit the form and the PT Delta Tiga Enam team will contact you to schedule a presentation and prepare an offer. No online payment, billing via invoice.' }}
                     </p>
                 </div>
 

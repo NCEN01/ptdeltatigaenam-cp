@@ -65,8 +65,8 @@ class SettingSeeder extends Seeder
             ['group' => 'topbar', 'key' => 'topbar_promo_link', 'value' => '/layanan/sertifikasi-bnsp-ahli-k3-umum#daftar', 'type' => 'text'],
             ['group' => 'topbar', 'key' => 'topbar_agenda_active', 'value' => '1', 'type' => 'text'],
             ['group' => 'topbar', 'key' => 'topbar_agenda_text', 'type' => 'json', 'value' => json_encode([
-                'id' => 'Pelatihan & sertifikasi terbaru — lihat jadwal terdekat',
-                'en' => 'Latest training & certification — see the upcoming schedule',
+                'id' => 'Pelatihan & sertifikasi terbaru, lihat jadwal terdekat',
+                'en' => 'Latest training & certification, see the upcoming schedule',
             ])],
             ['group' => 'topbar', 'key' => 'topbar_agenda_cta', 'type' => 'json', 'value' => json_encode([
                 'id' => 'Lihat Agenda',

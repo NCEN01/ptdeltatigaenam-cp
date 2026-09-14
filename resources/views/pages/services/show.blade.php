@@ -77,7 +77,7 @@
             <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
                 <p class="eyebrow inline-flex items-center justify-center"><span class="rule-gold mr-3"></span>{{ $id ? 'Cara Mendaftar' : 'How to Register' }}</p>
                 <h2 class="mt-4 font-display text-3xl text-navy text-balance md:text-4xl">{{ $id ? 'Daftar mudah dalam 3 langkah' : 'Register easily in 3 steps' }}</h2>
-                <p class="mx-auto mt-4 max-w-xl text-slate-600">{{ $id ? 'Prosesnya cepat & aman — amankan kursi Anda dalam hitungan menit.' : 'Fast & secure — reserve your seat in minutes.' }}</p>
+                <p class="mx-auto mt-4 max-w-xl text-slate-600">{{ $id ? 'Prosesnya cepat dan aman. Amankan kursi Anda dalam hitungan menit.' : 'Fast and secure. Reserve your seat in minutes.' }}</p>
             </div>
 
             <div class="relative mx-auto mt-10 max-w-5xl md:mt-14">
@@ -169,7 +169,7 @@
                                     {{ $id ? 'Jadwal terdekat' : 'Next available schedule' }}
                                 @endif
                             </h3>
-                            <p class="mt-2 text-sm text-navy-200">{{ $id ? 'Kursi terbatas — daftar sekarang sebelum kehabisan.' : 'Limited seats — register now before they’re gone.' }}</p>
+                            <p class="mt-2 text-sm text-navy-200">{{ $id ? 'Kursi terbatas, daftar sekarang sebelum kehabisan.' : 'Limited seats, register now before they’re gone.' }}</p>
                         </div>
                     </div>
 

@@ -19,7 +19,7 @@
     <x-page-header
         :eyebrow="'PT Delta Tiga Enam'"
         :title="__('site.contact.title')"
-        :subtitle="$id ? 'Ceritakan kebutuhan organisasi Anda — tim kami akan merespons dengan cepat.' : 'Tell us about your needs — our team will respond promptly.'"
+        :subtitle="$id ? 'Ceritakan kebutuhan organisasi Anda. Tim kami akan merespons dengan cepat.' : 'Tell us about your needs — our team will respond promptly.'"
         placement="contact"
         image="photo-1497366754035-f200968a6e72" />
 
@@ -35,7 +35,7 @@
                 </h2>
                 <p class="mt-5 max-w-md text-pretty leading-relaxed text-slate-600">
                     {{ $id
-                        ? 'Punya pertanyaan seputar pelatihan, sertifikasi, atau rekrutmen? Isi formulir di samping atau hubungi kami langsung — tim kami siap membantu.'
+                        ? 'Punya pertanyaan seputar pelatihan, sertifikasi, atau rekrutmen? Isi formulir di samping atau hubungi kami langsung. Tim kami siap membantu.'
                         : 'Questions about training, certification, or recruitment? Fill out the form or reach us directly — our team is ready to help.' }}
                 </p>
 

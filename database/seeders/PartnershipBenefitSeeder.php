@@ -64,8 +64,8 @@ class PartnershipBenefitSeeder extends Seeder
                 'icon' => 'chart-bar',
                 'title' => ['id' => 'Hasil yang bisa Anda ukur', 'en' => 'Results you can measure'],
                 'description' => [
-                    'id' => 'Setiap program ditutup dengan laporan berisi nilai sebelum dan sesudah, tingkat kelulusan, serta catatan tindak lanjut per peserta — bukan sekadar daftar hadir.',
-                    'en' => 'Every programme closes with a report showing before-and-after scores, pass rates, and per-participant follow-up notes — not just an attendance list.',
+                    'id' => 'Setiap program ditutup dengan laporan berisi nilai sebelum dan sesudah, tingkat kelulusan, serta catatan tindak lanjut per peserta, bukan sekadar daftar hadir.',
+                    'en' => 'Every programme closes with a report showing before-and-after scores, pass rates, and per-participant follow-up notes, not just an attendance list.',
                 ],
             ],
             [
