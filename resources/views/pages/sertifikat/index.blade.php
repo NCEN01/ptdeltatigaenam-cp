@@ -1,19 +1,6 @@
 @php
     $id = app()->getLocale() === 'id';
 
-    /* Angka ringkasan. Ditulis sebagai daftar supaya barisnya dirender satu kali,
-       bukan tiga blok markup yang hampir sama.
-
-       Hanya angka kedaluwarsa yang diberi warna, dan hanya kalau memang ada —
-       nol yang dimerahkan menakut-nakuti tanpa sebab. Nol diredupkan ke
-       slate-500 (4,6:1), bukan navy-200: navy-200 dibuat untuk latar gelap dan
-       hanya berkontras 1,5:1 di atas latar terang ini. */
-    $figures = [
-        ['value' => $certificates->total(), 'label' => $id ? 'Terdaftar' : 'Registered'],
-        ['value' => $validCount, 'label' => $id ? 'Masih berlaku' : 'Currently valid'],
-        ['value' => $expiredCount, 'label' => $id ? 'Kedaluwarsa' : 'Expired', 'tone' => $expiredCount > 0 ? 'text-rose-700' : 'text-slate-500'],
-    ];
-
     $proof = $id ? [
         ['Diakui secara nasional', 'Sertifikat diterbitkan melalui skema BNSP bersama LSP mitra, sehingga berlaku untuk audit pelanggan, tender, dan persyaratan regulasi.'],
         ['Diuji, bukan sekadar dilatih', 'Setiap nama di daftar ini melewati uji kompetensi bersama asesor — pada pekerjaan dan peralatan yang benar-benar mereka tangani.'],
@@ -36,13 +23,19 @@
          Halaman ini dipakai orang untuk satu hal: memeriksa apakah sebuah
          sertifikat benar ada dan masih berlaku. Jadi pencarian yang dulu
          terselip sebagai baris alat kecil kini memimpin halaman, ditemani
-         angka nyata yang dihitung dari data — bukan klaim.
-
          Permukaannya sedikit turun: ini area alat, bukan isi. Kolom pencarian
-         yang putih jadi menonjol di atasnya tanpa perlu isian warna. --}}
+         yang putih jadi menonjol di atasnya tanpa perlu isian warna.
+
+         Blok tiga angka besar (Terdaftar / Masih berlaku / Kedaluwarsa) dihapus
+         dari sini. Dua sebabnya nyata: saat orang mencari — yaitu saat halaman
+         ini bekerja — angkanya berbunyi "1 1 0" atau "0 0 0", tiga angka
+         terbesar di layar untuk mengatakan nyaris tidak ada apa-apa; dan
+         "Terdaftar 25" membantah klaim situs sendiri yang menulis "500+
+         Profesional Terlatih" di beranda serta halaman Tentang. Jumlahnya kini
+         muncul sebagai keterangan tenang tepat di atas daftarnya. --}}
     <section class="section-sm border-b border-navy-50 bg-neutral-50">
-        <div class="container grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-16">
-            <div class="lg:col-span-7">
+        <div class="container">
+            <div class="max-w-2xl">
                 {{-- font-display dan text-balance tidak ditulis di sini: app.css
                      sudah memberikannya ke seluruh h1–h4. --}}
                 <h2 class="text-3xl leading-tight text-navy md:text-4xl">
@@ -71,32 +64,7 @@
                     </div>
                 </form>
 
-                @if ($q !== '')
-                    <p class="mt-4 text-sm text-slate-600">
-                        {{ $id ? 'Menampilkan hasil untuk' : 'Showing results for' }}
-                        <span class="font-semibold text-navy">&ldquo;{{ $q }}&rdquo;</span>
-                        <span class="mx-2 text-slate-400" aria-hidden="true">·</span>
-                        {{-- Bukan .link-underline: kelas itu inline-flex tanpa garis saat diam,
-                             jadi tautan di tengah kalimat tidak bisa membungkus dan hanya
-                             dibedakan warna — 1,5:1 terhadap teks sekitarnya. --}}
-                        <a href="{{ route('certificates.index') }}" class="font-medium text-sky-700 underline underline-offset-4 transition-colors hover:text-navy">{{ $id ? 'tampilkan semua' : 'show all' }}</a>
-                    </p>
-                @endif
             </div>
-
-            {{-- Angka dipisah garis tipis, bukan dikotakkan jadi kartu — tiga kotak
-                 berjajar justru menyaingi perhatian dari kolom pencarian. Angkanya
-                 sengaja besar: inilah bukti yang dibawa halaman ini. --}}
-            {{-- divide-navy-200, bukan -100: garisnya adalah seluruh premis tata
-                 letak ini, dan navy-100 di atas neutral-50 hanya 1,2:1. --}}
-            <dl class="divide-y divide-navy-200 border-t border-navy-200 lg:col-span-5 lg:border-t-0">
-                @foreach ($figures as $figure)
-                    <div class="flex items-baseline justify-between gap-6 py-4 lg:py-5">
-                        <dt class="text-sm text-slate-600">{{ $figure['label'] }}</dt>
-                        <dd class="font-display text-3xl leading-none tabular-nums {{ $figure['tone'] ?? 'text-navy' }} md:text-4xl">{{ $figure['value'] }}</dd>
-                    </div>
-                @endforeach
-            </dl>
         </div>
     </section>
 
@@ -110,6 +78,41 @@
                      kali jumlah kolomnya berubah. --}}
                 <x-certificate-empty :searching="$q !== ''" />
             @else
+
+            {{-- Keterangan hasil. Menjawab pertanyaan yang benar-benar muncul —
+                 "berapa yang cocok, dan apakah ada yang sudah kedaluwarsa" —
+                 dengan satu baris, bukan tiga angka sebesar judul. Jumlah
+                 kedaluwarsa hanya disebut kalau memang ada. --}}
+            <div class="mb-6 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm text-slate-600">
+                @if ($q !== '')
+                    <span>
+                        <span class="font-semibold tabular-nums text-navy">{{ $certificates->total() }}</span>
+                        {{ $id ? 'hasil untuk' : 'results for' }}
+                        <span class="font-semibold text-navy">&ldquo;{{ $q }}&rdquo;</span>
+                    </span>
+                @else
+                    <span>
+                        {{ $id ? 'Menampilkan' : 'Showing' }}
+                        <span class="font-semibold tabular-nums text-navy">{{ $certificates->firstItem() }}&ndash;{{ $certificates->lastItem() }}</span>
+                        {{ $id ? 'dari' : 'of' }}
+                        <span class="font-semibold tabular-nums text-navy">{{ $certificates->total() }}</span>
+                        {{ $id ? 'sertifikat' : 'certificates' }}
+                    </span>
+                @endif
+
+                @if ($expiredCount > 0)
+                    <span class="text-slate-400" aria-hidden="true">·</span>
+                    <span class="text-rose-700">
+                        <span class="font-semibold tabular-nums">{{ $expiredCount }}</span>
+                        {{ $id ? 'sudah kedaluwarsa' : 'expired' }}
+                    </span>
+                @endif
+
+                @if ($q !== '')
+                    <span class="text-slate-400" aria-hidden="true">·</span>
+                    <a href="{{ route('certificates.index') }}" class="font-medium text-sky-700 underline underline-offset-4 transition-colors hover:text-navy">{{ $id ? 'tampilkan semua' : 'show all' }}</a>
+                @endif
+            </div>
 
             {{-- Mobile: daftar kartu — tabel selebar layar memaksa geser ke samping. --}}
             <div class="space-y-3 md:hidden">

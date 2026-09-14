@@ -17,7 +17,7 @@ class CertificateController extends Controller
         // Satu definisi pencarian dipakai dua kali: untuk daftarnya dan untuk
         // menghitung yang kedaluwarsa. Dibuat sebagai closure supaya tiap
         // pemakaian memperoleh query baru, bukan query yang sudah dibebani
-        // paginator. Angka ketiga (yang masih berlaku) diturunkan dari keduanya.
+        // paginator.
         $matching = fn () => CertificateHolder::active()
             ->when($q !== '', function ($query) use ($q) {
                 $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $q);
@@ -47,7 +47,6 @@ class CertificateController extends Controller
             'certificates' => $certificates,
             'q' => $q,
             'expiredCount' => $expiredCount,
-            'validCount' => $certificates->total() - $expiredCount,
         ]);
     }
 }
