@@ -88,7 +88,7 @@
                                 </h1>
                                 <p class="mt-6 max-w-xl text-[15px] font-normal leading-relaxed text-white/90 text-pretty md:text-lg">{{ $slide['desc'] }}</p>
                                 <div class="mt-10">
-                                    <a href="{{ $slide['link'] }}" class="btn border border-gold text-gold hover:border-gold hover:bg-gold hover:text-white hover:shadow-gold">{{ $slide['btn_text'] }}</a>
+                                    <a href="{{ $slide['link'] }}" class="btn border border-gold text-gold hover:border-gold hover:bg-gold hover:text-navy-950 hover:shadow-gold">{{ $slide['btn_text'] }}</a>
                                 </div>
                             </div>
                         </div>
@@ -203,7 +203,6 @@
             <div class="container">
                 <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                     <div class="max-w-2xl">
-                        <p class="eyebrow mb-3" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $isId ? 'Pelatihan Terbaru' : 'Latest Training' }}</p>
                         <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $isId ? 'Pelatihan Terbaru Kami' : 'Our Latest Training' }}</h2>
                     </div>
                     <a href="{{ route('services.index') }}" class="link-underline shrink-0 font-medium" data-aos="fade-up">
@@ -213,8 +212,8 @@
                 </div>
 
                 {{-- Single-row carousel: smaller cards, slides sideways when there are many --}}
-                <div class="swiper mt-10" data-carousel data-aos="fade-up">
-                    <div class="swiper-wrapper">
+                <div class="swiper swiper-equal-height mt-10" data-carousel data-aos="fade-up">
+                    <div class="swiper-wrapper items-stretch">
                         @foreach ($latestServices as $service)
                             <div class="swiper-slide flex h-auto">
                                 <a href="{{ route('services.show', $service->slug) }}" data-spotlight class="card card-hover group flex h-full w-full flex-col overflow-hidden">
@@ -257,8 +256,9 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="mt-8 flex justify-center gap-2" data-carousel-pagination></div>
                 </div>
+                {{-- Di luar .swiper: elemen di dalamnya ikut terpotong overflow:hidden milik Swiper. --}}
+                <div class="mt-8 flex justify-center gap-2" data-carousel-pagination></div>
             </div>
         </section>
     @endif
@@ -378,7 +378,7 @@
                         <p class="mt-3 text-pretty leading-relaxed text-navy-100" data-aos="fade-up">{{ __('site.home.portfolio_title') }}</p>
                     </div>
                     <a href="{{ route('portfolio.index') }}" data-aos="fade-up"
-                       class="group inline-flex shrink-0 items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-white transition duration-300 hover:border-gold hover:bg-gold hover:text-navy-950">
+                       class="group inline-flex shrink-0 items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-white transition duration-300 hover:border-white hover:bg-white hover:text-navy-950">
                         {{ $isId ? 'Lihat Semua Portofolio' : 'View All Portfolio' }}
                         <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
@@ -519,11 +519,7 @@
         <div class="container relative">
             {{-- Centered header --}}
             <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
-                <p class="eyebrow inline-flex items-center justify-center gap-2">
-                    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4" stroke-linecap="round"/></svg>
-                    {{ $isId ? 'Jadwal Kegiatan' : 'Agenda' }}
-                </p>
-                <h2 class="mt-3 text-display-lg font-semibold text-navy text-balance">{{ $isId ? 'Agenda Mendatang Kami' : 'Our Upcoming Agenda' }}</h2>
+                <h2 class="text-display-lg font-semibold text-navy text-balance">{{ $isId ? 'Agenda Mendatang Kami' : 'Our Upcoming Agenda' }}</h2>
                 <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-600">
                     {{ $isId
                         ? 'Ikuti kelas pelatihan, sertifikasi, dan kegiatan terbaru dari kami. Geser untuk melihat jadwal lengkapnya.'
@@ -535,11 +531,11 @@
                 <div class="relative mt-12" data-hscroll data-hscroll-auto data-aos="fade-up">
                     {{-- Arrows (desktop) --}}
                     <button type="button" data-hscroll-prev aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}"
-                        class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-gold hover:bg-gold hover:text-navy-950 active:scale-95 lg:grid">
+                        class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 lg:grid">
                         <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
                     <button type="button" data-hscroll-next aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}"
-                        class="absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-gold hover:bg-gold hover:text-navy-950 active:scale-95 lg:grid">
+                        class="absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 lg:grid">
                         <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
 
@@ -607,7 +603,7 @@
                 </div>
 
                 <div class="mt-10 text-center" data-aos="fade-up">
-                    <a href="{{ route('agenda.index') }}" class="inline-flex items-center gap-2 rounded-full border border-navy-200 px-6 py-3 text-sm font-medium text-navy transition duration-300 hover:border-gold hover:bg-gold hover:text-navy-950">
+                    <a href="{{ route('agenda.index') }}" class="inline-flex items-center gap-2 rounded-full border border-navy-200 px-6 py-3 text-sm font-medium text-navy transition duration-300 hover:border-navy hover:bg-navy hover:text-white">
                         {{ $isId ? 'Lihat Semua Agenda' : 'View All Agendas' }}
                         <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
