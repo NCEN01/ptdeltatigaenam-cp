@@ -31,6 +31,12 @@ class ServiceSeeder extends Seeder
                     // dibaca satu pun view. Harga 0 sudah ditampilkan sebagai
                     // "Hubungi kami" oleh halaman layanan.
                     'price' => $item['price'],
+                    // Diskon di CMS bersifat tampilan saja: `price` tetap harga yang
+                    // ditagih, `discount_original_price` adalah angka coret di atasnya.
+                    // Keduanya ditulis eksplisit (termasuk false/null) supaya seeder
+                    // yang dijalankan ulang ikut membersihkan diskon yang dicabut.
+                    'discount_active' => isset($item['price_before']),
+                    'discount_original_price' => $item['price_before'] ?? null,
                     'duration' => $item['duration'],
                     'location' => $item['location'],
                     'mode' => $item['mode'],
@@ -42,6 +48,11 @@ class ServiceSeeder extends Seeder
                     'is_featured' => $index < 4,
                     'sort_order' => $index + 1,
                     'is_active' => true,
+                    // Tanpa ini seluruh layanan punya created_at yang sama persis,
+                    // dan blok "Pelatihan Terbaru" di beranda memakai latest() —
+                    // artinya 6 dari 10 layanan terpilih secara acak dan berubah-ubah.
+                    // Diberi jarak sehari agar urutannya tetap dan sesuai sort_order.
+                    'created_at' => Carbon::today()->subDays($index)->setTime(9, 0),
                 ],
             );
 
@@ -160,6 +171,7 @@ class ServiceSeeder extends Seeder
                     ['title' => ['id' => 'Simulasi dan uji kompetensi', 'en' => 'Simulation and assessment'], 'description' => ['id' => 'Dua kali simulasi ujian, pembahasan, lalu uji kompetensi bersama asesor BNSP.', 'en' => 'Two mock exams, review, then assessment with a BNSP assessor.']],
                 ],
                 'price' => 8500000,
+                'price_before' => 12500000, // hemat 32%
                 'duration' => ['id' => '12 hari (120 jam)', 'en' => '12 days (120 hours)'],
                 'location' => 'Jakarta Selatan, DKI Jakarta',
                 'mode' => 'offline',
@@ -196,6 +208,7 @@ class ServiceSeeder extends Seeder
                     ['title' => ['id' => 'Proyek perbaikan unit', 'en' => 'Unit improvement project'], 'description' => ['id' => 'Setiap peserta menjalankan satu perbaikan nyata di unitnya dan memaparkan hasilnya.', 'en' => 'Each participant runs one real improvement in their unit and presents the result.']],
                 ],
                 'price' => 4500000,
+                'price_before' => 6000000, // hemat 25%
                 'duration' => ['id' => '4 hari (32 jam)', 'en' => '4 days (32 hours)'],
                 'location' => 'Jakarta Pusat, DKI Jakarta',
                 'mode' => 'offline',
@@ -448,6 +461,7 @@ class ServiceSeeder extends Seeder
                     ['title' => ['id' => 'Uji kompetensi dan penerbitan sertifikat', 'en' => 'Assessment and certification'], 'description' => ['id' => 'Uji praktik bersama asesor, pemeriksaan mutu hasil, lalu penerbitan sertifikat.', 'en' => 'Practical assessment with an assessor, quality inspection, then certificate issuance.']],
                 ],
                 'price' => 3800000,
+                'price_before' => 4750000, // hemat 20%
                 'duration' => ['id' => '5 hari (40 jam)', 'en' => '5 days (40 hours)'],
                 'location' => 'Di lokasi klien',
                 'mode' => 'offline',

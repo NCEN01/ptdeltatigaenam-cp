@@ -42,12 +42,15 @@ class SettingSeeder extends Seeder
             // bar promonya tidak muncul sama sekali karena topbar_active kosong.
             ['group' => 'topbar', 'key' => 'topbar_active', 'value' => '1', 'type' => 'text'],
             ['group' => 'topbar', 'key' => 'topbar_promo_active', 'value' => '1', 'type' => 'text'],
+            // Angka di sini sengaja sama persis dengan diskon pada layanan
+            // sertifikasi-bnsp-ahli-k3-umum, dan tautannya menuju layanan itu —
+            // kalau berbeda, pengunjung yang mengklik akan menemukan harga lain.
             ['group' => 'topbar', 'key' => 'topbar_promo_text', 'type' => 'json', 'value' => json_encode([
-                'id' => 'Promo Sertifikasi BNSP',
-                'en' => 'BNSP Certification Promo',
+                'id' => 'Promo Sertifikasi Ahli K3 Umum',
+                'en' => 'General Safety Expert Certification Promo',
             ])],
-            ['group' => 'topbar', 'key' => 'topbar_promo_price_old', 'value' => 'Rp 15.000.000', 'type' => 'text'],
-            ['group' => 'topbar', 'key' => 'topbar_promo_price_new', 'value' => 'Rp 9.000.000', 'type' => 'text'],
+            ['group' => 'topbar', 'key' => 'topbar_promo_price_old', 'value' => 'Rp 12.500.000', 'type' => 'text'],
+            ['group' => 'topbar', 'key' => 'topbar_promo_price_new', 'value' => 'Rp 8.500.000', 'type' => 'text'],
             ['group' => 'topbar', 'key' => 'topbar_promo_note', 'type' => 'json', 'value' => json_encode([
                 'id' => 'kuota terbatas bulan ini',
                 'en' => 'limited quota this month',
@@ -56,7 +59,7 @@ class SettingSeeder extends Seeder
                 'id' => 'Lihat Program',
                 'en' => 'View Program',
             ])],
-            ['group' => 'topbar', 'key' => 'topbar_promo_link', 'value' => '/layanan', 'type' => 'text'],
+            ['group' => 'topbar', 'key' => 'topbar_promo_link', 'value' => '/layanan/sertifikasi-bnsp-ahli-k3-umum', 'type' => 'text'],
             ['group' => 'topbar', 'key' => 'topbar_agenda_active', 'value' => '1', 'type' => 'text'],
             ['group' => 'topbar', 'key' => 'topbar_agenda_text', 'type' => 'json', 'value' => json_encode([
                 'id' => 'Pelatihan & sertifikasi terbaru — lihat jadwal terdekat',
