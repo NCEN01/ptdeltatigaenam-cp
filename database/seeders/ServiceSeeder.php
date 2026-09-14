@@ -27,9 +27,9 @@ class ServiceSeeder extends Seeder
                         'en' => $this->body($item, 'en'),
                     ],
                     'image' => StoredImages::pick($images, $index),
-                    // price_label sengaja dilewati: kolomnya ada di tabel tetapi tidak
-                    // dibaca satu pun view. Harga 0 sudah ditampilkan sebagai
-                    // "Hubungi kami" oleh halaman layanan.
+                    // Satuan harga. Dikosongkan untuk pelatihan dan sertifikasi karena
+                    // halaman layanan sudah memakai "peserta" sebagai cadangan.
+                    'price_label' => $item['price_unit'] ?? null,
                     'price' => $item['price'],
                     // Diskon di CMS bersifat tampilan saja: `price` tetap harga yang
                     // ditagih, `discount_original_price` adalah angka coret di atasnya.
@@ -88,14 +88,17 @@ class ServiceSeeder extends Seeder
     {
         $service->schedules()->delete();
 
-        // Konsultasi dan headhunter dikerjakan per penugasan, bukan per angkatan,
-        // jadi tidak ada jadwal kelas yang masuk akal untuk ditampilkan.
         if ($item['quota'] === null) {
             return;
         }
 
+        // Jarak antarbatch mengikuti lama programnya. Penugasan headhunter dan
+        // konsultasi berjalan 70–120 hari; jarak tetap 35 hari akan membuat
+        // batch berikutnya mulai sebelum yang sebelumnya selesai.
+        $gap = max(35, $item['days'] + 21);
+
         foreach ([0, 1, 2] as $n) {
-            $start = Carbon::today()->addDays(21 + ($index * 4) + ($n * 35));
+            $start = Carbon::today()->addDays(21 + ($index * 4) + ($n * $gap));
 
             $service->schedules()->create([
                 'start_date' => $start,
@@ -280,13 +283,15 @@ class ServiceSeeder extends Seeder
                     ['title' => ['id' => 'Asesmen dan wawancara berbasis perilaku', 'en' => 'Assessment and behaviour-based interviews'], 'description' => ['id' => 'Menguji kompetensi kepemimpinan dan kecocokan dengan budaya organisasi.', 'en' => 'Testing leadership competency and fit with the organisation\'s culture.']],
                     ['title' => ['id' => 'Pendampingan penawaran dan masa transisi', 'en' => 'Offer and transition support'], 'description' => ['id' => 'Membantu negosiasi paket sampai kandidat terpilih benar-benar mulai bekerja.', 'en' => 'Supporting package negotiation until the selected candidate actually starts.']],
                 ],
-                'price' => 0,
+                'price' => 38500000,
+                'price_before' => 52000000, // hemat 26%
+                'price_unit' => ['id' => 'penugasan', 'en' => 'assignment'],
                 'duration' => ['id' => '8–14 pekan', 'en' => '8–14 weeks'],
                 'location' => 'Jakarta Selatan, DKI Jakarta',
                 'mode' => 'hybrid',
-                'quota' => null,
-                'taken' => 0,
-                'days' => 1,
+                'quota' => 6,
+                'taken' => 4,
+                'days' => 70,
             ],
             [
                 'slug' => 'konsultasi-struktur-organisasi',
@@ -316,13 +321,15 @@ class ServiceSeeder extends Seeder
                     ['title' => ['id' => 'Perancangan struktur dan wewenang', 'en' => 'Structure and authority design'], 'description' => ['id' => 'Menyusun struktur baru dan menurunkan wewenang ke jenjang yang tepat.', 'en' => 'Designing the new structure and pushing authority to the right level.']],
                     ['title' => ['id' => 'Penerapan dan pendampingan', 'en' => 'Rollout and support'], 'description' => ['id' => 'Sosialisasi ke seluruh karyawan dan pendampingan sampai struktur berjalan.', 'en' => 'Briefing all employees and supporting the structure until it runs.']],
                 ],
-                'price' => 0,
+                'price' => 72000000,
+                'price_before' => 90000000, // hemat 20%
+                'price_unit' => ['id' => 'paket proyek', 'en' => 'project package'],
                 'duration' => ['id' => '3–6 bulan', 'en' => '3–6 months'],
                 'location' => 'Di lokasi klien',
                 'mode' => 'offline',
-                'quota' => null,
-                'taken' => 0,
-                'days' => 1,
+                'quota' => 4,
+                'taken' => 2,
+                'days' => 120,
             ],
             [
                 'slug' => 'sertifikasi-bnsp-human-resource',
@@ -424,13 +431,15 @@ class ServiceSeeder extends Seeder
                     ['title' => ['id' => 'Kajian pembanding gaji', 'en' => 'Salary benchmarking'], 'description' => ['id' => 'Membandingkan struktur gaji terhadap data pasar industri sejenis.', 'en' => 'Comparing the pay structure against comparable industry market data.']],
                     ['title' => ['id' => 'Penerapan dan komunikasi', 'en' => 'Rollout and communication'], 'description' => ['id' => 'Menyiapkan cara menjelaskan struktur baru kepada seluruh karyawan.', 'en' => 'Preparing how to explain the new structure to all employees.']],
                 ],
-                'price' => 0,
+                'price' => 48000000,
+                'price_before' => 60000000, // hemat 20%
+                'price_unit' => ['id' => 'paket proyek', 'en' => 'project package'],
                 'duration' => ['id' => '2–4 bulan', 'en' => '2–4 months'],
                 'location' => 'Di lokasi klien',
                 'mode' => 'hybrid',
-                'quota' => null,
-                'taken' => 0,
-                'days' => 1,
+                'quota' => 5,
+                'taken' => 3,
+                'days' => 90,
             ],
             [
                 'slug' => 'sertifikasi-juru-las-dan-teknisi',

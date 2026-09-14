@@ -14,9 +14,13 @@ class Service extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * price_label ikut di sini karena satuan harga tidak selalu "peserta":
+     * headhunter dan konsultasi dijual per penugasan, bukan per kursi.
+     */
     public array $translatable = [
         'title', 'short_description', 'description', 'duration',
-        'meta_title', 'meta_description',
+        'price_label', 'meta_title', 'meta_description',
     ];
 
     protected function casts(): array

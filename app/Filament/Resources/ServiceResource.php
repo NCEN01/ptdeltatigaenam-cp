@@ -57,13 +57,20 @@ class ServiceResource extends Resource
             ])->columns(2),
 
             Forms\Components\Section::make('Harga & Detail')->schema([
-                Forms\Components\TextInput::make('price')->label('Harga per Peserta (IDR)')->numeric()->default(0)->prefix('Rp')
-                    ->helperText('Harga asli yang ditagih. Diskon di bawah hanya untuk tampilan — tidak mengubah harga ini.'),
+                Forms\Components\TextInput::make('price')->label('Harga (IDR)')->numeric()->default(0)->prefix('Rp')
+                    ->helperText('Harga asli yang ditagih. Isi 0 bila ingin menampilkan "Hubungi kami". Diskon di bawah hanya untuk tampilan — tidak mengubah harga ini.'),
                 Forms\Components\Toggle::make('discount_active')->label('Tampilkan Diskon (tampilan saja)')->default(false)->live(),
                 Forms\Components\TextInput::make('discount_original_price')->label('Harga Sebelum Diskon (dicoret)')->numeric()->prefix('Rp')
                     ->helperText('Harga "coret" yang lebih tinggi dari harga asli. Persentase "Hemat" dihitung otomatis.')
                     ->visible(fn (Forms\Get $get) => (bool) $get('discount_active'))
                     ->required(fn (Forms\Get $get) => (bool) $get('discount_active')),
+                // Satuan harga tidak selalu "peserta": headhunter dan konsultasi
+                // dijual per penugasan. Dikosongkan berarti tetap memakai "peserta".
+                Forms\Components\TextInput::make('price_label.id')->label('Satuan Harga (ID)')
+                    ->placeholder('peserta')->maxLength(40)
+                    ->helperText('Tampil setelah garis miring, mis. "Rp 8.500.000 / peserta". Kosongkan untuk memakai "peserta".'),
+                Forms\Components\TextInput::make('price_label.en')->label('Satuan Harga (EN)')
+                    ->placeholder('person')->maxLength(40),
                 Forms\Components\TextInput::make('duration')->label('Durasi')->placeholder('2 hari'),
                 Forms\Components\TextInput::make('location')->label('Lokasi')->placeholder('Cilegon'),
                 Forms\Components\Select::make('mode')->options(['offline' => 'Offline', 'online' => 'Online', 'hybrid' => 'Hybrid'])->default('offline'),

@@ -59,7 +59,10 @@ class SettingSeeder extends Seeder
                 'id' => 'Lihat Program',
                 'en' => 'View Program',
             ])],
-            ['group' => 'topbar', 'key' => 'topbar_promo_link', 'value' => '/layanan/sertifikasi-bnsp-ahli-k3-umum', 'type' => 'text'],
+            // Berakhir di #daftar, bukan puncak halaman: pengunjung yang mengklik
+            // promo langsung mendarat di daftar jadwal dan tombol pendaftaran.
+            // url() melewatkan fragmen apa adanya, jadi tanda # tetap utuh.
+            ['group' => 'topbar', 'key' => 'topbar_promo_link', 'value' => '/layanan/sertifikasi-bnsp-ahli-k3-umum#daftar', 'type' => 'text'],
             ['group' => 'topbar', 'key' => 'topbar_agenda_active', 'value' => '1', 'type' => 'text'],
             ['group' => 'topbar', 'key' => 'topbar_agenda_text', 'type' => 'json', 'value' => json_encode([
                 'id' => 'Pelatihan & sertifikasi terbaru — lihat jadwal terdekat',

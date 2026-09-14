@@ -2,6 +2,11 @@
     $id = app()->getLocale() === 'id';
     $scheduleCount = $service->schedules->count();
 
+    // Satuan harga. Sebelumnya "peserta" ditulis mati di tiga tempat, sehingga
+    // layanan yang dijual per penugasan (headhunter, konsultasi) ikut tertulis
+    // "/ peserta". Kolom price_label memang disediakan untuk ini.
+    $priceUnit = trim((string) $service->price_label) ?: ($id ? 'peserta' : 'person');
+
     // Easy registration — 3 steps [title, description, icon].
     $steps = $id ? [
         ['Pilih Jadwal', 'Tentukan batch & tanggal yang paling sesuai untuk Anda.', 'calendar'],
@@ -46,10 +51,10 @@
                                 <span class="font-display text-xl text-white/45 line-through">Rp {{ number_format((float) $service->discount_original_price, 0, ',', '.') }}</span>
                                 <span class="rounded-md bg-gold px-2 py-0.5 font-mono text-[11px] font-bold uppercase tracking-wide text-navy-950">{{ $id ? 'Hemat' : 'Save' }} {{ $service->discountPercent() }}%</span>
                             </div>
-                            <p class="mt-1 font-display text-4xl text-white">Rp {{ number_format((float) $service->price, 0, ',', '.') }}<span class="text-base font-normal text-navy-200"> / {{ $id ? 'peserta' : 'person' }}</span></p>
+                            <p class="mt-1 font-display text-4xl text-white">Rp {{ number_format((float) $service->price, 0, ',', '.') }}<span class="text-base font-normal text-navy-200"> / {{ $priceUnit }}</span></p>
                             <p class="mt-2.5 text-xs leading-relaxed text-gold-soft">{{ $id ? 'Harga promo berlaku terbatas, harga akan naik setelah periode promo berakhir.' : 'Promo price for a limited time, the price will rise after the promo ends.' }}</p>
                         @else
-                            <p class="mt-2 font-display text-4xl">Rp {{ number_format((float) $service->price, 0, ',', '.') }}<span class="text-base font-normal text-navy-200"> / {{ $id ? 'peserta' : 'person' }}</span></p>
+                            <p class="mt-2 font-display text-4xl">Rp {{ number_format((float) $service->price, 0, ',', '.') }}<span class="text-base font-normal text-navy-200"> / {{ $priceUnit }}</span></p>
                         @endif
                     @else
                         <p class="mt-2 font-display text-3xl">{{ $id ? 'Hubungi kami' : 'Contact us' }}</p>
@@ -196,7 +201,7 @@
                                 @endif
 
                                 @if ($schedule->effectivePrice() > 0)
-                                    <p class="mt-3 font-display text-xl text-navy">Rp {{ number_format($schedule->effectivePrice(), 0, ',', '.') }}<span class="text-sm font-normal text-slate-500"> / {{ $id ? 'peserta' : 'person' }}</span></p>
+                                    <p class="mt-3 font-display text-xl text-navy">Rp {{ number_format($schedule->effectivePrice(), 0, ',', '.') }}<span class="text-sm font-normal text-slate-500"> / {{ $priceUnit }}</span></p>
                                 @endif
 
                                 @if ($service->is_purchasable)
