@@ -8,8 +8,11 @@
         placement="portfolio"
         image="photo-1531403009284-440f080d1e12" />
 
-    {{-- Portfolio grid (asymmetric) --}}
-    <section class="section">
+    {{-- Portfolio grid (asymmetric).
+         pb-0: the testimonial section below brings its own full top padding, so keeping
+         this section's bottom padding too stacked two full gaps (288px at lg) between the
+         pagination and the next heading. One section break is enough. --}}
+    <section class="section pb-0">
         <div class="container">
             <div class="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                 <div class="max-w-2xl">
