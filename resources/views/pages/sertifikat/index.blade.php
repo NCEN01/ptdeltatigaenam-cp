@@ -48,19 +48,20 @@
                         : 'Enter a participant name, company name, or certificate number. Results show the qualification assessed and whether it is still valid.' }}
                 </p>
 
-                <form method="GET" action="{{ route('certificates.index') }}" class="mt-8">
+                {{-- Satu instrumen utuh: kolom isian dan tombolnya berbagi satu
+                     bingkai, bukan dua kotak bersebelahan. Cincin fokus dipasang
+                     di bingkainya (focus-within) memakai sky-600 penuh — 3,5:1,
+                     memenuhi syarat penanda fokus; sky-500 beralfa tidak. --}}
+                <form method="GET" action="{{ route('certificates.index') }}" class="mt-8 max-w-xl">
                     <label for="cert-q" class="sr-only">{{ $id ? 'Kata kunci pencarian sertifikat' : 'Certificate search keyword' }}</label>
-                    <div class="flex flex-col gap-3 sm:flex-row">
+                    <div class="flex flex-col gap-2 rounded-2xl border border-navy-200 bg-white p-2 transition-colors duration-200 focus-within:border-sky-600 focus-within:ring-2 focus-within:ring-sky-600 sm:flex-row sm:items-center">
                         <div class="relative flex-1">
-                            <svg class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-                            {{-- Tanpa focus:outline-none / ring sendiri: app.css sudah punya
-                                 :focus-visible bercincin sky-500 penuh. Cincin /30 buatan saya
-                                 hanya berkontras 1,3:1 dan justru menimpa yang lebih kuat. --}}
+                            <svg class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
                             <input id="cert-q" type="search" name="q" value="{{ $q }}" autocomplete="off"
                                    placeholder="{{ $id ? 'mis. Ahmad Fauzi, PT Baja Perkasa, DTE/BNSP/…' : 'e.g. Ahmad Fauzi, PT Baja Perkasa, DTE/BNSP/…' }}"
-                                   class="w-full rounded-xl border border-navy-200 bg-white py-3.5 pl-11 pr-4 text-[15px] text-navy transition-colors duration-200 placeholder:text-slate-500 focus:border-sky-500">
+                                   class="w-full border-0 bg-transparent py-2.5 pl-10 pr-2 text-[15px] text-navy placeholder:text-slate-500 focus:outline-none">
                         </div>
-                        <button type="submit" class="btn-blue shrink-0 justify-center !py-3.5 sm:!px-8">{{ $id ? 'Cari' : 'Search' }}</button>
+                        <button type="submit" class="btn-blue shrink-0 justify-center !rounded-xl !py-3 sm:!px-8">{{ $id ? 'Cari' : 'Search' }}</button>
                     </div>
                 </form>
 
@@ -117,10 +118,10 @@
             {{-- Mobile: daftar kartu — tabel selebar layar memaksa geser ke samping. --}}
             <div class="space-y-3 md:hidden">
                 @foreach ($certificates as $c)
-                    <article class="rounded-2xl border border-navy-100 bg-white p-4">
+                    <article class="rounded-2xl border border-navy-100 bg-white p-5 transition-colors duration-200 ease-out-soft active:bg-neutral-50">
                         <div class="flex items-start justify-between gap-3">
                             <div class="min-w-0">
-                                <h3 class="truncate font-display font-semibold text-navy">{{ $c->participant_name }}</h3>
+                                <h3 class="truncate font-display text-[15px] font-semibold text-navy">{{ $c->participant_name }}</h3>
                                 <p class="mt-0.5 truncate text-xs text-slate-600">{{ $c->company_name ?: '—' }}</p>
                             </div>
                             <x-certificate-status :expires-at="$c->expires_at" class="shrink-0" />
@@ -149,37 +150,42 @@
             {{-- Tabel (tablet & desktop). Keenam kolom asli dipertahankan apa
                  adanya — urutan, judul, dan isi selnya. Yang berubah hanya
                  kepala tabelnya: dari isian navy-anim menjadi terang. --}}
-            <div class="hidden overflow-hidden rounded-2xl border border-navy-100 md:block">
+            <div class="hidden overflow-hidden rounded-2xl border border-navy-100 md:block" data-aos="fade-up">
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-[800px] text-left text-sm">
                         <caption class="sr-only">{{ $id ? 'Daftar pemegang sertifikat kompetensi' : 'List of competency certificate holders' }}</caption>
+                        {{-- Judul kolom terang dengan garis bawah tegas, bukan isian
+                             abu-abu: kepala tabel berhenti menjadi balok dan daftar
+                             namanya yang memimpin. --}}
                         <thead>
-                            <tr class="border-b border-navy-100 bg-neutral-50 text-navy">
-                                <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'No. UJK' : 'Reg. No.' }}</th>
-                                <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Peserta' : 'Participant' }}</th>
-                                <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Nama Perusahaan' : 'Company' }}</th>
-                                <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'No. Sertifikat' : 'Certificate No.' }}</th>
-                                <th scope="col" class="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Kualifikasi' : 'Qualification' }}</th>
+                            <tr class="border-b-2 border-navy-100 bg-white text-slate-500">
+                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'No. UJK' : 'Reg. No.' }}</th>
+                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Peserta' : 'Participant' }}</th>
+                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Nama Perusahaan' : 'Company' }}</th>
+                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'No. Sertifikat' : 'Certificate No.' }}</th>
+                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Kualifikasi' : 'Qualification' }}</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-navy-50">
+                        <tbody>
                             @foreach ($certificates as $c)
-                                <tr class="transition-colors duration-150 hover:bg-neutral-50/70">
-                                    <td class="whitespace-nowrap px-5 py-4 font-mono text-slate-500">{{ $c->ujk_number ?: '—' }}</td>
+                                {{-- Baris berselang samar memandu mata menyusuri lima kolom
+                                     tanpa perlu garis di setiap baris. --}}
+                                <tr class="transition-colors duration-200 ease-out-soft even:bg-neutral-50/60 hover:bg-sky-50/50">
+                                    <td class="whitespace-nowrap px-6 py-5 font-mono text-xs tracking-tight text-slate-500">{{ $c->ujk_number ?: '—' }}</td>
                                     {{-- Status menempel pada nama, sama seperti kartu mobile.
                                          Kolom Tgl. Berakhir dihapus, tetapi penanda berlaku /
                                          kedaluwarsa tetap perlu ada: tanpanya halaman ini
                                          berhenti menjadi alat verifikasi. --}}
-                                    <td class="px-5 py-4">
-                                        <span class="font-medium text-navy">{{ $c->participant_name }}</span>
+                                    <td class="px-6 py-5">
+                                        <span class="font-display text-[15px] font-semibold text-navy">{{ $c->participant_name }}</span>
                                         <x-certificate-status :expires-at="$c->expires_at" class="ml-2 align-middle" />
                                     </td>
-                                    <td class="px-5 py-4 text-slate-700">{{ $c->company_name ?: '—' }}</td>
-                                    <td class="whitespace-nowrap px-5 py-4 font-mono text-xs text-slate-600">{{ $c->certificate_number ?: '—' }}</td>
-                                    <td class="px-5 py-4">
+                                    <td class="px-6 py-5 text-slate-700">{{ $c->company_name ?: '—' }}</td>
+                                    <td class="whitespace-nowrap px-6 py-5 font-mono text-xs tracking-tight text-slate-600">{{ $c->certificate_number ?: '—' }}</td>
+                                    <td class="px-6 py-5">
                                         @if ($c->qualification)
                                             <span class="inline-flex rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-xs font-medium text-sky-700">{{ $c->qualification }}</span>
-                                        @else — @endif
+                                        @else <span class="text-slate-400">—</span> @endif
                                     </td>
                                 </tr>
                             @endforeach
