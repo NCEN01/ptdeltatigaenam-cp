@@ -80,9 +80,14 @@ class ServiceSeeder extends Seeder
     }
 
     /**
-     * Tiga jadwal per layanan, selalu di masa depan dan dihitung dari hari ini,
-     * supaya halaman pendaftaran tidak pernah tampil basi berapa pun lama
-     * seeder ini tidak dijalankan ulang.
+     * Jadwal selalu di masa depan dan dihitung dari hari ini, supaya halaman
+     * pendaftaran tidak pernah tampil basi berapa pun lama seeder ini tidak
+     * dijalankan ulang.
+     *
+     * Pelatihan dan sertifikasi dibuka dalam beberapa angkatan, jadi tiga batch
+     * masuk akal. Headhunter dan konsultasi dikerjakan per penugasan — menawarkan
+     * tiga batch dengan harga dan kuota yang persis sama hanya mengulang kartu
+     * yang serupa, jadi layanan itu diberi satu batch saja lewat kunci 'batches'.
      */
     private function syncSchedules(Service $service, array $item, int $index): void
     {
@@ -97,7 +102,7 @@ class ServiceSeeder extends Seeder
         // batch berikutnya mulai sebelum yang sebelumnya selesai.
         $gap = max(35, $item['days'] + 21);
 
-        foreach ([0, 1, 2] as $n) {
+        foreach (range(0, ($item['batches'] ?? 3) - 1) as $n) {
             $start = Carbon::today()->addDays(21 + ($index * 4) + ($n * $gap));
 
             $service->schedules()->create([
@@ -286,6 +291,7 @@ class ServiceSeeder extends Seeder
                 'price' => 38500000,
                 'price_before' => 52000000, // hemat 26%
                 'price_unit' => ['id' => 'penugasan', 'en' => 'assignment'],
+                'batches' => 1, // per penugasan, bukan per angkatan
                 'duration' => ['id' => '8–14 pekan', 'en' => '8–14 weeks'],
                 'location' => 'Jakarta Selatan, DKI Jakarta',
                 'mode' => 'hybrid',
@@ -324,6 +330,7 @@ class ServiceSeeder extends Seeder
                 'price' => 72000000,
                 'price_before' => 90000000, // hemat 20%
                 'price_unit' => ['id' => 'paket proyek', 'en' => 'project package'],
+                'batches' => 1, // per penugasan, bukan per angkatan
                 'duration' => ['id' => '3–6 bulan', 'en' => '3–6 months'],
                 'location' => 'Di lokasi klien',
                 'mode' => 'offline',
@@ -434,6 +441,7 @@ class ServiceSeeder extends Seeder
                 'price' => 48000000,
                 'price_before' => 60000000, // hemat 20%
                 'price_unit' => ['id' => 'paket proyek', 'en' => 'project package'],
+                'batches' => 1, // per penugasan, bukan per angkatan
                 'duration' => ['id' => '2–4 bulan', 'en' => '2–4 months'],
                 'location' => 'Di lokasi klien',
                 'mode' => 'hybrid',

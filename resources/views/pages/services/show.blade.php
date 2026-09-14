@@ -157,9 +157,18 @@
                         <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-60"></div>
                         <div class="pointer-events-none absolute inset-0 grain opacity-40"></div>
                         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
+                        {{-- Layanan per penugasan hanya membuka satu batch, jadi tidak ada
+                             yang bisa "dipilih". Teksnya menyesuaikan agar tidak menjanjikan
+                             pilihan yang tidak ada. --}}
                         <div class="relative">
                             <p class="font-mono text-[11px] uppercase tracking-normal text-gold-soft">{{ $id ? 'Amankan Kursi Anda' : 'Secure Your Seat' }}</p>
-                            <h3 class="mt-2 font-display text-xl">{{ $id ? 'Pilih jadwal di bawah' : 'Pick a schedule below' }}</h3>
+                            <h3 class="mt-2 font-display text-xl">
+                                @if ($scheduleCount > 1)
+                                    {{ $id ? 'Pilih jadwal di bawah' : 'Pick a schedule below' }}
+                                @else
+                                    {{ $id ? 'Jadwal terdekat' : 'Next available schedule' }}
+                                @endif
+                            </h3>
                             <p class="mt-2 text-sm text-navy-200">{{ $id ? 'Kursi terbatas — daftar sekarang sebelum kehabisan.' : 'Limited seats — register now before they’re gone.' }}</p>
                         </div>
                     </div>
