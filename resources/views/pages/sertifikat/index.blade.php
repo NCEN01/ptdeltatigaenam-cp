@@ -1,6 +1,4 @@
 @php
-    use Illuminate\Support\Facades\Storage;
-
     $id = app()->getLocale() === 'id';
 
     $proof = $id ? [
@@ -268,23 +266,6 @@
                  melorot bersama bloknya alih-alih membatasi kolom. --}}
             <div class="lg:col-span-5 lg:border-l lg:border-navy-200 lg:pl-10">
                 <div class="border-t border-navy-200 pt-8 lg:sticky lg:top-28 lg:border-t-0 lg:pt-0">
-                    {{-- Satu foto nyata dari program yang memang dituju tombolnya.
-                         Seksi ini sebelumnya teks semua; foto memberinya bobot
-                         tanpa perlu kotak atau isian warna. --}}
-                    @if ($ctaService?->image)
-                        @php
-                            $ctaImage = str_starts_with($ctaService->image, 'http')
-                                ? $ctaService->image
-                                : Storage::url($ctaService->image);
-                        @endphp
-                        <a href="{{ route('services.show', $ctaService->slug) }}" class="group mb-7 block overflow-hidden rounded-2xl">
-                            <img src="{{ $ctaImage }}"
-                                 alt="{{ $id ? 'Pelaksanaan program '.$ctaService->title : $ctaService->title.' in progress' }}"
-                                 loading="lazy" decoding="async"
-                                 class="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out-soft group-hover:scale-[1.04]">
-                        </a>
-                    @endif
-
                     <p class="font-display text-xl font-semibold leading-snug text-navy text-balance md:text-2xl">
                         {{ $id ? 'Ingin nama Anda ada di daftar ini?' : 'Want your name on this list?' }}
                     </p>
