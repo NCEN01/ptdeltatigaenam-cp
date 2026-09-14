@@ -200,18 +200,6 @@
                 <p class="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-slate-600">
                     {{ $isId ? 'Prinsip yang memandu cara kami bekerja dan melayani setiap klien.' : 'The principles that guide how we work and serve every client.' }}
                 </p>
-
-                {{-- Spell the acronym out: the five values are D-E-L-T-A, the company's own name.
-                     The Indonesian titles translate away from it, so without this the wordplay
-                     is invisible to half the audience. --}}
-                <p class="mt-7 flex items-center justify-center gap-2 sm:gap-3" aria-hidden="true">
-                    @foreach ($values as $value)
-                        <span class="font-display text-2xl font-bold tracking-[0.1em] text-navy-200 sm:text-3xl">{{ $value['letter'] }}</span>
-                        @unless ($loop->last)
-                            <span class="h-1 w-1 rounded-full bg-gold-soft"></span>
-                        @endunless
-                    @endforeach
-                </p>
             </div>
 
             {{-- Value strip — interactive carousel on mobile (swipe + tappable dots + arrows), 5-up grid on desktop --}}
