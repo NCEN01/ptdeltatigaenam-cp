@@ -60,26 +60,23 @@ class TestimonialResource extends Resource
                         ->rows(4),
                 ])->columns(2),
 
-            // Kedua select memakai preload(): tanpa itu Filament membiarkan daftarnya kosong
-            // sampai admin mengetik, dan pencariannya berjalan di kolom slug — sehingga
-            // mengetik judul proyek justru tidak menemukan apa-apa. Jumlah portofolio dan
-            // klien di sini kecil, jadi memuat seluruhnya di awal jauh lebih membantu.
-            Forms\Components\Section::make('Relasi (opsional)')->schema([
-                Forms\Components\Select::make('client_id')
-                    ->relationship('client', 'name')
-                    ->searchable()
-                    ->preload()
-                    ->label('Klien')
-                    ->helperText('Kaitkan testimoni ini dengan klien, bila ada.'),
-
+            // Select Klien dihapus: kolom client_id tidak pernah dibaca satu pun view,
+            // controller, atau model — hanya bisa diisi lalu tidak berpengaruh ke mana-mana.
+            // Nama perusahaan narasumber sudah ditangani field "Perusahaan" (author_company),
+            // dan itulah yang benar-benar tampil di situs.
+            //
+            // preload(): tanpa itu Filament membiarkan daftarnya kosong sampai admin mengetik,
+            // dan pencariannya berjalan di kolom slug — sehingga mengetik judul proyek justru
+            // tidak menemukan apa-apa.
+            Forms\Components\Section::make('Tautkan ke Portofolio (opsional)')->schema([
                 Forms\Components\Select::make('portfolio_id')
                     ->relationship('portfolio', 'slug')
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->title)
                     ->searchable(['slug'])
                     ->preload()
                     ->label('Portofolio')
-                    ->helperText('Testimoni yang dikaitkan akan tampil di halaman detail portofolio tersebut, lengkap dengan ratingnya.'),
-            ])->columns(2)->collapsed(),
+                    ->helperText('Testimoni yang ditautkan akan tampil di halaman detail portofolio tersebut, lengkap dengan ratingnya.'),
+            ])->collapsed(),
         ]);
     }
 
