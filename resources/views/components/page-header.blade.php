@@ -2,7 +2,7 @@
     'eyebrow' => null,
     'title' => '',
     'subtitle' => null,
-    'image' => null, // Unsplash photo id, atau URL/path penuh, fallback jika tidak ada banner
+    'image' => null, // Unsplash photo id, fallback jika tidak ada banner
     'placement' => null, // e.g. 'about', 'services', 'portfolio', dll.
 ])
 
@@ -40,11 +40,7 @@
     }
 
     if (! $bgImage && $image) {
-        // Accepts either an Unsplash photo id (the original contract) or a ready URL/path,
-        // so a page with its own artwork — a portfolio cover, say — can supply it directly.
-        $bgImage = (str_starts_with($image, 'http') || str_starts_with($image, '/'))
-            ? $image
-            : 'https://images.unsplash.com/' . $image . '?auto=format&fit=crop&w=1920&q=80';
+        $bgImage = 'https://images.unsplash.com/' . $image . '?auto=format&fit=crop&w=1920&q=80';
     }
 
     $hwWords = preg_split('/\s+/', trim((string) $bannerTitle)) ?: [];
