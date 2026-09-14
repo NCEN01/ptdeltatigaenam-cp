@@ -59,12 +59,11 @@
     <section class="section bg-white">
         <div class="container grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div class="lg:col-span-7" data-aos="fade-up">
-                <p class="eyebrow mb-5"><span class="rule-gold mr-3"></span>{{ $id ? 'Tentang Program' : 'About the Program' }}</p>
                 <h2 class="font-display text-3xl leading-tight text-navy text-balance md:text-4xl">{{ $id ? 'Kemitraan PT Delta Tiga Enam' : 'PT Delta Tiga Enam Partnership' }}</h2>
                 <p class="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-slate-700">{{ $narrative }}</p>
             </div>
             <div class="lg:col-span-5" data-aos="fade-left" data-aos-delay="100">
-                <div class="relative h-full overflow-hidden rounded-3xl bg-navy-950 p-8 text-white md:p-10">
+                <div class="relative h-full overflow-hidden rounded-2xl bg-navy-950 p-8 text-white md:p-10">
                     <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-50"></div>
                     <div class="pointer-events-none absolute inset-0 grain opacity-40"></div>
                     <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
@@ -85,30 +84,26 @@
     <section class="section-sm border-t border-navy-50 bg-neutral-50">
         <div class="container">
             <div class="max-w-2xl" data-aos="fade-up">
-                <p class="eyebrow mb-4"><span class="rule-gold mr-3"></span>{{ $id ? 'Manfaat Program' : 'Program Benefits' }}</p>
                 <h2 class="font-display text-3xl text-navy text-balance md:text-4xl">{{ $id ? 'Mengapa menjadi mitra kami' : 'Why partner with us' }}</h2>
             </div>
 
+            {{-- Normalise DB rows and the hardcoded fallback into one shape, so the card
+                 markup exists once instead of being copy-pasted per data source. --}}
+            @php
+                $benefitCards = (isset($benefits) && $benefits->isNotEmpty())
+                    ? $benefits->map(fn ($b) => ['title' => $b->title, 'desc' => $b->description])
+                    : collect($manfaat)->map(fn ($m) => ['title' => $m[0], 'desc' => $m[1]]);
+            @endphp
+
             <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                @if (isset($benefits) && $benefits->isNotEmpty())
-                    @foreach ($benefits as $benefit)
-                        <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
-                            <span class="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-navy-500 to-sky-400 font-display text-lg text-white transition-all duration-300 group-hover:from-navy-600 group-hover:to-navy-500">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                            <h3 class="mt-6 font-display text-lg text-navy">{{ $benefit->title }}</h3>
-                            <p class="mt-2.5 text-pretty text-sm leading-relaxed text-slate-600">{{ $benefit->description }}</p>
-                            <span class="mt-5 block h-0.5 w-0 rounded-full bg-gradient-to-r from-gold to-gold-soft transition-all duration-500 group-hover:w-12"></span>
-                        </div>
-                    @endforeach
-                @else
-                    @foreach ($manfaat as $item)
-                        <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
-                            <span class="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-navy-500 to-sky-400 font-display text-lg text-white transition-all duration-300 group-hover:from-navy-600 group-hover:to-navy-500">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                            <h3 class="mt-6 font-display text-lg text-navy">{{ $item[0] }}</h3>
-                            <p class="mt-2.5 text-pretty text-sm leading-relaxed text-slate-600">{{ $item[1] }}</p>
-                            <span class="mt-5 block h-0.5 w-0 rounded-full bg-gradient-to-r from-gold to-gold-soft transition-all duration-500 group-hover:w-12"></span>
-                        </div>
-                    @endforeach
-                @endif
+                @foreach ($benefitCards as $card)
+                    <div class="group flex flex-col rounded-2xl border border-navy-100 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
+                        <span class="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-navy-500 to-sky-400 font-display text-lg text-white transition-all duration-300 group-hover:from-navy-600 group-hover:to-navy-500">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                        <h3 class="mt-6 font-display text-lg text-navy">{{ $card['title'] }}</h3>
+                        <p class="mt-2.5 text-pretty text-sm leading-relaxed text-slate-600">{{ $card['desc'] }}</p>
+                        <span class="mt-5 block h-0.5 w-0 rounded-full bg-gradient-to-r from-gold to-gold-soft transition-all duration-500 group-hover:w-12"></span>
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -121,7 +116,6 @@
             <section class="section border-t border-navy-50 bg-white">
                 <div class="container">
                     <div class="max-w-3xl" data-aos="fade-up">
-                        <p class="eyebrow mb-4"><span class="rule-gold mr-3"></span>{{ $id ? 'Penawaran Paket' : 'Package Offerings' }}</p>
                         <h2 class="font-display text-3xl text-navy text-balance md:text-4xl">{{ $id ? 'Pilih paket kemitraan Anda' : 'Choose your partnership package' }}</h2>
                         <p class="mt-4 font-mono text-xs uppercase tracking-normal text-slate-500">Blue · Silver · Gold · Platinum</p>
                     </div>
@@ -137,7 +131,7 @@
                                 }
                                 $perks = (!empty($dbFeatures) && is_array($dbFeatures)) ? $dbFeatures : $meta['perks'];
                             @endphp
-                            <div class="group relative flex flex-col overflow-hidden rounded-3xl border bg-white shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-lift {{ $package->is_highlighted ? 'border-gold ring-1 ring-gold' : 'border-navy-100' }}"
+                            <div class="group relative flex flex-col overflow-hidden rounded-2xl border bg-white shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-lift {{ $package->is_highlighted ? 'border-gold' : 'border-navy-100' }}"
                                  data-aos="fade-up" data-aos-delay="{{ $loop->index * 90 }}">
                                 @if ($package->is_highlighted)
                                     <span class="absolute right-5 top-5 z-10 rounded-full bg-gold px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-navy-950 shadow-gold">{{ $id ? 'Populer' : 'Popular' }}</span>
@@ -182,7 +176,6 @@
             <div class="container">
                 {{-- Centered heading --}}
                 <div class="mx-auto max-w-2xl text-center">
-                    <p class="eyebrow mb-4 inline-flex items-center justify-center"><span class="rule-gold mr-3"></span>{{ $id ? 'Daftar Kemitraan' : 'Partnership Application' }}</p>
                     <h2 class="font-display text-3xl text-navy text-balance md:text-4xl">{{ $id ? 'Mulai kolaborasi' : 'Start a collaboration' }}</h2>
                     <p class="mx-auto mt-5 max-w-xl text-pretty leading-relaxed text-slate-600">
                         {{ $id
@@ -192,10 +185,13 @@
                 </div>
 
                 {{-- Steps --}}
-                <div class="mx-auto mt-10 grid max-w-3xl grid-cols-3 gap-3 sm:gap-5">
+                {{-- A connector line ties the three into one flow; as plain columns they read
+                     as unrelated items rather than "first this, then this, then this". --}}
+                <div class="relative mx-auto mt-10 grid max-w-3xl grid-cols-3 gap-3 sm:gap-5">
+                    <span class="pointer-events-none absolute left-[16.667%] right-[16.667%] top-[18px] hidden h-px bg-gradient-to-r from-sky-200 via-sky-300 to-sky-200 sm:block md:top-5" aria-hidden="true"></span>
                     @foreach ($steps as $i => $step)
                         <div class="flex flex-col items-center gap-2 text-center md:gap-3">
-                            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 font-display text-xs text-white md:h-10 md:w-10 md:text-sm">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                            <span class="relative grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 font-display text-xs text-white ring-4 ring-neutral-50 md:h-10 md:w-10 md:text-sm">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
                             <p class="text-xs leading-relaxed text-slate-700 md:text-sm">{{ $step }}</p>
                         </div>
                     @endforeach
@@ -217,7 +213,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('partnership.store') }}" class="overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-lift">
+                    <form method="POST" action="{{ route('partnership.store') }}" class="overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card">
                         @csrf
                         <div style="display:none !important" aria-hidden="true">
                             <input type="text" name="website_url" tabindex="-1" autocomplete="off">
