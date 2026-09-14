@@ -649,11 +649,13 @@
             {{-- Left Side: Heading & WhatsApp CTA --}}
             <div class="lg:col-span-5 flex flex-col space-y-8 lg:sticky lg:top-28 lg:self-start" data-aos="fade-right">
                 <div class="space-y-4">
-                    <p class="eyebrow"><span class="rule-gold mr-3"></span>FAQ</p>
+                    {{-- .kicker, not .eyebrow: the latter is display:none site-wide, so this
+                         label never actually rendered. --}}
+                    <p class="kicker"><span class="rule-gold mr-3"></span>FAQ</p>
                     <h2 class="text-display-lg font-semibold text-navy text-balance">
                         {{ $isId ? 'Pertanyaan yang Sering Diajukan' : 'Frequently Asked Questions' }}
                     </h2>
-                    <p class="text-sm leading-relaxed text-slate-600">
+                    <p class="max-w-md text-[15px] leading-relaxed text-slate-600 text-pretty">
                         {{ $isId
                             ? 'Temukan jawaban cepat untuk pertanyaan umum mengenai sertifikasi, pelatihan, rekrutmen, dan kemitraan di PT Delta Tiga Enam.'
                             : 'Find quick answers to common questions about certification, training, recruitment, and partnerships at PT Delta Tiga Enam.' }}
@@ -661,7 +663,7 @@
                 </div>
 
                 {{-- WhatsApp CTA Card --}}
-                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-900 to-navy-950 p-7 text-white shadow-lift ring-1 ring-white/5 space-y-4 md:p-8">
+                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-navy-900 to-navy-950 p-7 text-white shadow-lift ring-1 ring-white/5 space-y-4 md:p-8">
                     <div class="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-sky-400/15 blur-3xl"></div>
                     <div class="pointer-events-none absolute -bottom-16 -left-10 h-40 w-40 rounded-full bg-gold/10 blur-3xl"></div>
                     <div class="relative flex items-center gap-3">
@@ -740,40 +742,59 @@
                     ];
                 @endphp
 
-                <div class="space-y-3">
-                    @foreach ($faqs as $i => $faq)
-                        <div class="overflow-hidden rounded-2xl border bg-white transition-all duration-300"
-                             :class="activeFaq === {{ $i }} ? 'border-gold/40 shadow-card' : 'border-navy-100 hover:border-navy-200'">
-                            <button type="button"
-                                    x-on:click="activeFaq = activeFaq === {{ $i }} ? null : {{ $i }}"
-                                    :aria-expanded="activeFaq === {{ $i }}"
-                                    class="flex w-full items-center gap-4 px-5 py-5 text-left focus:outline-none md:px-6">
-                                <span class="font-mono text-sm font-bold tabular-nums transition-colors duration-300"
-                                      :class="activeFaq === {{ $i }} ? 'text-gold-deep' : 'text-slate-400'">{{ sprintf('%02d', $i + 1) }}</span>
-                                <span class="flex-1 font-display text-[15px] font-semibold leading-snug text-navy md:text-[17px]">{{ $faq['q'] }}</span>
-                                <span class="relative grid h-8 w-8 shrink-0 place-items-center rounded-full transition-colors duration-300"
-                                      :class="activeFaq === {{ $i }} ? 'bg-navy text-white' : 'bg-navy-50 text-slate-600'">
-                                    <span class="absolute h-0.5 w-3.5 rounded-full bg-current"></span>
-                                    <span class="absolute h-3.5 w-0.5 rounded-full bg-current transition-transform duration-300"
-                                          :class="activeFaq === {{ $i }} ? 'scale-y-0' : ''"></span>
-                                </span>
-                            </button>
-                            <div x-show="activeFaq === {{ $i }}"
-                                 x-transition:enter="transition-all ease-out duration-300"
-                                 x-transition:enter-start="opacity-0 max-h-0"
-                                 x-transition:enter-end="opacity-100 max-h-[600px]"
-                                 x-transition:leave="transition-all ease-in duration-200"
-                                 x-transition:leave-start="opacity-100 max-h-[600px]"
-                                 x-transition:leave-end="opacity-0 max-h-0"
-                                 class="overflow-hidden">
-                                <div class="px-5 pb-6 md:px-6">
-                                    <div class="ml-9 border-l-2 border-gold/40 pl-4 text-sm leading-relaxed text-slate-600">
-                                        {{ $faq['a'] }}
+                {{-- One surface with hairline dividers instead of a stack of boxed cards:
+                     seven bordered rectangles read as a card grid, which the brand brief
+                     explicitly lists as an anti-reference. --}}
+                <div class="overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card">
+                    <div class="divide-y divide-navy-100">
+                        @foreach ($faqs as $i => $faq)
+                            <div class="group/faq relative transition-colors duration-300"
+                                 :class="activeFaq === {{ $i }} ? 'bg-navy-50/60' : 'bg-white hover:bg-navy-50/30'">
+
+                                {{-- Active marker: a hairline on the row's leading edge, drawn with a
+                                     pseudo-free span so it scales rather than shifting the text. --}}
+                                <span aria-hidden="true"
+                                      class="pointer-events-none absolute inset-y-0 left-0 w-[3px] origin-center bg-gradient-to-b from-sky-500 to-gold transition-transform duration-300 ease-out-soft"
+                                      :class="activeFaq === {{ $i }} ? 'scale-y-100' : 'scale-y-0'"></span>
+
+                                <h3>
+                                    <button type="button" id="faq-q-{{ $i }}"
+                                            x-on:click="activeFaq = activeFaq === {{ $i }} ? null : {{ $i }}"
+                                            :aria-expanded="activeFaq === {{ $i }} ? 'true' : 'false'"
+                                            aria-controls="faq-panel-{{ $i }}"
+                                            class="flex w-full items-start gap-4 px-5 py-5 text-left transition-colors md:gap-5 md:px-7">
+
+                                        <span class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg font-mono text-[11px] font-bold tabular-nums transition-all duration-300"
+                                              :class="activeFaq === {{ $i }} ? 'bg-navy text-white' : 'bg-navy-50 text-slate-500 group-hover/faq:bg-navy-100'">{{ sprintf('%02d', $i + 1) }}</span>
+
+                                        <span class="flex-1 font-display text-[15px] font-semibold leading-snug transition-colors duration-300 md:text-[17px]"
+                                              :class="activeFaq === {{ $i }} ? 'text-navy' : 'text-navy/85'">{{ $faq['q'] }}</span>
+
+                                        {{-- Plus that rotates into a minus. --}}
+                                        <span class="relative mt-0.5 grid h-7 w-7 shrink-0 place-items-center transition-transform duration-300 ease-out-soft"
+                                              :class="activeFaq === {{ $i }} ? 'rotate-180 text-sky-600' : 'text-slate-400'"
+                                              aria-hidden="true">
+                                            <span class="absolute h-0.5 w-3.5 rounded-full bg-current"></span>
+                                            <span class="absolute h-3.5 w-0.5 rounded-full bg-current transition-transform duration-300 ease-out-soft"
+                                                  :class="activeFaq === {{ $i }} ? 'scale-y-0' : 'scale-y-100'"></span>
+                                        </span>
+                                    </button>
+                                </h3>
+
+                                {{-- grid-rows 0fr -> 1fr: animates to the answer's natural height, so a
+                                     long answer is never clipped the way a fixed max-height clips it. --}}
+                                <div id="faq-panel-{{ $i }}" role="region" aria-labelledby="faq-q-{{ $i }}"
+                                     class="faq-panel grid transition-[grid-template-rows] duration-300 ease-out-soft"
+                                     :class="activeFaq === {{ $i }} ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
+                                    <div class="overflow-hidden">
+                                        <p class="pb-6 pl-[3.75rem] pr-5 text-sm leading-relaxed text-slate-600 text-pretty md:pl-[4.25rem] md:pr-8">
+                                            {{ $faq['a'] }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
             </div>
 

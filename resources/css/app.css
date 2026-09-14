@@ -427,6 +427,13 @@
     55%  { filter: blur(0); }
     100% { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
+/* FAQ accordion opens by animating grid-template-rows 0fr -> 1fr, which settles on
+   the answer's natural height (a fixed max-height clips long answers). Snap it open
+   when the reader asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+    .faq-panel { transition: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .hero-carousel .swiper-slide-active .hero-content > * { animation: hero-fade 0.5s ease both; }
     @keyframes hero-fade { from { opacity: 0; } to { opacity: 1; } }
