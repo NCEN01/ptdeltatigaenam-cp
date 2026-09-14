@@ -4,14 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\CertificateHolder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class CertificateController extends Controller
 {
+    private const PER_PAGE = 10;
+
     public function index(Request $request)
     {
         $q = trim((string) $request->query('q', ''));
 
-        $certificates = CertificateHolder::active()
+        // Satu definisi pencarian dipakai dua kali: untuk daftarnya dan untuk
+        // menghitung yang kedaluwarsa. Dibuat sebagai closure supaya tiap
+        // pemakaian memperoleh query baru, bukan query yang sudah dibebani
+        // paginator. Angka ketiga (yang masih berlaku) diturunkan dari keduanya.
+        $matching = fn () => CertificateHolder::active()
             ->when($q !== '', function ($query) use ($q) {
                 $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $q);
                 $query->where(function ($sub) use ($escaped) {
@@ -21,12 +28,26 @@ class CertificateController extends Controller
                         ->orWhere('ujk_number', 'like', "%{$escaped}%")
                         ->orWhere('qualification', 'like', "%{$escaped}%");
                 });
-            })
+            });
+
+        // Dihitung atas seluruh hasil pencarian, bukan hanya halaman yang tampil —
+        // kalau dihitung dari koleksi paginator, angkanya berubah setiap ganti
+        // halaman dan berhenti berarti apa-apa.
+        $expiredCount = $matching()->whereNotNull('expires_at')
+            ->whereDate('expires_at', '<', Carbon::today())
+            ->count();
+
+        $certificates = $matching()
             ->orderBy('sort_order')
             ->latest('id')
-            ->paginate(10)
+            ->paginate(self::PER_PAGE)
             ->withQueryString();
 
-        return view('pages.sertifikat.index', compact('certificates', 'q'));
+        return view('pages.sertifikat.index', [
+            'certificates' => $certificates,
+            'q' => $q,
+            'expiredCount' => $expiredCount,
+            'validCount' => $certificates->total() - $expiredCount,
+        ]);
     }
 }
