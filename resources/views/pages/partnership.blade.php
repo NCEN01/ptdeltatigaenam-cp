@@ -111,8 +111,8 @@
                         class="font-display text-3xl text-navy text-balance md:text-4xl" />
                     <p class="mt-5 text-pretty leading-relaxed text-slate-600">
                         {{ $id
-                            ? 'Program pelatihan dan uji kompetensi kami dijalankan bersama lembaga berikut. Nomor registrasinya kami cantumkan agar bisa Anda periksa.'
-                            : 'Our training and competency assessment programmes run with the bodies below. Their registration numbers are listed so you can check them.' }}
+                            ? 'Pelatihan dan uji kompetensi kami dijalankan bersama lembaga sertifikasi profesi berlisensi BNSP. Sertifikat yang diterima karyawan Anda diakui secara nasional.'
+                            : 'Our training and competency assessment run with BNSP-licensed certification bodies. The certificates your employees earn are recognised nationwide.' }}
                     </p>
                 </div>
 
