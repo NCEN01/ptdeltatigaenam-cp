@@ -48,14 +48,18 @@
             <div class="relative container pt-14 md:pt-20 {{ $clients->isEmpty() ? 'pb-14 md:pb-20' : 'pb-10 md:pb-12' }}">
                 {{-- Rata kiri, mengikuti pola judul seksi di
                      halaman lain. Judul di tengah membuat seksi ini terasa
-                     berdiri sendiri, padahal ia bagian dari satu situs. --}}
-                <div class="max-w-2xl" data-aos="fade-up">
-                    <h2 class="text-display-lg font-semibold text-white text-balance">{{ $isId ? 'Mitra Kami' : 'Our Partners' }}</h2>
-                    <p class="mt-5 leading-relaxed text-navy-100">
+                     berdiri sendiri, padahal ia bagian dari satu situs.
+
+                     max-w-xl, bukan 2xl: kalimatnya dimaksudkan menumpuk tiga
+                     baris seperti pada rancangannya. Pemenggalannya diserahkan
+                     ke text-balance supaya tetap utuh di layar sempit, bukan
+                     dipaksa dengan <br> yang akan patah di tempat keliru. --}}
+                <div class="max-w-xl" data-aos="fade-up">
+                    <h2 class="text-display-lg font-semibold text-white text-balance">
                         {{ $isId
-                            ? 'Lembaga sertifikasi, asosiasi profesi, dan institusi pendidikan yang bekerja sama dengan kami dalam menyelenggarakan pelatihan dan uji kompetensi.'
-                            : 'Certification bodies, professional associations, and educational institutions that work with us to run training and competency assessment.' }}
-                    </p>
+                            ? 'Saatnya naik level bersama sertifikasi kompetensi resmi BNSP.'
+                            : 'Time to level up with official BNSP competency certification.' }}
+                    </h2>
                 </div>
 
                 {{-- Tanpa kartu kaca. Pelat putih tempat logonya sudah menjadi
@@ -83,8 +87,8 @@
             </div>
         @endif
 
-        {{-- ===================== KLIEN — clean white logo band: the logos' white backgrounds blend
-             in (no boxes), shown grayscale and revealing their colour on hover ===================== --}}
+        {{-- ===================== KLIEN — clean white logo band: the logos' transparent
+             backgrounds blend in (no boxes), shown in their own colours ===================== --}}
         @if ($clients->isNotEmpty())
             <div class="relative bg-white pb-11 pt-10 md:pb-12 md:pt-12" data-aos="fade-up">
                 <div class="container flex flex-col gap-6 md:flex-row md:items-center md:gap-10">
@@ -97,16 +101,18 @@
                             {{ $isId ? 'Klien yang telah menggunakan layanan kami.' : 'Clients who have used our services.' }}
                         </p>
                     </div>
-                    {{-- Right: logos run left, grayscale → colour on hover. Fade both edges (clean on
+                    {{-- Right: logos run left in their own colours. Fade both edges (clean on
                          mobile where it stacks full-width; near the heading on desktop). --}}
                     <div class="mask-fade-x relative w-full min-w-0 flex-1 overflow-hidden">
                         <div class="flex w-max items-center gap-10 animate-marquee [will-change:transform] md:gap-14">
                             @for ($h = 0; $h < 2; $h++)
                                 @foreach ($klien as $client)
                                     @if ($client->logo)
-                                        {{-- White logo bg blends into the white band; grayscale by default, colour on hover --}}
+                                        {{-- Logonya transparan, jadi menyatu dengan pita putih tanpa
+                                             perlu kotak. Ditampilkan dengan warna aslinya: merek
+                                             seperti ini justru dikenali lewat warnanya. --}}
                                         <img src="{{ Storage::url($client->logo) }}" alt="{{ $client->name }}" loading="lazy"
-                                             class="h-10 w-auto max-w-[150px] shrink-0 object-contain opacity-70 grayscale transition duration-300 hover:scale-105 hover:opacity-100 hover:grayscale-0 md:h-12"
+                                             class="h-10 w-auto max-w-[150px] shrink-0 object-contain transition duration-300 hover:scale-105 md:h-12"
                                              aria-hidden="{{ $h ? 'true' : 'false' }}">
                                     @else
                                         <span class="shrink-0 text-base font-semibold text-slate-500 transition hover:text-navy" aria-hidden="{{ $h ? 'true' : 'false' }}">{{ $client->name }}</span>
