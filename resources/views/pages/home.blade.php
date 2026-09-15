@@ -287,37 +287,38 @@
         <div class="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/88"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 
-        <div class="container relative flex min-h-[34rem] flex-col justify-between py-16 md:min-h-[40rem] md:py-20">
-            {{-- Heading --}}
-            <div class="text-center" data-aos="fade-up">
-                <h2 class="font-display text-3xl text-white text-balance md:text-5xl">{{ $isId ? 'Alasan Memilih Kami?' : 'Why Choose Us?' }}</h2>
-                <p class="mx-auto mt-5 max-w-xl text-navy-100 text-pretty">{{ $isId ? 'Keahlian praktisi, pendekatan yang dipersonalisasi, dan komitmen pada hasil nyata bagi organisasi Anda.' : 'Practitioner expertise, a personalized approach, and a commitment to real results for your organization.' }}</p>
+        {{-- Judul di kiri, alasannya di kanan. Sebelumnya judul di tengah lalu
+             satu baris tipis di dasar pita setinggi 34rem, dengan justify-between
+             menyisakan lubang kosong besar di antaranya. Dua kolom mengisi pita
+             itu sebagaimana mestinya dan tidak perlu lagi dipaksa setinggi itu. --}}
+        <div class="container relative grid items-start gap-12 py-20 lg:grid-cols-12 lg:gap-16 lg:py-28">
+            <div class="lg:col-span-5" data-aos="fade-up">
+                <x-heading
+                    :lead="$isId ? 'Alasan Memilih' : 'Why Choose'"
+                    :accent="$isId ? 'Kami?' : 'Us?'"
+                    accent-class="text-gradient-hero"
+                    class="font-display text-3xl text-white text-balance md:text-5xl" />
+                <p class="mt-5 max-w-md leading-relaxed text-navy-100 text-pretty">{{ $isId ? 'Keahlian praktisi, pendekatan yang dipersonalisasi, dan komitmen pada hasil nyata bagi organisasi Anda.' : 'Practitioner expertise, a personalized approach, and a commitment to real results for your organization.' }}</p>
             </div>
 
-            {{-- Numbered row --}}
-            {{-- Mobile/tablet: auto-running marquee so users notice there are more than 2 (swipe not needed) --}}
-            <div class="mask-fade-x mt-14 overflow-hidden border-t border-white/10 pt-8 lg:hidden">
-                <div class="flex w-max gap-3 animate-marquee [will-change:transform]">
-                    @for ($h = 0; $h < 2; $h++)
-                        @foreach ($reasons as $i => $r)
-                            <div class="w-[210px] shrink-0 rounded-2xl border border-white/10 bg-white/[0.05] p-4" aria-hidden="{{ $h === 1 ? 'true' : 'false' }}">
-                                <p class="font-mono text-lg text-gold-soft">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}.</p>
-                                <p class="mt-3 font-display text-[15px] leading-snug text-white">{{ $r }}</p>
-                            </div>
-                        @endforeach
-                    @endfor
-                </div>
-            </div>
+            {{-- Satu daftar, bukan dua salinan. Dulu ada pita berjalan untuk layar
+                 kecil dan baris tujuh kolom untuk layar lebar: isinya tertulis dua
+                 kali di halaman, dan yang tersembunyi tetap ikut terkirim.
 
-            {{-- Desktop: 7-column divided row --}}
-            <div class="mt-16 hidden border-t border-white/10 pt-8 lg:grid lg:grid-cols-7 lg:divide-x lg:divide-white/10">
+                 Tujuh kolom juga terlalu sempit. Di lebar penuh tiap kolom hanya
+                 menyisakan sekitar 130 piksel, sehingga "Sertifikasi Diakui
+                 Industri" pecah menjadi tiga baris.
+
+                 Angka 01..07 dilepas: ketujuhnya setara, tidak ada yang pertama
+                 atau terakhir, jadi penomorannya menjanjikan urutan yang tidak
+                 pernah ada. Tanpa angka, kata-katanya yang berbicara. --}}
+            <ul class="lg:col-span-7 sm:grid sm:grid-cols-2 sm:gap-x-10 lg:gap-x-14">
                 @foreach ($reasons as $i => $r)
-                    <div class="lg:px-5" data-aos="fade-up" data-aos-delay="{{ $i * 55 }}">
-                        <p class="font-mono text-lg text-gold-soft">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}.</p>
-                        <p class="mt-3 font-display text-[15px] leading-snug text-white">{{ $r }}</p>
-                    </div>
+                    <li class="border-t border-white/10 py-5 md:py-6" data-aos="fade-up" data-aos-delay="{{ ($i % 2) * 70 }}">
+                        <p class="font-display text-lg font-medium leading-snug text-white text-balance md:text-xl">{{ $r }}</p>
+                    </li>
                 @endforeach
-            </div>
+            </ul>
         </div>
     </section>
 
