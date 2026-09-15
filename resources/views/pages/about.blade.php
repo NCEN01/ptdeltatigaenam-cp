@@ -262,9 +262,6 @@
                         <div class="relative aspect-[4/3] overflow-hidden bg-navy-100 sm:aspect-[4/5] lg:aspect-square">
                             <img src="{{ asset('images/values/'.$value['img'].'.jpg') }}" alt="" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
                             <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/70 via-navy-950/10 to-transparent"></div>
-                            {{-- The acronym letter, outlined so it reads as a mark rather than a caption. --}}
-                            <span class="pointer-events-none absolute bottom-3 left-4 font-display text-5xl font-bold leading-none text-transparent transition-all duration-500 ease-out-soft group-hover:text-gold-soft/25 md:text-6xl"
-                                  style="-webkit-text-stroke: 1px rgba(237,214,138,.55);" aria-hidden="true">{{ $value['letter'] }}</span>
                         </div>
                         {{-- One navy for all five: the previous odd/even navy-900 / navy-600 zebra
                              carried no meaning, it just striped the strip. --}}
