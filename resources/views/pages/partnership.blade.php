@@ -51,9 +51,7 @@
         :title="$id ? 'Program Kemitraan Corporate Training' : 'Corporate Training Partnership Program'"
         :subtitle="$intro ?: ($id ? 'Solusi pelatihan SDM yang efektif, relevan, dan dapat disesuaikan dengan kebutuhan perusahaan Anda.' : 'Effective, relevant HR training solutions tailored to your company needs.')"
         placement="partnership"
-        image="photo-1600880292089-90a7e086ee0c">
-        <a href="#daftar" class="btn-blue">{{ $id ? 'Daftar Sekarang' : 'Apply Now' }}</a>
-    </x-page-header>
+        image="photo-1600880292089-90a7e086ee0c" />
 
     {{-- ===================== NARRATIVE ===================== --}}
     <section class="section bg-white">

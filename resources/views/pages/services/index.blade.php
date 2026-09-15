@@ -6,27 +6,7 @@
         :title="__('site.home.services_title')"
         :subtitle="$id ? 'Dari konsultasi manajemen hingga sertifikasi kompetensi, dirancang untuk hasil yang terukur.' : 'From management consulting to competency certification, designed for measurable outcomes.'"
         placement="services"
-        image="photo-1524178232363-1fb2b075b655">
-        {{-- Category jump-nav. Highlights the section you are currently reading, so on a page
-             of seven stacked sections the chips act as a position indicator, not just links.
-             Mobile is a scroll-snap strip rather than the old auto-running marquee: chips that
-             drift sideways are hard to hit, and `hover:pause` does not fire on touch. --}}
-        <nav class="mt-8 w-full sm:mt-10" aria-label="{{ $id ? 'Kategori layanan' : 'Service categories' }}"
-             x-data="sectionNav(@js($categories->pluck('slug')->all()))">
-            <ul class="mask-fade-x -mx-5 flex snap-x snap-mandatory gap-2 overflow-x-auto px-5 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:flex-wrap sm:[mask-image:none] sm:justify-center sm:overflow-visible sm:px-0">
-                @foreach ($categories as $cat)
-                    <li class="shrink-0 snap-start sm:shrink" x-data="{ slug: @js($cat->slug) }">
-                        <a href="#{{ $cat->slug }}"
-                           class="block whitespace-nowrap rounded-full border px-4 py-2 text-sm transition-all duration-300 ease-out-soft"
-                           :class="active === slug
-                               ? 'border-white bg-white text-navy font-medium'
-                               : 'border-white/15 text-navy-100 hover:border-white/50 hover:text-white'"
-                           :aria-current="active === slug ? 'true' : null">{{ $cat->name }}</a>
-                    </li>
-                @endforeach
-            </ul>
-        </nav>
-    </x-page-header>
+        image="photo-1524178232363-1fb2b075b655" />
 
     {{-- ===================== CARA MENGIKUTI =====================
          Kolom mode (online / offline / hybrid) sudah ada di data dan tampil pada

@@ -46,29 +46,6 @@ function onScrollFrame(handler) {
     };
 }
 
-// Services page: highlights the category chip for the section you are reading.
-Alpine.data('sectionNav', (ids = []) => ({
-    active: ids[0] ?? '',
-    sections: [],
-    detach: null,
-
-    init() {
-        this.detach = onScrollFrame(() => this.measure());
-        this.$nextTick(() => {
-            this.sections = ids.map((id) => document.getElementById(id)).filter(Boolean);
-            this.measure();
-        });
-    },
-
-    destroy() {
-        this.detach?.();
-    },
-
-    measure() {
-        if (this.sections.length) this.active = activeSectionId(this.sections, 160);
-    },
-}));
-
 // Article table of contents: highlights the section currently under the reading line
 // and tracks how far through the body the reader is.
 Alpine.data('articleToc', (items = []) => ({
