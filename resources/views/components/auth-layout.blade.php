@@ -79,12 +79,16 @@
             <p class="auth-anim relative font-mono text-xs text-navy-200 [animation-delay:440ms]">© {{ now()->year }} PT Delta Tiga Enam</p>
         </div>
 
-        {{-- Form panel --}}
-        <div class="flex items-center justify-center px-6 py-12 sm:px-12">
+        {{-- Form panel. Sisi dan atas-bawahnya lebih rapat di layar kecil: dengan
+             py-12 dan px-6, formulir daftar yang enam kolom itu menyisakan jarak
+             yang tidak perlu di ponsel. min-h-dvh dipasang di induknya, bukan
+             h-dvh, jadi formulir yang lebih tinggi dari layar ikut memanjang
+             alih-alih terpotong di atas oleh items-center. --}}
+        <div class="flex items-center justify-center px-5 py-10 sm:px-12 sm:py-12">
             <div class="w-full max-w-md">
                 {{-- Di layar kecil panel brand tidak ada sama sekali, jadi baris ini
                      satu-satunya tanda pengunjung masih berada di situs yang sama. --}}
-                <a href="{{ route('home') }}" class="auth-anim mb-10 inline-flex items-center gap-2.5 rounded-xl text-sm font-medium text-navy transition-colors hover:text-sky-700 lg:hidden">
+                <a href="{{ route('home') }}" class="auth-anim mb-8 inline-flex items-center gap-2.5 rounded-xl text-sm font-medium text-navy transition-colors hover:text-sky-700 lg:hidden sm:mb-10">
                     <img src="{{ asset('images/logodelta36.png') }}" alt="" class="h-9 w-9">
                     PT Delta Tiga Enam
                 </a>
