@@ -3,7 +3,10 @@
 {{-- Satu pelat logo mitra. Dipakai dua kali oleh x-partners-clients: pada
      susunan diam saat mitranya muat dua baris, dan di dalam pita berjalan
      saat jumlahnya lebih banyak. --}}
-<div {{ $attributes->merge(['class' => 'group']) }}>
+{{-- h-full + flex-col: sel grid sama tinggi, jadi nomor registrasi bisa
+     didorong ke dasar sel dengan mt-auto. Tanpa itu letaknya ikut naik-turun
+     mengikuti nama mitra yang ada yang satu baris dan ada yang dua. --}}
+<div {{ $attributes->merge(['class' => 'group flex h-full flex-col']) }}>
     <div class="flex aspect-[3/2] w-full items-center justify-center overflow-hidden rounded-xl bg-white p-4 shadow-[0_2px_8px_rgba(2,12,27,0.25)] transition-transform duration-500 ease-out-soft group-hover:-translate-y-1.5">
         @if ($partner->logo)
             <img src="{{ Storage::url($partner->logo) }}" alt="{{ $partner->name }}" loading="lazy" class="max-h-full max-w-full object-contain">
@@ -15,6 +18,6 @@
     {{-- Nama mitra tidak dimiringkan: italic di sini mengenai data, bukan penekanan. --}}
     <p class="mt-3.5 font-display text-sm font-semibold leading-snug text-white text-balance">{{ $partner->name }}</p>
     @if ($partner->registration_number)
-        <p class="mt-1 font-mono text-[11px] tracking-tight text-navy-200">{{ $partner->registration_number }}</p>
+        <p class="mt-auto pt-1 font-mono text-[11px] tracking-tight text-navy-200">{{ $partner->registration_number }}</p>
     @endif
 </div>

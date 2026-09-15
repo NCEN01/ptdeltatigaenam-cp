@@ -61,9 +61,10 @@
 
                      Tiga logo per baris, dan tetap dua baris ketika mitranya
                      bertambah: yang tumbuh jumlah kolomnya, sehingga pelatnya
-                     mengecil sendiri. max-w-4xl menahan lebarnya supaya pelat
-                     tidak melar selebar halaman saat mitranya masih sedikit. --}}
-                <div class="mitra-grid mt-12 max-w-4xl gap-x-5 gap-y-8 md:mt-14 md:gap-x-6" style="--mitra-cols: {{ $partnerCols }};">
+                     mengecil sendiri. Selebar container, sejajar tepi kiri dan
+                     kanan seperti seksi lain — dibatasi max-w-4xl, sisi kanannya
+                     menganga kosong sampai hampir separuh halaman. --}}
+                <div class="mitra-grid mt-12 gap-x-5 gap-y-8 md:mt-14 md:gap-x-6" style="--mitra-cols: {{ $partnerCols }};">
                     @foreach ($partners as $partner)
                         <x-partner-plate :partner="$partner" data-aos="fade-up" data-aos-delay="{{ ($loop->index % $partnerCols) * 70 }}" />
                     @endforeach
