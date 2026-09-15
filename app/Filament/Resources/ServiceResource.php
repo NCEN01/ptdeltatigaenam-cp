@@ -102,7 +102,7 @@ class ServiceResource extends Resource
                         Forms\Components\DatePicker::make('end_date')->label('Selesai'),
                         Forms\Components\Select::make('mode')
                             ->label('Cara Mengikuti')
-                            ->options(['offline' => 'Tatap Muka', 'online' => 'Online', 'hybrid' => 'Gabungan'])
+                            ->options(['offline' => 'Offline', 'online' => 'Online', 'hybrid' => 'Hybrid'])
                             ->default('offline')
                             ->helperText('Tampil sebagai label pada kartu jadwal di situs.'),
                         Forms\Components\TimePicker::make('start_time')->label('Jam Mulai')->seconds(false),

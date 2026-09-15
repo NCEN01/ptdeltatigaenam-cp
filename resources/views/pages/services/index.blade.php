@@ -36,75 +36,75 @@
          Disajikan sebagai tiga kartu, dan sengaja tidak kembar: yang paling
          banyak dipakai dibuat gelap sebagai penanda, dua sisanya terang. --}}
     @php
-        /* Tatap muka diletakkan lebih dulu dan ditandai unggulan karena memang
+        /* Offline diletakkan lebih dulu dan ditandai unggulan karena memang
            mode yang paling banyak dipakai pada data: tujuh dari sepuluh layanan.
            Menonjolkan online justru akan menjanjikan sesuatu yang belum ada
            programnya. */
         $modes = $id ? [
             [
-                'label' => 'Tatap Muka', 'icon' => 'users', 'featured' => true,
-                'lead' => 'Praktik langsung pada alat dan proses yang benar-benar dipakai peserta.',
+                'label' => 'Offline', 'icon' => 'users', 'featured' => true,
+                'lead' => 'Seluruh sesi berlangsung tatap muka, di lokasi kerja Anda atau di ruang pelatihan kami.',
                 'points' => [
-                    'Digelar di kantor atau pabrik Anda',
-                    'Praktik langsung pada alat yang dipakai',
-                    'Uji kompetensi mengikuti pola sif',
-                    'Tidak menghentikan lini produksi',
+                    'Praktik pada alat dan proses yang dipakai sehari-hari',
+                    'Pengajar hadir langsung mendampingi peserta',
+                    'Uji kompetensi digelar di tempat yang sama',
+                    'Jadwal dapat mengikuti pola sif, produksi tetap jalan',
                     'Sertifikat BNSP bagi yang dinyatakan kompeten',
                 ],
             ],
             [
                 'label' => 'Online', 'icon' => 'screen', 'featured' => false,
-                'lead' => 'Diikuti dari mana saja, cukup dengan koneksi yang stabil.',
+                'lead' => 'Seluruh sesi berlangsung daring, diikuti dari mana saja dengan koneksi yang stabil.',
                 'points' => [
-                    'Diikuti dari kantor, rumah, atau lokasi kerja',
-                    'Studi kasus dan simulasi terpandu',
+                    'Kelas langsung bersama pengajar, bukan rekaman',
+                    'Studi kasus dan simulasi dikerjakan bersama',
                     'Uji kompetensi daring bersama asesor',
                     'Bukti kerja diserahkan secara digital',
                     'Cocok untuk tim yang tersebar di banyak lokasi',
                 ],
             ],
             [
-                'label' => 'Gabungan', 'icon' => 'layers', 'featured' => false,
-                'lead' => 'Teori dituntaskan daring, hari tatap muka dipakai penuh untuk praktik.',
+                'label' => 'Hybrid', 'icon' => 'layers', 'featured' => false,
+                'lead' => 'Teori diselesaikan daring, lalu praktik dan uji kompetensi digelar di lokasi Anda.',
                 'points' => [
-                    'Sesi teori diikuti dari mana saja',
-                    'Hari tatap muka habis untuk praktik',
-                    'Uji kompetensi sehari dengan sesi praktik',
-                    'Peserta lebih sedikit meninggalkan pekerjaan',
+                    'Materi dasar dituntaskan lebih dulu secara daring',
+                    'Pertemuan langsung dipakai penuh untuk praktik',
+                    'Uji kompetensi pada hari yang sama dengan praktik',
+                    'Waktu peserta meninggalkan pekerjaan lebih singkat',
                     'Cocok untuk program berdurasi panjang',
                 ],
             ],
         ] : [
             [
-                'label' => 'In Person', 'icon' => 'users', 'featured' => true,
-                'lead' => 'Hands-on practice on the equipment and processes participants actually use.',
+                'label' => 'Offline', 'icon' => 'users', 'featured' => true,
+                'lead' => 'Every session runs in person, at your workplace or in our training rooms.',
                 'points' => [
-                    'Run at your office or plant',
-                    'Practice on the equipment in daily use',
-                    'Assessment follows your shift pattern',
-                    'No production line has to stop',
+                    'Practice on the equipment and processes used daily',
+                    'The instructor is present and works alongside participants',
+                    'Assessment is held at the same location',
+                    'Scheduling can follow your shift pattern, production keeps running',
                     'BNSP certificate for those judged competent',
                 ],
             ],
             [
                 'label' => 'Online', 'icon' => 'screen', 'featured' => false,
-                'lead' => 'Joined from anywhere, a stable connection is all it takes.',
+                'lead' => 'Every session runs remotely, joined from anywhere with a stable connection.',
                 'points' => [
-                    'Joined from the office, home, or a work site',
-                    'Guided case studies and simulations',
-                    'Assessment online with a certified assessor',
+                    'Live classes with the instructor, not recordings',
+                    'Case studies and simulations worked through together',
+                    'Assessment held online with a certified assessor',
                     'Work evidence submitted digitally',
                     'Suits teams spread across several sites',
                 ],
             ],
             [
-                'label' => 'Blended', 'icon' => 'layers', 'featured' => false,
-                'lead' => 'Theory covered online, so in-person days go entirely to practice.',
+                'label' => 'Hybrid', 'icon' => 'layers', 'featured' => false,
+                'lead' => 'Theory is completed online, then practice and assessment run at your site.',
                 'points' => [
-                    'Theory sessions joined from anywhere',
-                    'In-person days spent fully on practice',
-                    'Assessment on the same day as practice',
-                    'Less time away from the job for participants',
+                    'Core material is covered online first',
+                    'In-person days are spent entirely on practice',
+                    'Assessment on the same day as the practical session',
+                    'Participants spend less time away from the job',
                     'Suits longer programmes',
                 ],
             ],
@@ -169,8 +169,8 @@
 
             <p class="mt-10 max-w-3xl text-sm leading-relaxed text-slate-600" data-aos="fade-up">
                 {{ $id
-                    ? 'Cara mengikuti ditentukan per angkatan, bukan per program. Jadwal yang sama bisa dibuka tatap muka bulan ini dan gabungan pada angkatan berikutnya. Label pada tiap kartu jadwal menunjukkan yang berlaku.'
-                    : 'The delivery mode is set per intake, not per programme. The same course can run in person this month and blended for the next. The label on each schedule card shows which applies.' }}
+                    ? 'Cara mengikuti ditentukan per angkatan, bukan per program. Jadwal yang sama bisa dibuka offline bulan ini dan hybrid pada angkatan berikutnya. Label pada tiap kartu jadwal menunjukkan yang berlaku.'
+                    : 'The delivery mode is set per intake, not per programme. The same course can run offline this month and hybrid for the next. The label on each schedule card shows which applies.' }}
             </p>
         </div>
     </section>
