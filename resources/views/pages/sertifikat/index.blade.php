@@ -1,4 +1,8 @@
 @php
+    /* Anchor tujuan setelah mencari atau berpindah halaman. Diambil dari
+       controller supaya id di markup dan fragmen di tautan tidak bisa berbeda. */
+    $anchor = App\Http\Controllers\CertificateController::RESULTS_ANCHOR;
+
     $id = app()->getLocale() === 'id';
 
     $proof = $id ? [
@@ -61,7 +65,7 @@
 
             {{-- Formulir sengaja lebih lebar dari kolom teksnya: bilah pencarian
                  menjadi benda paling menonjol di seksi ini tanpa perlu dikotakkan. --}}
-            <form method="GET" action="{{ route('certificates.index') }}" class="mt-9 max-w-3xl">
+            <form method="GET" action="{{ route('certificates.index') }}#{{ $anchor }}" class="mt-9 max-w-3xl">
                 <label for="cert-q" class="sr-only">{{ $id ? 'Nama peserta, perusahaan, atau nomor sertifikat' : 'Participant name, company, or certificate number' }}</label>
                 <div class="flex flex-col gap-3 sm:flex-row">
                     <div class="relative flex-1">
@@ -88,7 +92,7 @@
                     <span class="mr-1 text-slate-500">{{ $id ? 'Cari cepat:' : 'Quick search:' }}</span>
                     @foreach ($suggestions as $suggestion)
                         @php $active = $q === $suggestion; @endphp
-                        <a href="{{ route('certificates.index', ['q' => $suggestion]) }}"
+                        <a href="{{ route('certificates.index', ['q' => $suggestion]) }}#{{ $anchor }}"
                            @if ($active) aria-current="true" @endif
                            class="rounded-full border px-3.5 py-1.5 font-medium transition-colors duration-200 {{ $active
                                ? 'border-navy bg-navy text-white'
@@ -102,7 +106,7 @@
     </section>
 
     {{-- ===================== HASIL ===================== --}}
-    <section class="section-sm bg-white">
+    <section id="{{ $anchor }}" class="section-sm scroll-mt-28 bg-white">
         <div class="container">
 
             @if ($certificates->isEmpty())
@@ -143,7 +147,7 @@
 
                 @if ($q !== '')
                     <span class="text-slate-400" aria-hidden="true">·</span>
-                    <a href="{{ route('certificates.index') }}" class="font-medium text-sky-700 underline underline-offset-4 transition-colors hover:text-navy">{{ $id ? 'tampilkan semua' : 'show all' }}</a>
+                    <a href="{{ route('certificates.index') }}#{{ $anchor }}" class="font-medium text-sky-700 underline underline-offset-4 transition-colors hover:text-navy">{{ $id ? 'tampilkan semua' : 'show all' }}</a>
                 @endif
             </div>
 

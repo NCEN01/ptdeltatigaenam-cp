@@ -10,6 +10,13 @@ class CertificateController extends Controller
 {
     private const PER_PAGE = 10;
 
+    /**
+     * Anchor tujuan setelah mencari atau berpindah halaman. Dibagi ke view lewat
+     * satu tempat supaya id pada markup dan fragmen pada tautan tidak bisa
+     * berbeda — kalau berbeda, fragmennya diam-diam tidak menuju ke mana pun.
+     */
+    public const RESULTS_ANCHOR = 'hasil';
+
     public function index(Request $request)
     {
         $q = trim((string) $request->query('q', ''));
@@ -41,7 +48,11 @@ class CertificateController extends Controller
             ->orderBy('sort_order')
             ->latest('id')
             ->paginate(self::PER_PAGE)
-            ->withQueryString();
+            ->withQueryString()
+            // Setiap tautan halaman berakhir di #hasil. Pagination memuat ulang
+            // halaman penuh, jadi tanpa fragmen ini browser selalu mendarat di
+            // puncak dokumen dan pembaca kehilangan tempatnya.
+            ->fragment(self::RESULTS_ANCHOR);
 
         return view('pages.sertifikat.index', [
             'certificates' => $certificates,
