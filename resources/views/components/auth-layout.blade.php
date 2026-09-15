@@ -1,6 +1,25 @@
 @props(['title' => '', 'heading' => '', 'subheading' => null])
 
-@php use App\Support\Locale; @endphp
+@php
+    use App\Support\Locale;
+
+    $isId = app()->getLocale() === 'id';
+
+    // Apa yang sebenarnya bisa dilakukan sebuah akun di sini, bukan angka
+    // pencapaian perusahaan. Pengunjung yang sudah sampai ke halaman ini tidak
+    // sedang menimbang kredibilitas; ia sedang menimbang perlu-tidaknya mendaftar.
+    // Ketiganya merujuk fitur yang memang ada: profil tersimpan, riwayat pesanan
+    // berikut statusnya, dan pembayaran yang bisa dilanjutkan.
+    $perks = $isId ? [
+        'Pesan layanan tanpa mengetik ulang data perusahaan',
+        'Pantau pesanan Anda, dari menunggu sampai lunas',
+        'Lanjutkan pembayaran yang tertunda kapan saja',
+    ] : [
+        'Book services without retyping your company details',
+        'Track every order, from pending through paid',
+        'Pick up an unfinished payment whenever you like',
+    ];
+@endphp
 <!DOCTYPE html>
 <html lang="{{ Locale::current() }}">
 <head>
@@ -14,52 +33,73 @@
 </head>
 <body class="min-h-dvh bg-white text-ink antialiased">
     <div class="grid min-h-dvh lg:grid-cols-2">
-        {{-- Brand panel --}}
-        <div class="relative hidden overflow-hidden bg-navy-anim p-12 text-white lg:flex lg:flex-col lg:justify-between">
-            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=80" alt="" class="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-40">
-            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/85 to-navy-950/60"></div>
-            <div class="pointer-events-none absolute inset-0 aurora opacity-40"></div>
+        {{-- Panel brand. Susunan lapisannya disamakan dengan pita gelap lain di
+             situs (foto, tirai navy, gradasi, butir, satu cahaya samar). Sebelumnya
+             foto beropasitas 40% ditumpuk di atas bg-navy-anim lalu ditutup aurora,
+             empat lapisan bergerak yang saling melawan sehingga fotonya keruh. --}}
+        <div class="relative hidden overflow-hidden bg-navy-950 p-12 text-white lg:flex lg:flex-col lg:justify-between">
+            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=80"
+                 alt="" loading="lazy" class="pointer-events-none absolute inset-0 h-full w-full object-cover">
+            <div class="pointer-events-none absolute inset-0 bg-navy-950/82"></div>
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-navy-950/70 via-navy-950/45 to-navy-950/92"></div>
+            <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
+            <div class="pointer-events-none absolute -right-24 top-1/4 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl"></div>
             <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/50 to-transparent"></div>
-            <a href="{{ route('home') }}" class="auth-anim relative flex items-center gap-3">
-                <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-11 w-11 shrink-0">
+
+            <a href="{{ route('home') }}" class="auth-anim relative flex items-center gap-3 rounded-xl">
+                <img src="{{ asset('images/logodelta36.png') }}" alt="" class="h-11 w-11 shrink-0">
                 <span class="font-display text-lg">PT Delta Tiga Enam</span>
             </a>
+
             <div class="relative">
-                <p class="auth-anim eyebrow mb-5 [animation-delay:120ms]">Human Capital · Training · Certification</p>
-                <p class="auth-anim max-w-md text-[2.2rem] leading-[1.12] text-balance [animation-delay:200ms]">
-                    {{ app()->getLocale() === 'id' ? 'Transformasi human capital yang berkelanjutan.' : 'Sustainable human capital transformation.' }}
+                {{-- Baris "Human Capital · Training · Certification" dihapus, bukan
+                     diganti: kelas .eyebrow bernilai display:none !important di
+                     seluruh situs, jadi kalimat itu tidak pernah sekali pun tampil. --}}
+                <p class="auth-anim max-w-md text-[2rem] leading-[1.14] text-balance [animation-delay:120ms]">
+                    {{ $isId
+                        ? 'Satu akun untuk memesan pelatihan, sertifikasi, dan layanan lainnya.'
+                        : 'One account for booking training, certification, and every other service.' }}
                 </p>
-                <div class="auth-anim mt-8 flex items-center gap-6 [animation-delay:280ms]">
-                    <div>
-                        <p class="font-display text-2xl text-white md:text-[1.7rem]" data-counter="500" data-counter-suffix="+">0+</p>
-                        <p class="mt-1 font-mono text-[10px] uppercase tracking-wider text-navy-200">{{ app()->getLocale() === 'id' ? 'Profesional' : 'Professionals' }}</p>
-                    </div>
-                    <div class="h-8 w-px bg-white/15"></div>
-                    <div>
-                        <p class="font-display text-2xl text-white md:text-[1.7rem]" data-counter="10" data-counter-suffix="+">0+</p>
-                        <p class="mt-1 font-mono text-[10px] uppercase tracking-wider text-navy-200">{{ app()->getLocale() === 'id' ? 'Tahun' : 'Years' }}</p>
-                    </div>
-                </div>
+
+                <ul class="mt-9 space-y-4">
+                    {{-- Jedanya lewat style, bukan kelas [animation-delay:..]: Tailwind
+                         memindai berkas sumber apa adanya, sehingga kelas yang nilainya
+                         baru terbentuk saat render tidak pernah ikut dibuat. --}}
+                    @foreach ($perks as $i => $perk)
+                        <li class="auth-anim flex items-start gap-3" style="animation-delay: {{ 200 + $i * 70 }}ms">
+                            <svg class="mt-0.5 h-5 w-5 shrink-0 text-sky-400" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                                <path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="text-[15px] leading-relaxed text-navy-100">{{ $perk }}</span>
+                        </li>
+                    @endforeach
+                </ul>
             </div>
-            <p class="auth-anim relative font-mono text-xs text-slate-400 [animation-delay:360ms]">© {{ now()->year }} PT Delta Tiga Enam</p>
+
+            <p class="auth-anim relative font-mono text-xs text-navy-200 [animation-delay:440ms]">© {{ now()->year }} PT Delta Tiga Enam</p>
         </div>
 
         {{-- Form panel --}}
-        <div class="flex items-center justify-center px-6 py-10 sm:px-12">
+        <div class="flex items-center justify-center px-6 py-12 sm:px-12">
             <div class="w-full max-w-md">
-                <a href="{{ route('home') }}" class="auth-anim mb-8 inline-flex items-center gap-2 text-sm text-slate-500 hover:text-navy lg:hidden">
-                    <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-9 w-9">
-                    Delta Tiga Enam
+                {{-- Di layar kecil panel brand tidak ada sama sekali, jadi baris ini
+                     satu-satunya tanda pengunjung masih berada di situs yang sama. --}}
+                <a href="{{ route('home') }}" class="auth-anim mb-10 inline-flex items-center gap-2.5 rounded-xl text-sm font-medium text-navy transition-colors hover:text-sky-700 lg:hidden">
+                    <img src="{{ asset('images/logodelta36.png') }}" alt="" class="h-9 w-9">
+                    PT Delta Tiga Enam
                 </a>
 
-                <h1 class="auth-anim font-display text-3xl font-semibold text-navy">{{ $heading }}</h1>
-                @if ($subheading)<p class="auth-anim mt-2 text-slate-600 [animation-delay:80ms]">{{ $subheading }}</p>@endif
+                <h1 class="auth-anim font-display text-3xl font-semibold text-navy text-balance sm:text-4xl">{{ $heading }}</h1>
+                @if ($subheading)<p class="auth-anim mt-3 leading-relaxed text-slate-600 text-pretty [animation-delay:80ms]">{{ $subheading }}</p>@endif
 
                 @if (session('status'))
-                    <div class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800" role="status">{{ session('status') }}</div>
+                    <div class="mt-7 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3.5 text-sm leading-relaxed text-emerald-800" role="status" aria-live="polite">
+                        <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.7 5.7a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 10a1 1 0 011.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z"/></svg>
+                        {{ session('status') }}
+                    </div>
                 @endif
 
-                <div class="mt-6">{{ $slot }}</div>
+                <div class="mt-8">{{ $slot }}</div>
             </div>
         </div>
     </div>

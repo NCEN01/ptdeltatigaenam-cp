@@ -11,8 +11,13 @@
 @php $val = old($name, $value); $invalid = $errors->has($name); @endphp
 
 <div class="{{ $type === 'textarea' ? '' : '' }}">
+    {{-- Bintang wajib memakai biru, bukan emas. Emas di atas putih hanya
+         sekitar 1,9:1, jadi penanda yang justru harus terbaca malah nyaris
+         tidak terlihat. Cincin fokusnya pun ikut pindah ke biru: selain gagal
+         batas 3:1 milik WCAG 1.4.11, emas berbeda sendiri dari :focus-visible
+         situs ini yang sudah memakai ring-sky-500. --}}
     <label for="{{ $name }}" class="mb-1.5 block text-sm font-medium text-navy">
-        {{ $label }}@if ($required)<span class="text-gold" aria-hidden="true"> *</span>@endif
+        {{ $label }}@if ($required)<span class="text-sky-600" aria-hidden="true"> *</span>@endif
     </label>
 
     @if ($type === 'textarea')
@@ -21,7 +26,7 @@
             @if ($invalid) aria-invalid="true" aria-describedby="{{ $name }}-error" @endif
             placeholder="{{ $placeholder }}"
             {{ $attributes->class([
-                'w-full rounded-2xl border bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-0',
+                'w-full rounded-2xl border bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-0',
                 'border-rose-300' => $invalid,
                 'border-navy-200 focus:border-navy' => ! $invalid,
             ]) }}>{{ $val }}</textarea>
@@ -37,7 +42,7 @@
                 } }}"
                 placeholder="{{ $placeholder }}"
                 {{ $attributes->class([
-                    'w-full rounded-2xl border bg-white px-4 py-3 pr-12 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-gold',
+                    'w-full rounded-2xl border bg-white px-4 py-3 pr-12 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500',
                     'border-rose-300' => $invalid,
                     'border-navy-200 focus:border-navy' => ! $invalid,
                 ]) }}>
@@ -70,7 +75,7 @@
             } }}"
             placeholder="{{ $placeholder }}"
             {{ $attributes->class([
-                'w-full rounded-2xl border bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-gold',
+                'w-full rounded-2xl border bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500',
                 'border-rose-300' => $invalid,
                 'border-navy-200 focus:border-navy' => ! $invalid,
             ]) }}>
