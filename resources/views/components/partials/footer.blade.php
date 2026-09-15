@@ -123,7 +123,7 @@
             <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/50 to-transparent"></div>
 
             <div class="relative">
-                <p class="eyebrow mb-4 inline-flex items-center justify-center text-gold-soft"><span class="rule-gold mr-3 from-gold"></span>{{ $ctaEyebrow }}</p>
+                <p class="eyebrow mb-4 inline-flex items-center justify-center text-gold-soft">{{ $ctaEyebrow }}</p>
                 <h3 class="mx-auto max-w-2xl text-3xl font-semibold leading-[1.1] text-white text-balance md:text-[2.75rem]">{{ $ctaTitle }}</h3>
                 <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/85 md:text-base">{{ $ctaSub }}</p>
                 <a href="{{ route($ctaRoute) }}" class="group mt-8 inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3.5 text-sm font-semibold text-navy-950 shadow-gold ring-1 ring-transparent transition duration-200 hover:-translate-y-0.5 hover:bg-gold-soft">
@@ -171,7 +171,6 @@
                     <div class="grid gap-x-12 gap-y-8 sm:grid-cols-2">
                         <div>
                             <p class="text-sm font-semibold text-gold">{{ $id ? 'Layanan' : 'Services' }}</p>
-                            <span class="mt-2.5 block h-0.5 w-7 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
                             <ul class="mt-5 space-y-3.5 text-sm">
                                 @forelse ($footerServices as $svc)
                                     <li><a href="{{ route('services.index') }}#{{ $svc->slug }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
@@ -186,7 +185,6 @@
                         </div>
                         <div>
                             <p class="text-sm font-semibold text-gold">{{ __('site.common.quick_links') }}</p>
-                            <span class="mt-2.5 block h-0.5 w-7 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
                             <ul class="mt-5 space-y-3.5 text-sm">
                                 @foreach ($nav as $route => $label)
                                     <li><a href="{{ route($route) }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
@@ -201,7 +199,6 @@
                 {{-- Contact --}}
                 <div class="lg:col-span-4">
                     <p class="text-sm font-semibold text-gold">{{ $id ? 'Kontak' : 'Contact' }}</p>
-                    <span class="mt-2.5 block h-0.5 w-7 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
                     <ul class="mt-4 space-y-3.5 text-sm text-white/80">
                         <li class="flex items-start gap-2.5">
                             <svg class="h-4 w-4 shrink-0 text-white mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -226,7 +223,6 @@
             {{-- Offices — full width below --}}
             <div class="mt-12">
                 <p class="text-sm font-semibold text-gold">{{ $id ? 'Kantor Kami' : 'Our Offices' }}</p>
-                <span class="mt-2.5 block h-0.5 w-7 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
                 <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     @if ($offices->isNotEmpty())
                         @foreach ($offices as $office)

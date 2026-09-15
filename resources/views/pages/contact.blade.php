@@ -29,7 +29,7 @@
 
             {{-- Left: intro + quick contact --}}
             <div class="lg:col-span-5" data-aos="fade-right">
-                <p class="eyebrow"><span class="rule-gold mr-3"></span>{{ $id ? 'Hubungi Kami' : 'Get in Touch' }}</p>
+                <p class="eyebrow">{{ $id ? 'Hubungi Kami' : 'Get in Touch' }}</p>
                 <h2 class="mt-4 font-display text-3xl leading-tight text-navy text-balance md:text-4xl">
                     {{ $id ? 'Mari bicarakan kebutuhan Anda' : "Let's talk about your needs" }}
                 </h2>
@@ -70,7 +70,7 @@
             {{-- Right: form --}}
             <div class="lg:col-span-7" data-aos="fade-left">
                 <div class="rounded-3xl border border-navy-100 bg-white p-8 shadow-lift md:p-10">
-                    <p class="eyebrow mb-3"><span class="rule-gold mr-3"></span>{{ $id ? 'Kirim Pesan' : 'Send a Message' }}</p>
+                    <p class="eyebrow mb-3">{{ $id ? 'Kirim Pesan' : 'Send a Message' }}</p>
                     <h2 class="mb-7 font-display text-2xl text-navy text-balance md:text-3xl">{{ $id ? 'Isi formulir di bawah ini' : 'Fill out the form below' }}</h2>
 
                     @if (session('status'))
@@ -113,7 +113,7 @@
     <section class="section-sm border-t border-navy-50 bg-neutral-50" x-data="{ activeOffice: 0, offices: {{ json_encode($offices) }} }">
         <div class="container">
             <div class="text-center" data-aos="fade-up">
-                <p class="eyebrow inline-flex items-center justify-center"><span class="rule-gold mr-3"></span>{{ $id ? 'Lokasi Kantor' : 'Office Locations' }}</p>
+                <p class="eyebrow inline-flex items-center justify-center">{{ $id ? 'Lokasi Kantor' : 'Office Locations' }}</p>
                 <h2 class="mt-4 font-display text-3xl text-navy md:text-4xl">{{ $id ? 'Temui kami di lokasi berikut' : 'Find us at these locations' }}</h2>
             </div>
 

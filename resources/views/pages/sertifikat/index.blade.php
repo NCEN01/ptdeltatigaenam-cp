@@ -57,7 +57,6 @@
                 <h2 class="text-3xl leading-tight text-navy md:text-5xl">
                     {{ $id ? 'Cek Keaslian Sertifikat Kompetensi' : 'Verify a Competency Certificate' }}
                 </h2>
-                <span class="mt-6 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
                 <p class="mt-6 font-display text-xl leading-snug text-navy md:text-2xl">
                     {{ $id ? 'Satu nama. Satu nomor. Langsung terbukti.' : 'One name. One number. Proof on the spot.' }}
                 </p>
@@ -246,7 +245,6 @@
                 <h2 class="text-2xl text-navy md:text-4xl">
                     {{ $id ? 'Kenapa daftar ini kami buka' : 'Why we publish this list' }}
                 </h2>
-                <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
 
                 {{-- Judul tiap butir dibesarkan dan jaraknya dilonggarkan supaya
                      daftar ini terbaca sebagai tiga argumen, bukan tiga baris

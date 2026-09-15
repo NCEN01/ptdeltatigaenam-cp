@@ -60,7 +60,6 @@
         <div class="container grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div class="lg:col-span-7" data-aos="fade-up">
                 <h2 class="font-display text-3xl leading-tight text-navy text-balance md:text-4xl">{{ $id ? 'Kemitraan PT Delta Tiga Enam' : 'PT Delta Tiga Enam Partnership' }}</h2>
-                <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
 
                 {{-- The opening sentence is lifted to lead size so the block has an entry
                      point. Split on the first sentence boundary — the wording is untouched,

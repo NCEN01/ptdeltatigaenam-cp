@@ -33,7 +33,7 @@
             <div class="container">
                 <div class="flex flex-col gap-4 border-b border-navy-100 pb-6 md:flex-row md:items-end md:justify-between">
                     <div class="max-w-2xl">
-                        <p class="mb-3 font-mono text-[11px] uppercase tracking-normal text-gold-deep"><span class="rule-gold mr-3"></span>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</p>
+                        <p class="mb-3 font-mono text-[11px] uppercase tracking-normal text-gold-deep">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</p>
                         <h2 class="text-3xl font-semibold text-navy md:text-4xl">{{ $cat->name }}</h2>
                         @if ($cat->short_description)<p class="mt-3 text-pretty text-slate-600">{{ $cat->short_description }}</p>@endif
                     </div>

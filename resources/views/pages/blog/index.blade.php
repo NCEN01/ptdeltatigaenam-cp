@@ -18,11 +18,9 @@
             <div class="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
                 {{-- Baris .eyebrow "Artikel Terbaru" dihapus dari sini: .eyebrow
                      berstatus display:none di seluruh situs, jadi label itu tidak
-                     pernah tampil sekali pun. Garis emas dipertahankan sebagai
-                     aksennya, kini menempel pada judul yang memang terlihat. --}}
+                     pernah tampil sekali pun. --}}
                 <div class="max-w-2xl">
                     <h2 class="font-display text-3xl text-navy text-balance md:text-4xl" data-aos="fade-up">{{ $id ? 'Wawasan & artikel kami' : 'Our insights & articles' }}</h2>
-                    <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
                     <p class="mt-5 text-pretty leading-relaxed text-slate-600" data-aos="fade-up">
                         {{ $id
                             ? 'Catatan dari ruang pelatihan, lokasi uji kompetensi, dan meja konsultasi kami. Yang kami tulis di sini berangkat dari pekerjaan yang benar-benar kami kerjakan bersama klien.'

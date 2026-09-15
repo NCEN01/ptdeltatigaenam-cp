@@ -126,7 +126,7 @@
             <div class="container">
                 <div class="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
                     <div class="max-w-2xl">
-                        <p class="kicker mb-3" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $id ? 'Terus Membaca' : 'Keep Reading' }}</p>
+                        <p class="kicker mb-3" data-aos="fade-up">{{ $id ? 'Terus Membaca' : 'Keep Reading' }}</p>
                         <h2 class="font-display text-3xl text-navy text-balance md:text-4xl" data-aos="fade-up">{{ $id ? 'Artikel terbaru lainnya' : 'More recent articles' }}</h2>
                     </div>
 

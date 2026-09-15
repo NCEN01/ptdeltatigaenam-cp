@@ -25,7 +25,7 @@
                 <span class="font-display text-lg">PT Delta Tiga Enam</span>
             </a>
             <div class="relative">
-                <p class="auth-anim eyebrow mb-5 [animation-delay:120ms]"><span class="rule-gold mr-3"></span>Human Capital · Training · Certification</p>
+                <p class="auth-anim eyebrow mb-5 [animation-delay:120ms]">Human Capital · Training · Certification</p>
                 <p class="auth-anim max-w-md text-[2.2rem] leading-[1.12] text-balance [animation-delay:200ms]">
                     {{ app()->getLocale() === 'id' ? 'Transformasi human capital yang berkelanjutan.' : 'Sustainable human capital transformation.' }}
                 </p>

@@ -655,7 +655,7 @@
                 <div class="space-y-4">
                     {{-- .kicker, not .eyebrow: the latter is display:none site-wide, so this
                          label never actually rendered. --}}
-                    <p class="kicker"><span class="rule-gold mr-3"></span>FAQ</p>
+                    <p class="kicker">FAQ</p>
                     <h2 class="text-display-lg font-semibold text-navy text-balance">
                         {{ $isId ? 'Pertanyaan yang Sering Diajukan' : 'Frequently Asked Questions' }}
                     </h2>

@@ -46,12 +46,11 @@
         {{-- ===================== MITRA — centered; logo box on top, name + reg. number below ===================== --}}
         @if ($partners->isNotEmpty())
             <div class="relative container pt-14 md:pt-20 {{ $clients->isEmpty() ? 'pb-14 md:pb-20' : 'pb-10 md:pb-12' }}">
-                {{-- Rata kiri dengan garis emas, mengikuti pola judul seksi di
+                {{-- Rata kiri, mengikuti pola judul seksi di
                      halaman lain. Judul di tengah membuat seksi ini terasa
                      berdiri sendiri, padahal ia bagian dari satu situs. --}}
                 <div class="max-w-2xl" data-aos="fade-up">
                     <h2 class="text-display-lg font-semibold text-white text-balance">{{ $isId ? 'Mitra Kami' : 'Our Partners' }}</h2>
-                    <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
                     <p class="mt-5 leading-relaxed text-navy-100">
                         {{ $isId
                             ? 'Lembaga sertifikasi, asosiasi profesi, dan institusi pendidikan yang bekerja sama dengan kami dalam menyelenggarakan pelatihan dan uji kompetensi.'
@@ -94,7 +93,6 @@
                         {{-- h2, bukan h3: klien dan mitra adalah dua kelompok yang setara.
                              Sebagai h3 ia terbaca seolah bagian dari "Mitra Kami". --}}
                         <h2 class="font-display text-2xl font-bold text-navy text-balance md:text-3xl">{{ $isId ? 'Klien Kami' : 'Our Clients' }}</h2>
-                        <span class="mt-2.5 block h-0.5 w-10 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
                         <p class="mt-3 text-sm leading-relaxed text-slate-600">
                             {{ $isId ? 'Klien yang telah menggunakan layanan kami.' : 'Clients who have used our services.' }}
                         </p>

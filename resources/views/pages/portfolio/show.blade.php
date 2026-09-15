@@ -53,7 +53,7 @@
                 <div class="space-y-6 lg:sticky lg:top-28">
                     {{-- Facts --}}
                     <div class="rounded-2xl border border-navy-100 bg-neutral-50 p-6">
-                        <p class="kicker mb-5"><span class="rule-gold mr-3"></span>{{ $id ? 'Detail Proyek' : 'Project Details' }}</p>
+                        <p class="kicker mb-5">{{ $id ? 'Detail Proyek' : 'Project Details' }}</p>
                         <dl class="divide-y divide-navy-100">
                             @if ($portfolio->client_name)
                                 <div class="flex items-start justify-between gap-4 py-3">
@@ -115,7 +115,6 @@
                 <div class="flex flex-col gap-5 border-b border-navy-100 pb-7 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <h2 class="font-display text-2xl font-semibold text-navy md:text-3xl">{{ $id ? 'Kata klien tentang proyek ini' : 'What the client said' }}</h2>
-                        <span class="mt-4 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
                     </div>
 
                     <div class="flex items-center gap-5">
@@ -202,8 +201,7 @@
                      "Dokumentasi Kegiatan", not "Galeri": these are records of what happened
                      on the ground, and the sidebar fact row already says "Dokumentasi". --}}
                 <h2 class="font-display text-2xl font-semibold text-navy md:text-3xl" data-aos="fade-up">{{ $id ? 'Dokumentasi Kegiatan' : 'Activity Documentation' }}</h2>
-                <span class="mt-4 mb-8 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
-                <div class="columns-1 gap-4 sm:columns-2 lg:columns-3">
+                <div class="mt-8 columns-1 gap-4 sm:columns-2 lg:columns-3">
                     @foreach ($portfolio->images as $img)
                         <figure class="group mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-navy-100 bg-navy-900 shadow-card" data-aos="fade-up">
                             <img src="{{ $imgUrl($img->image) }}" alt="{{ $img->caption ?: $portfolio->title }}" loading="lazy" decoding="async" class="w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">
@@ -218,7 +216,7 @@
     @if ($related->isNotEmpty())
         <section class="section-sm border-t border-navy-50 bg-neutral-50">
             <div class="container">
-                <p class="kicker mb-8" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $id ? 'Portofolio terkait' : 'Related portfolio' }}</p>
+                <p class="kicker mb-8" data-aos="fade-up">{{ $id ? 'Portofolio terkait' : 'Related portfolio' }}</p>
                 <div class="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($related as $r)
                         <a href="{{ route('portfolio.show', $r->slug) }}" class="group flex h-full flex-col overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">

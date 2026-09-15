@@ -26,7 +26,6 @@
         <div class="container grid gap-10 lg:grid-cols-12 lg:gap-16">
             <div class="lg:col-span-4" data-aos="fade-up">
                 <h2 class="font-display text-3xl leading-tight text-navy md:text-4xl">{{ $isId ? 'Profil Perusahaan' : 'Company Profile' }}</h2>
-                <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
             </div>
             <div class="space-y-5 leading-relaxed text-slate-700 lg:col-span-8" data-aos="fade-up" data-aos-delay="80">
                 @foreach ($aboutParas as $para)
@@ -219,7 +218,6 @@
                     <blockquote class="mt-9 max-w-2xl">
                         <p class="text-pretty text-xl italic leading-[1.6] text-white md:text-2xl">&ldquo;{{ $founderQuote }}&rdquo;</p>
                     </blockquote>
-                    <span class="mt-7 block h-0.5 w-16 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
                     {{-- Full navy-100, not navy-100/80: the extra transparency only cost contrast. --}}
                     <p class="mt-7 max-w-xl text-pretty text-[15px] leading-[1.8] text-navy-100">{{ $founderBio }}</p>
                 </div>

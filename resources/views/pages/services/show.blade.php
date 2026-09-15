@@ -75,7 +75,7 @@
         <div class="pointer-events-none absolute inset-0 aurora-light opacity-70"></div>
         <div class="container relative">
             <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
-                <p class="eyebrow inline-flex items-center justify-center"><span class="rule-gold mr-3"></span>{{ $id ? 'Cara Mendaftar' : 'How to Register' }}</p>
+                <p class="eyebrow inline-flex items-center justify-center">{{ $id ? 'Cara Mendaftar' : 'How to Register' }}</p>
                 <h2 class="mt-4 font-display text-3xl text-navy text-balance md:text-4xl">{{ $id ? 'Daftar mudah dalam 3 langkah' : 'Register easily in 3 steps' }}</h2>
                 <p class="mx-auto mt-4 max-w-xl text-slate-600">{{ $id ? 'Prosesnya cepat dan aman. Amankan kursi Anda dalam hitungan menit.' : 'Fast and secure. Reserve your seat in minutes.' }}</p>
             </div>
@@ -132,7 +132,7 @@
 
                 @if ($service->activities->isNotEmpty())
                     <div class="mt-12">
-                        <p class="eyebrow mb-2"><span class="rule-gold mr-3"></span>{{ $id ? 'Materi & Kegiatan' : 'Topics & Activities' }}</p>
+                        <p class="eyebrow mb-2">{{ $id ? 'Materi & Kegiatan' : 'Topics & Activities' }}</p>
                         <p class="mb-6 text-sm text-slate-600">{{ $id ? 'Rangkaian materi yang dirancang aplikatif dan siap pakai.' : 'A curriculum designed to be practical and ready to apply.' }}</p>
                         <div class="space-y-3">
                             @foreach ($service->activities as $activity)
@@ -253,7 +253,7 @@
     @if ($related->isNotEmpty())
         <section class="section-sm border-t border-navy-50 bg-white">
             <div class="container">
-                <p class="kicker mb-8" data-aos="fade-up"><span class="rule-gold mr-3"></span>{{ $id ? 'Layanan terkait' : 'Related services' }}</p>
+                <p class="kicker mb-8" data-aos="fade-up">{{ $id ? 'Layanan terkait' : 'Related services' }}</p>
                 <div class="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($related as $r)
                         <a href="{{ route('services.show', $r->slug) }}" class="group flex h-full flex-col overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
