@@ -101,15 +101,18 @@
         <section class="section-sm border-t border-navy-50 bg-white">
             <div class="container">
                 <div class="max-w-2xl" data-aos="fade-up">
+                    {{-- Judulnya menyebut "lembaga sertifikasi" dan kalimat pendukungnya
+                         "pelatihan" serta "uji kompetensi": istilah yang memang dicari
+                         orang, bukan kiasan yang tidak pernah diketik siapa pun. --}}
                     <x-heading
-                        :lead="$id ? 'Nama di balik' : 'The names behind the'"
-                        :accent="$id ? 'sertifikat' : 'certificates'"
-                        :tail="$id ? 'yang tim Anda bawa pulang' : 'your team takes home'"
+                        :lead="$id ? 'Lembaga sertifikasi yang' : 'Certification bodies we'"
+                        :accent="$id ? 'bekerja sama' : 'work with'"
+                        :tail="$id ? 'dengan kami' : ''"
                         class="font-display text-3xl text-navy text-balance md:text-4xl" />
                     <p class="mt-5 text-pretty leading-relaxed text-slate-600">
                         {{ $id
-                            ? 'Uji kompetensi dalam program kemitraan ini dijalankan bersama lembaga sertifikasi profesi dan asosiasi berikut. Nomor registrasinya kami cantumkan apa adanya, supaya Anda bisa memeriksanya sendiri sebelum kerja sama dimulai.'
-                            : 'Competency assessment in this partnership programme runs with the certification bodies and associations below. Their registration numbers are printed as they are, so you can verify them yourself before the partnership begins.' }}
+                            ? 'Program pelatihan dan uji kompetensi kami dijalankan bersama lembaga berikut. Nomor registrasinya kami cantumkan agar bisa Anda periksa.'
+                            : 'Our training and competency assessment programmes run with the bodies below. Their registration numbers are listed so you can check them.' }}
                     </p>
                 </div>
 

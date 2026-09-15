@@ -12,6 +12,10 @@
         : 'aspect-[3/2] bg-white shadow-[0_2px_8px_rgba(2,12,27,0.25)]';
 
     $logoSize = $light ? 'max-h-14 md:max-h-16' : 'max-h-full';
+
+    // Nama mitra kerap masuk dengan spasi di ujungnya lewat CMS, dan spasi itu
+    // terlihat sebagai baris yang tidak rata di kolom sebelahnya.
+    $name = trim($partner->name);
 @endphp
 
 {{-- h-full + flex-col: sel grid sama tinggi, jadi nomor registrasi bisa
@@ -20,14 +24,19 @@
 <div {{ $attributes->merge(['class' => 'group flex h-full flex-col']) }}>
     <div class="flex w-full items-center justify-center overflow-hidden rounded-xl p-4 transition duration-500 ease-out-soft group-hover:-translate-y-1.5 {{ $box }}">
         @if ($partner->logo)
-            <img src="{{ Storage::url($partner->logo) }}" alt="{{ $partner->name }}" loading="lazy" class="max-w-full object-contain {{ $logoSize }}">
+            {{-- alt kosong dengan sengaja: nama mitranya sudah tertulis tepat di
+                 bawah logo ini. Diisi, namanya terbaca dua kali oleh pembaca layar
+                 dan ikut tersalin dua kali ketika halaman ini di-copy. --}}
+            <img src="{{ Storage::url($partner->logo) }}" alt="" loading="lazy" class="max-w-full object-contain {{ $logoSize }}">
         @else
-            <span class="px-2 text-center font-display text-xs font-semibold leading-tight text-navy">{{ $partner->name }}</span>
+            {{-- Tanpa logo, kotaknya jadi kosong. Inisial menjaga bentuknya tanpa
+                 mengulang nama yang sudah tertulis di bawah. --}}
+            <span class="font-display text-3xl font-semibold text-navy-200" aria-hidden="true">{{ mb_strtoupper(mb_substr($name, 0, 1)) }}</span>
         @endif
     </div>
 
     {{-- Nama mitra tidak dimiringkan: italic di sini mengenai data, bukan penekanan. --}}
-    <p class="mt-3.5 font-display text-sm font-semibold leading-snug text-balance {{ $light ? 'text-navy' : 'text-white' }}">{{ $partner->name }}</p>
+    <p class="mt-3.5 font-display text-sm font-semibold leading-snug text-balance {{ $light ? 'text-navy' : 'text-white' }}">{{ $name }}</p>
     @if ($partner->registration_number)
         <p class="mt-auto pt-1 font-mono text-[11px] tracking-tight {{ $light ? 'text-slate-500' : 'text-navy-200' }}">{{ $partner->registration_number }}</p>
     @endif
