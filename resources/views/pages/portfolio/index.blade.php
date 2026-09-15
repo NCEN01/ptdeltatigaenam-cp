@@ -17,6 +17,14 @@
             <div class="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                 <div class="max-w-2xl">
                     <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $id ? 'Dampak nyata bersama klien kami' : 'Real impact alongside our clients' }}</h2>
+                    <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
+                    {{-- Contoh yang disebut di sini benar ada di daftarnya: pabrik baja
+                         di Cilegon, rumah sakit di Yogyakarta, Batam, dan Balikpapan. --}}
+                    <p class="mt-5 text-pretty leading-relaxed text-slate-600" data-aos="fade-up">
+                        {{ $id
+                            ? 'Dari pabrik baja di Cilegon sampai rumah sakit di Yogyakarta, dari Batam sampai Balikpapan. Tiap proyek memuat tantangan yang kami terima, cara kami mengerjakannya, dan hasil yang bisa diukur.'
+                            : 'From a steel mill in Cilegon to a hospital in Yogyakarta, from Batam to Balikpapan. Each project sets out the problem we were handed, how we worked it, and what measurably changed.' }}
+                    </p>
                 </div>
 
                 <div class="flex shrink-0 flex-col items-start gap-2 md:items-end" data-aos="fade-up">
