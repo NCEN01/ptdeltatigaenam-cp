@@ -33,70 +33,79 @@
          kartu jadwal di halaman detail, tetapi tidak pernah dijelaskan artinya.
          Seksi ini menjelaskannya sebelum pengunjung menemui lencana itu.
 
-         Tiga kolom bersebelahan memang bentuk yang tepat untuk perbandingan, jadi
-         bukan grid kartu seragam. Tanpa kotak dan tanpa isian warna: pemisahnya
-         satu garis rambut tegak, mengikuti bahasa visual halaman lain. --}}
+         Disajikan sebagai tiga kartu, dan sengaja tidak kembar: yang paling
+         banyak dipakai dibuat gelap sebagai penanda, dua sisanya terang. --}}
     @php
+        /* Tatap muka diletakkan lebih dulu dan ditandai unggulan karena memang
+           mode yang paling banyak dipakai pada data: tujuh dari sepuluh layanan.
+           Menonjolkan online justru akan menjanjikan sesuatu yang belum ada
+           programnya. */
         $modes = $id ? [
             [
-                'label' => 'Online',
-                'lead' => 'Fleksibel, diikuti dari mana saja.',
+                'label' => 'Tatap Muka', 'icon' => 'users', 'featured' => true,
+                'lead' => 'Praktik langsung pada alat dan proses yang benar-benar dipakai peserta.',
                 'points' => [
-                    ['Tempat', 'Dari kantor, rumah, atau lokasi kerja Anda. Cukup koneksi yang stabil.'],
-                    ['Bentuk praktik', 'Studi kasus dan simulasi terpandu, dikerjakan bersama pengajar secara langsung.'],
-                    ['Uji kompetensi', 'Dijadwalkan daring bersama asesor, dengan penyerahan bukti kerja secara digital.'],
-                    ['Paling cocok', 'Tim yang tersebar di banyak lokasi, atau materi yang tidak menuntut peragaan alat.'],
+                    'Digelar di kantor atau pabrik Anda',
+                    'Praktik langsung pada alat yang dipakai',
+                    'Uji kompetensi mengikuti pola sif',
+                    'Tidak menghentikan lini produksi',
+                    'Sertifikat BNSP bagi yang dinyatakan kompeten',
                 ],
             ],
             [
-                'label' => 'Tatap Muka',
-                'lead' => 'Praktik langsung, digelar di tempat Anda.',
+                'label' => 'Online', 'icon' => 'screen', 'featured' => false,
+                'lead' => 'Diikuti dari mana saja, cukup dengan koneksi yang stabil.',
                 'points' => [
-                    ['Tempat', 'Di kantor atau pabrik Anda, atau di ruang pelatihan kami.'],
-                    ['Bentuk praktik', 'Langsung pada alat dan proses yang benar-benar dipakai peserta sehari-hari.'],
-                    ['Uji kompetensi', 'Digelar di tempat kerja dan dapat mengikuti pola sif, tanpa menghentikan produksi.'],
-                    ['Paling cocok', 'Keterampilan yang harus diperagakan, dan tim yang berada di satu lokasi.'],
+                    'Diikuti dari kantor, rumah, atau lokasi kerja',
+                    'Studi kasus dan simulasi terpandu',
+                    'Uji kompetensi daring bersama asesor',
+                    'Bukti kerja diserahkan secara digital',
+                    'Cocok untuk tim yang tersebar di banyak lokasi',
                 ],
             ],
             [
-                'label' => 'Gabungan',
-                'lead' => 'Teori daring, praktik di tempat kerja.',
+                'label' => 'Gabungan', 'icon' => 'layers', 'featured' => false,
+                'lead' => 'Teori dituntaskan daring, hari tatap muka dipakai penuh untuk praktik.',
                 'points' => [
-                    ['Tempat', 'Sesi teori diikuti dari mana saja, sesi praktik digelar di lokasi Anda.'],
-                    ['Bentuk praktik', 'Materi dituntaskan lebih dulu secara daring, sehingga hari tatap muka dipakai penuh untuk praktik.'],
-                    ['Uji kompetensi', 'Digelar di tempat kerja pada hari yang sama dengan sesi praktiknya.'],
-                    ['Paling cocok', 'Program panjang yang sayang bila seluruh harinya menuntut peserta meninggalkan pekerjaan.'],
+                    'Sesi teori diikuti dari mana saja',
+                    'Hari tatap muka habis untuk praktik',
+                    'Uji kompetensi sehari dengan sesi praktik',
+                    'Peserta lebih sedikit meninggalkan pekerjaan',
+                    'Cocok untuk program berdurasi panjang',
                 ],
             ],
         ] : [
             [
-                'label' => 'Online',
-                'lead' => 'Flexible, joined from anywhere.',
+                'label' => 'In Person', 'icon' => 'users', 'featured' => true,
+                'lead' => 'Hands-on practice on the equipment and processes participants actually use.',
                 'points' => [
-                    ['Where', 'From your office, your home, or your work site. A stable connection is enough.'],
-                    ['Practice', 'Guided case studies and simulations, worked through live with the instructor.'],
-                    ['Assessment', 'Scheduled online with an assessor, with work evidence submitted digitally.'],
-                    ['Best for', 'Teams spread across sites, or material that does not require handling equipment.'],
+                    'Run at your office or plant',
+                    'Practice on the equipment in daily use',
+                    'Assessment follows your shift pattern',
+                    'No production line has to stop',
+                    'BNSP certificate for those judged competent',
                 ],
             ],
             [
-                'label' => 'In Person',
-                'lead' => 'Hands-on practice, run at your site.',
+                'label' => 'Online', 'icon' => 'screen', 'featured' => false,
+                'lead' => 'Joined from anywhere, a stable connection is all it takes.',
                 'points' => [
-                    ['Where', 'At your office or plant, or in our training rooms.'],
-                    ['Practice', 'Directly on the equipment and processes participants actually use every day.'],
-                    ['Assessment', 'Run at the workplace and able to follow shift patterns, without stopping production.'],
-                    ['Best for', 'Skills that must be demonstrated, and teams based in one location.'],
+                    'Joined from the office, home, or a work site',
+                    'Guided case studies and simulations',
+                    'Assessment online with a certified assessor',
+                    'Work evidence submitted digitally',
+                    'Suits teams spread across several sites',
                 ],
             ],
             [
-                'label' => 'Blended',
-                'lead' => 'Theory online, practice on site.',
+                'label' => 'Blended', 'icon' => 'layers', 'featured' => false,
+                'lead' => 'Theory covered online, so in-person days go entirely to practice.',
                 'points' => [
-                    ['Where', 'Theory sessions are joined from anywhere; practice sessions run at your site.'],
-                    ['Practice', 'Material is covered online first, so the in-person days are spent entirely on practice.'],
-                    ['Assessment', 'Held at the workplace on the same day as the practical session.'],
-                    ['Best for', 'Longer programmes where taking people off the job every day would be costly.'],
+                    'Theory sessions joined from anywhere',
+                    'In-person days spent fully on practice',
+                    'Assessment on the same day as practice',
+                    'Less time away from the job for participants',
+                    'Suits longer programmes',
                 ],
             ],
         ];
@@ -115,23 +124,45 @@
                 </p>
             </div>
 
-            <div class="mt-12 grid gap-10 lg:grid-cols-3 lg:gap-12">
+            {{-- Kartu unggulan dibuat gelap, dua lainnya terang. Dibedakan supaya
+                 tidak menjadi tiga kotak kembar, dan yang ditonjolkan adalah mode
+                 yang benar-benar paling banyak dipakai. Semua kartu setinggi sama
+                 lewat auto-rows-fr, jadi barisnya rata berapa pun panjang teksnya. --}}
+            <div class="mt-12 grid auto-rows-fr gap-6 md:grid-cols-2 lg:grid-cols-3">
                 @foreach ($modes as $i => $mode)
-                    {{-- Pemisah berlaku untuk tiap kolom setelah yang pertama: garis
-                         mendatar saat menumpuk di layar sempit, tegak saat berjajar. --}}
+                    @php $dark = $mode['featured']; @endphp
                     <div data-aos="fade-up" data-aos-delay="{{ $i * 90 }}"
-                         class="{{ $i > 0 ? 'border-t border-navy-200 pt-10 lg:border-l lg:border-navy-200 lg:border-t-0 lg:pl-12 lg:pt-0' : '' }}">
-                        <h3 class="font-display text-2xl font-semibold text-navy">{{ $mode['label'] }}</h3>
-                        <p class="mt-2 leading-relaxed text-slate-600">{{ $mode['lead'] }}</p>
+                         class="relative flex flex-col overflow-hidden rounded-2xl p-7 transition-transform duration-500 ease-out-soft hover:-translate-y-1 md:p-8 {{ $dark
+                             ? 'bg-navy-950 text-white'
+                             : 'border border-navy-100 bg-white' }}">
 
-                        <dl class="mt-7 divide-y divide-navy-200 border-t border-navy-200">
-                            @foreach ($mode['points'] as [$term, $desc])
-                                <div class="py-4">
-                                    <dt class="font-mono text-[11px] uppercase tracking-wider text-slate-500">{{ $term }}</dt>
-                                    <dd class="mt-1.5 text-sm leading-relaxed text-slate-700">{{ $desc }}</dd>
-                                </div>
-                            @endforeach
-                        </dl>
+                        @if ($dark)
+                            <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-40"></div>
+                        @endif
+
+                        <div class="relative flex flex-1 flex-col">
+                            <span class="grid h-12 w-12 place-items-center rounded-xl {{ $dark ? 'bg-white/10 text-white' : 'bg-sky-50 text-sky-700' }}" aria-hidden="true">
+                                @if ($mode['icon'] === 'users')
+                                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 17.5V19"/><circle cx="10" cy="8" r="3.2"/><path d="M20 19v-1.4a3.3 3.3 0 0 0-2.5-3.2M15.5 5.3a3.2 3.2 0 0 1 0 5.9"/></svg>
+                                @elseif ($mode['icon'] === 'screen')
+                                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M9 20h6M12 16.5V20"/></svg>
+                                @else
+                                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 21 8l-9 4.5L3 8l9-4.5Z"/><path d="m3 12.5 9 4.5 9-4.5"/></svg>
+                                @endif
+                            </span>
+
+                            <h3 class="mt-6 font-display text-2xl font-semibold {{ $dark ? 'text-white' : 'text-navy' }}">{{ $mode['label'] }}</h3>
+                            <p class="mt-2.5 leading-relaxed {{ $dark ? 'text-navy-100' : 'text-slate-600' }}">{{ $mode['lead'] }}</p>
+
+                            <ul class="mt-6 space-y-3 border-t pt-6 text-sm {{ $dark ? 'border-white/15' : 'border-navy-100' }}">
+                                @foreach ($mode['points'] as $point)
+                                    <li class="flex items-start gap-2.5">
+                                        <svg class="mt-0.5 h-4 w-4 shrink-0 {{ $dark ? 'text-sky-300' : 'text-sky-600' }}" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 10.5 4 4 8-9"/></svg>
+                                        <span class="{{ $dark ? 'text-navy-100' : 'text-slate-700' }}">{{ $point }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 @endforeach
             </div>
