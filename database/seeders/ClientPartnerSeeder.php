@@ -10,68 +10,70 @@ use Illuminate\Database\Seeder;
 /**
  * Logo klien dan mitra yang tampil di beranda serta halaman Portofolio.
  *
- * Berkas logonya masih tersimpan di storage/app/public/clients dan /partners,
- * jadi seeder ini memasangkan kembali berkas itu ke barisnya.
+ * Klien memakai logo asli dengan nama berkas tetap, jadi barisnya menunjuk
+ * langsung ke berkasnya. Mitra masih memakai gambar contoh, sehingga tetap
+ * mengambil apa pun yang tersedia di storage/app/public/partners.
  */
 class ClientPartnerSeeder extends Seeder
 {
     public function run(): void
     {
-        $clientLogos = StoredImages::in('clients');
-        $partnerLogos = StoredImages::in('partners');
-
-        foreach ($this->clients() as $i => $name) {
+        foreach ($this->clients() as $i => $client) {
             Client::updateOrCreate(
-                ['name' => $name],
+                ['name' => $client['name']],
                 [
-                    'logo' => StoredImages::pick($clientLogos, $i),
+                    'logo' => $client['logo'],
                     'sort_order' => $i + 1,
                     'is_active' => true,
                 ],
             );
         }
 
-        foreach ($this->partners() as $i => $partner) {
-            Partner::updateOrCreate(
-                ['name' => $partner['name']],
-                [
+        // Mitra sudah diisi admin lewat CMS; daftar di bawah cuma contoh untuk
+        // pemasangan baru. Dulu barisnya ditulis ulang setiap kali seeder jalan,
+        // sehingga mitra contoh yang sudah sengaja dihapus admin hidup lagi dan
+        // harus dihapus manual sekali lagi. Sekarang hanya diisi saat kosong.
+        if (Partner::query()->doesntExist()) {
+            $partnerLogos = StoredImages::in('partners');
+
+            foreach ($this->partners() as $i => $partner) {
+                Partner::create([
+                    'name' => $partner['name'],
                     'registration_number' => $partner['registration_number'],
                     'logo' => StoredImages::pick($partnerLogos, $i),
                     'website_url' => $partner['website_url'],
                     'description' => $partner['description'],
                     'sort_order' => $i + 1,
                     'is_active' => true,
-                ],
-            );
+                ]);
+            }
         }
 
         $this->command?->info('Klien & mitra siap: '.Client::count().' klien, '.Partner::count().' mitra.');
     }
 
-    /** @return list<string> */
+    /**
+     * Klien asli. Nama diambil persis seperti tertulis pada logonya, dan
+     * dipakai juga sebagai teks alternatif gambar di pita logo.
+     *
+     * @return list<array{name: string, logo: string}>
+     */
     private function clients(): array
     {
         return [
-            'PT Nusantara Jaya',
-            'Bank Sinar Mas',
-            'Global Energi Group',
-            'PT Baja Perkasa',
-            'PT Cipta Mandiri Manufaktur',
-            'PT Tirta Anugerah',
-            'PT Lintas Samudra Energi',
-            'Bank Pembangunan Daerah Jabar',
-            'PT Sumber Daya Elektrik',
-            'PT Agro Lestari Nusantara',
-            'PT Karya Bangun Sejahtera',
-            'PT Ritel Maju Bersama',
-            'RS Harapan Sehat',
-            'PT Konstruksi Bumi Persada',
-            'PT Tekstil Indah Permai',
-            'PT Asuransi Wira Sentosa',
-            'PT Pelabuhan Niaga Indonesia',
-            'PT Mineral Jaya Abadi',
-            'PT Fabrikasi Logam Nusantara',
-            'PT Properti Cendana Group',
+            ['name' => 'Pertamina Training & Consulting', 'logo' => 'clients/pertamina-training-and-consulting.webp'],
+            ['name' => 'Pertamina International Shipping', 'logo' => 'clients/pertamina-international-shipping.webp'],
+            ['name' => 'Pertamina Gas Negara', 'logo' => 'clients/pertamina-gas-negara.webp'],
+            ['name' => 'Pertamina Energy Terminal', 'logo' => 'clients/pertamina-energy-terminal.webp'],
+            ['name' => 'Pertamina Trans Kontinental', 'logo' => 'clients/pertamina-trans-kontinental.webp'],
+            ['name' => 'Pertamina Port and Logistics', 'logo' => 'clients/pertamina-port-and-logistics.webp'],
+            ['name' => 'Pertamina Marine Solutions', 'logo' => 'clients/pertamina-marine-solutions.webp'],
+            ['name' => 'Pertamina Marine Engineering', 'logo' => 'clients/pertamina-marine-engineering.webp'],
+            ['name' => 'Pertamina PDC', 'logo' => 'clients/pertamina-pdc.webp'],
+            ['name' => 'Universitas Indonesia', 'logo' => 'clients/universitas-indonesia.webp'],
+            ['name' => 'Pupuk Sriwidjaja Palembang', 'logo' => 'clients/pupuk-sriwidjaja-pusri.webp'],
+            ['name' => 'Bank Indonesia', 'logo' => 'clients/bank-indonesia.webp'],
+            ['name' => 'Telkom Indonesia', 'logo' => 'clients/telkom-indonesia.webp'],
         ];
     }
 
