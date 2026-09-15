@@ -17,13 +17,14 @@
             <div class="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                 <div class="max-w-2xl">
                     <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $id ? 'Dampak nyata bersama klien kami' : 'Real impact alongside our clients' }}</h2>
-                    {{-- Menggambarkan isi halaman detail yang sebenarnya, yang memang
-                         tersusun sebagai Latar Belakang, Pendekatan, Lingkup, lalu
-                         Hasil berikut angkanya. --}}
+                    {{-- Tiga ketukan pendek yang sejajar, bukan satu kalimat panjang:
+                         lebih mudah diingat dan langsung menggambarkan susunan
+                         halaman detailnya (Latar Belakang, Pendekatan, lalu Hasil
+                         berikut angkanya). --}}
                     <p class="mt-5 text-pretty leading-relaxed text-slate-600" data-aos="fade-up">
                         {{ $id
-                            ? 'Tiap proyek di sini dibuka apa adanya: masalah yang kami terima di awal, langkah yang kami ambil, dan angka yang berubah setelah pengerjaan selesai.'
-                            : 'Every project here is laid out plainly: the problem we were handed, the steps we took, and the numbers that moved once the work was done.' }}
+                            ? 'Tiap proyek kami tulis utuh: apa yang tidak berjalan, apa yang kami ubah, dan seberapa jauh bedanya.'
+                            : 'Every project is written out in full: what was not working, what we changed, and how far the numbers moved.' }}
                     </p>
                 </div>
 
