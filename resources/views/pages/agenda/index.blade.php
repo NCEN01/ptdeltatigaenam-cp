@@ -27,8 +27,24 @@
 
                 {{-- Split the count by status: a bare total reads as "5 events you can join"
                      even when all five have already happened. --}}
+                <div class="flex shrink-0 flex-col items-start gap-3 md:items-end" data-aos="fade-up">
+                    <x-search-form
+                        id="agenda-q"
+                        :action="route('agenda.index')"
+                        :value="$q"
+                        :placeholder="$id ? 'Cari kegiatan, lokasi…' : 'Search event, location…'"
+                        :label="$id ? 'Cari agenda' : 'Search agenda'" />
+
+                    @if ($q !== '')
+                        <p class="font-mono text-xs text-slate-500">
+                            {{ $agendas->total() }} {{ $id ? 'hasil untuk' : 'results for' }} &ldquo;{{ $q }}&rdquo;
+                            <span class="mx-1 text-navy-200" aria-hidden="true">·</span>
+                            <a href="{{ route('agenda.index') }}" class="text-sky-700 hover:underline">{{ $id ? 'reset' : 'reset' }}</a>
+                        </p>
+                    @endif
+
                 @if ($agendas->total())
-                    <div class="flex shrink-0 items-center gap-5 md:flex-col md:items-end md:gap-2" data-aos="fade-up">
+                    <div class="flex items-center gap-5 md:flex-col md:items-end md:gap-2">
                         @if ($upcomingCount)
                             <span class="inline-flex items-center gap-2 font-mono text-sm text-navy">
                                 <span class="relative flex h-2 w-2">
@@ -46,6 +62,7 @@
                         @endif
                     </div>
                 @endif
+                </div>
             </div>
 
             {{-- Grid --}}
@@ -135,9 +152,17 @@
                         <span class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-navy text-sky-400">
                             <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M4 9h16M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
                         </span>
-                        <p class="mt-5 font-display text-lg font-semibold text-navy">{{ $id ? 'Belum ada agenda' : 'No agenda yet' }}</p>
-                        <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Agenda & kegiatan terbaru akan tampil di sini.' : 'Our latest agenda and events will appear here.' }}</p>
-                        <a href="{{ route('contact.index') }}" class="btn-blue mt-6">{{ $id ? 'Tanya Jadwal Berikutnya' : 'Ask About Upcoming Dates' }}</a>
+                        {{-- Pencarian yang tidak menemukan apa pun berbeda dari agenda yang
+                             memang belum diisi: yang pertama butuh jalan keluar. --}}
+                        @if ($q !== '')
+                            <p class="mt-5 font-display text-lg font-semibold text-navy">{{ $id ? 'Tidak ada agenda yang cocok' : 'No matching events' }}</p>
+                            <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Coba kata kunci lain, atau lihat seluruh agenda kami.' : 'Try another keyword, or view all our events.' }}</p>
+                            <a href="{{ route('agenda.index') }}" class="btn-blue mt-6">{{ $id ? 'Tampilkan Semua Agenda' : 'Show All Events' }}</a>
+                        @else
+                            <p class="mt-5 font-display text-lg font-semibold text-navy">{{ $id ? 'Belum ada agenda' : 'No agenda yet' }}</p>
+                            <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Agenda & kegiatan terbaru akan tampil di sini.' : 'Our latest agenda and events will appear here.' }}</p>
+                            <a href="{{ route('contact.index') }}" class="btn-blue mt-6">{{ $id ? 'Tanya Jadwal Berikutnya' : 'Ask About Upcoming Dates' }}</a>
+                        @endif
                     </div>
                 @endforelse
             </div>

@@ -18,10 +18,26 @@
                 <div class="max-w-2xl">
                     <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $id ? 'Dampak nyata bersama klien kami' : 'Real impact alongside our clients' }}</h2>
                 </div>
-                {{-- total(), not count(): count() would report only the projects on this page. --}}
-                @if ($portfolios->total())
-                    <p class="font-mono text-sm text-slate-500" data-aos="fade-up">{{ str_pad($portfolios->total(), 2, '0', STR_PAD_LEFT) }} {{ $id ? 'proyek' : 'projects' }}</p>
-                @endif
+
+                <div class="flex shrink-0 flex-col items-start gap-2 md:items-end" data-aos="fade-up">
+                    <x-search-form
+                        id="portfolio-q"
+                        :action="route('portfolio.index')"
+                        :value="$q"
+                        :placeholder="$id ? 'Cari proyek, klien, lokasi…' : 'Search project, client, location…'"
+                        :label="$id ? 'Cari portofolio' : 'Search portfolio'" />
+
+                    {{-- total(), not count(): count() would report only the projects on this page. --}}
+                    @if ($q !== '')
+                        <p class="font-mono text-xs text-slate-500">
+                            {{ $portfolios->total() }} {{ $id ? 'hasil untuk' : 'results for' }} &ldquo;{{ $q }}&rdquo;
+                            <span class="mx-1 text-navy-200" aria-hidden="true">·</span>
+                            <a href="{{ route('portfolio.index') }}" class="text-sky-700 hover:underline">{{ $id ? 'reset' : 'reset' }}</a>
+                        </p>
+                    @elseif ($portfolios->total())
+                        <p class="font-mono text-sm text-slate-500">{{ str_pad($portfolios->total(), 2, '0', STR_PAD_LEFT) }} {{ $id ? 'proyek' : 'projects' }}</p>
+                    @endif
+                </div>
             </div>
 
             @if ($portfolios->isNotEmpty())
@@ -80,9 +96,17 @@
                     <span class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-navy text-gold">
                         <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none"><path d="M4 7h16v12H4z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M4 11h16M9 7V5h6v2" stroke="currentColor" stroke-width="1.4"/></svg>
                     </span>
-                    <p class="mt-5 font-display text-lg font-semibold text-navy">{{ $id ? 'Portofolio segera hadir' : 'Portfolio coming soon' }}</p>
-                    <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Kami sedang menyiapkan kisah proyek terbaik untuk ditampilkan di sini.' : 'We are preparing our best project stories to showcase here.' }}</p>
-                    <a href="{{ route('contact.index') }}" class="btn-blue mt-6">{{ $id ? 'Diskusikan Proyek Anda' : 'Discuss Your Project' }}</a>
+                    {{-- Pencarian yang tidak menemukan apa pun berbeda dari portofolio yang
+                         memang belum diisi: yang pertama butuh jalan keluar. --}}
+                    @if ($q !== '')
+                        <p class="mt-5 font-display text-lg font-semibold text-navy">{{ $id ? 'Tidak ada proyek yang cocok' : 'No matching projects' }}</p>
+                        <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Coba nama klien, lokasi, atau sebagian judul proyeknya.' : 'Try a client name, a location, or part of the project title.' }}</p>
+                        <a href="{{ route('portfolio.index') }}" class="btn-blue mt-6">{{ $id ? 'Tampilkan Semua Proyek' : 'Show All Projects' }}</a>
+                    @else
+                        <p class="mt-5 font-display text-lg font-semibold text-navy">{{ $id ? 'Portofolio segera hadir' : 'Portfolio coming soon' }}</p>
+                        <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Kami sedang menyiapkan kisah proyek terbaik untuk ditampilkan di sini.' : 'We are preparing our best project stories to showcase here.' }}</p>
+                        <a href="{{ route('contact.index') }}" class="btn-blue mt-6">{{ $id ? 'Diskusikan Proyek Anda' : 'Discuss Your Project' }}</a>
+                    @endif
                 </div>
             @endif
         </div>

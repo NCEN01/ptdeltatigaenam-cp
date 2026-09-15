@@ -21,15 +21,12 @@
                     <h2 class="font-display text-3xl text-navy text-balance md:text-4xl" data-aos="fade-up">{{ $id ? 'Wawasan & artikel kami' : 'Our insights & articles' }}</h2>
                 </div>
                 <div class="flex shrink-0 flex-col items-start gap-2.5 md:items-end" data-aos="fade-up">
-                    <form action="{{ route('blog.index') }}#{{ \App\Http\Controllers\Controller::RESULTS_ANCHOR }}" method="GET" role="search" class="relative w-full sm:w-72">
-                        <input type="search" name="q" value="{{ $q ?? '' }}" autocomplete="off"
-                               placeholder="{{ $id ? 'Cari artikel…' : 'Search articles…' }}"
-                               class="w-full rounded-full border border-navy-200 bg-white py-2.5 pl-5 pr-12 text-sm text-navy placeholder:text-slate-400 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/25">
-                        <button type="submit" aria-label="{{ $id ? 'Cari artikel' : 'Search articles' }}"
-                                class="absolute right-1.5 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-sky-600 text-white transition hover:bg-sky-700 active:scale-95">
-                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-                        </button>
-                    </form>
+                    <x-search-form
+                        id="blog-q"
+                        :action="route('blog.index')"
+                        :value="$q ?? ''"
+                        :placeholder="$id ? 'Cari artikel…' : 'Search articles…'"
+                        :label="$id ? 'Cari artikel' : 'Search articles'" />
                     @if (($q ?? '') !== '')
                         <p class="font-mono text-xs text-slate-500">{{ $posts->total() }} {{ $id ? 'hasil untuk' : 'results for' }} “{{ $q }}” · <a href="{{ route('blog.index') }}" class="text-sky-600 hover:underline">{{ $id ? 'reset' : 'reset' }}</a></p>
                     @elseif ($posts->total())
