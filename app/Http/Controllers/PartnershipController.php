@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Partner;
 use App\Models\PartnershipBenefit;
 use App\Models\PartnershipPackage;
 use App\Models\PartnershipRegistration;
@@ -18,6 +19,7 @@ class PartnershipController extends Controller
             'intro' => Setting::getLocalized('partnership_intro'),
             'benefits' => PartnershipBenefit::where('is_active', true)->orderBy('sort_order')->get(),
             'packages' => PartnershipPackage::where('is_active', true)->orderBy('sort_order')->get(),
+            'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),
         ]);
     }
 

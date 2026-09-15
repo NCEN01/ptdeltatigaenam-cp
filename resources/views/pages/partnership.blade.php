@@ -90,6 +90,42 @@
         </div>
     </section>
 
+    {{-- ===================== PARTNER BODIES =====================
+         Ditempatkan sebelum daftar manfaat karena menjawab pertanyaan yang
+         datang lebih dulu: siapa yang menerbitkan sertifikatnya. Tanpa itu,
+         "Sertifikasi dan Pengakuan Kompetensi" di bawah hanya sebuah klaim.
+
+         Tanpa label kecil di atas judulnya. Judul dan kalimat pendukung sudah
+         menyebut isinya, dan seksi lain di halaman ini pun tidak memakainya. --}}
+    @if ($partners->isNotEmpty())
+        <section class="section-sm border-t border-navy-50 bg-white">
+            <div class="container">
+                <div class="max-w-2xl" data-aos="fade-up">
+                    <x-heading
+                        :lead="$id ? 'Nama di balik' : 'The names behind the'"
+                        :accent="$id ? 'sertifikat' : 'certificates'"
+                        :tail="$id ? 'yang tim Anda bawa pulang' : 'your team takes home'"
+                        class="font-display text-3xl text-navy text-balance md:text-4xl" />
+                    <p class="mt-5 text-pretty leading-relaxed text-slate-600">
+                        {{ $id
+                            ? 'Uji kompetensi dalam program kemitraan ini dijalankan bersama lembaga sertifikasi profesi dan asosiasi berikut. Nomor registrasinya kami cantumkan apa adanya, supaya Anda bisa memeriksanya sendiri sebelum kerja sama dimulai.'
+                            : 'Competency assessment in this partnership programme runs with the certification bodies and associations below. Their registration numbers are printed as they are, so you can verify them yourself before the partnership begins.' }}
+                    </p>
+                </div>
+
+                {{-- Empat kolom mengikuti jumlah mitra saat ini; bila nanti bertambah
+                     barisnya yang bertambah, bukan pelatnya yang menyusut — di halaman
+                     seputih ini logo yang terlalu kecil langsung hilang terbaca. --}}
+                <div class="mt-12 grid gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-4">
+                    @foreach ($partners as $partner)
+                        <x-partner-plate :partner="$partner" tone="light"
+                                         data-aos="fade-up" data-aos-delay="{{ ($loop->index % 4) * 80 }}" />
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
     {{-- ===================== BENEFITS ===================== --}}
     <section class="section-sm border-t border-navy-50 bg-neutral-50">
         <div class="container">
