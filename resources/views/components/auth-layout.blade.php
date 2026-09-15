@@ -85,7 +85,12 @@
              h-dvh, jadi formulir yang lebih tinggi dari layar ikut memanjang
              alih-alih terpotong di atas oleh items-center. --}}
         <div class="flex items-center justify-center px-5 py-10 sm:px-12 sm:py-12">
-            <div class="w-full max-w-md">
+            {{-- max-w-xl, bukan max-w-md. Panel ini separuh layar: di monitor 1920px
+                 ia selebar hampir 960px, dan formulir 448px di dalamnya menyisakan
+                 250px kosong di kiri dan kanan sehingga terlihat kecil dan hanyut.
+                 576px mengisi ruangnya tanpa membuat satu barisnya terlalu lebar
+                 untuk dibaca. --}}
+            <div class="w-full max-w-xl">
                 {{-- Di layar kecil panel brand tidak ada sama sekali, jadi baris ini
                      satu-satunya tanda pengunjung masih berada di situs yang sama. --}}
                 <a href="{{ route('home') }}" class="auth-anim mb-8 inline-flex items-center gap-2.5 rounded-xl text-sm font-medium text-navy transition-colors hover:text-sky-700 lg:hidden sm:mb-10">
