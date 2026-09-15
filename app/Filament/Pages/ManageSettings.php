@@ -49,6 +49,8 @@ class ManageSettings extends Page implements HasForms
             'company_about' => Setting::get('company_about') ?: ['id' => '', 'en' => ''],
             'company_vision' => Setting::get('company_vision') ?: ['id' => '', 'en' => ''],
             'partnership_intro' => Setting::get('partnership_intro') ?: ['id' => '', 'en' => ''],
+            'partnership_partners_title' => Setting::get('partnership_partners_title') ?: ['id' => '', 'en' => ''],
+            'partnership_partners_desc' => Setting::get('partnership_partners_desc') ?: ['id' => '', 'en' => ''],
         ]);
     }
 
@@ -75,6 +77,19 @@ class ManageSettings extends Page implements HasForms
                 Textarea::make('partnership_intro.id')->label('Intro Kemitraan (ID)')->required()->maxLength(1000)->rows(3),
                 Textarea::make('partnership_intro.en')->label('Intro Kemitraan (EN)')->nullable()->maxLength(1000)->rows(3),
             ])->columns(2),
+
+            Section::make('Seksi Lembaga Mitra (Halaman Kemitraan)')
+                ->description('Judul dan kalimat di atas deretan logo mitra. Logonya sendiri diatur di menu Konten → Mitra (Logo).')
+                ->schema([
+                    TextInput::make('partnership_partners_title.id')->label('Judul (ID)')->nullable()->maxLength(160)
+                        // Satu penggalan boleh dimiringkan tanpa perlu mengetik HTML.
+                        // Tanpa bintang, judulnya tampil tegak seluruhnya.
+                        ->helperText('Apit satu penggalan dengan tanda bintang untuk dimiringkan, mis. Lembaga sertifikasi yang *bekerja sama* dengan kami. Kosongkan untuk memakai teks bawaan.'),
+                    TextInput::make('partnership_partners_title.en')->label('Judul (EN)')->nullable()->maxLength(160),
+                    Textarea::make('partnership_partners_desc.id')->label('Deskripsi (ID)')->nullable()->maxLength(600)->rows(3)
+                        ->helperText('Kosongkan untuk memakai teks bawaan.'),
+                    Textarea::make('partnership_partners_desc.en')->label('Deskripsi (EN)')->nullable()->maxLength(600)->rows(3),
+                ])->columns(2),
         ])->statePath('data');
     }
 
@@ -90,6 +105,8 @@ class ManageSettings extends Page implements HasForms
         $this->put('company_about', json_encode($data['company_about']), 'json', 'general');
         $this->put('company_vision', json_encode($data['company_vision']), 'json', 'general');
         $this->put('partnership_intro', json_encode($data['partnership_intro']), 'json', 'partnership');
+        $this->put('partnership_partners_title', json_encode($data['partnership_partners_title']), 'json', 'partnership');
+        $this->put('partnership_partners_desc', json_encode($data['partnership_partners_desc']), 'json', 'partnership');
 
         Notification::make()->title('Pengaturan disimpan')->success()->send();
     }

@@ -36,13 +36,21 @@ class PartnerResource extends Resource
                 ->placeholder('Contoh: 8141312')->helperText('Nomor registrasi mitra yang tampil di bawah logo pada halaman depan.'),
             Forms\Components\TextInput::make('website_url')->label('Website')->url()->maxLength(500),
             MediaUpload::for('logo', 'logo', 'partners')->label('Logo'),
+            // Situs mengurutkan mitra dengan sort_order, tetapi kolomnya tidak
+            // pernah ada di form ini: setiap mitra baru masuk dengan nilai 0 dan
+            // urutannya tidak bisa diatur sama sekali dari CMS.
+            Forms\Components\TextInput::make('sort_order')->label('Urutan')->numeric()->default(0)
+                ->helperText('Makin kecil makin depan. Bisa juga digeser langsung dari daftarnya.'),
             Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
         ])->columns(2);
     }
 
     public static function table(Table $table): Table
     {
-        return $table->defaultSort('created_at', 'desc')->columns([
+        // Diurutkan sama seperti di situs, dan bisa digeser dengan menyeret
+        // barisnya. Sebelumnya daftar ini urut waktu dibuat, sehingga susunan
+        // di sini tidak ada hubungannya dengan susunan logo di halaman.
+        return $table->defaultSort('sort_order')->reorderable('sort_order')->columns([
             Tables\Columns\ImageColumn::make('logo')->disk('public')->label('')->size(80),
             Tables\Columns\TextColumn::make('name')->label('Nama')->searchable(),
             Tables\Columns\TextColumn::make('registration_number')->label('No. Registrasi')->searchable()->placeholder('—'),

@@ -17,6 +17,8 @@ class PartnershipController extends Controller
     {
         return view('pages.partnership', [
             'intro' => Setting::getLocalized('partnership_intro'),
+            'partnersTitle' => Setting::getLocalized('partnership_partners_title'),
+            'partnersDesc' => Setting::getLocalized('partnership_partners_desc'),
             'benefits' => PartnershipBenefit::where('is_active', true)->orderBy('sort_order')->get(),
             'packages' => PartnershipPackage::where('is_active', true)->orderBy('sort_order')->get(),
             'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),

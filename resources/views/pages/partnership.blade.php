@@ -98,22 +98,38 @@
          Tanpa label kecil di atas judulnya. Judul dan kalimat pendukung sudah
          menyebut isinya, dan seksi lain di halaman ini pun tidak memakainya. --}}
     @if ($partners->isNotEmpty())
+        @php
+            // Judul dan deskripsi bisa diganti admin lewat Pengaturan Situs →
+            // Seksi Lembaga Mitra. Dikosongkan berarti memakai teks bawaan di
+            // bawah ini, jadi seksinya tidak pernah tampil tanpa tulisan.
+            //
+            // Teks bawaannya menyebut "lembaga sertifikasi", "pelatihan", dan
+            // "uji kompetensi": istilah yang memang dicari orang, bukan kiasan
+            // yang tidak pernah diketik siapa pun.
+            $pTitle = trim((string) ($partnersTitle ?? '')) ?: ($id
+                ? 'Lembaga sertifikasi yang *bekerja sama* dengan kami'
+                : 'Certification bodies we *work with*');
+
+            $pDesc = trim((string) ($partnersDesc ?? '')) ?: ($id
+                ? 'Pelatihan dan uji kompetensi kami dijalankan bersama lembaga sertifikasi profesi berlisensi BNSP. Sertifikat yang diterima karyawan Anda diakui secara nasional.'
+                : 'Our training and competency assessment run with BNSP-licensed certification bodies. The certificates your employees earn are recognised nationwide.');
+
+            // Satu penggalan di antara tanda bintang dimiringkan. Tanpa bintang
+            // judulnya tegak seluruhnya, jadi admin tidak perlu mengetik HTML
+            // dan tidak ada cara mengetik judul yang merusak halamannya.
+            $pLead = $pTitle;
+            $pAccent = $pTail = '';
+            if (preg_match('/^(.*?)\*(.+?)\*(.*)$/', $pTitle, $m)) {
+                [$pLead, $pAccent, $pTail] = [trim($m[1]), trim($m[2]), trim($m[3])];
+            }
+        @endphp
+
         <section class="section-sm border-t border-navy-50 bg-white">
             <div class="container">
                 <div class="max-w-2xl" data-aos="fade-up">
-                    {{-- Judulnya menyebut "lembaga sertifikasi" dan kalimat pendukungnya
-                         "pelatihan" serta "uji kompetensi": istilah yang memang dicari
-                         orang, bukan kiasan yang tidak pernah diketik siapa pun. --}}
-                    <x-heading
-                        :lead="$id ? 'Lembaga sertifikasi yang' : 'Certification bodies we'"
-                        :accent="$id ? 'bekerja sama' : 'work with'"
-                        :tail="$id ? 'dengan kami' : ''"
-                        class="font-display text-3xl text-navy text-balance md:text-4xl" />
-                    <p class="mt-5 text-pretty leading-relaxed text-slate-600">
-                        {{ $id
-                            ? 'Pelatihan dan uji kompetensi kami dijalankan bersama lembaga sertifikasi profesi berlisensi BNSP. Sertifikat yang diterima karyawan Anda diakui secara nasional.'
-                            : 'Our training and competency assessment run with BNSP-licensed certification bodies. The certificates your employees earn are recognised nationwide.' }}
-                    </p>
+                    <x-heading :lead="$pLead" :accent="$pAccent" :tail="$pTail"
+                               class="font-display text-3xl text-navy text-balance md:text-4xl" />
+                    <p class="mt-5 text-pretty leading-relaxed text-slate-600">{{ $pDesc }}</p>
                 </div>
 
                 {{-- Empat kolom mengikuti jumlah mitra saat ini; bila nanti bertambah

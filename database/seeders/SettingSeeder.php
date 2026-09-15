@@ -19,6 +19,19 @@ class SettingSeeder extends Seeder
             ])],
             ['group' => 'partnership', 'key' => 'partnership_billing_mode', 'value' => 'invoice', 'type' => 'text'],
 
+            // Judul & deskripsi seksi logo mitra di halaman Kemitraan. Diisi di
+            // sini supaya admin melihat teks yang sedang tampil saat membuka
+            // formnya, bukan kolom kosong yang harus ditebak isinya. Penggalan
+            // di antara tanda bintang tampil miring.
+            ['group' => 'partnership', 'key' => 'partnership_partners_title', 'type' => 'json', 'value' => json_encode([
+                'id' => 'Lembaga sertifikasi yang *bekerja sama* dengan kami',
+                'en' => 'Certification bodies we *work with*',
+            ])],
+            ['group' => 'partnership', 'key' => 'partnership_partners_desc', 'type' => 'json', 'value' => json_encode([
+                'id' => 'Pelatihan dan uji kompetensi kami dijalankan bersama lembaga sertifikasi profesi berlisensi BNSP. Sertifikat yang diterima karyawan Anda diakui secara nasional.',
+                'en' => 'Our training and competency assessment run with BNSP-licensed certification bodies. The certificates your employees earn are recognised nationwide.',
+            ])],
+
             // Company profile defaults
             ['group' => 'general', 'key' => 'site_name', 'value' => 'PT Delta Tiga Enam', 'type' => 'text'],
             ['group' => 'general', 'key' => 'site_email', 'value' => 'info@deltatigaenam.com', 'type' => 'text'],
