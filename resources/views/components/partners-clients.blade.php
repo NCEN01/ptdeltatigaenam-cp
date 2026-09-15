@@ -21,11 +21,12 @@
 
     $klien = $repeat($clients, 16);
 
-    // Mitra ditata dua baris berisi dua logo. split(2) membagi rata, jadi tiga
-    // mitra menjadi 2 + 1 dan barisnya tidak pernah kosong. Lebih dari empat
-    // berarti tidak muat lagi, dan tiap barisnya berganti menjadi pita berjalan.
-    $partnerRows = $partners->split(2);
-    $marqueePartners = $partners->count() > 4;
+    // Mitra ditata tiga logo per baris dan tetap dua baris saat jumlahnya
+    // bertambah: kolomnya yang tumbuh, sehingga pelatnya mengecil sendiri tanpa
+    // perlu diatur ulang. Minimal 3 supaya empat mitra sekarang tidak melar
+    // menjadi dua pelat raksasa, dan dibatasi 6 karena di bawah itu logonya
+    // sudah tidak terbaca — lewat dua belas mitra, barisnya bertambah.
+    $partnerCols = min(6, max(3, (int) ceil($partners->count() / 2)));
 @endphp
 
 @if ($partners->isNotEmpty() || $clients->isNotEmpty())
@@ -58,40 +59,15 @@
                      wadahnya sendiri; membungkusnya lagi dengan panel buram
                      hanya menumpuk bingkai.
 
-                     Dua baris berisi dua logo. Selama mitranya masih muat (empat
-                     atau kurang) susunannya diam saja — pita berjalan yang isinya
-                     sedikit malah terbaca sebagai kesalahan. Lebih dari itu tiap
-                     barisnya berjalan, arahnya berlawanan supaya jelas keduanya
-                     bergerak sendiri-sendiri, bukan satu blok yang bergeser. --}}
-                @if (! $marqueePartners)
-                    <div class="mt-12 max-w-2xl space-y-6 md:mt-14">
-                        @foreach ($partnerRows as $row)
-                            <div class="grid grid-cols-2 gap-5 md:gap-6">
-                                @foreach ($row as $partner)
-                                    <x-partner-plate :partner="$partner" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 2) * 90 }}" />
-                                @endforeach
-                            </div>
-                        @endforeach
-                    </div>
-                @else
-                    {{-- Jarak antarpelat dipasang sebagai margin di tiap pelat, bukan
-                         gap pada relnya. Dengan gap, jarak di sambungan antara dua
-                         salinan tidak ikut terhitung dalam -50%, sehingga tiap kali
-                         putarannya kembali ke awal gambarnya melompat setengah jarak. --}}
-                    <div class="mask-fade-x mt-12 max-w-2xl overflow-hidden md:mt-14" data-aos="fade-up">
-                        @foreach ($partnerRows as $i => $row)
-                            <div class="flex w-max [will-change:transform] {{ $i ? 'mt-6 animate-marquee-reverse' : 'animate-marquee' }}">
-                                @for ($h = 0; $h < 2; $h++)
-                                    @foreach ($repeat($row, 4) as $partner)
-                                        <div class="w-44 shrink-0 pr-5 sm:w-56 md:w-72 md:pr-6" aria-hidden="{{ $h ? 'true' : 'false' }}">
-                                            <x-partner-plate :partner="$partner" />
-                                        </div>
-                                    @endforeach
-                                @endfor
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
+                     Tiga logo per baris, dan tetap dua baris ketika mitranya
+                     bertambah: yang tumbuh jumlah kolomnya, sehingga pelatnya
+                     mengecil sendiri. max-w-4xl menahan lebarnya supaya pelat
+                     tidak melar selebar halaman saat mitranya masih sedikit. --}}
+                <div class="mitra-grid mt-12 max-w-4xl gap-x-5 gap-y-8 md:mt-14 md:gap-x-6" style="--mitra-cols: {{ $partnerCols }};">
+                    @foreach ($partners as $partner)
+                        <x-partner-plate :partner="$partner" data-aos="fade-up" data-aos-delay="{{ ($loop->index % $partnerCols) * 70 }}" />
+                    @endforeach
+                </div>
             </div>
         @endif
 
