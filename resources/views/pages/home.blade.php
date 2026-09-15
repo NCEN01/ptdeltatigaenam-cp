@@ -82,7 +82,9 @@
                                     $hl = implode(' ', array_slice($hw, 0, $mid));   // baris 1 — tebal
                                     $ha = implode(' ', array_slice($hw, $mid));       // baris 2 — italic
                                 @endphp
-                                <h1 class="font-display font-bold leading-[1.12] text-balance [font-size:clamp(2.15rem,5.1vw,3.9rem)] {{ empty($slide['cat']) ? '' : 'mt-6' }}">
+                                {{-- Ketiga nilai clamp diturunkan ~10% bersamaan agar judul
+                                     mengecil merata, bukan hanya di satu ukuran layar. --}}
+                                <h1 class="font-display font-bold leading-[1.12] text-balance [font-size:clamp(1.95rem,4.6vw,3.5rem)] {{ empty($slide['cat']) ? '' : 'mt-6' }}">
                                     <span class="block">{{ $hl }}</span>
                                     @if ($ha !== '')<span class="italic-accent block font-normal leading-[1.28] pb-[0.16em] text-gradient-white-navy">{{ $ha }}</span>@endif
                                 </h1>
