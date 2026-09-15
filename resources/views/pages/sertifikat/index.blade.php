@@ -246,18 +246,27 @@
                     {{ $id ? 'Kenapa daftar ini kami buka' : 'Why we publish this list' }}
                 </h2>
 
-                {{-- Judul tiap butir dibesarkan dan jaraknya dilonggarkan supaya
-                     daftar ini terbaca sebagai tiga argumen, bukan tiga baris
-                     keterangan. Tetap dipisah garis rambut: isinya argumen, dan
-                     argumen tidak perlu dikotakkan satu per satu. --}}
-                <dl class="mt-9 divide-y divide-navy-200 border-t border-navy-200">
-                    @foreach ($proof as [$title, $body])
-                        <div class="py-7">
-                            <dt class="font-display text-xl font-semibold leading-snug text-navy md:text-2xl">{{ $title }}</dt>
-                            <dd class="mt-2.5 max-w-[62ch] text-pretty leading-relaxed text-slate-600">{{ $body }}</dd>
-                        </div>
+                {{-- Angka besar yang diredupkan di margin kiri. Murni tipografi:
+                     tanpa kotak, tanpa lencana, tanpa blok warna. Yang dipandu
+                     bukan sekadar hiasan, sebab tiga butir ini memang terhitung,
+                     dan <ol> membuat urutannya ikut terbaca pembaca layar.
+                     Angkanya sendiri diberi aria-hidden supaya tidak dibacakan
+                     dua kali.
+
+                     Butirnya memakai <h3>, bukan <dt>: ini judul yang
+                     memperkenalkan paragraf, bukan istilah dengan definisinya,
+                     dan sebagai heading ia ikut terbaca mesin pencari. --}}
+                <ol class="mt-10 divide-y divide-navy-200 border-t border-navy-200">
+                    @foreach ($proof as $i => [$title, $body])
+                        <li class="grid grid-cols-[2.25rem_1fr] gap-x-4 py-7 sm:grid-cols-[3.5rem_1fr] sm:gap-x-6">
+                            <span class="font-display text-2xl font-semibold leading-none tabular-nums text-navy-200 sm:text-3xl" aria-hidden="true">{{ sprintf('%02d', $i + 1) }}</span>
+                            <div>
+                                <h3 class="font-display text-xl font-semibold leading-snug text-navy md:text-2xl">{{ $title }}</h3>
+                                <p class="mt-2.5 max-w-[62ch] text-pretty leading-relaxed text-slate-600">{{ $body }}</p>
+                            </div>
+                        </li>
                     @endforeach
-                </dl>
+                </ol>
             </div>
 
             {{-- Bukan panel berwarna: hanya blok teks yang menempel di kolomnya,
@@ -268,9 +277,11 @@
                  melorot bersama bloknya alih-alih membatasi kolom. --}}
             <div class="lg:col-span-5 lg:border-l lg:border-navy-200 lg:pl-10">
                 <div class="border-t border-navy-200 pt-8 lg:sticky lg:top-28 lg:border-t-0 lg:pt-0">
-                    <p class="font-display text-xl font-semibold leading-snug text-navy text-balance md:text-2xl">
+                    {{-- <h3>, bukan <p>: ini judul yang memperkenalkan blok ajakan,
+                         sejajar dengan ketiga butir alasan di kolom sebelahnya. --}}
+                    <h3 class="font-display text-xl font-semibold leading-snug text-navy text-balance md:text-2xl">
                         {{ $id ? 'Ingin nama Anda ada di daftar ini?' : 'Want your name on this list?' }}
-                    </p>
+                    </h3>
                     <p class="mt-3 text-sm leading-relaxed text-slate-600">
                         {{ $id
                             ? 'Uji kompetensi dapat digelar di tempat kerja Anda, mengikuti pola sif, tanpa menghentikan produksi.'

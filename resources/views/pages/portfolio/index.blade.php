@@ -17,12 +17,13 @@
             <div class="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                 <div class="max-w-2xl">
                     <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $id ? 'Dampak nyata bersama klien kami' : 'Real impact alongside our clients' }}</h2>
-                    {{-- Contoh yang disebut di sini benar ada di daftarnya: pabrik baja
-                         di Cilegon, rumah sakit di Yogyakarta, Batam, dan Balikpapan. --}}
+                    {{-- Menggambarkan isi halaman detail yang sebenarnya, yang memang
+                         tersusun sebagai Latar Belakang, Pendekatan, Lingkup, lalu
+                         Hasil berikut angkanya. --}}
                     <p class="mt-5 text-pretty leading-relaxed text-slate-600" data-aos="fade-up">
                         {{ $id
-                            ? 'Dari pabrik baja di Cilegon sampai rumah sakit di Yogyakarta, dari Batam sampai Balikpapan. Tiap proyek memuat tantangan yang kami terima, cara kami mengerjakannya, dan hasil yang bisa diukur.'
-                            : 'From a steel mill in Cilegon to a hospital in Yogyakarta, from Batam to Balikpapan. Each project sets out the problem we were handed, how we worked it, and what measurably changed.' }}
+                            ? 'Tiap proyek di sini dibuka apa adanya: masalah yang kami terima di awal, langkah yang kami ambil, dan angka yang berubah setelah pengerjaan selesai.'
+                            : 'Every project here is laid out plainly: the problem we were handed, the steps we took, and the numbers that moved once the work was done.' }}
                     </p>
                 </div>
 
