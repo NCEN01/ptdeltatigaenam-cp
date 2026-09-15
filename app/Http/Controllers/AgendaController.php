@@ -18,7 +18,7 @@ class AgendaController extends Controller
                 ->orderByRaw('starts_at >= NOW() DESC')
                 ->orderByRaw('CASE WHEN starts_at >= NOW() THEN starts_at END ASC')
                 ->orderByDesc('starts_at')
-                ->paginate(self::PER_PAGE),
+                ->paginate(self::PER_PAGE)->fragment(self::RESULTS_ANCHOR),
 
             // Counted across the whole set, not just the current page, so the summary
             // stays honest when every published event has already happened.

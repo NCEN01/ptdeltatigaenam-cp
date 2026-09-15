@@ -10,13 +10,6 @@ class CertificateController extends Controller
 {
     private const PER_PAGE = 10;
 
-    /**
-     * Anchor tujuan setelah mencari atau berpindah halaman. Dibagi ke view lewat
-     * satu tempat supaya id pada markup dan fragmen pada tautan tidak bisa
-     * berbeda — kalau berbeda, fragmennya diam-diam tidak menuju ke mana pun.
-     */
-    public const RESULTS_ANCHOR = 'hasil';
-
     public function index(Request $request)
     {
         $q = trim((string) $request->query('q', ''));

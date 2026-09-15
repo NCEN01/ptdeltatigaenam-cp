@@ -12,7 +12,7 @@
         placement="blog"
         image="photo-1499750310107-5fef28a66643" />
 
-    <section class="section bg-white">
+    <section id="{{ \App\Http\Controllers\Controller::RESULTS_ANCHOR }}" class="section scroll-mt-28 bg-white">
         <div class="container">
             {{-- Section heading + search --}}
             <div class="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
@@ -21,7 +21,7 @@
                     <h2 class="font-display text-3xl text-navy text-balance md:text-4xl" data-aos="fade-up">{{ $id ? 'Wawasan & artikel kami' : 'Our insights & articles' }}</h2>
                 </div>
                 <div class="flex shrink-0 flex-col items-start gap-2.5 md:items-end" data-aos="fade-up">
-                    <form action="{{ route('blog.index') }}" method="GET" role="search" class="relative w-full sm:w-72">
+                    <form action="{{ route('blog.index') }}#{{ \App\Http\Controllers\Controller::RESULTS_ANCHOR }}" method="GET" role="search" class="relative w-full sm:w-72">
                         <input type="search" name="q" value="{{ $q ?? '' }}" autocomplete="off"
                                placeholder="{{ $id ? 'Cari artikel…' : 'Search articles…' }}"
                                class="w-full rounded-full border border-navy-200 bg-white py-2.5 pl-5 pr-12 text-sm text-navy placeholder:text-slate-400 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/25">

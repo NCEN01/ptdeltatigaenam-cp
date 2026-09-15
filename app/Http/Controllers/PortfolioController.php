@@ -16,7 +16,7 @@ class PortfolioController extends Controller
     {
         return view('pages.portfolio.index', [
             'portfolios' => Portfolio::where('is_active', true)->with('category')
-                ->orderBy('sort_order')->latest('project_date')->paginate(self::PER_PAGE),
+                ->orderBy('sort_order')->latest('project_date')->paginate(self::PER_PAGE)->fragment(self::RESULTS_ANCHOR),
             'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),
             'clients' => Client::where('is_active', true)->orderBy('sort_order')->get(),
             'testimonials' => Testimonial::where('is_active', true)->latest()->get(),

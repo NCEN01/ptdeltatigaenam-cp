@@ -8,7 +8,7 @@
         placement="agenda"
         image="photo-1517048676732-d65bc937f952" />
 
-    <section class="section">
+    <section id="{{ \App\Http\Controllers\Controller::RESULTS_ANCHOR }}" class="section scroll-mt-28">
         <div class="container">
             {{-- Section heading --}}
             <div class="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">

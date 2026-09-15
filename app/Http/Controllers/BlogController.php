@@ -33,12 +33,23 @@ class BlogController extends Controller
                 ->when($q !== '', function ($query) use ($q) {
                     // Escape SQL wildcards
                     $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $q);
-                    $query->where(function ($sub) use ($escaped) {
-                        $sub->where('title', 'like', "%{$escaped}%")
-                            ->orWhere('excerpt', 'like', "%{$escaped}%");
+
+                    // LOWER() di kedua sisi, bukan LIKE biasa. title dan excerpt
+                    // adalah kolom terjemahan: di MariaDB tipe JSON sebenarnya
+                    // LONGTEXT bercollation utf8mb4_bin, yang peka huruf besar-
+                    // kecil. Akibatnya "supervisor" tidak menemukan apa pun
+                    // sementara "Supervisor" menemukan artikelnya — pencarian
+                    // terasa rusak bagi siapa pun yang mengetik huruf kecil.
+                    // LOWER() dipilih daripada COLLATE karena tetap jalan di
+                    // SQLite, yang dipakai test suite.
+                    $needle = '%'.mb_strtolower($escaped).'%';
+
+                    $query->where(function ($sub) use ($needle) {
+                        $sub->whereRaw('LOWER(title) LIKE ?', [$needle])
+                            ->orWhereRaw('LOWER(excerpt) LIKE ?', [$needle]);
                     });
                 })
-                ->latest('published_at')->paginate(self::PER_PAGE)->withQueryString(),
+                ->latest('published_at')->paginate(self::PER_PAGE)->withQueryString()->fragment(self::RESULTS_ANCHOR),
             'categories' => BlogCategory::where('is_active', true)->orderBy('sort_order')->get(),
             'q' => $q,
         ]);
