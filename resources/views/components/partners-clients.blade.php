@@ -46,32 +46,38 @@
         {{-- ===================== MITRA — centered; logo box on top, name + reg. number below ===================== --}}
         @if ($partners->isNotEmpty())
             <div class="relative container pt-14 md:pt-20 {{ $clients->isEmpty() ? 'pb-14 md:pb-20' : 'pb-10 md:pb-12' }}">
-                <div class="text-center" data-aos="fade-up">
+                {{-- Rata kiri dengan garis emas, mengikuti pola judul seksi di
+                     halaman lain. Judul di tengah membuat seksi ini terasa
+                     berdiri sendiri, padahal ia bagian dari satu situs. --}}
+                <div class="max-w-2xl" data-aos="fade-up">
                     <h2 class="text-display-lg font-semibold text-white text-balance">{{ $isId ? 'Mitra Kami' : 'Our Partners' }}</h2>
-                    <p class="mx-auto mt-4 max-w-xl text-sm italic leading-relaxed text-white/75 md:text-base">
-                        {{ $isId ? 'Siap berkolaborasi menciptakan tenaga yang berkualitas.' : 'Ready to collaborate in creating quality talent.' }}
+                    <span class="mt-5 block h-0.5 w-14 rounded-full bg-gradient-to-r from-gold to-gold-soft" aria-hidden="true"></span>
+                    <p class="mt-5 leading-relaxed text-navy-100">
+                        {{ $isId
+                            ? 'Lembaga sertifikasi, asosiasi profesi, dan institusi pendidikan yang bekerja sama dengan kami dalam menyelenggarakan pelatihan dan uji kompetensi.'
+                            : 'Certification bodies, professional associations, and educational institutions that work with us to run training and competency assessment.' }}
                     </p>
                 </div>
 
-                <div class="mitra-grid mx-auto mt-10 max-w-3xl gap-3.5 md:mt-12 md:gap-4" style="--mitra-cols: {{ $lgCols }};">
+                {{-- Tanpa kartu kaca. Pelat putih tempat logonya sudah menjadi
+                     wadahnya sendiri; membungkusnya lagi dengan panel buram
+                     hanya menumpuk bingkai. Nama mitra juga tidak dimiringkan:
+                     italic di sini mengenai data, bukan penekanan. --}}
+                <div class="mitra-grid mt-12 gap-x-5 gap-y-8 md:mt-14 md:gap-x-6" style="--mitra-cols: {{ $lgCols }};">
                     @foreach ($partners as $partner)
-                        <div class="group flex flex-col rounded-2xl bg-white/10 p-2.5 ring-1 ring-white/15 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:bg-white/[0.16] hover:ring-white/25"
-                             data-aos="fade-up" data-aos-delay="{{ ($loop->index % $lgCols) * 70 }}">
-                            {{-- White logo box (upper area) — logo centered --}}
-                            <div class="flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-xl bg-white p-3">
+                        <div class="group" data-aos="fade-up" data-aos-delay="{{ ($loop->index % $lgCols) * 70 }}">
+                            <div class="flex aspect-[3/2] w-full items-center justify-center overflow-hidden rounded-xl bg-white p-4 shadow-[0_2px_8px_rgba(2,12,27,0.25)] transition-transform duration-500 ease-out-soft group-hover:-translate-y-1.5">
                                 @if ($partner->logo)
                                     <img src="{{ Storage::url($partner->logo) }}" alt="{{ $partner->name }}" loading="lazy" class="max-h-full max-w-full object-contain">
                                 @else
-                                    <span class="text-center font-display text-xs font-bold italic text-navy">{{ $partner->name }}</span>
+                                    <span class="px-2 text-center font-display text-xs font-semibold leading-tight text-navy">{{ $partner->name }}</span>
                                 @endif
                             </div>
-                            {{-- Name + registration number --}}
-                            <div class="mt-2.5 text-center">
-                                <p class="font-display text-[13px] font-bold italic leading-tight text-white text-balance md:text-sm">{{ $partner->name }}</p>
-                                @if ($partner->registration_number)
-                                    <p class="mt-0.5 font-mono text-[11px] text-white/55">{{ $partner->registration_number }}</p>
-                                @endif
-                            </div>
+
+                            <p class="mt-3.5 font-display text-sm font-semibold leading-snug text-white text-balance">{{ $partner->name }}</p>
+                            @if ($partner->registration_number)
+                                <p class="mt-1 font-mono text-[11px] tracking-tight text-navy-200">{{ $partner->registration_number }}</p>
+                            @endif
                         </div>
                     @endforeach
                 </div>
