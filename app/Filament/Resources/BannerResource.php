@@ -38,6 +38,10 @@ class BannerResource extends Resource
         'agenda'      => 'Agenda',
         'partnership' => 'Kemitraan',
         'contact'     => 'Kontak',
+        // Bukan latar kepala halaman seperti yang lain, melainkan foto pendamping
+        // di samping panel logo pada seksi "Mitra Kami". Bila tidak diisi, panel
+        // logonya melebar memenuhi ruang dan tidak ada gambar yang rusak.
+        'partners'    => 'Mitra (Foto Pendamping)',
     ];
 
     public static function form(Form $form): Form
@@ -64,13 +68,21 @@ class BannerResource extends Resource
                     Forms\Components\TextInput::make('title.id')
                         ->label('Judul (ID)')
                         ->required()
-                        ->maxLength(250),
+                        ->maxLength(250)
+                        // Pada penempatan "Mitra" judulnya tidak tampil sebagai teks;
+                        // ia dipakai sebagai keterangan gambar untuk pembaca layar.
+                        ->helperText(fn (Forms\Get $get): ?string => $get('placement') === 'partners'
+                            ? 'Tidak tampil di halaman. Dipakai sebagai keterangan foto, mis. "Peserta menerima sertifikat kompetensi BNSP".'
+                            : null),
                     Forms\Components\TextInput::make('title.en')
                         ->label('Judul (EN)')
                         ->maxLength(250),
                     Forms\Components\TextInput::make('subtitle.id')
                         ->label('Subjudul (ID)')
-                        ->maxLength(500),
+                        ->maxLength(500)
+                        ->helperText(fn (Forms\Get $get): ?string => $get('placement') === 'partners'
+                            ? 'Opsional. Bila diisi, tampil sebagai caption di bawah foto.'
+                            : null),
                     Forms\Components\TextInput::make('subtitle.en')
                         ->label('Subjudul (EN)')
                         ->maxLength(500),
@@ -89,8 +101,19 @@ class BannerResource extends Resource
                 ])->columns(2),
 
             Forms\Components\Section::make('Gambar')->schema([
+                // Penempatan "Mitra" memakai bingkai tegak, sisanya melebar. Profil
+                // ditentukan saat berkas disimpan supaya satu field tetap cukup —
+                // dua field dengan nama sama akan bertabrakan di Filament.
                 MediaUpload::for('image', 'hero', 'banners')
-                    ->label('Gambar Banner')
+                    ->label(fn (Forms\Get $get): string => $get('placement') === 'partners' ? 'Foto Mitra' : 'Gambar Banner')
+                    ->helperText(fn (Forms\Get $get): string => $get('placement') === 'partners'
+                        ? 'Foto tegak, disarankan 1100×1375 px (4:5), maks 8192 KB. Misalnya peserta memegang sertifikat. Otomatis dioptimasi & dikonversi ke WebP.'
+                        : 'Disarankan 2400×1000 px, maks 12288 KB. Otomatis dioptimasi & dikonversi ke WebP.')
+                    ->saveUploadedFileUsing(fn ($file, Forms\Get $get) => app(\App\Services\MediaService::class)->process(
+                        $file,
+                        $get('placement') === 'partners' ? 'partner_photo' : 'hero',
+                        'banners',
+                    ))
                     ->required(),
             ]),
 

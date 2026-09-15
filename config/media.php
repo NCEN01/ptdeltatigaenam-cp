@@ -67,6 +67,15 @@ return [
             'formats' => ['jpg', 'jpeg', 'png', 'webp'],
             'responsive' => [1200, 768, 480],
         ],
+        'partner_photo' => [
+            // Foto pendamping seksi "Mitra Kami": berdiri di samping panel logo,
+            // jadi bingkainya tegak (4:5), bukan melebar seperti profil banner.
+            // Memakai profil banner di sini memotong habis sisi kiri-kanan foto.
+            'width' => 1100, 'height' => 1375, 'fit' => 'cover',
+            'target_kb' => 350, 'max_upload_kb' => 8192, 'quality' => 88,
+            'formats' => ['jpg', 'jpeg', 'png', 'webp'],
+            'responsive' => [1100, 800, 560],
+        ],
         'logo' => [
             'width' => 400, 'height' => 200, 'fit' => 'contain',
             'target_kb' => 100, 'max_upload_kb' => 2048,

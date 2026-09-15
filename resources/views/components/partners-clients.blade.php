@@ -21,8 +21,27 @@
 
     $klien = $repeat($clients, 16);
 
+    // Foto pendamping seksi Mitra, diunggah lewat CMS (Banner → penempatan "Mitra").
+    // Opsional: tanpa foto, panel logonya melebar penuh dan tidak ada ruang kosong.
+    $photo = \App\Models\Banner::activeNow()
+        ->where('placement', 'partners')
+        ->orderBy('sort_order')
+        ->first();
+
+    $photoSrc = $photoSrcset = null;
+    if ($photo?->image) {
+        if (str_starts_with($photo->image, 'http')) {
+            $photoSrc = $photo->image;
+        } else {
+            $photoSrc = Storage::url($photo->image);
+            $photoSrcset = app(\App\Services\MediaService::class)->srcset($photo->image, 'partner_photo');
+        }
+    }
+
     // Desktop column count grows with the number of partners, so the cards get
     // smaller automatically as more mitra are added (kept to the wireframe's 3 up to 6).
+    // Berdampingan dengan foto, panelnya tinggal 7 dari 12 kolom, jadi jumlah
+    // kolomnya dibatasi agar pelat logonya tidak menyempit.
     $pCount = $partners->count();
     $lgCols = match (true) {
         $pCount <= 6 => 3,
@@ -30,6 +49,9 @@
         $pCount <= 20 => 5,
         default => 6,
     };
+    if ($photoSrc) {
+        $lgCols = min($lgCols, 3);
+    }
 @endphp
 
 @if ($partners->isNotEmpty() || $clients->isNotEmpty())
@@ -43,42 +65,60 @@
         <div class="pointer-events-none absolute inset-0 grain opacity-20"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 
-        {{-- ===================== MITRA — centered; logo box on top, name + reg. number below ===================== --}}
+        {{-- ===================== MITRA — panel putih di atas latar gelap, berisi judul,
+             deskripsi, dan logo mitra; foto pendamping (opsional, dari CMS) di sampingnya.
+             Panelnya yang menjadi wadah, jadi pelat logonya cukup bergaris tipis — tanpa
+             itu ada dua lapis kotak menumpuk untuk satu logo. ===================== --}}
         @if ($partners->isNotEmpty())
             <div class="relative container pt-14 md:pt-20 {{ $clients->isEmpty() ? 'pb-14 md:pb-20' : 'pb-10 md:pb-12' }}">
-                {{-- Rata kiri, mengikuti pola judul seksi di
-                     halaman lain. Judul di tengah membuat seksi ini terasa
-                     berdiri sendiri, padahal ia bagian dari satu situs. --}}
-                <div class="max-w-2xl" data-aos="fade-up">
-                    <h2 class="text-display-lg font-semibold text-white text-balance">{{ $isId ? 'Mitra Kami' : 'Our Partners' }}</h2>
-                    <p class="mt-5 leading-relaxed text-navy-100">
-                        {{ $isId
-                            ? 'Lembaga sertifikasi, asosiasi profesi, dan institusi pendidikan yang bekerja sama dengan kami dalam menyelenggarakan pelatihan dan uji kompetensi.'
-                            : 'Certification bodies, professional associations, and educational institutions that work with us to run training and competency assessment.' }}
-                    </p>
-                </div>
+                <div class="grid gap-6 lg:grid-cols-12 lg:gap-8">
+                    <div class="{{ $photoSrc ? 'lg:col-span-7' : 'lg:col-span-12' }} rounded-3xl bg-white p-7 shadow-[0_30px_70px_-40px_rgba(2,12,27,0.95)] sm:p-9 md:p-11" data-aos="fade-up">
+                        {{-- Rata kiri, mengikuti pola judul seksi di halaman lain. --}}
+                        <div class="max-w-2xl">
+                            <h2 class="text-display-lg font-semibold text-navy text-balance">{{ $isId ? 'Mitra Kami' : 'Our Partners' }}</h2>
+                            <p class="mt-5 leading-relaxed text-slate-600">
+                                {{ $isId
+                                    ? 'Lembaga sertifikasi, asosiasi profesi, dan institusi pendidikan yang bekerja sama dengan kami dalam menyelenggarakan pelatihan dan uji kompetensi.'
+                                    : 'Certification bodies, professional associations, and educational institutions that work with us to run training and competency assessment.' }}
+                            </p>
+                        </div>
 
-                {{-- Tanpa kartu kaca. Pelat putih tempat logonya sudah menjadi
-                     wadahnya sendiri; membungkusnya lagi dengan panel buram
-                     hanya menumpuk bingkai. Nama mitra juga tidak dimiringkan:
-                     italic di sini mengenai data, bukan penekanan. --}}
-                <div class="mitra-grid mt-12 gap-x-5 gap-y-8 md:mt-14 md:gap-x-6" style="--mitra-cols: {{ $lgCols }};">
-                    @foreach ($partners as $partner)
-                        <div class="group" data-aos="fade-up" data-aos-delay="{{ ($loop->index % $lgCols) * 70 }}">
-                            <div class="flex aspect-[3/2] w-full items-center justify-center overflow-hidden rounded-xl bg-white p-4 shadow-[0_2px_8px_rgba(2,12,27,0.25)] transition-transform duration-500 ease-out-soft group-hover:-translate-y-1.5">
-                                @if ($partner->logo)
-                                    <img src="{{ Storage::url($partner->logo) }}" alt="{{ $partner->name }}" loading="lazy" class="max-h-full max-w-full object-contain">
-                                @else
-                                    <span class="px-2 text-center font-display text-xs font-semibold leading-tight text-navy">{{ $partner->name }}</span>
-                                @endif
-                            </div>
+                        {{-- Nama mitra tidak dimiringkan: italic di sini mengenai data,
+                             bukan penekanan. --}}
+                        <div class="mitra-grid mt-10 gap-x-5 gap-y-7 md:mt-12 md:gap-x-6" style="--mitra-cols: {{ $lgCols }};">
+                            @foreach ($partners as $partner)
+                                <div class="group" data-aos="fade-up" data-aos-delay="{{ ($loop->index % $lgCols) * 70 }}">
+                                    <div class="flex aspect-[3/2] w-full items-center justify-center overflow-hidden rounded-xl border border-navy-100 bg-white p-4 transition duration-500 ease-out-soft group-hover:-translate-y-1.5 group-hover:border-sky-200 group-hover:shadow-lift">
+                                        @if ($partner->logo)
+                                            <img src="{{ Storage::url($partner->logo) }}" alt="{{ $partner->name }}" loading="lazy" class="max-h-full max-w-full object-contain">
+                                        @else
+                                            <span class="px-2 text-center font-display text-xs font-semibold leading-tight text-navy">{{ $partner->name }}</span>
+                                        @endif
+                                    </div>
 
-                            <p class="mt-3.5 font-display text-sm font-semibold leading-snug text-white text-balance">{{ $partner->name }}</p>
-                            @if ($partner->registration_number)
-                                <p class="mt-1 font-mono text-[11px] tracking-tight text-navy-200">{{ $partner->registration_number }}</p>
+                                    <p class="mt-3.5 font-display text-sm font-semibold leading-snug text-navy text-balance">{{ $partner->name }}</p>
+                                    @if ($partner->registration_number)
+                                        <p class="mt-1 font-mono text-[11px] tracking-tight text-slate-500">{{ $partner->registration_number }}</p>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    @if ($photoSrc)
+                        {{-- lg:absolute agar tingginya mengikuti panel di sebelahnya, bukan
+                             sebaliknya; di layar kecil fotonya kembali mengalir normal. --}}
+                        <div class="relative overflow-hidden rounded-3xl bg-navy-900 ring-1 ring-white/10 lg:col-span-5" data-aos="fade-up" data-aos-delay="120">
+                            <img src="{{ $photoSrc }}" @if ($photoSrcset) srcset="{{ $photoSrcset }}" sizes="(min-width: 1024px) 40vw, 100vw" @endif
+                                 alt="{{ $photo->title }}" loading="lazy"
+                                 class="h-72 w-full object-cover sm:h-96 lg:absolute lg:inset-0 lg:h-full">
+                            @if (filled($photo->subtitle))
+                                <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-950/90 via-navy-950/55 to-transparent p-6 pt-16">
+                                    <p class="text-sm font-medium leading-snug text-white text-pretty">{{ $photo->subtitle }}</p>
+                                </div>
                             @endif
                         </div>
-                    @endforeach
+                    @endif
                 </div>
             </div>
         @endif
