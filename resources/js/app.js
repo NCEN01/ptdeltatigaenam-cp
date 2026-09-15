@@ -529,6 +529,41 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 });
 
 // ═══════════════════════════════════════════
+//  LAND ON THE FRAGMENT AFTER A FULL PAGE RELOAD
+// ═══════════════════════════════════════════
+// Pagination links and the GET search forms reload the whole page carrying a
+// fragment (e.g. ?page=2#hasil). Leaving that to the browser does not work
+// here: `html { scroll-behavior: smooth }` turns the jump into an animation,
+// and the layout work that follows — AOS revealing, Alpine dropping x-cloak,
+// carousels measuring — cancels it. The reader is left back at the top, which
+// is exactly the bug this fixes.
+//
+// So position explicitly, and do it twice: once as soon as the module runs
+// (module scripts are deferred, so the DOM is already parsed), then again
+// after `load`, because images finishing can move the target.
+function landOnHashTarget() {
+    const hash = window.location.hash;
+    if (hash.length < 2) return;
+
+    // getElementById, not querySelector: an id can legally contain characters
+    // that are invalid in a CSS selector and would throw.
+    const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+    if (!target) return;
+
+    const offset = parseInt(target.dataset.scrollOffset) || 100;
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+
+    // 'instant', not 'auto'. 'auto' defers to the CSS scroll-behavior, which is
+    // smooth here — the very animation that keeps getting cancelled.
+    window.scrollTo({ top, behavior: 'instant' });
+}
+
+if (window.location.hash.length > 1) {
+    landOnHashTarget();
+    window.addEventListener('load', landOnHashTarget, { once: true });
+}
+
+// ═══════════════════════════════════════════
 //  CATEGORY COVERFLOW (drag · snap · 3D)
 // ═══════════════════════════════════════════
 function initCoverflow() {
