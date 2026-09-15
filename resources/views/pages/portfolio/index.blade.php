@@ -17,14 +17,16 @@
             <div class="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                 <div class="max-w-2xl">
                     <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $id ? 'Dampak nyata bersama klien kami' : 'Real impact alongside our clients' }}</h2>
-                    {{-- Tiga ketukan pendek yang sejajar, bukan satu kalimat panjang:
-                         lebih mudah diingat dan langsung menggambarkan susunan
-                         halaman detailnya (Latar Belakang, Pendekatan, lalu Hasil
-                         berikut angkanya). --}}
+                    {{-- Menyebut pekerjaan yang benar-benar ada di daftarnya. Keempat
+                         frasa itu mencakup kelima kategori layanan yang masing-masing
+                         memang berisi proyek: pelatihan karyawan, sertifikasi
+                         kompetensi, konsultasi manajemen beserta human capital, dan
+                         headhunter. Kalimat penutupnya menggambarkan susunan halaman
+                         detailnya, yang ditutup bagian Hasil berikut angkanya. --}}
                     <p class="mt-5 text-pretty leading-relaxed text-slate-600" data-aos="fade-up">
                         {{ $id
-                            ? 'Tiap proyek kami tulis utuh: apa yang tidak berjalan, apa yang kami ubah, dan seberapa jauh bedanya.'
-                            : 'Every project is written out in full: what was not working, what we changed, and how far the numbers moved.' }}
+                            ? 'Pelatihan yang kami jalankan, orang yang kami sertifikasi, struktur yang kami tata ulang, dan posisi kunci yang kami isi. Tiap proyek ditulis lengkap sampai angka yang berubah setelahnya.'
+                            : 'Training we ran, people we certified, structures we rebuilt, and key roles we filled. Every project is written out in full, down to the numbers that moved afterwards.' }}
                     </p>
                 </div>
 
