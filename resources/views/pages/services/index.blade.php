@@ -54,8 +54,18 @@
                                     @endif
                                 </div>
                                 <div class="flex flex-1 flex-col p-6">
-                                    <h3 class="font-display text-xl font-semibold text-navy">{{ $service->title }}</h3>
-                                    @if ($service->short_description)<p class="mt-2 line-clamp-2 text-sm text-slate-600">{{ $service->short_description }}</p>@endif
+                                    {{-- Judul dan deskripsi dibungkus satu blok yang tumbuh (flex-1),
+                                         sehingga sisa ruang kartu diserap di sini dan baris harga
+                                         selalu mendarat di dasar kartu. Tanpa ini, harga menempel
+                                         tepat di bawah deskripsi, jadi kartu berjudul dua baris
+                                         menampilkan harganya lebih rendah daripada tetangganya.
+
+                                         Judul dijatah dua baris agar bagian atas kartu juga rata,
+                                         bukan hanya harganya. --}}
+                                    <div class="flex-1">
+                                        <h3 class="line-clamp-2 min-h-14 font-display text-xl font-semibold leading-snug text-navy">{{ $service->title }}</h3>
+                                        @if ($service->short_description)<p class="mt-2 line-clamp-2 text-sm text-slate-600">{{ $service->short_description }}</p>@endif
+                                    </div>
                                     <div class="mt-6 flex items-end justify-between border-t border-navy-100 pt-5">
                                         <div>
                                             @if ($service->price > 0)
@@ -70,6 +80,11 @@
                                                     <p class="font-display text-lg font-semibold text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
                                                 @endif
                                             @else
+                                                {{-- Diberi baris label juga, supaya ketiga bentuk harga
+                                                     sama-sama dua baris. Kalau yang satu ini satu baris,
+                                                     kartunya jadi lebih pendek dan harga tetangganya
+                                                     tidak sejajar meski blok ini sudah didorong ke dasar. --}}
+                                                <p class="font-mono text-[10px] uppercase tracking-wider text-slate-400">{{ $id ? 'Investasi' : 'Investment' }}</p>
                                                 <p class="font-display text-lg font-semibold text-navy">{{ $id ? 'Hubungi kami' : 'Contact us' }}</p>
                                             @endif
                                         </div>
