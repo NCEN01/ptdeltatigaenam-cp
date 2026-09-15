@@ -81,15 +81,42 @@ class ServiceResource extends Resource
                 Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
             ])->columns(3),
 
+            // Lima field di bawah ini tampil di situs tetapi sebelumnya tidak bisa
+            // diisi admin sama sekali: lokasi, cara mengikuti, kuota, kursi terisi,
+            // dan harga khusus batch. Nilainya hanya bisa masuk lewat seeder.
+            //
+            // maxItems(1)->addable(false) juga dilepas. Tujuh layanan sudah punya
+            // tiga jadwal, sedangkan situs menampilkan seluruhnya; dengan batas satu
+            // item admin tidak dapat menambah angkatan baru, dan membuka layanan
+            // berjadwal tiga lalu menyimpannya berbenturan dengan batas itu.
             Forms\Components\Section::make('Jadwal / Batch')->schema([
                 Forms\Components\Repeater::make('schedules')->relationship()->label('Jadwal')
+                    ->addActionLabel('Tambah Jadwal')
+                    // Tanpa ini tiap baris yang dilipat hanya bertuliskan "Schedules".
+                    ->itemLabel(fn (array $state): string => filled($state['start_date'] ?? null)
+                        ? \Illuminate\Support\Carbon::parse($state['start_date'])->translatedFormat('d M Y')
+                        : 'Jadwal baru')
+                    ->orderColumn('start_date')
                     ->schema([
                         Forms\Components\DatePicker::make('start_date')->label('Mulai')->required(),
                         Forms\Components\DatePicker::make('end_date')->label('Selesai'),
+                        Forms\Components\Select::make('mode')
+                            ->label('Cara Mengikuti')
+                            ->options(['offline' => 'Tatap Muka', 'online' => 'Online', 'hybrid' => 'Gabungan'])
+                            ->default('offline')
+                            ->helperText('Tampil sebagai label pada kartu jadwal di situs.'),
                         Forms\Components\TimePicker::make('start_time')->label('Jam Mulai')->seconds(false),
                         Forms\Components\TimePicker::make('end_time')->label('Jam Selesai')->seconds(false),
-                        Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
-                    ])->columns(3)->collapsible()->defaultItems(1)->maxItems(1)->addable(false),
+                        Forms\Components\TextInput::make('location')->label('Lokasi')->maxLength(200)
+                            ->placeholder('Jakarta Selatan, atau Di lokasi klien'),
+                        Forms\Components\TextInput::make('quota')->label('Kuota Peserta')->numeric()->minValue(0),
+                        Forms\Components\TextInput::make('seats_taken')->label('Kursi Terisi')->numeric()->minValue(0)->default(0)
+                            ->helperText('Sisa kursi dan bilah keterisian di situs dihitung dari sini.'),
+                        Forms\Components\TextInput::make('price_override')->label('Harga Khusus Batch (IDR)')->numeric()->prefix('Rp')
+                            ->helperText('Kosongkan untuk memakai harga layanan.'),
+                        Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true)
+                            ->helperText('Nonaktif berarti jadwal ini tidak tampil di situs.'),
+                    ])->columns(3)->collapsible()->defaultItems(1),
             ])->collapsed(),
 
             Forms\Components\Section::make('Kegiatan')->schema([

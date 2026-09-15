@@ -33,7 +33,7 @@
          kartu jadwal di halaman detail, tetapi tidak pernah dijelaskan artinya.
          Seksi ini menjelaskannya sebelum pengunjung menemui lencana itu.
 
-         Dua kolom bersebelahan memang bentuk yang tepat untuk perbandingan, jadi
+         Tiga kolom bersebelahan memang bentuk yang tepat untuk perbandingan, jadi
          bukan grid kartu seragam. Tanpa kotak dan tanpa isian warna: pemisahnya
          satu garis rambut tegak, mengikuti bahasa visual halaman lain. --}}
     @php
@@ -58,6 +58,16 @@
                     ['Paling cocok', 'Keterampilan yang harus diperagakan, dan tim yang berada di satu lokasi.'],
                 ],
             ],
+            [
+                'label' => 'Gabungan',
+                'lead' => 'Teori daring, praktik di tempat kerja.',
+                'points' => [
+                    ['Tempat', 'Sesi teori diikuti dari mana saja, sesi praktik digelar di lokasi Anda.'],
+                    ['Bentuk praktik', 'Materi dituntaskan lebih dulu secara daring, sehingga hari tatap muka dipakai penuh untuk praktik.'],
+                    ['Uji kompetensi', 'Digelar di tempat kerja pada hari yang sama dengan sesi praktiknya.'],
+                    ['Paling cocok', 'Program panjang yang sayang bila seluruh harinya menuntut peserta meninggalkan pekerjaan.'],
+                ],
+            ],
         ] : [
             [
                 'label' => 'Online',
@@ -79,6 +89,16 @@
                     ['Best for', 'Skills that must be demonstrated, and teams based in one location.'],
                 ],
             ],
+            [
+                'label' => 'Blended',
+                'lead' => 'Theory online, practice on site.',
+                'points' => [
+                    ['Where', 'Theory sessions are joined from anywhere; practice sessions run at your site.'],
+                    ['Practice', 'Material is covered online first, so the in-person days are spent entirely on practice.'],
+                    ['Assessment', 'Held at the workplace on the same day as the practical session.'],
+                    ['Best for', 'Longer programmes where taking people off the job every day would be costly.'],
+                ],
+            ],
         ];
     @endphp
 
@@ -86,19 +106,21 @@
         <div class="container">
             <div class="max-w-2xl">
                 <h2 class="text-3xl leading-tight text-navy md:text-4xl" data-aos="fade-up">
-                    {{ $id ? 'Online atau tatap muka' : 'Online or in person' }}
+                    {{ $id ? 'Tiga cara mengikuti program' : 'Three ways to take a programme' }}
                 </h2>
                 <p class="mt-5 text-pretty leading-relaxed text-slate-600" data-aos="fade-up">
                     {{ $id
-                        ? 'Program yang sama dapat dijalankan dengan dua cara. Yang berbeda hanya tempat dan bentuk praktiknya, bukan materi maupun sertifikat yang Anda terima.'
-                        : 'The same programme can run in two ways. What differs is the place and the form of practice, not the material or the certificate you receive.' }}
+                        ? 'Program yang sama dapat dijalankan dengan tiga cara. Yang berbeda hanya tempat dan bentuk praktiknya, bukan materi maupun sertifikat yang Anda terima.'
+                        : 'The same programme can run in three ways. What differs is the place and the form of practice, not the material or the certificate you receive.' }}
                 </p>
             </div>
 
-            <div class="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-16">
+            <div class="mt-12 grid gap-10 lg:grid-cols-3 lg:gap-12">
                 @foreach ($modes as $i => $mode)
+                    {{-- Pemisah berlaku untuk tiap kolom setelah yang pertama: garis
+                         mendatar saat menumpuk di layar sempit, tegak saat berjajar. --}}
                     <div data-aos="fade-up" data-aos-delay="{{ $i * 90 }}"
-                         class="{{ $i === 1 ? 'border-t border-navy-200 pt-10 lg:border-l lg:border-t-0 lg:pl-16 lg:pt-0' : '' }}">
+                         class="{{ $i > 0 ? 'border-t border-navy-200 pt-10 lg:border-l lg:border-navy-200 lg:border-t-0 lg:pl-12 lg:pt-0' : '' }}">
                         <h3 class="font-display text-2xl font-semibold text-navy">{{ $mode['label'] }}</h3>
                         <p class="mt-2 leading-relaxed text-slate-600">{{ $mode['lead'] }}</p>
 
@@ -116,8 +138,8 @@
 
             <p class="mt-10 max-w-3xl text-sm leading-relaxed text-slate-600" data-aos="fade-up">
                 {{ $id
-                    ? 'Sebagian program juga berjalan gabungan: teori secara daring, lalu praktik dan uji kompetensi di tempat kerja. Sampaikan kebutuhan Anda, dan kami sesuaikan jadwalnya.'
-                    : 'Some programmes also run as a blend: theory online, then practice and assessment at the workplace. Tell us what you need and we will shape the schedule around it.' }}
+                    ? 'Cara mengikuti ditentukan per angkatan, bukan per program. Jadwal yang sama bisa dibuka tatap muka bulan ini dan gabungan pada angkatan berikutnya. Label pada tiap kartu jadwal menunjukkan yang berlaku.'
+                    : 'The delivery mode is set per intake, not per programme. The same course can run in person this month and blended for the next. The label on each schedule card shows which applies.' }}
             </p>
         </div>
     </section>
