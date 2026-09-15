@@ -21,15 +21,11 @@
 
     $klien = $repeat($clients, 16);
 
-    // Desktop column count grows with the number of partners, so the cards get
-    // smaller automatically as more mitra are added (kept to the wireframe's 3 up to 6).
-    $pCount = $partners->count();
-    $lgCols = match (true) {
-        $pCount <= 6 => 3,
-        $pCount <= 12 => 4,
-        $pCount <= 20 => 5,
-        default => 6,
-    };
+    // Mitra ditata dua baris berisi dua logo. split(2) membagi rata, jadi tiga
+    // mitra menjadi 2 + 1 dan barisnya tidak pernah kosong. Lebih dari empat
+    // berarti tidak muat lagi, dan tiap barisnya berganti menjadi pita berjalan.
+    $partnerRows = $partners->split(2);
+    $marqueePartners = $partners->count() > 4;
 @endphp
 
 @if ($partners->isNotEmpty() || $clients->isNotEmpty())
@@ -48,42 +44,54 @@
             <div class="relative container pt-14 md:pt-20 {{ $clients->isEmpty() ? 'pb-14 md:pb-20' : 'pb-10 md:pb-12' }}">
                 {{-- Rata kiri, mengikuti pola judul seksi di
                      halaman lain. Judul di tengah membuat seksi ini terasa
-                     berdiri sendiri, padahal ia bagian dari satu situs.
-
-                     max-w-xl, bukan 2xl: kalimatnya dimaksudkan menumpuk tiga
-                     baris seperti pada rancangannya. Pemenggalannya diserahkan
-                     ke text-balance supaya tetap utuh di layar sempit, bukan
-                     dipaksa dengan <br> yang akan patah di tempat keliru. --}}
-                <div class="max-w-xl" data-aos="fade-up">
-                    <h2 class="text-display-lg font-semibold text-white text-balance">
+                     berdiri sendiri, padahal ia bagian dari satu situs. --}}
+                <div class="max-w-2xl" data-aos="fade-up">
+                    <h2 class="text-display-lg font-semibold text-white text-balance">{{ $isId ? 'Mitra Kami' : 'Our Partners' }}</h2>
+                    <p class="mt-5 text-lg leading-relaxed text-navy-100 text-pretty">
                         {{ $isId
                             ? 'Saatnya naik level bersama sertifikasi kompetensi resmi BNSP.'
                             : 'Time to level up with official BNSP competency certification.' }}
-                    </h2>
+                    </p>
                 </div>
 
                 {{-- Tanpa kartu kaca. Pelat putih tempat logonya sudah menjadi
                      wadahnya sendiri; membungkusnya lagi dengan panel buram
-                     hanya menumpuk bingkai. Nama mitra juga tidak dimiringkan:
-                     italic di sini mengenai data, bukan penekanan. --}}
-                <div class="mitra-grid mt-12 gap-x-5 gap-y-8 md:mt-14 md:gap-x-6" style="--mitra-cols: {{ $lgCols }};">
-                    @foreach ($partners as $partner)
-                        <div class="group" data-aos="fade-up" data-aos-delay="{{ ($loop->index % $lgCols) * 70 }}">
-                            <div class="flex aspect-[3/2] w-full items-center justify-center overflow-hidden rounded-xl bg-white p-4 shadow-[0_2px_8px_rgba(2,12,27,0.25)] transition-transform duration-500 ease-out-soft group-hover:-translate-y-1.5">
-                                @if ($partner->logo)
-                                    <img src="{{ Storage::url($partner->logo) }}" alt="{{ $partner->name }}" loading="lazy" class="max-h-full max-w-full object-contain">
-                                @else
-                                    <span class="px-2 text-center font-display text-xs font-semibold leading-tight text-navy">{{ $partner->name }}</span>
-                                @endif
-                            </div>
+                     hanya menumpuk bingkai.
 
-                            <p class="mt-3.5 font-display text-sm font-semibold leading-snug text-white text-balance">{{ $partner->name }}</p>
-                            @if ($partner->registration_number)
-                                <p class="mt-1 font-mono text-[11px] tracking-tight text-navy-200">{{ $partner->registration_number }}</p>
-                            @endif
-                        </div>
-                    @endforeach
-                </div>
+                     Dua baris berisi dua logo. Selama mitranya masih muat (empat
+                     atau kurang) susunannya diam saja — pita berjalan yang isinya
+                     sedikit malah terbaca sebagai kesalahan. Lebih dari itu tiap
+                     barisnya berjalan, arahnya berlawanan supaya jelas keduanya
+                     bergerak sendiri-sendiri, bukan satu blok yang bergeser. --}}
+                @if (! $marqueePartners)
+                    <div class="mt-12 max-w-2xl space-y-6 md:mt-14">
+                        @foreach ($partnerRows as $row)
+                            <div class="grid grid-cols-2 gap-5 md:gap-6">
+                                @foreach ($row as $partner)
+                                    <x-partner-plate :partner="$partner" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 2) * 90 }}" />
+                                @endforeach
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    {{-- Jarak antarpelat dipasang sebagai margin di tiap pelat, bukan
+                         gap pada relnya. Dengan gap, jarak di sambungan antara dua
+                         salinan tidak ikut terhitung dalam -50%, sehingga tiap kali
+                         putarannya kembali ke awal gambarnya melompat setengah jarak. --}}
+                    <div class="mask-fade-x mt-12 max-w-2xl overflow-hidden md:mt-14" data-aos="fade-up">
+                        @foreach ($partnerRows as $i => $row)
+                            <div class="flex w-max [will-change:transform] {{ $i ? 'mt-6 animate-marquee-reverse' : 'animate-marquee' }}">
+                                @for ($h = 0; $h < 2; $h++)
+                                    @foreach ($repeat($row, 4) as $partner)
+                                        <div class="w-44 shrink-0 pr-5 sm:w-56 md:w-72 md:pr-6" aria-hidden="{{ $h ? 'true' : 'false' }}">
+                                            <x-partner-plate :partner="$partner" />
+                                        </div>
+                                    @endforeach
+                                @endfor
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
         @endif
 

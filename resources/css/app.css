@@ -324,12 +324,6 @@
         mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 100%);
     }
 
-    /* Responsive Mitra grid — desktop column count comes from --mitra-cols (set per partner
-       count in the blade), so the cards shrink automatically as more partners are added. */
-    .mitra-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    @media (min-width: 640px) { .mitra-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-    @media (min-width: 1024px) { .mitra-grid { grid-template-columns: repeat(var(--mitra-cols, 3), minmax(0, 1fr)); } }
-
     .mask-fade-y {
         mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
     }
