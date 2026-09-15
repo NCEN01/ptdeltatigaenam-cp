@@ -28,6 +28,100 @@
         </nav>
     </x-page-header>
 
+    {{-- ===================== CARA MENGIKUTI =====================
+         Kolom mode (online / offline / hybrid) sudah ada di data dan tampil pada
+         kartu jadwal di halaman detail, tetapi tidak pernah dijelaskan artinya.
+         Seksi ini menjelaskannya sebelum pengunjung menemui lencana itu.
+
+         Dua kolom bersebelahan memang bentuk yang tepat untuk perbandingan, jadi
+         bukan grid kartu seragam. Tanpa kotak dan tanpa isian warna: pemisahnya
+         satu garis rambut tegak, mengikuti bahasa visual halaman lain. --}}
+    @php
+        $modes = $id ? [
+            [
+                'label' => 'Online',
+                'lead' => 'Fleksibel, diikuti dari mana saja.',
+                'points' => [
+                    ['Tempat', 'Dari kantor, rumah, atau lokasi kerja Anda. Cukup koneksi yang stabil.'],
+                    ['Bentuk praktik', 'Studi kasus dan simulasi terpandu, dikerjakan bersama pengajar secara langsung.'],
+                    ['Uji kompetensi', 'Dijadwalkan daring bersama asesor, dengan penyerahan bukti kerja secara digital.'],
+                    ['Paling cocok', 'Tim yang tersebar di banyak lokasi, atau materi yang tidak menuntut peragaan alat.'],
+                ],
+            ],
+            [
+                'label' => 'Tatap Muka',
+                'lead' => 'Praktik langsung, digelar di tempat Anda.',
+                'points' => [
+                    ['Tempat', 'Di kantor atau pabrik Anda, atau di ruang pelatihan kami.'],
+                    ['Bentuk praktik', 'Langsung pada alat dan proses yang benar-benar dipakai peserta sehari-hari.'],
+                    ['Uji kompetensi', 'Digelar di tempat kerja dan dapat mengikuti pola sif, tanpa menghentikan produksi.'],
+                    ['Paling cocok', 'Keterampilan yang harus diperagakan, dan tim yang berada di satu lokasi.'],
+                ],
+            ],
+        ] : [
+            [
+                'label' => 'Online',
+                'lead' => 'Flexible, joined from anywhere.',
+                'points' => [
+                    ['Where', 'From your office, your home, or your work site. A stable connection is enough.'],
+                    ['Practice', 'Guided case studies and simulations, worked through live with the instructor.'],
+                    ['Assessment', 'Scheduled online with an assessor, with work evidence submitted digitally.'],
+                    ['Best for', 'Teams spread across sites, or material that does not require handling equipment.'],
+                ],
+            ],
+            [
+                'label' => 'In Person',
+                'lead' => 'Hands-on practice, run at your site.',
+                'points' => [
+                    ['Where', 'At your office or plant, or in our training rooms.'],
+                    ['Practice', 'Directly on the equipment and processes participants actually use every day.'],
+                    ['Assessment', 'Run at the workplace and able to follow shift patterns, without stopping production.'],
+                    ['Best for', 'Skills that must be demonstrated, and teams based in one location.'],
+                ],
+            ],
+        ];
+    @endphp
+
+    <section class="section-sm border-b border-navy-50 bg-white">
+        <div class="container">
+            <div class="max-w-2xl">
+                <h2 class="text-3xl leading-tight text-navy md:text-4xl" data-aos="fade-up">
+                    {{ $id ? 'Online atau tatap muka' : 'Online or in person' }}
+                </h2>
+                <p class="mt-5 text-pretty leading-relaxed text-slate-600" data-aos="fade-up">
+                    {{ $id
+                        ? 'Program yang sama dapat dijalankan dengan dua cara. Yang berbeda hanya tempat dan bentuk praktiknya, bukan materi maupun sertifikat yang Anda terima.'
+                        : 'The same programme can run in two ways. What differs is the place and the form of practice, not the material or the certificate you receive.' }}
+                </p>
+            </div>
+
+            <div class="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-16">
+                @foreach ($modes as $i => $mode)
+                    <div data-aos="fade-up" data-aos-delay="{{ $i * 90 }}"
+                         class="{{ $i === 1 ? 'border-t border-navy-200 pt-10 lg:border-l lg:border-t-0 lg:pl-16 lg:pt-0' : '' }}">
+                        <h3 class="font-display text-2xl font-semibold text-navy">{{ $mode['label'] }}</h3>
+                        <p class="mt-2 leading-relaxed text-slate-600">{{ $mode['lead'] }}</p>
+
+                        <dl class="mt-7 divide-y divide-navy-200 border-t border-navy-200">
+                            @foreach ($mode['points'] as [$term, $desc])
+                                <div class="py-4">
+                                    <dt class="font-mono text-[11px] uppercase tracking-wider text-slate-500">{{ $term }}</dt>
+                                    <dd class="mt-1.5 text-sm leading-relaxed text-slate-700">{{ $desc }}</dd>
+                                </div>
+                            @endforeach
+                        </dl>
+                    </div>
+                @endforeach
+            </div>
+
+            <p class="mt-10 max-w-3xl text-sm leading-relaxed text-slate-600" data-aos="fade-up">
+                {{ $id
+                    ? 'Sebagian program juga berjalan gabungan: teori secara daring, lalu praktik dan uji kompetensi di tempat kerja. Sampaikan kebutuhan Anda, dan kami sesuaikan jadwalnya.'
+                    : 'Some programmes also run as a blend: theory online, then practice and assessment at the workplace. Tell us what you need and we will shape the schedule around it.' }}
+            </p>
+        </div>
+    </section>
+
     @forelse ($categories as $cat)
         <section id="{{ $cat->slug }}" class="scroll-mt-28 py-14 md:py-20 {{ $loop->odd ? '' : 'bg-mist' }}">
             <div class="container">
