@@ -285,6 +285,14 @@
         <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1920&q=80" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover">
         <div class="absolute inset-0 bg-navy-950/82"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/88"></div>
+        {{-- Butir dan cahaya samar, alat yang sama dengan kepala halaman dan pita
+             Mitra. Tanpa keduanya foto gelap ini rata betul dan terbaca sebagai
+             bidang datar, bukan ruang. --}}
+        <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
+        {{-- /10, bukan /12: 12 di luar skala opasitas Tailwind sehingga kelasnya
+             tidak pernah dibuat dan lingkarannya tampil tanpa warna sama sekali. --}}
+        <div class="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl" data-parallax="0.12"></div>
+        <div class="pointer-events-none absolute -right-24 bottom-0 h-80 w-80 rounded-full bg-cyan/10 blur-3xl" data-parallax="0.08"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 
         {{-- Judul di kiri, alasannya di kanan. Sebelumnya judul di tengah lalu
@@ -293,12 +301,16 @@
              itu sebagaimana mestinya dan tidak perlu lagi dipaksa setinggi itu. --}}
         <div class="container relative grid items-start gap-12 py-20 lg:grid-cols-12 lg:gap-16 lg:py-28">
             <div class="lg:col-span-5" data-aos="fade-up">
+                {{-- text-display-lg, sama dengan judul seksi lain di situs ini,
+                     dan ukurannya ikut lebar layar lewat clamp. Pasangan
+                     text-3xl/md:text-5xl sebelumnya melompat sekali di satu
+                     titik henti lalu diam di 48px berapa pun lebar layarnya. --}}
                 <x-heading
                     :lead="$isId ? 'Alasan Memilih' : 'Why Choose'"
                     :accent="$isId ? 'Kami?' : 'Us?'"
                     accent-class="text-gradient-hero"
-                    class="font-display text-3xl text-white text-balance md:text-5xl" />
-                <p class="mt-5 max-w-md leading-relaxed text-navy-100 text-pretty">{{ $isId ? 'Keahlian praktisi, pendekatan yang dipersonalisasi, dan komitmen pada hasil nyata bagi organisasi Anda.' : 'Practitioner expertise, a personalized approach, and a commitment to real results for your organization.' }}</p>
+                    class="text-display-lg font-semibold text-white text-balance" />
+                <p class="mt-6 max-w-md text-lg leading-relaxed text-navy-100 text-pretty">{{ $isId ? 'Keahlian praktisi, pendekatan yang dipersonalisasi, dan komitmen pada hasil nyata bagi organisasi Anda.' : 'Practitioner expertise, a personalized approach, and a commitment to real results for your organization.' }}</p>
             </div>
 
             {{-- Satu daftar, bukan dua salinan. Dulu ada pita berjalan untuk layar
@@ -311,10 +323,15 @@
 
                  Angka 01..07 dilepas: ketujuhnya setara, tidak ada yang pertama
                  atau terakhir, jadi penomorannya menjanjikan urutan yang tidak
-                 pernah ada. Tanpa angka, kata-katanya yang berbicara. --}}
-            <ul class="lg:col-span-7 sm:grid sm:grid-cols-2 sm:gap-x-10 lg:gap-x-14">
+                 pernah ada. Penggantinya centang, penanda yang tidak menjanjikan
+                 urutan apa pun dan memakai bahasa yang sudah dipakai daftar
+                 manfaat paket di halaman Kemitraan. --}}
+            <ul class="sm:grid sm:grid-cols-2 sm:gap-x-10 lg:col-span-7 lg:gap-x-14">
                 @foreach ($reasons as $i => $r)
-                    <li class="border-t border-white/10 py-5 md:py-6" data-aos="fade-up" data-aos-delay="{{ ($i % 2) * 70 }}">
+                    <li class="flex items-start gap-3.5 border-t border-white/10 py-5 md:py-6" data-aos="fade-up" data-aos-delay="{{ ($i % 2) * 70 }}">
+                        <svg class="mt-1 h-5 w-5 shrink-0 text-sky-400" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                         <p class="font-display text-lg font-medium leading-snug text-white text-balance md:text-xl">{{ $r }}</p>
                     </li>
                 @endforeach
