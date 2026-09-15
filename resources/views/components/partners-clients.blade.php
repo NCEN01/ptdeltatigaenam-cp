@@ -85,7 +85,9 @@
                 <div class="container flex flex-col gap-6 md:flex-row md:items-center md:gap-10">
                     {{-- Left: heading + description --}}
                     <div class="shrink-0 md:w-60 lg:w-72">
-                        <h3 class="font-display text-2xl font-bold text-navy text-balance md:text-3xl">{{ $isId ? 'Klien Kami' : 'Our Clients' }}</h3>
+                        {{-- h2, bukan h3: klien dan mitra adalah dua kelompok yang setara.
+                             Sebagai h3 ia terbaca seolah bagian dari "Mitra Kami". --}}
+                        <h2 class="font-display text-2xl font-bold text-navy text-balance md:text-3xl">{{ $isId ? 'Klien Kami' : 'Our Clients' }}</h2>
                         <span class="mt-2.5 block h-0.5 w-10 rounded-full bg-gradient-to-r from-gold to-gold-soft"></span>
                         <p class="mt-3 text-sm leading-relaxed text-slate-600">
                             {{ $isId ? 'Klien yang telah menggunakan layanan kami.' : 'Clients who have used our services.' }}

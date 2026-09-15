@@ -82,12 +82,18 @@
                                     $hl = implode(' ', array_slice($hw, 0, $mid));   // baris 1 — tebal
                                     $ha = implode(' ', array_slice($hw, $mid));       // baris 2 — italic
                                 @endphp
-                                {{-- Ketiga nilai clamp diturunkan ~10% bersamaan agar judul
+                                {{-- Hanya slide pertama yang menjadi <h1>. Seluruh slide ada di
+                                     DOM sekaligus, jadi menandai ketiganya sebagai h1 membuat
+                                     mesin pencari melihat tiga judul halaman yang bersaing.
+                                     Sisanya h2, tampilannya tetap sama persis.
+
+                                     Ketiga nilai clamp diturunkan ~10% bersamaan agar judul
                                      mengecil merata, bukan hanya di satu ukuran layar. --}}
-                                <h1 class="font-display font-bold leading-[1.12] text-balance [font-size:clamp(1.95rem,4.6vw,3.5rem)] {{ empty($slide['cat']) ? '' : 'mt-6' }}">
+                                @php $heroTag = $loop->first ? 'h1' : 'h2'; @endphp
+                                <{{ $heroTag }} class="font-display font-bold leading-[1.12] text-balance [font-size:clamp(1.95rem,4.6vw,3.5rem)] {{ empty($slide['cat']) ? '' : 'mt-6' }}">
                                     <span class="block">{{ $hl }}</span>
                                     @if ($ha !== '')<span class="italic-accent block font-normal leading-[1.28] pb-[0.16em] text-gradient-white-navy">{{ $ha }}</span>@endif
-                                </h1>
+                                </{{ $heroTag }}>
                                 <p class="mt-6 max-w-xl text-[15px] font-normal leading-relaxed text-white/90 text-pretty md:text-lg">{{ $slide['desc'] }}</p>
                                 <div class="mt-10">
                                     <a href="{{ $slide['link'] }}" class="btn border border-gold text-gold hover:border-gold hover:bg-gold hover:text-navy-950 hover:shadow-gold">{{ $slide['btn_text'] }}</a>
@@ -668,7 +674,7 @@
                         <span class="grid h-10 w-10 place-items-center rounded-xl bg-sky-400 text-white ring-1 ring-white/20">
                             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.2 4.79 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.16c-.24.68-1.42 1.31-1.95 1.36-.5.05-.96.24-3.23-.67-2.73-1.08-4.47-3.86-4.6-4.04-.14-.18-1.11-1.48-1.11-2.82 0-1.34.7-2 .95-2.28.24-.27.53-.34.7-.34.18 0 .35 0 .5.01.16.01.38-.06.59.45.22.52.73 1.8.8 1.93.06.13.11.28.02.46-.09.18-.13.29-.26.45-.13.16-.28.36-.4.48-.13.13-.27.28-.12.54.15.26.66 1.09 1.42 1.76.97.87 1.79 1.14 2.05 1.27.26.13.41.11.56-.07.15-.18.65-.76.82-1.02.17-.26.35-.22.59-.13.24.09 1.52.72 1.78.85.26.13.43.2.5.31.06.11.06.64-.18 1.32z"/></svg>
                         </span>
-                        <h4 class="font-display font-semibold text-white text-base">{{ $isId ? 'Punya pertanyaan lain?' : 'Have more questions?' }}</h4>
+                        <h3 class="font-display font-semibold text-white text-base">{{ $isId ? 'Punya pertanyaan lain?' : 'Have more questions?' }}</h3>
                     </div>
                     <p class="relative text-xs text-navy-200 leading-relaxed">
                         {{ $isId
@@ -762,7 +768,7 @@
                                             aria-controls="faq-panel-{{ $i }}"
                                             class="flex w-full items-start gap-4 px-5 py-5 text-left transition-colors md:gap-5 md:px-7">
 
-                                        <span class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg font-mono text-[11px] font-bold tabular-nums transition-all duration-300"
+                                        <span class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg font-mono text-[11px] font-bold tabular-nums transition-all duration-300" aria-hidden="true"
                                               :class="activeFaq === {{ $i }} ? 'bg-navy text-white' : 'bg-navy-50 text-slate-500 group-hover/faq:bg-navy-100'">{{ sprintf('%02d', $i + 1) }}</span>
 
                                         <span class="flex-1 font-display text-[15px] font-semibold leading-snug transition-colors duration-300 md:text-[17px]"

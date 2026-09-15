@@ -43,7 +43,7 @@ return [
         'services_kicker' => 'Lini Layanan',
         'services_title' => 'Keahlian yang membentuk organisasi unggul',
         'portfolio_kicker' => 'Portofolio Kami',
-        'portfolio_title' => 'Dampak nyata bersama mitra dan client',
+        'portfolio_title' => 'Dampak nyata bersama mitra dan klien',
         'testimonials_kicker' => 'Suara Klien',
         'testimonials_title' => 'Dipercaya para pemimpin',
         'partners_kicker' => 'Dipercaya Oleh',
