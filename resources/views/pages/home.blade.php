@@ -388,21 +388,49 @@
         </section>
     @endif
 
-    {{-- ===================== PORTFOLIO ===================== --}}
+    {{-- ===================== PORTFOLIO =====================
+         Tanpa foto latar. Seksi ini isinya tiga foto proyek; menaruhnya di atas
+         foto keempat membuat keduanya saling berebut perhatian, dan di sela-sela
+         kartunya latar itu menyembul sebagai potongan gambar acak. Bidang gelap
+         polos membuat foto proyeknya yang berbicara. --}}
     @if ($portfolios->isNotEmpty())
-        <section class="section-sm relative overflow-hidden">
-            {{-- Background image + dark overlay (kept light enough for the photo to show) --}}
-            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1920&q=80" alt="" loading="lazy"
-                 class="absolute inset-0 h-full w-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/88"></div>
+        <section class="section-sm relative overflow-hidden bg-navy-950">
             <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
+            <div class="pointer-events-none absolute -left-32 -top-20 h-96 w-96 rounded-full bg-sky-500/10 blur-3xl"></div>
+            <div class="pointer-events-none absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-cyan/10 blur-3xl"></div>
+            <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 
             <div class="container relative">
-                <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
                     <div class="max-w-xl">
-                        <h2 class="font-display text-3xl font-bold text-white text-balance md:text-4xl" data-aos="fade-up">{{ __('site.home.portfolio_kicker') }}</h2>
-                        <p class="mt-3 text-pretty leading-relaxed text-navy-100" data-aos="fade-up">{{ __('site.home.portfolio_title') }}</p>
+                        <h2 class="text-display-lg font-semibold text-white text-balance" data-aos="fade-up">{{ __('site.home.portfolio_kicker') }}</h2>
+                        <p class="mt-4 text-lg leading-relaxed text-navy-100 text-pretty" data-aos="fade-up">{{ __('site.home.portfolio_title') }}</p>
+
+                        {{-- Cakupannya sebagai satu baris keterangan, bukan tiga angka
+                             raksasa berjajar: yang terakhir itu pola halaman SaaS yang
+                             PRODUCT.md justru minta dihindari. Angkanya dihitung dari
+                             data, jadi ikut bertambah sendiri saat admin menambah
+                             proyek. Isinya ditulis apa adanya sebagai cadangan bila
+                             animasi penghitungnya tidak jalan. --}}
+                        @if ($portfolioScope?->total)
+                            @php
+                                $scope = $isId
+                                    ? [[$portfolioScope->total, 'proyek'], [$portfolioScope->clients, 'klien'], [$portfolioScope->categories, 'bidang layanan']]
+                                    : [[$portfolioScope->total, 'projects'], [$portfolioScope->clients, 'clients'], [$portfolioScope->categories, 'service areas']];
+                            @endphp
+                            <p class="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-wider text-navy-200" data-aos="fade-up">
+                                @foreach ($scope as [$value, $label])
+                                    @if (! $loop->first)
+                                        <span class="h-3.5 w-px bg-white/20" aria-hidden="true"></span>
+                                    @endif
+                                    <span class="inline-flex items-baseline gap-1.5">
+                                        <span class="font-display text-base tabular-nums text-white" data-counter="{{ $value }}">{{ $value }}</span>{{ $label }}
+                                    </span>
+                                @endforeach
+                            </p>
+                        @endif
                     </div>
+
                     <a href="{{ route('portfolio.index') }}" data-aos="fade-up"
                        class="group inline-flex shrink-0 items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-white transition duration-300 hover:border-white hover:bg-white hover:text-navy-950">
                         {{ $isId ? 'Lihat Semua Portofolio' : 'View All Portfolio' }}
@@ -410,24 +438,44 @@
                     </a>
                 </div>
 
-                <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {{-- Tanpa kartu kaca. bg-white/[0.06] + backdrop-blur di atas foto
+                     adalah kaca sebagai hiasan, tepat yang disebut anti-referensi
+                     di PRODUCT.md, dan bingkainya justru mengecilkan fotonya.
+                     Susunannya kini sama dengan halaman Portofolio: foto, lalu
+                     judul di bawahnya langsung. --}}
+                <div class="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($portfolios as $p)
-                        <a href="{{ route('portfolio.show', $p->slug) }}"
-                           class="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.1]"
+                        <a href="{{ route('portfolio.show', $p->slug) }}" class="group block"
                            data-aos="fade-up" data-aos-delay="{{ $loop->index * 90 }}">
-                            <div class="relative aspect-[16/10] overflow-hidden bg-navy-900">
+                            <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-navy-900 ring-1 ring-white/10 transition-shadow duration-500 group-hover:shadow-lift">
                                 @if ($p->cover_image)
                                     <img src="{{ str_starts_with($p->cover_image, 'http') ? $p->cover_image : Storage::url($p->cover_image) }}" alt="{{ $p->title }}" loading="lazy"
-                                         class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                                         class="h-full w-full object-cover transition-transform duration-[900ms] ease-out-soft group-hover:scale-[1.07]">
                                 @else
                                     <div class="h-full w-full bg-gradient-to-br from-navy-700 to-navy-900"></div>
                                 @endif
+
+                                @if ($p->category)
+                                    <span class="absolute left-4 top-4 z-10 rounded-full bg-white/90 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-navy backdrop-blur">{{ $p->category->name }}</span>
+                                @endif
+
+                                {{-- Ajakan yang muncul saat disentuh kursor, bahasa yang
+                                     sama dengan kartu di halaman Portofolio. --}}
+                                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/85 via-navy-950/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+                                <div class="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-3 items-center p-5 opacity-0 transition-all duration-500 ease-out-soft group-hover:translate-y-0 group-hover:opacity-100">
+                                    <span class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-navy shadow-lift">
+                                        {{ $isId ? 'Lihat Detail' : 'View Case' }}
+                                        <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </span>
+                                </div>
                             </div>
-                            <div class="p-5">
-                                @if ($p->category)<p class="font-mono text-[10px] uppercase tracking-label text-gold">{{ $p->category->name }}</p>@endif
-                                <h3 class="mt-2 font-display text-base font-semibold text-white">{{ $p->title }}</h3>
-                                @if ($p->client_name)<p class="mt-1 text-xs text-white/50">{{ $p->client_name }}</p>@endif
-                            </div>
+
+                            <h3 class="mt-5 font-display text-lg font-semibold leading-snug text-white text-balance transition-colors duration-300 group-hover:text-sky-300">{{ $p->title }}</h3>
+                            <p class="mt-1.5 flex flex-wrap items-center gap-x-2 text-sm text-navy-200">
+                                @if ($p->client_name)<span>{{ $p->client_name }}</span>@endif
+                                @if ($p->client_name && $p->project_date)<span class="text-white/25" aria-hidden="true">·</span>@endif
+                                @if ($p->project_date)<span class="font-mono text-xs">{{ $p->project_date->translatedFormat('Y') }}</span>@endif
+                            </p>
                         </a>
                     @endforeach
                 </div>

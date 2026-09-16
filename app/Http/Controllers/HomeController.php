@@ -29,6 +29,14 @@ class HomeController extends Controller
             // 3 newest portfolios — auto-updates whenever a more recent one is added.
             'portfolios' => Portfolio::where('is_active', true)
                 ->with('category')->latest('project_date')->latest('id')->take(3)->get(),
+            // Cakupan portofolio, dihitung dari datanya sendiri sehingga angkanya
+            // ikut bergerak saat admin menambah proyek. Satu query, bukan tiga:
+            // ketiganya membaca tabel dan filter yang sama persis.
+            'portfolioScope' => Portfolio::where('is_active', true)
+                ->selectRaw('COUNT(*) as total')
+                ->selectRaw("COUNT(DISTINCT NULLIF(client_name, '')) as clients")
+                ->selectRaw('COUNT(DISTINCT service_category_id) as categories')
+                ->first(),
             'testimonials' => Testimonial::where('is_active', true)
                 ->latest()->take(12)->get(),
             'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),
