@@ -24,9 +24,17 @@
     :description="$id
         ? 'Cek keaslian sertifikat kompetensi BNSP terbitan PT Delta Tiga Enam. Masukkan nama peserta, nama perusahaan, atau nomor sertifikat untuk melihat kualifikasi yang diuji dan status berlakunya.'
         : 'Verify BNSP competency certificates issued by PT Delta Tiga Enam. Enter a participant name, company, or certificate number to see the qualification assessed and whether it is still valid.'">
+    {{-- Judulnya menyebut pekerjaan yang dicari orang, bukan nama daftarnya.
+         Sebelumnya h1 berbunyi "Pemegang Sertifikat" lalu beberapa piksel di
+         bawahnya h2 berbunyi "Cek Keaslian Sertifikat Kompetensi": dua judul
+         besar berurutan yang mengatakan hal serupa, dan kata kunci yang
+         sebenarnya dicari orang justru berada di judul yang lebih rendah.
+         Sekarang h1 memikulnya, dan seksi pencarian di bawah tinggal mengajak. --}}
     <x-page-header
-        :title="$id ? 'Pemegang Sertifikat' : 'Certificate Holders'"
-        :subtitle="$id ? 'Bukti nyata kompetensi. Para profesional yang telah lulus sertifikasi resmi bersama kami.' : 'Real proof of competency. Professionals who have earned official certification with us.'"
+        :title="$id ? 'Cek Keaslian Sertifikat Kompetensi' : 'Verify a Competency Certificate'"
+        :subtitle="$id
+            ? 'Daftar terbuka pemegang sertifikat BNSP terbitan PT Delta Tiga Enam. Siapa pun boleh memeriksanya, tanpa perlu menghubungi kami dulu.'
+            : 'The open register of BNSP certificate holders issued by PT Delta Tiga Enam. Anyone may check it, without contacting us first.'"
         placement="certificate"
         image="photo-1524178232363-1fb2b075b655" />
 
@@ -42,77 +50,91 @@
          "Terdaftar 25" terbaca membantah klaim situs sendiri yang menulis
          "500+ Profesional Terlatih" di beranda.
 
-         Cakupan daftarnya kembali di bawah, tetapi kedua sebab itu ditutup
-         lebih dulu. Angkanya dihitung atas seluruh daftar dan tidak pernah
-         mengikuti kata kunci, jadi tidak bisa menyusut jadi "1". Kata-katanya
-         pun menyebut "tercatat di daftar ini", bukan "profesional terlatih":
-         daftar verifikasi yang terbuka memang bagian kecil dari seluruh peserta
-         yang pernah dilatih, dan menyebutnya begitu menghapus pertentangannya. --}}
+         Cakupan daftarnya kembali di kolom kanan, tetapi kedua sebab itu
+         ditutup lebih dulu. Angkanya dihitung atas seluruh daftar dan tidak
+         pernah mengikuti kata kunci, jadi tidak bisa menyusut jadi "1".
+         Kata-katanya pun menyebut "tercatat di daftar ini", bukan "profesional
+         terlatih": daftar verifikasi yang terbuka memang bagian kecil dari
+         seluruh peserta yang pernah dilatih, dan menyebutnya begitu menghapus
+         pertentangannya. --}}
     {{-- Latar putih dengan sapuan cahaya lembut, bukan blok abu rata: memberi
          kedalaman tanpa isian warna, dan kolom pencarian yang putih justru makin
          menonjol di atasnya. Pola yang sama sudah dipakai halaman Layanan. --}}
     <section class="section-sm relative overflow-hidden border-b border-navy-50 bg-white">
         <div class="pointer-events-none absolute inset-0 aurora-light opacity-80"></div>
 
-        <div class="container relative">
-            <div class="max-w-2xl">
-                {{-- Judul memuat kata yang benar-benar diketik orang saat mencari
-                     ("cek keaslian sertifikat kompetensi"), bukan nama fitur.
+        {{-- Dua kolom, bukan satu tumpukan. Sebelumnya judul, formulir, pintasan,
+             dan angka cakupan berderet ke bawah sepanjang satu kolom sempit,
+             menyisakan separuh kanan layar kosong. Kini alat pencariannya di kiri
+             dan cakupan daftarnya di kanan, memakai pembatas kolom yang sama
+             dengan seksi "Kenapa daftar ini kami buka" di bawah. --}}
+        <div class="container relative grid gap-10 lg:grid-cols-12 lg:gap-16">
+            <div class="lg:col-span-7">
+                {{-- Judul seksi turun ukuran dan berganti peran: bukan lagi
+                     mengulang judul halaman, melainkan mengajak orang mulai.
                      font-display dan text-balance tidak ditulis: app.css sudah
                      memberikannya ke seluruh h1–h4. --}}
-                <h2 class="text-3xl leading-tight text-navy md:text-5xl">
-                    {{ $id ? 'Cek Keaslian Sertifikat Kompetensi' : 'Verify a Competency Certificate' }}
-                </h2>
-                <p class="mt-6 font-display text-xl leading-snug text-navy md:text-2xl">
+                <h2 class="text-2xl leading-snug text-navy md:text-3xl">
                     {{ $id ? 'Satu nama. Satu nomor. Langsung terbukti.' : 'One name. One number. Proof on the spot.' }}
-                </p>
+                </h2>
+
+                {{-- busy dipasang di form, bukan di tombol, supaya keadaan
+                     "sedang memeriksa" terlihat sekalipun pengunjung menekan
+                     Enter di kolom isian. Tombolnya sengaja tidak dinonaktifkan:
+                     menonaktifkan tombol kirim pada peristiwa submit membuat
+                     sebagian browser membatalkan pengirimannya. --}}
+                <form method="GET" action="{{ route('certificates.index') }}#{{ $anchor }}" class="mt-7"
+                      x-data="{ busy: false }" x-on:submit="busy = true" x-bind:aria-busy="busy">
+                    <label for="cert-q" class="mb-2 block text-sm font-medium text-navy">
+                        {{ $id ? 'Nama peserta, perusahaan, atau nomor sertifikat' : 'Participant name, company, or certificate number' }}
+                    </label>
+                    <div class="flex flex-col gap-3 sm:flex-row">
+                        <div class="relative flex-1">
+                            <svg class="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                            {{-- Placeholder tidak diterjemahkan: isinya contoh nama dan nomor. --}}
+                            <input id="cert-q" type="search" name="q" value="{{ $q }}" autocomplete="off"
+                                   placeholder="Ahmad Fauzi · PT Baja Perkasa · DTE/BNSP/2026/1000"
+                                   class="w-full rounded-2xl border border-navy-200 bg-white py-5 pl-14 pr-5 text-base text-navy transition-colors duration-200 placeholder:text-slate-500 focus:border-sky-600">
+                        </div>
+                        <button type="submit" class="btn-blue shrink-0 justify-center !rounded-2xl !py-5 active:scale-[0.98] sm:!px-10">
+                            <svg x-show="busy" x-cloak class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity="0.3" stroke-width="3"/>
+                                <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                            <span x-text="busy ? @js($id ? 'Memeriksa…' : 'Checking…') : @js($id ? 'Periksa' : 'Check')">{{ $id ? 'Periksa' : 'Check' }}</span>
+                        </button>
+                    </div>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-600">
+                        {{ $id
+                            ? 'Sebagian nama atau sebagian nomor sudah cukup. Hasilnya menampilkan kualifikasi yang diuji dan apakah sertifikatnya masih berlaku hari ini.'
+                            : 'Part of a name or part of a number is enough. Results show the qualification assessed and whether the certificate is still valid today.' }}
+                    </p>
+                </form>
+
+                {{-- Pintasan dari kualifikasi yang paling banyak dipegang. Bukan hiasan:
+                     pengunjung yang belum tahu harus mengetik apa jadi punya titik
+                     mulai, dan seksi ini menunjukkan isi daftarnya tanpa diklaim. --}}
+                @if ($suggestions->isNotEmpty())
+                    <div class="mt-7 flex flex-wrap items-center gap-2 text-sm">
+                        <span class="mr-1 text-slate-500">{{ $id ? 'Cari cepat:' : 'Quick search:' }}</span>
+                        @foreach ($suggestions as $suggestion)
+                            @php $active = $q === $suggestion; @endphp
+                            <a href="{{ route('certificates.index', ['q' => $suggestion]) }}#{{ $anchor }}"
+                               @if ($active) aria-current="true" @endif
+                               class="rounded-full border px-3.5 py-1.5 font-medium transition duration-200 active:scale-[0.97] {{ $active
+                                   ? 'border-navy bg-navy text-white'
+                                   : 'border-navy-200 bg-white text-navy hover:border-sky-600 hover:text-sky-700' }}">
+                                {{ $suggestion }}
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
             </div>
 
-            {{-- Formulir sengaja lebih lebar dari kolom teksnya: bilah pencarian
-                 menjadi benda paling menonjol di seksi ini tanpa perlu dikotakkan. --}}
-            <form method="GET" action="{{ route('certificates.index') }}#{{ $anchor }}" class="mt-9 max-w-3xl">
-                <label for="cert-q" class="sr-only">{{ $id ? 'Nama peserta, perusahaan, atau nomor sertifikat' : 'Participant name, company, or certificate number' }}</label>
-                <div class="flex flex-col gap-3 sm:flex-row">
-                    <div class="relative flex-1">
-                        <svg class="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-                        {{-- Placeholder tidak diterjemahkan: isinya contoh nama dan nomor. --}}
-                        <input id="cert-q" type="search" name="q" value="{{ $q }}" autocomplete="off"
-                               placeholder="Ahmad Fauzi · PT Baja Perkasa · DTE/BNSP/2026/1000"
-                               class="w-full rounded-2xl border border-navy-200 bg-white py-5 pl-14 pr-5 text-base text-navy transition-colors duration-200 placeholder:text-slate-500 focus:border-sky-600">
-                    </div>
-                    <button type="submit" class="btn-blue shrink-0 justify-center !rounded-2xl !py-5 sm:!px-10">{{ $id ? 'Periksa' : 'Check' }}</button>
-                </div>
-                <p class="mt-4 max-w-2xl text-sm leading-relaxed text-slate-600">
-                    {{ $id
-                        ? 'Sebagian nama atau sebagian nomor sudah cukup. Hasilnya menampilkan kualifikasi yang diuji dan apakah sertifikatnya masih berlaku hari ini.'
-                        : 'Part of a name or part of a number is enough. Results show the qualification assessed and whether the certificate is still valid today.' }}
-                </p>
-            </form>
-
-            {{-- Pintasan dari kualifikasi yang paling banyak dipegang. Bukan hiasan:
-                 pengunjung yang belum tahu harus mengetik apa jadi punya titik
-                 mulai, dan seksi ini menunjukkan isi daftarnya tanpa diklaim. --}}
-            @if ($suggestions->isNotEmpty())
-                <div class="mt-7 flex flex-wrap items-center gap-2 text-sm">
-                    <span class="mr-1 text-slate-500">{{ $id ? 'Cari cepat:' : 'Quick search:' }}</span>
-                    @foreach ($suggestions as $suggestion)
-                        @php $active = $q === $suggestion; @endphp
-                        <a href="{{ route('certificates.index', ['q' => $suggestion]) }}#{{ $anchor }}"
-                           @if ($active) aria-current="true" @endif
-                           class="rounded-full border px-3.5 py-1.5 font-medium transition-colors duration-200 {{ $active
-                               ? 'border-navy bg-navy text-white'
-                               : 'border-navy-200 bg-white text-navy hover:border-sky-600 hover:text-sky-700' }}">
-                            {{ $suggestion }}
-                        </a>
-                    @endforeach
-                </div>
-            @endif
-
-            {{-- Cakupan daftar. Angka dan labelnya sebaris, bukan angka raksasa
-                 bertumpuk label kecil: bentuk yang terakhir itu pola kartu
-                 statistik SaaS yang PRODUCT.md sebut sebagai anti-referensi, dan
-                 di halaman yang pekerjaannya memverifikasi, angka yang berteriak
-                 justru terdengar seperti pemasaran.
+            {{-- Cakupan daftar. Angka di atas, labelnya tepat di bawah, dipisah
+                 garis rambut — bukan tiga kartu statistik bersebelahan: di halaman
+                 yang pekerjaannya memverifikasi, angka yang dikotakkan dan
+                 diperbesar terdengar seperti pemasaran, bukan bukti.
 
                  Nilainya tercetak apa adanya di dalam elemennya, jadi tetap
                  terbaca bila animasi penghitungnya tidak berjalan. --}}
@@ -121,21 +143,29 @@
                     $scope = $id ? [
                         [$registry->total, 'sertifikat tercatat'],
                         [$registry->valid, 'masih berlaku hari ini'],
-                        [$registry->companies, 'perusahaan'],
+                        [$registry->companies, 'perusahaan berbeda'],
                     ] : [
                         [$registry->total, 'certificates on record'],
                         [$registry->valid, 'still valid today'],
-                        [$registry->companies, 'companies'],
+                        [$registry->companies, 'distinct companies'],
                     ];
                 @endphp
-                <ul class="mt-10 flex flex-wrap items-baseline gap-x-8 gap-y-4 border-t border-navy-100 pt-8 sm:gap-x-10">
-                    @foreach ($scope as [$value, $label])
-                        <li class="flex items-baseline gap-2">
-                            <span class="font-display text-2xl font-semibold tabular-nums text-navy md:text-3xl" data-counter="{{ $value }}">{{ $value }}</span>
-                            <span class="text-sm leading-tight text-slate-600">{{ $label }}</span>
-                        </li>
-                    @endforeach
-                </ul>
+                <aside class="lg:col-span-5 lg:border-l lg:border-navy-200 lg:pl-10">
+                    <h3 class="border-t border-navy-200 pt-8 text-sm font-semibold uppercase tracking-wide text-slate-500 lg:border-t-0 lg:pt-0">
+                        {{ $id ? 'Isi daftar ini' : 'Inside this register' }}
+                    </h3>
+                    <dl class="mt-6 divide-y divide-navy-100 border-y border-navy-100">
+                        @foreach ($scope as [$value, $label])
+                            {{-- dt sebelum dd mengikuti urutan yang diwajibkan HTML;
+                                 flex-col-reverse yang membalik tampilannya, sehingga
+                                 angka tampil di atas tanpa merusak strukturnya. --}}
+                            <div class="flex flex-col-reverse py-5">
+                                <dt class="mt-1 text-sm leading-tight text-slate-600">{{ $label }}</dt>
+                                <dd class="font-display text-3xl font-semibold leading-none tabular-nums text-navy" data-counter="{{ $value }}">{{ $value }}</dd>
+                            </div>
+                        @endforeach
+                    </dl>
+                </aside>
             @endif
         </div>
     </section>
