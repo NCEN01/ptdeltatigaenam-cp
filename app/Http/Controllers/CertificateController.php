@@ -57,24 +57,35 @@ class CertificateController extends Controller
     }
 
     /**
-     * Ukuran daftar ini secara keseluruhan: berapa sertifikat tercatat, berapa
-     * yang masih berlaku hari ini, dan dari berapa perusahaan.
+     * Susunan daftar ini menurut ketiga keadaan yang sama persis dengan lencana
+     * pada kolom hasil: berlaku, segera berakhir, dan kedaluwarsa. Ditambah
+     * jumlah keseluruhan dan jumlah perusahaan.
+     *
+     * Ambangnya menyalin x-certificate-status — kedaluwarsa bila tanggalnya
+     * sudah lewat, segera berakhir bila jatuh dalam 90 hari ke depan. Kalau
+     * salah satu ambang bergeser tanpa yang lain, legenda di halaman akan
+     * menyebut angka yang tidak cocok dengan lencana di sebelahnya.
      *
      * Sengaja TIDAK mengikuti kata kunci pencarian. Angka yang ikut menyusut
      * saat orang mencari akan berbunyi "1 dari 1" — tidak memberi tahu apa pun
      * tentang seberapa besar daftarnya, padahal justru itu yang menenangkan
      * pengunjung yang sedang memeriksa keaslian sebuah sertifikat.
      *
-     * Batas "masih berlaku" memakai DATE() supaya benar-benar kebalikan dari
-     * hitungan kedaluwarsa di atas; tanpa itu sertifikat yang berakhir hari ini
-     * bisa tidak terhitung di kedua sisi karena jamnya.
+     * DATE() dipakai di ketiganya supaya ketiga ember itu saling lepas dan
+     * jumlahnya pas dengan total; tanpa itu sertifikat yang berakhir hari ini
+     * bisa lolos dari semua ember gara-gara jamnya.
      */
     private function registryScope(): ?object
     {
+        $today = Carbon::today()->toDateString();
+        $soonLimit = Carbon::today()->addDays(90)->toDateString();
+
         return CertificateHolder::active()
             ->selectRaw('COUNT(*) as total')
-            ->selectRaw('SUM(CASE WHEN expires_at IS NULL OR DATE(expires_at) >= ? THEN 1 ELSE 0 END) as valid', [Carbon::today()->toDateString()])
             ->selectRaw("COUNT(DISTINCT NULLIF(company_name, '')) as companies")
+            ->selectRaw('SUM(CASE WHEN expires_at IS NULL OR DATE(expires_at) > ? THEN 1 ELSE 0 END) as valid', [$soonLimit])
+            ->selectRaw('SUM(CASE WHEN expires_at IS NOT NULL AND DATE(expires_at) >= ? AND DATE(expires_at) <= ? THEN 1 ELSE 0 END) as soon', [$today, $soonLimit])
+            ->selectRaw('SUM(CASE WHEN expires_at IS NOT NULL AND DATE(expires_at) < ? THEN 1 ELSE 0 END) as expired', [$today])
             ->first();
     }
 

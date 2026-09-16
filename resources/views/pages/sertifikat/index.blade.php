@@ -85,18 +85,29 @@
                      sebagian browser membatalkan pengirimannya. --}}
                 <form method="GET" action="{{ route('certificates.index') }}#{{ $anchor }}" class="mt-7"
                       x-data="{ busy: false }" x-on:submit="busy = true" x-bind:aria-busy="busy">
-                    <label for="cert-q" class="mb-2 block text-sm font-medium text-navy">
+                    <label for="cert-q" class="mb-2.5 block text-sm font-medium text-navy">
                         {{ $id ? 'Nama peserta, perusahaan, atau nomor sertifikat' : 'Participant name, company, or certificate number' }}
                     </label>
-                    <div class="flex flex-col gap-3 sm:flex-row">
+
+                    {{-- Kolom isian dan tombol menjadi satu benda, bukan dua kotak
+                         bersebelahan berjarak. Bilah pencarian adalah pekerjaan
+                         halaman ini, jadi ia pantas terbaca sebagai satu alat.
+
+                         Jari-jari luar 24px membungkus jari-jari dalam 16px dengan
+                         sela 8px, jadi lengkungannya benar-benar sepusat.
+
+                         Bayangan sengaja tidak dipasang saat diam: garis 1px plus
+                         bayangan lebar adalah hiasan kartu hantu. Cincinnya hanya
+                         muncul saat fokus, di situ ia menjadi penanda keadaan. --}}
+                    <div class="rounded-3xl border border-navy-200 bg-white p-2 transition duration-200 focus-within:border-sky-600 focus-within:ring-4 focus-within:ring-sky-500/15 sm:flex sm:items-center sm:gap-2">
                         <div class="relative flex-1">
-                            <svg class="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                            <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
                             {{-- Placeholder tidak diterjemahkan: isinya contoh nama dan nomor. --}}
                             <input id="cert-q" type="search" name="q" value="{{ $q }}" autocomplete="off"
                                    placeholder="Ahmad Fauzi · PT Baja Perkasa · DTE/BNSP/2026/1000"
-                                   class="w-full rounded-2xl border border-navy-200 bg-white py-5 pl-14 pr-5 text-base text-navy transition-colors duration-200 placeholder:text-slate-500 focus:border-sky-600">
+                                   class="w-full rounded-2xl border-0 bg-transparent py-4 pl-12 pr-4 text-base text-navy placeholder:text-slate-500 focus:outline-none focus:ring-0">
                         </div>
-                        <button type="submit" class="btn-blue shrink-0 justify-center !rounded-2xl !py-5 active:scale-[0.98] sm:!px-10">
+                        <button type="submit" class="btn-blue mt-2 w-full justify-center !rounded-2xl !py-4 active:scale-[0.98] sm:mt-0 sm:w-auto sm:!px-9">
                             <svg x-show="busy" x-cloak class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                 <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity="0.3" stroke-width="3"/>
                                 <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
@@ -104,10 +115,11 @@
                             <span x-text="busy ? @js($id ? 'Memeriksa…' : 'Checking…') : @js($id ? 'Periksa' : 'Check')">{{ $id ? 'Periksa' : 'Check' }}</span>
                         </button>
                     </div>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-600">
+
+                    <p class="mt-3.5 text-sm leading-relaxed text-slate-600">
                         {{ $id
-                            ? 'Sebagian nama atau sebagian nomor sudah cukup. Hasilnya menampilkan kualifikasi yang diuji dan apakah sertifikatnya masih berlaku hari ini.'
-                            : 'Part of a name or part of a number is enough. Results show the qualification assessed and whether the certificate is still valid today.' }}
+                            ? 'Sebagian nama atau sebagian nomor sudah cukup.'
+                            : 'Part of a name or part of a number is enough.' }}
                     </p>
                 </form>
 
@@ -131,40 +143,61 @@
                 @endif
             </div>
 
-            {{-- Cakupan daftar. Angka di atas, labelnya tepat di bawah, dipisah
-                 garis rambut — bukan tiga kartu statistik bersebelahan: di halaman
-                 yang pekerjaannya memverifikasi, angka yang dikotakkan dan
-                 diperbesar terdengar seperti pemasaran, bukan bukti.
+            {{-- Susunan daftar menurut ketiga keadaan yang sama persis dengan
+                 lencana di kolom hasil, berikut titik warnanya. Jadi kolom ini
+                 bukan sekadar memamerkan angka: ia mengajarkan cara membaca
+                 hasilnya sebelum hasilnya muncul, sekaligus menjawab "seberapa
+                 besar daftar ini" dalam satu tempat.
+
+                 Bukan pula tiga kartu statistik bersebelahan — di halaman yang
+                 pekerjaannya memverifikasi, angka yang dikotakkan dan diperbesar
+                 terdengar seperti pemasaran, bukan bukti.
 
                  Nilainya tercetak apa adanya di dalam elemennya, jadi tetap
                  terbaca bila animasi penghitungnya tidak berjalan. --}}
             @if ($registry?->total)
                 @php
-                    $scope = $id ? [
-                        [$registry->total, 'sertifikat tercatat'],
-                        [$registry->valid, 'masih berlaku hari ini'],
-                        [$registry->companies, 'perusahaan berbeda'],
+                    $states = $id ? [
+                        ['bg-sky-500', 'Berlaku', $registry->valid],
+                        ['bg-amber-500', 'Segera berakhir', $registry->soon],
+                        ['bg-rose-500', 'Kedaluwarsa', $registry->expired],
                     ] : [
-                        [$registry->total, 'certificates on record'],
-                        [$registry->valid, 'still valid today'],
-                        [$registry->companies, 'distinct companies'],
+                        ['bg-sky-500', 'Valid', $registry->valid],
+                        ['bg-amber-500', 'Expiring soon', $registry->soon],
+                        ['bg-rose-500', 'Expired', $registry->expired],
                     ];
                 @endphp
                 <aside class="lg:col-span-5 lg:border-l lg:border-navy-200 lg:pl-10">
-                    <h3 class="border-t border-navy-200 pt-8 text-sm font-semibold uppercase tracking-wide text-slate-500 lg:border-t-0 lg:pt-0">
-                        {{ $id ? 'Isi daftar ini' : 'Inside this register' }}
-                    </h3>
-                    <dl class="mt-6 divide-y divide-navy-100 border-y border-navy-100">
-                        @foreach ($scope as [$value, $label])
-                            {{-- dt sebelum dd mengikuti urutan yang diwajibkan HTML;
-                                 flex-col-reverse yang membalik tampilannya, sehingga
-                                 angka tampil di atas tanpa merusak strukturnya. --}}
-                            <div class="flex flex-col-reverse py-5">
-                                <dt class="mt-1 text-sm leading-tight text-slate-600">{{ $label }}</dt>
-                                <dd class="font-display text-3xl font-semibold leading-none tabular-nums text-navy" data-counter="{{ $value }}">{{ $value }}</dd>
-                            </div>
-                        @endforeach
-                    </dl>
+                    <div class="border-t border-navy-200 pt-8 lg:border-t-0 lg:pt-0">
+                        <h3 class="font-display text-base font-semibold text-navy">
+                            {{ $id ? 'Isi daftar ini hari ini' : 'What is in the register today' }}
+                        </h3>
+                        <p class="mt-2 text-sm leading-relaxed text-slate-600">
+                            {{ $id
+                                ? 'Tanda yang sama muncul di samping setiap nama pada hasil pencarian.'
+                                : 'The same markers appear beside every name in the results.' }}
+                        </p>
+
+                        <dl class="mt-6 divide-y divide-navy-100 border-y border-navy-100">
+                            @foreach ($states as [$dot, $label, $value])
+                                <div class="flex items-center justify-between gap-4 py-4">
+                                    <dt class="flex items-center gap-2.5 text-sm text-navy">
+                                        <span class="h-2 w-2 shrink-0 rounded-full {{ $dot }}" aria-hidden="true"></span>
+                                        {{ $label }}
+                                    </dt>
+                                    <dd class="font-display text-2xl font-semibold leading-none tabular-nums text-navy" data-counter="{{ $value }}">{{ $value }}</dd>
+                                </div>
+                            @endforeach
+                        </dl>
+
+                        <p class="mt-5 text-sm leading-relaxed text-slate-600">
+                            {{ $id ? 'Seluruhnya' : 'All told' }}
+                            <span class="font-semibold tabular-nums text-navy">{{ $registry->total }}</span>
+                            {{ $id ? 'sertifikat dari' : 'certificates from' }}
+                            <span class="font-semibold tabular-nums text-navy">{{ $registry->companies }}</span>
+                            {{ $id ? 'perusahaan.' : 'companies.' }}
+                        </p>
+                    </div>
                 </aside>
             @endif
         </div>
