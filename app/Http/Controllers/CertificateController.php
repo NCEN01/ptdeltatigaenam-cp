@@ -52,7 +52,30 @@ class CertificateController extends Controller
             'q' => $q,
             'expiredCount' => $expiredCount,
             'suggestions' => $this->topQualifications(),
+            'registry' => $this->registryScope(),
         ]);
+    }
+
+    /**
+     * Ukuran daftar ini secara keseluruhan: berapa sertifikat tercatat, berapa
+     * yang masih berlaku hari ini, dan dari berapa perusahaan.
+     *
+     * Sengaja TIDAK mengikuti kata kunci pencarian. Angka yang ikut menyusut
+     * saat orang mencari akan berbunyi "1 dari 1" — tidak memberi tahu apa pun
+     * tentang seberapa besar daftarnya, padahal justru itu yang menenangkan
+     * pengunjung yang sedang memeriksa keaslian sebuah sertifikat.
+     *
+     * Batas "masih berlaku" memakai DATE() supaya benar-benar kebalikan dari
+     * hitungan kedaluwarsa di atas; tanpa itu sertifikat yang berakhir hari ini
+     * bisa tidak terhitung di kedua sisi karena jamnya.
+     */
+    private function registryScope(): ?object
+    {
+        return CertificateHolder::active()
+            ->selectRaw('COUNT(*) as total')
+            ->selectRaw('SUM(CASE WHEN expires_at IS NULL OR DATE(expires_at) >= ? THEN 1 ELSE 0 END) as valid', [Carbon::today()->toDateString()])
+            ->selectRaw("COUNT(DISTINCT NULLIF(company_name, '')) as companies")
+            ->first();
     }
 
     /**

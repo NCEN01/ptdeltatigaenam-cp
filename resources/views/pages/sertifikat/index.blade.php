@@ -36,12 +36,18 @@
          terselip sebagai baris alat kecil kini memimpin halaman.
 
          Blok tiga angka besar (Terdaftar / Masih berlaku / Kedaluwarsa) pernah
-         berdiri di sini lalu dihapus. Dua sebabnya nyata: saat orang mencari —
-         yaitu saat halaman ini bekerja — angkanya berbunyi "1 1 0" atau
-         "0 0 0", tiga angka terbesar di layar untuk mengatakan nyaris tidak ada
-         apa-apa; dan "Terdaftar 25" membantah klaim situs sendiri yang menulis
-         "500+ Profesional Terlatih" di beranda serta halaman Tentang. Jumlahnya
-         kini muncul sebagai keterangan tenang tepat di atas daftarnya. --}}
+         berdiri di sini lalu dihapus karena dua sebab nyata: angkanya ikut
+         menyusut saat orang mencari, sehingga berbunyi "1 1 0" — tiga angka
+         terbesar di layar untuk mengatakan nyaris tidak ada apa-apa; dan
+         "Terdaftar 25" terbaca membantah klaim situs sendiri yang menulis
+         "500+ Profesional Terlatih" di beranda.
+
+         Cakupan daftarnya kembali di bawah, tetapi kedua sebab itu ditutup
+         lebih dulu. Angkanya dihitung atas seluruh daftar dan tidak pernah
+         mengikuti kata kunci, jadi tidak bisa menyusut jadi "1". Kata-katanya
+         pun menyebut "tercatat di daftar ini", bukan "profesional terlatih":
+         daftar verifikasi yang terbuka memang bagian kecil dari seluruh peserta
+         yang pernah dilatih, dan menyebutnya begitu menghapus pertentangannya. --}}
     {{-- Latar putih dengan sapuan cahaya lembut, bukan blok abu rata: memberi
          kedalaman tanpa isian warna, dan kolom pencarian yang putih justru makin
          menonjol di atasnya. Pola yang sama sudah dipakai halaman Layanan. --}}
@@ -100,6 +106,36 @@
                         </a>
                     @endforeach
                 </div>
+            @endif
+
+            {{-- Cakupan daftar. Angka dan labelnya sebaris, bukan angka raksasa
+                 bertumpuk label kecil: bentuk yang terakhir itu pola kartu
+                 statistik SaaS yang PRODUCT.md sebut sebagai anti-referensi, dan
+                 di halaman yang pekerjaannya memverifikasi, angka yang berteriak
+                 justru terdengar seperti pemasaran.
+
+                 Nilainya tercetak apa adanya di dalam elemennya, jadi tetap
+                 terbaca bila animasi penghitungnya tidak berjalan. --}}
+            @if ($registry?->total)
+                @php
+                    $scope = $id ? [
+                        [$registry->total, 'sertifikat tercatat'],
+                        [$registry->valid, 'masih berlaku hari ini'],
+                        [$registry->companies, 'perusahaan'],
+                    ] : [
+                        [$registry->total, 'certificates on record'],
+                        [$registry->valid, 'still valid today'],
+                        [$registry->companies, 'companies'],
+                    ];
+                @endphp
+                <ul class="mt-10 flex flex-wrap items-baseline gap-x-8 gap-y-4 border-t border-navy-100 pt-8 sm:gap-x-10">
+                    @foreach ($scope as [$value, $label])
+                        <li class="flex items-baseline gap-2">
+                            <span class="font-display text-2xl font-semibold tabular-nums text-navy md:text-3xl" data-counter="{{ $value }}">{{ $value }}</span>
+                            <span class="text-sm leading-tight text-slate-600">{{ $label }}</span>
+                        </li>
+                    @endforeach
+                </ul>
             @endif
         </div>
     </section>
