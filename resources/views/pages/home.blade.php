@@ -394,11 +394,13 @@
          kartunya latar itu menyembul sebagai potongan gambar acak. Bidang gelap
          polos membuat foto proyeknya yang berbicara. --}}
     @if ($portfolios->isNotEmpty())
-        <section class="section-sm relative overflow-hidden bg-navy-950">
-            <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
-            <div class="pointer-events-none absolute -left-32 -top-20 h-96 w-96 rounded-full bg-sky-500/10 blur-3xl"></div>
-            <div class="pointer-events-none absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-cyan/10 blur-3xl"></div>
-            <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
+        {{-- bg-navy-anim + grain, persis seperti seksi Kategori Layanan di halaman
+             ini dan seksi Pendiri di halaman Tentang. Lingkaran cahaya yang
+             sebelumnya saya tambahkan dilepas: gradien itu sudah membawa pendar
+             birunya sendiri, dan menumpuknya justru mengeruhkan sapuan terangnya. --}}
+        <section class="section-sm relative overflow-hidden bg-navy-anim text-white">
+            <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
+            <div class="pointer-events-none absolute inset-0 grain opacity-30"></div>
 
             <div class="container relative">
                 <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
@@ -418,7 +420,10 @@
                                     ? [[$portfolioScope->total, 'proyek'], [$portfolioScope->clients, 'klien'], [$portfolioScope->categories, 'bidang layanan']]
                                     : [[$portfolioScope->total, 'projects'], [$portfolioScope->clients, 'clients'], [$portfolioScope->categories, 'service areas']];
                             @endphp
-                            <p class="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-wider text-navy-200" data-aos="fade-up">
+                            {{-- navy-100, bukan navy-200: sapuan terang di gradien ini
+                                 mencapai #2b83df, dan biru muda di atasnya nyaris
+                                 tidak terbaca saat sapuan itu lewat. --}}
+                            <p class="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-wider text-navy-100" data-aos="fade-up">
                                 @foreach ($scope as [$value, $label])
                                     @if (! $loop->first)
                                         <span class="h-3.5 w-px bg-white/20" aria-hidden="true"></span>
@@ -471,9 +476,9 @@
                             </div>
 
                             <h3 class="mt-5 font-display text-lg font-semibold leading-snug text-white text-balance transition-colors duration-300 group-hover:text-sky-300">{{ $p->title }}</h3>
-                            <p class="mt-1.5 flex flex-wrap items-center gap-x-2 text-sm text-navy-200">
+                            <p class="mt-1.5 flex flex-wrap items-center gap-x-2 text-sm text-navy-100">
                                 @if ($p->client_name)<span>{{ $p->client_name }}</span>@endif
-                                @if ($p->client_name && $p->project_date)<span class="text-white/25" aria-hidden="true">·</span>@endif
+                                @if ($p->client_name && $p->project_date)<span class="text-white/40" aria-hidden="true">·</span>@endif
                                 @if ($p->project_date)<span class="font-mono text-xs">{{ $p->project_date->translatedFormat('Y') }}</span>@endif
                             </p>
                         </a>
