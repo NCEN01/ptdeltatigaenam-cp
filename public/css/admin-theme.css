@@ -14,77 +14,90 @@
 
 /* ===========================================================================
    LOGIN / SIMPLE PAGES
+
+   Panel internal, jadi tampilannya sengaja berbeda dari halaman masuk pelanggan
+   yang terbagi dua dengan foto. Di sini: satu kartu di tengah bidang navy pekat,
+   tanpa foto sama sekali. Sunyi, padat, terbaca sebagai perkakas kerja.
+
+   Yang dibongkar dari versi sebelumnya, semuanya penanda tampilan "ramai":
+     - empat gradien radial bertumpuk menjadi satu sumber cahaya dari atas
+     - orb beranimasi 16 detik tanpa henti dilepas; gerak abadi di halaman masuk
+       tidak menyampaikan apa pun dan terus memakan GPU selama halaman terbuka
+     - kartu kaca (backdrop-filter) menjadi permukaan padat
+     - garis 1px berpasangan bayangan lebar, si "kartu hantu", tinggal bayangan
+     - garis emas melintang di kepala kartu dilepas, sejalan dengan penghapusan
+       penanda emas di seluruh situs
+     - teks merek bergradasi dilepas; warnanya kini pekat, penekanan lewat bobot
+
+   Warnanya memakai palet situs yang sebenarnya (#071d38, #0b2b52, #2b83df),
+   bukan biru lain yang dipakai blok di bawah. Panel admin sebelumnya berwarna
+   biru yang berbeda dari situsnya sendiri.
    =========================================================================== */
 .fi-simple-layout {
     background:
-        radial-gradient(55% 70% at 12% 8%, rgba(21, 101, 192, 0.45), transparent 60%),
-        radial-gradient(45% 55% at 88% 92%, rgba(237, 174, 73, 0.22), transparent 60%),
-        radial-gradient(40% 45% at 50% 50%, rgba(72, 202, 228, 0.12), transparent 70%),
-        linear-gradient(150deg, #0f4890 0%, #1565c0 45%, #0b3161 100%);
+        radial-gradient(75% 55% at 50% -12%, rgba(43, 131, 223, 0.20), transparent 68%),
+        linear-gradient(180deg, #0b2b52 0%, #071d38 100%);
     background-attachment: fixed;
-    position: relative;
-    isolation: isolate;
 }
 
-/* soft floating orbs behind the card */
-.fi-simple-layout::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background:
-        radial-gradient(18rem 18rem at 20% 25%, rgba(21, 101, 192, 0.30), transparent 70%),
-        radial-gradient(16rem 16rem at 82% 75%, rgba(237, 174, 73, 0.18), transparent 70%);
-    animation: d36-float 16s ease-in-out infinite alternate;
-    pointer-events: none;
-}
-@keyframes d36-float {
-    from { transform: translate3d(-1.5%, -1%, 0) scale(1.02); }
-    to   { transform: translate3d(2%, 1.5%, 0) scale(1.08); }
-}
-@media (prefers-reduced-motion: reduce) {
-    .fi-simple-layout::before { animation: none; }
-}
-
-/* the login card */
+/* Kartu masuk. Satu bayangan, tanpa garis, tanpa buram di belakangnya. */
 .fi-simple-main {
-    border-radius: 1.25rem !important;
-    border: 1px solid rgba(255, 255, 255, 0.55) !important;
-    box-shadow:
-        0 30px 70px -25px rgba(0, 0, 0, 0.55),
-        0 2px 10px -4px rgba(10, 42, 94, 0.25) !important;
-    position: relative;
-    overflow: hidden;
-    background-color: rgba(255, 255, 255, 0.97) !important;
-    backdrop-filter: blur(6px);
+    border-radius: 1rem !important;
+    border: 0 !important;
+    box-shadow: 0 24px 56px -28px rgba(0, 0, 0, 0.7) !important;
+    background-color: #ffffff !important;
 }
 .dark .fi-simple-main {
-    background-color: rgba(17, 24, 39, 0.92) !important;
-    border-color: rgba(255, 255, 255, 0.08) !important;
+    background-color: #111827 !important;
+    box-shadow: 0 24px 56px -28px rgba(0, 0, 0, 0.85) !important;
 }
 
-/* gold accent line across the top of the card */
-.fi-simple-main::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--d36-gold), var(--d36-gold-soft), transparent);
-}
-
-/* brand + heading inside the card */
+/* Merek di kepala kartu: rata tengah, warna pekat, tanpa gradasi. */
 .fi-simple-header {
     text-align: center;
 }
 .fi-simple-header .fi-logo {
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: -0.02em;
-    font-size: 1.4rem;
-    background: linear-gradient(100deg, var(--d36-navy), var(--d36-sky));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: 1.35rem;
+    color: #0e2237;
     display: inline-block;
+}
+.dark .fi-simple-header .fi-logo {
+    color: #ffffff;
+}
+/* Bila brandLogo diisi gambar, .fi-logo menjadi <img> — batasi tingginya saja. */
+.fi-simple-header img.fi-logo {
+    height: 2.5rem;
+    width: auto;
+}
+
+/* Keterangan kecil di kaki kartu, penanda ini wilayah internal. Dipisah garis
+   rambut supaya terbaca sebagai catatan, bukan bagian dari formulirnya. */
+.d36-auth-note {
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(14, 34, 55, 0.08);
+    text-align: center;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: #64748b;
+}
+.dark .d36-auth-note {
+    border-top-color: rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+}
+.d36-auth-note a {
+    color: #0e2237;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.dark .d36-auth-note a {
+    color: #e2e8f0;
+}
+.d36-auth-note a:hover {
+    color: #2b83df;
 }
 
 /* ===========================================================================

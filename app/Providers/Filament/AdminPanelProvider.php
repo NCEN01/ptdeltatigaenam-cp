@@ -32,6 +32,10 @@ class AdminPanelProvider extends PanelProvider
             ->login(\App\Filament\Pages\Auth\Login::class)
             ->authGuard('web')
             ->brandName('Delta Tiga Enam')
+            // Logo sungguhan di kepala kartu masuk, menggantikan tulisan merek
+            // bergradasi. Tampil juga di bilah samping panel.
+            ->brandLogo(fn (): string => asset('images/logodelta36.png'))
+            ->brandLogoHeight('2.5rem')
             ->colors([
                 'primary' => Color::hex('#1565c0'),  // brand dark blue
                 'gold' => Color::hex('#edae49'),     // accent
@@ -46,6 +50,16 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::HEAD_END,
                 fn (): HtmlString => new HtmlString(
                     '<link rel="stylesheet" href="'.asset('css/admin-theme.css').'?v='.@filemtime(public_path('css/admin-theme.css')).'">'
+                ),
+            )
+            // Penanda wilayah internal di kaki kartu masuk. AUTH_LOGIN_FORM_AFTER
+            // hanya dipasang pada halaman masuk, jadi tidak perlu dibatasi scope
+            // dan tidak bocor ke halaman panel lain.
+            ->renderHook(
+                PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
+                fn (): HtmlString => new HtmlString(
+                    '<p class="d36-auth-note">Panel internal PT Delta Tiga Enam. '
+                    .'Mencari akun pelanggan? <a href="'.route('login', ['locale' => app()->getLocale()]).'">Masuk di sini</a>.</p>'
                 ),
             )
             ->plugins([
