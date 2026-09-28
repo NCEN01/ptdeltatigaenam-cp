@@ -11,6 +11,7 @@ use App\Models\Portfolio;
 use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\Testimonial;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -24,8 +25,25 @@ class HomeController extends Controller
                 ->withCount('services')->orderBy('sort_order')->get(),
             'featuredServices' => Service::where('is_active', true)->where('is_featured', true)
                 ->with('category')->orderBy('sort_order')->take(4)->get(),
-            'latestServices' => Service::where('is_active', true)
-                ->with('category')->latest()->take(6)->get(),
+            // Dipetakan ke bentuk yang dipakai <x-pelatihan-terbaru>. Datanya
+            // layanan sungguhan, bukan array contoh: judul, gambar, dan harganya
+            // ikut berubah begitu admin menyuntingnya lewat CMS.
+            //
+            // harga_awal hanya diisi ketika diskonnya memang aktif; komponennya
+            // menghitung persentase dari selisih keduanya, jadi mengisinya tanpa
+            // syarat akan memunculkan lencana diskon pada layanan yang tidak
+            // sedang berdiskon.
+            'programs' => Service::where('is_active', true)
+                ->with('category')->latest()->take(8)->get()
+                ->map(fn (Service $s): array => [
+                    'kategori' => optional($s->category)->name,
+                    'judul' => $s->title,
+                    'deskripsi' => $s->short_description,
+                    'gambar' => $s->image ? Storage::url($s->image) : null,
+                    'url' => route('services.show', $s->slug),
+                    'harga' => (float) $s->price,
+                    'harga_awal' => $s->hasDiscount() ? (float) $s->discount_original_price : null,
+                ]),
             // 3 newest portfolios — auto-updates whenever a more recent one is added.
             'portfolios' => Portfolio::where('is_active', true)
                 ->with('category')->latest('project_date')->latest('id')->take(3)->get(),

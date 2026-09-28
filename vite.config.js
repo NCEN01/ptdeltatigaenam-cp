@@ -5,7 +5,15 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: [
+                'resources/css/app.css',
+                'resources/js/app.js',
+                // Seksi "Pelatihan Terbaru Kami" — berkas terpisah dengan awalan
+                // .pt- sendiri, sengaja tidak digabung ke app.css supaya urutannya
+                // pasti sesudah Tailwind dan tidak ikut terpengaruh preflight.
+                'resources/css/pelatihan-terbaru.css',
+                'resources/js/pelatihan-terbaru.js',
+            ],
             refresh: true,
         }),
         VitePWA({

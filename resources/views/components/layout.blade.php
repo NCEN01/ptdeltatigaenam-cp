@@ -51,6 +51,11 @@
          Aktifkan lagi saat PWA dihidupkan: <link rel="manifest" href="{{ asset('manifest.webmanifest') }}"> --}}
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- Gaya milik komponen tertentu, didorong lewat @push('styles').
+         Letaknya sesudah app.css dengan sengaja: berkas seksi yang punya awalan
+         kelas sendiri harus menang atas preflight Tailwind tanpa !important. --}}
+    @stack('styles')
 </head>
 <body class="min-h-dvh bg-white text-ink antialiased">
     {{-- ── First-visit intro splash: logo + company name (~3.3s, once per browser session) ── --}}

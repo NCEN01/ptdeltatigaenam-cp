@@ -301,113 +301,15 @@
         </div>
     </section>
 
-    {{-- ===================== LATEST SERVICES ===================== --}}
-    @if ($latestServices->isNotEmpty())
-        {{-- Latar netral dengan tiga lambang pendidikan melayang di belakangnya:
-             toga, buku terbuka, dan lencana. Digambar sebagai goresan besar pada
-             warna navy-100 — cukup terbaca sebagai pola, tidak cukup untuk
-             bersaing dengan foto pelatihan di depannya. Tiga, bukan selusin;
-             ditaburkan banyak-banyak ia berhenti menjadi latar dan mulai menjadi
-             kertas kado.
+    {{-- ===================== PELATIHAN TERBARU =====================
+         Rancangan dari Claude Design, disesuaikan dengan palet, jenis huruf,
+         lebar container, dan radius situs ini. Seksi lama beserta ilustrasi
+         papan penilaiannya dihapus seluruhnya, termasuk carousel Swiper-nya.
 
-             Letaknya sengaja tidak simetris dan kecepatan melayangnya berbeda-beda
-             supaya polanya tidak pernah terbaca berulang. --}}
-        <section class="section-sm relative overflow-hidden border-t border-navy-50 bg-neutral-50">
-            {{-- Sapuan cahaya lembut di bawah lambang-lambangnya, supaya bidangnya
-                 tidak rata abu dari tepi ke tepi. --}}
-            <div class="pointer-events-none absolute inset-0 aurora-light opacity-60"></div>
-
-            <div class="container relative">
-                {{-- Kepala seksi dua kolom. Sebelumnya judul di kiri dan tautan kecil
-                     di kanan, dengan ruang menganga di antaranya. Gambar penilaian
-                     kini mengisi kolom kanan itu: ia punya tempat sendiri, cukup
-                     besar untuk terbaca, dan animasinya sungguh terlihat — sebagai
-                     cap air pucat di belakang kartu, gerak itu akan sia-sia. --}}
-                <div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
-                    <div class="lg:col-span-7">
-                        <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $isId ? 'Pelatihan Terbaru Kami' : 'Our Latest Training' }}</h2>
-                        {{-- Judulnya berdiri sendiri tanpa keterangan apa pun. Satu kalimat
-                             menyebut apa yang akan pengunjung temukan di kartunya, yaitu
-                             biayanya, dan itu memang tercetak di sana. --}}
-                        <p class="mt-4 max-w-lg leading-relaxed text-slate-600 text-pretty" data-aos="fade-up">
-                            {{ $isId
-                                ? 'Program yang paling baru kami buka, lengkap dengan biayanya.'
-                                : 'The programmes we opened most recently, priced up front.' }}
-                        </p>
-                        {{-- Kepingan bergaris, bukan tautan bergaris bawah: di samping judul
-                             sebesar ini, teks bergaris bawah terbaca sebagai catatan kaki
-                             alih-alih jalan menuju seluruh katalog. --}}
-                        <a href="{{ route('services.index') }}" data-aos="fade-up"
-                           class="group mt-7 inline-flex items-center gap-2 rounded-full border border-navy-200 bg-white px-6 py-3 text-sm font-semibold text-navy transition duration-300 hover:border-navy hover:bg-navy hover:text-white active:scale-[0.98]">
-                            {{ $isId ? 'Lihat Semua' : 'View All' }}
-                            <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </a>
-                    </div>
-
-                    {{-- Gambarnya mengayun sangat pelan agar tidak berdiri kaku,
-                         sementara centangnya yang memikul gerak sesungguhnya. --}}
-                    <div class="hidden justify-end lg:col-span-5 lg:flex" aria-hidden="true">
-                        <x-evaluation-mark class="edu-glyph h-52 w-52 text-navy-300 xl:h-60 xl:w-60"
-                                           style="--y:-10px; --r1:-2deg; --r2:2deg; --dur:14s;" />
-                    </div>
-                </div>
-
-                {{-- Single-row carousel: smaller cards, slides sideways when there are many --}}
-                <div class="swiper swiper-equal-height mt-10" data-carousel data-aos="fade-up">
-                    <div class="swiper-wrapper items-stretch">
-                        @foreach ($latestServices as $service)
-                            <div class="swiper-slide flex h-auto">
-                                <a href="{{ route('services.show', $service->slug) }}" data-spotlight class="card card-hover group flex h-full w-full flex-col overflow-hidden">
-                                    <div class="relative aspect-[16/10] overflow-hidden bg-navy-100">
-                                        @if ($service->image)
-                                            <img src="{{ Storage::url($service->image) }}" alt="{{ $service->title }}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
-                                        @else
-                                            <div class="h-full w-full bg-gradient-to-br from-navy-200 to-navy-100"></div>
-                                        @endif
-                                        {{-- Lencana "Baru" dilepas. Seksi ini judulnya
-                                             "Pelatihan Terbaru", jadi seluruh kartunya baru
-                                             menurut definisi; lencana yang menempel di semua
-                                             kartu berhenti membedakan apa pun dan tinggal
-                                             menutupi sudut fotonya. --}}
-                                    </div>
-                                    <div class="flex flex-1 flex-col p-4">
-                                        {{-- Kategori pindah dari emas ke biru, mengikuti
-                                             pengurangan penanda emas di seluruh situs. --}}
-                                        <p class="line-clamp-2 min-h-[2.4em] font-mono text-[10px] uppercase leading-[1.2] tracking-wider text-sky-700">{{ optional($service->category)->name }}</p>
-                                        <h3 class="mt-2 line-clamp-2 min-h-[2.75rem] font-display text-base font-semibold leading-snug text-navy">{{ $service->title }}</h3>
-                                        {{-- always reserve 2 lines so every card is the same height --}}
-                                        <p class="mt-1.5 line-clamp-2 min-h-[2.5rem] text-xs leading-relaxed text-slate-600">{{ $service->short_description }}</p>
-                                        <div class="mt-auto flex items-end justify-between border-t border-navy-100 pt-3">
-                                            <div>
-                                                @if ($service->price > 0)
-                                                    @if ($service->hasDiscount())
-                                                        <p class="flex flex-wrap items-center gap-1.5">
-                                                            <span class="font-mono text-[10px] text-slate-400 line-through">Rp {{ number_format((float) $service->discount_original_price, 0, ',', '.') }}</span>
-                                                            <span class="rounded bg-rose-100 px-1 py-0.5 font-mono text-[9px] font-bold text-rose-600">-{{ $service->discountPercent() }}%</span>
-                                                        </p>
-                                                        <p class="font-display text-base font-semibold text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
-                                                    @else
-                                                        <p class="font-mono text-[9px] uppercase tracking-wider text-slate-400">{{ __('site.common.from') }}</p>
-                                                        <p class="font-display text-base font-semibold text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
-                                                    @endif
-                                                @else
-                                                    <p class="font-display text-sm font-semibold text-navy">{{ $isId ? 'Hubungi kami' : 'Contact us' }}</p>
-                                                @endif
-                                            </div>
-                                            <span class="grid h-8 w-8 place-items-center rounded-full border border-navy-200 transition-all group-hover:border-sky-500 group-hover:bg-sky-500 group-hover:text-white">
-                                                <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-                {{-- Di luar .swiper: elemen di dalamnya ikut terpotong overflow:hidden milik Swiper. --}}
-                <div class="mt-8 flex justify-center gap-2" data-carousel-pagination></div>
-            </div>
-        </section>
+         $programs dipetakan HomeController dari model Service, jadi isinya
+         layanan sungguhan dan ikut berubah saat admin menyuntingnya di CMS. --}}
+    @if ($programs->isNotEmpty())
+        <x-pelatihan-terbaru :programs="$programs" :lihat-semua-url="route('services.index')" />
     @endif
 
     {{-- ===================== WHY CHOOSE US (image band + numbered row) ===================== --}}
