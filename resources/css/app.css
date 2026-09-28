@@ -318,10 +318,24 @@
         mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
     }
 
-    /* Lambang latar seksi Pelatihan Terbaru. Ia melayang sangat pelan di belakang
-       isi seksinya, jadi ia satu-satunya gerak abadi di halaman ini yang murni
-       hiasan — karena itu ia dihentikan bagi pembaca yang meminta kurangi gerak,
-       berbeda dari layar pembuka yang memang sengaja dibiarkan menyala. */
+    /* Lambang latar seksi Pelatihan Terbaru.
+       Melayang naik-turun SAMBIL mengayun pelan. Naik-turun saja terbaca
+       mekanis, seperti benda digerakkan mesin; sedikit putaran membuatnya
+       terbaca mengambang. Amplitudonya kecil dan putarannya sempit — gerak
+       hiasan yang mencolok justru menarik mata menjauh dari isi seksinya.
+
+       Satu keyframe untuk semuanya; ragamnya datang dari custom property yang
+       disetel per lambang di blade (--y, --r1, --r2, --dur, animation-delay).
+       Lima keyframe yang hampir sama hanya akan menggandakan CSS tanpa
+       menambah satu pun kemungkinan baru.
+
+       Ia satu-satunya gerak abadi di halaman ini yang murni hiasan, jadi ia
+       dihentikan bagi pembaca yang meminta kurangi gerak — berbeda dari layar
+       pembuka yang memang sengaja dibiarkan menyala. */
+    .edu-glyph {
+        animation: edu-drift var(--dur, 20s) ease-in-out infinite;
+        will-change: transform;
+    }
     @media (prefers-reduced-motion: reduce) {
         .edu-glyph { animation: none !important; }
     }
@@ -424,6 +438,13 @@
 @keyframes float-subtle {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-8px); }
+}
+
+/* Ayunan lambang latar (dipakai .edu-glyph). Ditulis di luar @layer supaya tidak
+   ikut terpangkas, sama alasannya dengan marquee-y di bawah. */
+@keyframes edu-drift {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(var(--r1, -5deg)); }
+    50%      { transform: translate3d(0, var(--y, -16px), 0) rotate(var(--r2, 4deg)); }
 }
 
 /* Vertical marquee keyframe (defined here so it isn't purged — used by .marquee-col) */

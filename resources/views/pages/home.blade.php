@@ -313,18 +313,46 @@
              Letaknya sengaja tidak simetris dan kecepatan melayangnya berbeda-beda
              supaya polanya tidak pernah terbaca berulang. --}}
         <section class="section-sm relative overflow-hidden border-t border-navy-50 bg-neutral-50">
+            {{-- Sapuan cahaya lembut di bawah lambang-lambangnya, supaya bidangnya
+                 tidak rata abu dari tepi ke tepi. --}}
+            <div class="pointer-events-none absolute inset-0 aurora-light opacity-60"></div>
+
+            {{-- Lima lambang pendidikan, dua di antaranya kecil dan diredupkan
+                 sehingga terbaca lebih jauh — itu yang membuat latarnya punya
+                 kedalaman alih-alih menjadi tempelan datar. Tiap lambang punya
+                 tinggi ayun, sudut, lama, dan jeda sendiri, jadi tidak pernah ada
+                 dua yang bergerak seirama; gerak seirama persis yang membuat
+                 hiasan terbaca murahan. --}}
             <div class="pointer-events-none absolute inset-0" aria-hidden="true">
                 {{-- Toga --}}
-                <svg class="edu-glyph animate-float absolute -right-10 top-8 h-56 w-56 text-navy-100 md:h-72 md:w-72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="edu-glyph absolute -right-10 top-8 h-56 w-56 text-navy-100 md:h-72 md:w-72"
+                     style="--y:-22px; --r1:-6deg; --r2:4deg; --dur:19s;"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 4 2 8.5 12 13l10-4.5z"/><path d="M6 10.6v4.6c0 1.9 2.7 3.3 6 3.3s6-1.4 6-3.3v-4.6"/><path d="M22 8.5v5.2"/>
                 </svg>
                 {{-- Buku terbuka --}}
-                <svg class="edu-glyph animate-float-slow absolute -left-12 bottom-6 h-52 w-52 text-navy-100 md:h-64 md:w-64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="edu-glyph absolute -left-12 bottom-6 h-52 w-52 text-navy-100 md:h-64 md:w-64"
+                     style="--y:-18px; --r1:5deg; --r2:-4deg; --dur:24s; animation-delay:-6s;"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 6.5C10.5 5 8 4.2 4 4.2v13c4 0 6.5.8 8 2.3 1.5-1.5 4-2.3 8-2.3v-13c-4 0-6.5.8-8 2.3z"/><path d="M12 6.5v13"/>
                 </svg>
                 {{-- Lencana --}}
-                <svg class="edu-glyph animate-float absolute right-1/4 -bottom-8 hidden h-40 w-40 text-navy-100 lg:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="edu-glyph absolute -bottom-8 right-1/4 hidden h-40 w-40 text-navy-100 lg:block"
+                     style="--y:-13px; --r1:4deg; --r2:-6deg; --dur:17s; animation-delay:-11s;"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="9" r="5.5"/><path d="m9.2 13.7-1.1 6 3.9-2 3.9 2-1.1-6"/>
+                </svg>
+                {{-- Gulungan ijazah — lebih kecil & lebih redup, terbaca lebih jauh --}}
+                <svg class="edu-glyph absolute left-[14%] top-4 hidden h-28 w-28 text-navy-100 opacity-60 md:block"
+                     style="--y:-11px; --r1:-7deg; --r2:6deg; --dur:27s; animation-delay:-3s;"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7"/><path d="M7 4a2 2 0 0 0-2 2v1.5h2"/><path d="M7 20a2 2 0 0 0 2-2V6"/><path d="M12 9h5M12 13h5"/>
+                </svg>
+                {{-- Pensil --}}
+                <svg class="edu-glyph absolute right-[8%] top-1/2 hidden h-24 w-24 text-navy-100 opacity-60 lg:block"
+                     style="--y:-9px; --r1:8deg; --r2:-5deg; --dur:21s; animation-delay:-15s;"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 20.5 4.9 16 16.4 4.5a2.1 2.1 0 0 1 3 3L7.9 19z"/><path d="m14.5 6.5 3 3"/>
                 </svg>
             </div>
 
