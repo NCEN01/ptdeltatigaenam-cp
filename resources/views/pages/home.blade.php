@@ -192,7 +192,17 @@
                              memanjang lima sampai enam baris dan membuat kartunya tinggi
                              sekali; nama kategori sudah menjelaskan isinya, dan uraian
                              lengkapnya memang menunggu di halaman Layanan. --}}
-                        <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none items-stretch gap-4 overflow-x-auto scroll-smooth pb-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        {{-- mask-fade-right: kartu yang mengintip di tepi kanan meluruh,
+                             bukan terpotong rata. Tanpa itu potongannya terbaca sebagai
+                             cacat tampilan alih-alih tanda bahwa barisnya masih panjang.
+                             Hanya tepi kanan — kartu pertama harus tetap tajam.
+
+                             px-1/py-2 memberi ruang bagi bayangan kartu dan angkatnya saat
+                             disentuh kursor; tanpa itu keduanya terpangkas oleh overflow
+                             rel ini, dan kartu paling kiri terlihat bayangannya terpotong
+                             lurus. -mx-1 mengembalikan ruang itu supaya kartu pertama tetap
+                             sejajar dengan tepi kolomnya. --}}
+                        <div data-hscroll-track class="mask-fade-right -mx-1 flex cursor-grab snap-x snap-mandatory select-none items-stretch gap-4 overflow-x-auto scroll-smooth px-1 pb-4 pt-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             @foreach ($categories as $cat)
                                 {{-- Seluruh kartu adalah tautannya. Tombol terisi di tiap
                                      kartu akan menjadi lima tombol biru berjajar di ruang
@@ -217,13 +227,30 @@
 
                                     <h3 class="mt-4 font-display text-[15px] font-semibold leading-snug text-navy text-balance transition-colors duration-300 group-hover:text-sky-700">{{ $cat->name }}</h3>
 
-                                    {{-- Pembungkus yang memikul mt-auto, bukan tulisannya
-                                         sendiri: teksnya tetap menempel di dasar kartu dan
-                                         tetap berjarak dari judul, sependek apa pun namanya. --}}
+                                    {{-- Jumlah layanan per kategori. Angkanya sudah ikut
+                                         terambil di HomeController lewat withCount('services')
+                                         tetapi tidak pernah ditampilkan satu pun halaman.
+                                         Ia mengisi ruang yang tadinya menganga pada kartu
+                                         berjudul pendek, dan yang mengisinya keterangan
+                                         betulan — bukan hiasan yang dipasang agar tidak
+                                         kosong. Disembunyikan bila kategorinya masih nol. --}}
+                                    @if ($cat->services_count > 0)
+                                        <p class="mt-2 font-mono text-[11px] tabular-nums text-slate-500">
+                                            {{ $cat->services_count }} {{ $isId ? 'layanan' : ($cat->services_count > 1 ? 'services' : 'service') }}
+                                        </p>
+                                    @endif
+
+                                    {{-- Dua pembungkus: yang luar memikul mt-auto plus jarak
+                                         minimum, yang dalam memikul garisnya. Kalau garis dan
+                                         mt-auto ditaruh pada elemen yang sama, pada kartu
+                                         tertinggi garisnya menempel persis di bawah tulisan
+                                         karena margin otomatisnya tinggal nol. --}}
                                     <span class="mt-auto block pt-5">
-                                        <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-700 transition-colors duration-300 group-hover:text-navy">
-                                            {{ $isId ? 'Selengkapnya' : 'Learn more' }}
-                                            <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        <span class="block border-t border-navy-100 pt-4">
+                                            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-700 transition-colors duration-300 group-hover:text-navy">
+                                                {{ $isId ? 'Selengkapnya' : 'Learn more' }}
+                                                <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </span>
                                         </span>
                                     </span>
                                 </a>
