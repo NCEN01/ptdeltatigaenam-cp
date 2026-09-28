@@ -112,28 +112,11 @@
                 <svg class="h-5 w-5" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
 
-            {{-- pagination — lifted above the stats ledger --}}
-            <div class="absolute inset-x-0 bottom-24 z-20 flex justify-center gap-2" data-hero-carousel-pagination></div>
-
-            {{-- stats ledger — merged onto the image (no top rule) --}}
-            <div class="absolute inset-x-0 bottom-0 z-20">
-                <div class="bg-gradient-to-t from-navy-950/90 via-navy-950/55 to-transparent backdrop-blur-[2px]">
-                    <div class="container">
-                        <div class="mx-auto grid max-w-2xl grid-cols-3 divide-x divide-white/10 py-4 md:py-5">
-                            @foreach ($heroStats as $stat)
-                                @php
-                                    $numVal = (int) filter_var($stat[0], FILTER_SANITIZE_NUMBER_INT);
-                                    $suffix = str_replace((string) $numVal, '', $stat[0]);
-                                @endphp
-                                <div class="group px-3 text-center md:px-6">
-                                    <p class="font-display text-xl text-white transition-colors duration-300 group-hover:text-gold-soft md:text-[1.7rem]" data-counter="{{ $numVal }}" data-counter-suffix="{{ $suffix }}">0{{ $suffix }}</p>
-                                    <p class="mt-1 font-mono text-[8px] uppercase tracking-normal text-navy-100 md:text-[9px]">{{ $stat[1] }}</p>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {{-- Paginasi turun ke dasar. Posisi bottom-24 sebelumnya dipakai untuk
+                 memberi ruang bagi papan statistik yang kini pindah ke seksi
+                 Kategori Layanan; tanpa papan itu, ketinggian tersebut menyisakan
+                 celah kosong di bawah titik-titiknya. --}}
+            <div class="absolute inset-x-0 bottom-8 z-20 flex justify-center gap-2" data-hero-carousel-pagination></div>
         </div>
     </section>
 
@@ -153,9 +136,15 @@
             <div class="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
                 {{-- Kiri: judul, kalimat pengantar, jalan ke seluruh kategori --}}
                 <div class="lg:col-span-4" data-aos="fade-up">
-                    <h2 class="font-display text-4xl font-bold leading-[1.1] text-navy text-balance md:text-5xl">
-                        {{ $isId ? 'Pilih kategori Anda' : 'Choose your category' }}
-                    </h2>
+                    {{-- Tegak tebal + satu kata miring berwarna. Di latar terang situs
+                         ini biasanya menekankan lewat miring saja; di sini warnanya
+                         ikut dipakai atas permintaan, dan sky-700 dipilih karena
+                         mencapai 6,4:1 di atas putih — jauh di atas ambang teks. --}}
+                    <x-heading
+                        :lead="$isId ? 'Kategori' : 'Service'"
+                        :accent="$isId ? 'Layanan' : 'Categories'"
+                        accent-class="text-sky-700"
+                        class="font-display text-4xl font-bold leading-[1.1] text-navy text-balance md:text-5xl" />
                     <p class="mt-5 max-w-sm leading-relaxed text-slate-600 text-pretty">
                         {{ $isId
                             ? 'Dari penataan organisasi sampai uji kompetensi bersertifikat BNSP.'
@@ -218,6 +207,30 @@
                     <p class="lg:col-span-8 text-slate-500">{{ $isId ? 'Belum ada kategori layanan.' : 'No service categories yet.' }}</p>
                 @endif
             </div>
+
+            {{-- Papan statistik, pindahan dari dasar hero. Di sana ia menumpang di
+                 atas foto di balik tirai gelap, terbaca setinggi 8px, dan menahan
+                 titik paginasi naik menjauh dari tepinya. Di sini ia punya ruang
+                 sendiri, angkanya bisa sebesar yang pantas, dan letaknya masuk akal:
+                 tepat setelah pengunjung melihat apa saja yang ditawarkan.
+
+                 Angkanya tetap dibaca dari Pengaturan Situs, jadi admin mengubahnya
+                 di tempat yang sama seperti sebelumnya. --}}
+            @if (! empty($heroStats))
+                <div class="mt-16 grid grid-cols-1 gap-y-8 border-t border-navy-100 pt-10 sm:grid-cols-3 sm:gap-x-8 md:mt-20" data-aos="fade-up">
+                    @foreach ($heroStats as $i => $stat)
+                        @php
+                            $numVal = (int) filter_var($stat[0], FILTER_SANITIZE_NUMBER_INT);
+                            $suffix = str_replace((string) $numVal, '', $stat[0]);
+                        @endphp
+                        <div class="{{ $i > 0 ? 'sm:border-l sm:border-navy-100 sm:pl-8' : '' }}">
+                            <p class="font-display text-4xl font-bold tabular-nums leading-none text-navy md:text-5xl"
+                               data-counter="{{ $numVal }}" data-counter-suffix="{{ $suffix }}">{{ $stat[0] }}</p>
+                            <p class="mt-3 text-sm leading-snug text-slate-600">{{ $stat[1] }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </section>
 

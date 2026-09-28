@@ -46,7 +46,7 @@ class ServiceCategorySeeder extends Seeder
         return [
             [
                 'slug' => 'konsultasi-manajemen',
-                'icon' => 'structure',
+                'icon' => 'book',
                 'name' => ['id' => 'Konsultasi Manajemen', 'en' => 'Management Consulting'],
                 'summary' => [
                     'id' => 'Menata struktur organisasi, alur wewenang, dan uraian tugas agar keputusan tidak tersendat di banyak lapis.',
