@@ -131,8 +131,15 @@
          Coverflow 3D-nya diganti rel geser yang sama dengan rail blog di bawah:
          satu perilaku untuk dua tempat, bisa diseret, dan tidak perlu JS khusus
          yang hanya melayani satu seksi. --}}
-    <section class="section-sm bg-white">
-        <div class="container">
+    {{-- Sapuan cahaya sangat lembut di atas putih, alat yang sama dengan halaman
+         Sertifikat dan detail Layanan. Bukan blok warna: ia hanya memberi bidang
+         ini kedalaman sehingga kartu-kartunya punya tempat untuk melayang. Tanpa
+         itu kartu putih di atas putih hanya bisa dibedakan lewat garis tepi, dan
+         garis tepi membuatnya terbaca sebagai kotak, bukan objek. --}}
+    <section class="section-sm relative overflow-hidden bg-white">
+        <div class="pointer-events-none absolute inset-0 aurora-light opacity-70"></div>
+
+        <div class="container relative">
             <div class="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
                 {{-- Kiri: judul, kalimat pengantar, jalan ke seluruh kategori --}}
                 <div class="lg:col-span-4" data-aos="fade-up">
@@ -159,11 +166,16 @@
                 {{-- Kanan: rel geser --}}
                 @if ($categories->isNotEmpty())
                     <div class="min-w-0 lg:col-span-8" data-hscroll>
-                        <div class="mb-6 flex items-center gap-3">
-                            <button type="button" data-hscroll-prev class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
+                        {{-- Panah bergaris, bukan bulatan biru terisi. Dengan tombol
+                             ajakan biru di kolom kiri, dua bulatan biru di sini membuat
+                             tiga benda paling mencolok berebut perhatian di satu seksi,
+                             padahal hanya satu yang benar-benar tujuan pengunjung.
+                             Sebagai garis tipis, panahnya tetap jelas tanpa bersaing. --}}
+                        <div class="mb-6 flex items-center justify-end gap-2">
+                            <button type="button" data-hscroll-prev class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 text-navy transition duration-300 hover:border-navy hover:bg-navy hover:text-white active:scale-95" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
-                            <button type="button" data-hscroll-next class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95" aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
+                            <button type="button" data-hscroll-next class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 text-navy transition duration-300 hover:border-navy hover:bg-navy hover:text-white active:scale-95" aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                         </div>
@@ -182,13 +194,20 @@
                                      kartu akan menjadi lima tombol biru berjajar di ruang
                                      sesempit ini; teks berpanah sudah cukup menandai bahwa
                                      kartunya bisa diklik. --}}
+                                {{-- Bayangan saja, tanpa garis tepi. Garis 1px berpasangan
+                                     bayangan lebar adalah pola kartu hantu; dipilih salah
+                                     satu, kartunya berhenti terlihat seperti kotak dan mulai
+                                     terlihat seperti benda yang terletak di atas bidang. --}}
                                 <a href="{{ route('services.index') }}#{{ $cat->slug }}"
-                                   class="group flex w-44 shrink-0 snap-start flex-col rounded-2xl border border-navy-100 bg-white p-5 transition duration-300 ease-out-soft hover:-translate-y-1 hover:border-sky-200 hover:shadow-lift sm:w-48">
-                                    <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-navy-50 text-navy transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">
+                                   class="group flex w-44 shrink-0 snap-start flex-col rounded-2xl bg-white p-5 shadow-card transition duration-300 ease-out-soft hover:-translate-y-1.5 hover:shadow-lift sm:w-48">
+                                    {{-- Bulat, bukan kotak membulat: ikonnya sendiri sudah
+                                         bersudut, dan lingkaran memberi bentuk yang berbeda
+                                         sehingga keduanya tidak saling menyalin. --}}
+                                    <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-navy-50 text-navy transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">
                                         <x-category-icon :name="$cat->icon" class="h-6 w-6" />
                                     </span>
 
-                                    <h3 class="mt-4 font-display text-[15px] font-semibold leading-snug text-navy text-balance">{{ $cat->name }}</h3>
+                                    <h3 class="mt-4 font-display text-[15px] font-semibold leading-snug text-navy text-balance transition-colors duration-300 group-hover:text-sky-700">{{ $cat->name }}</h3>
 
                                     {{-- Pembungkus yang memikul mt-auto, bukan tulisannya
                                          sendiri: teksnya tetap menempel di dasar kartu dan
@@ -217,16 +236,23 @@
                  Angkanya tetap dibaca dari Pengaturan Situs, jadi admin mengubahnya
                  di tempat yang sama seperti sebelumnya. --}}
             @if (! empty($heroStats))
-                <div class="mt-16 grid grid-cols-1 gap-y-8 border-t border-navy-100 pt-10 sm:grid-cols-3 sm:gap-x-8 md:mt-20" data-aos="fade-up">
+                <div class="mt-16 grid grid-cols-1 gap-y-9 border-t border-navy-100 pt-12 sm:grid-cols-3 sm:gap-x-8 md:mt-20" data-aos="fade-up">
                     @foreach ($heroStats as $i => $stat)
                         @php
                             $numVal = (int) filter_var($stat[0], FILTER_SANITIZE_NUMBER_INT);
                             $suffix = str_replace((string) $numVal, '', $stat[0]);
                         @endphp
                         <div class="{{ $i > 0 ? 'sm:border-l sm:border-navy-100 sm:pl-8' : '' }}">
-                            <p class="font-display text-4xl font-bold tabular-nums leading-none text-navy md:text-5xl"
-                               data-counter="{{ $numVal }}" data-counter-suffix="{{ $suffix }}">{{ $stat[0] }}</p>
-                            <p class="mt-3 text-sm leading-snug text-slate-600">{{ $stat[1] }}</p>
+                            {{-- Satuannya ("+", "%") dipisah ke span sendiri agar bisa
+                                 diberi warna: angkanya terbaca sebagai besaran, satuannya
+                                 sebagai keterangan. Penghitungnya dipasang pada span angka
+                                 saja — JS-nya menimpa seluruh isi elemen yang dipasangi,
+                                 jadi kalau satu span memuat keduanya, warnanya ikut hilang
+                                 begitu animasinya mulai. --}}
+                            <p class="flex items-baseline font-display text-5xl font-bold leading-none tracking-tight text-navy md:text-6xl">
+                                <span class="tabular-nums" data-counter="{{ $numVal }}">{{ $numVal }}</span><span class="text-sky-600">{{ $suffix }}</span>
+                            </p>
+                            <p class="mt-4 text-sm leading-snug text-slate-600">{{ $stat[1] }}</p>
                         </div>
                     @endforeach
                 </div>
