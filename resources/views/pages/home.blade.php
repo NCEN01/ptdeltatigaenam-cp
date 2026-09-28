@@ -147,12 +147,13 @@
                          ini biasanya menekankan lewat miring saja; di sini warnanya
                          ikut dipakai atas permintaan, dan sky-700 dipilih karena
                          mencapai 6,4:1 di atas putih — jauh di atas ambang teks. --}}
-                    {{-- Aksennya jatuh pada "Layanan", bukan "Kami": yang pertama
-                         menyebut isi seksinya, yang kedua hanya kepemilikan. --}}
+                    {{-- "Layanan Kami" dimiringkan berwarna sebagai satu kesatuan,
+                         bukan dua penggal terpisah: keduanya satu frasa, dan memutus
+                         warnanya di tengah frasa akan membuat jedanya terbaca di
+                         tempat yang bukan jeda. --}}
                     <x-heading
-                        :lead="$isId ? 'Kategori' : 'Our Service'"
-                        :accent="$isId ? 'Layanan' : 'Categories'"
-                        :tail="$isId ? 'Kami' : ''"
+                        :lead="$isId ? 'Kategori' : 'Our'"
+                        :accent="$isId ? 'Layanan Kami' : 'Service Categories'"
                         accent-class="text-sky-700"
                         class="font-display text-4xl font-bold leading-[1.1] text-navy text-balance md:text-5xl" />
                     <p class="mt-5 max-w-sm leading-relaxed text-slate-600 text-pretty">
