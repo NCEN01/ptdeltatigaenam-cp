@@ -303,15 +303,51 @@
 
     {{-- ===================== LATEST SERVICES ===================== --}}
     @if ($latestServices->isNotEmpty())
-        <section class="section-sm bg-white border-t border-navy-50">
-            <div class="container">
-                <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                    <div class="max-w-2xl">
+        {{-- Latar netral dengan tiga lambang pendidikan melayang di belakangnya:
+             toga, buku terbuka, dan lencana. Digambar sebagai goresan besar pada
+             warna navy-100 — cukup terbaca sebagai pola, tidak cukup untuk
+             bersaing dengan foto pelatihan di depannya. Tiga, bukan selusin;
+             ditaburkan banyak-banyak ia berhenti menjadi latar dan mulai menjadi
+             kertas kado.
+
+             Letaknya sengaja tidak simetris dan kecepatan melayangnya berbeda-beda
+             supaya polanya tidak pernah terbaca berulang. --}}
+        <section class="section-sm relative overflow-hidden border-t border-navy-50 bg-neutral-50">
+            <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+                {{-- Toga --}}
+                <svg class="edu-glyph animate-float absolute -right-10 top-8 h-56 w-56 text-navy-100 md:h-72 md:w-72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 4 2 8.5 12 13l10-4.5z"/><path d="M6 10.6v4.6c0 1.9 2.7 3.3 6 3.3s6-1.4 6-3.3v-4.6"/><path d="M22 8.5v5.2"/>
+                </svg>
+                {{-- Buku terbuka --}}
+                <svg class="edu-glyph animate-float-slow absolute -left-12 bottom-6 h-52 w-52 text-navy-100 md:h-64 md:w-64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 6.5C10.5 5 8 4.2 4 4.2v13c4 0 6.5.8 8 2.3 1.5-1.5 4-2.3 8-2.3v-13c-4 0-6.5.8-8 2.3z"/><path d="M12 6.5v13"/>
+                </svg>
+                {{-- Lencana --}}
+                <svg class="edu-glyph animate-float absolute right-1/4 -bottom-8 hidden h-40 w-40 text-navy-100 lg:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="9" r="5.5"/><path d="m9.2 13.7-1.1 6 3.9-2 3.9 2-1.1-6"/>
+                </svg>
+            </div>
+
+            <div class="container relative">
+                <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                    <div class="max-w-xl">
                         <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $isId ? 'Pelatihan Terbaru Kami' : 'Our Latest Training' }}</h2>
+                        {{-- Judulnya berdiri sendiri tanpa keterangan apa pun. Satu kalimat
+                             menyebut apa yang akan pengunjung temukan di kartunya: jadwal
+                             dan biaya, dua hal yang memang tercetak di sana. --}}
+                        <p class="mt-4 leading-relaxed text-slate-600 text-pretty" data-aos="fade-up">
+                            {{ $isId
+                                ? 'Program yang paling baru kami buka, lengkap dengan biayanya.'
+                                : 'The programmes we opened most recently, priced up front.' }}
+                        </p>
                     </div>
-                    <a href="{{ route('services.index') }}" class="link-underline shrink-0 font-medium" data-aos="fade-up">
+                    {{-- Kepingan bergaris, bukan tautan bergaris bawah: di samping judul
+                         sebesar ini, teks bergaris bawah terbaca sebagai catatan kaki
+                         alih-alih jalan menuju seluruh katalog. --}}
+                    <a href="{{ route('services.index') }}" data-aos="fade-up"
+                       class="group inline-flex shrink-0 items-center gap-2 rounded-full border border-navy-200 bg-white px-6 py-3 text-sm font-semibold text-navy transition duration-300 hover:border-navy hover:bg-navy hover:text-white active:scale-[0.98]">
                         {{ $isId ? 'Lihat Semua' : 'View All' }}
-                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
                 </div>
 
@@ -327,10 +363,16 @@
                                         @else
                                             <div class="h-full w-full bg-gradient-to-br from-navy-200 to-navy-100"></div>
                                         @endif
-                                        <span class="absolute left-3 top-3 rounded-full bg-sky-500 px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white">{{ $isId ? 'Baru' : 'New' }}</span>
+                                        {{-- Lencana "Baru" dilepas. Seksi ini judulnya
+                                             "Pelatihan Terbaru", jadi seluruh kartunya baru
+                                             menurut definisi; lencana yang menempel di semua
+                                             kartu berhenti membedakan apa pun dan tinggal
+                                             menutupi sudut fotonya. --}}
                                     </div>
                                     <div class="flex flex-1 flex-col p-4">
-                                        <p class="line-clamp-2 min-h-[2.4em] font-mono text-[10px] uppercase leading-[1.2] tracking-wider text-gold-deep">{{ optional($service->category)->name }}</p>
+                                        {{-- Kategori pindah dari emas ke biru, mengikuti
+                                             pengurangan penanda emas di seluruh situs. --}}
+                                        <p class="line-clamp-2 min-h-[2.4em] font-mono text-[10px] uppercase leading-[1.2] tracking-wider text-sky-700">{{ optional($service->category)->name }}</p>
                                         <h3 class="mt-2 line-clamp-2 min-h-[2.75rem] font-display text-base font-semibold leading-snug text-navy">{{ $service->title }}</h3>
                                         {{-- always reserve 2 lines so every card is the same height --}}
                                         <p class="mt-1.5 line-clamp-2 min-h-[2.5rem] text-xs leading-relaxed text-slate-600">{{ $service->short_description }}</p>

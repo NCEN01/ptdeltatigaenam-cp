@@ -318,6 +318,14 @@
         mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
     }
 
+    /* Lambang latar seksi Pelatihan Terbaru. Ia melayang sangat pelan di belakang
+       isi seksinya, jadi ia satu-satunya gerak abadi di halaman ini yang murni
+       hiasan — karena itu ia dihentikan bagi pembaca yang meminta kurangi gerak,
+       berbeda dari layar pembuka yang memang sengaja dibiarkan menyala. */
+    @media (prefers-reduced-motion: reduce) {
+        .edu-glyph { animation: none !important; }
+    }
+
     /* Fade only the left edge — the client marquee looks cut off by the "Klien Kami" heading. */
     .mask-fade-left {
         -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 100%);
