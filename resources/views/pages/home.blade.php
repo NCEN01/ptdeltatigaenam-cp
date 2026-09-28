@@ -147,9 +147,12 @@
                          ini biasanya menekankan lewat miring saja; di sini warnanya
                          ikut dipakai atas permintaan, dan sky-700 dipilih karena
                          mencapai 6,4:1 di atas putih — jauh di atas ambang teks. --}}
+                    {{-- Aksennya jatuh pada "Layanan", bukan "Kami": yang pertama
+                         menyebut isi seksinya, yang kedua hanya kepemilikan. --}}
                     <x-heading
-                        :lead="$isId ? 'Kategori' : 'Service'"
+                        :lead="$isId ? 'Kategori' : 'Our Service'"
                         :accent="$isId ? 'Layanan' : 'Categories'"
+                        :tail="$isId ? 'Kami' : ''"
                         accent-class="text-sky-700"
                         class="font-display text-4xl font-bold leading-[1.1] text-navy text-balance md:text-5xl" />
                     <p class="mt-5 max-w-sm leading-relaxed text-slate-600 text-pretty">
@@ -194,12 +197,16 @@
                                      kartu akan menjadi lima tombol biru berjajar di ruang
                                      sesempit ini; teks berpanah sudah cukup menandai bahwa
                                      kartunya bisa diklik. --}}
-                                {{-- Bayangan saja, tanpa garis tepi. Garis 1px berpasangan
-                                     bayangan lebar adalah pola kartu hantu; dipilih salah
-                                     satu, kartunya berhenti terlihat seperti kotak dan mulai
-                                     terlihat seperti benda yang terletak di atas bidang. --}}
+                                {{-- Garis rambut ditambah bayangan rapat 8px. Sebelumnya
+                                     bayangan saja: di atas bidang terang, bayangan lebar
+                                     yang menyebar praktis lenyap dan kartunya tidak
+                                     kelihatan. Yang dihindari adalah garis 1px berpasangan
+                                     bayangan LEBAR — itu pola kartu hantu; bayangan rapat
+                                     justru mempertegas tepinya, bukan mengaburkannya.
+                                     Saat disentuh kursor barulah bayangannya melebar, di
+                                     situ ia menjadi penanda keadaan. --}}
                                 <a href="{{ route('services.index') }}#{{ $cat->slug }}"
-                                   class="group flex w-44 shrink-0 snap-start flex-col rounded-2xl bg-white p-5 shadow-card transition duration-300 ease-out-soft hover:-translate-y-1.5 hover:shadow-lift sm:w-48">
+                                   class="group flex w-44 shrink-0 snap-start flex-col rounded-2xl border border-navy-100 bg-white p-5 shadow-[0_2px_8px_-2px_rgba(10,42,94,0.10)] transition duration-300 ease-out-soft hover:-translate-y-1.5 hover:border-sky-200 hover:shadow-lift sm:w-48">
                                     {{-- Bulat, bukan kotak membulat: ikonnya sendiri sudah
                                          bersudut, dan lingkaran memberi bentuk yang berbeda
                                          sehingga keduanya tidak saling menyalin. --}}
