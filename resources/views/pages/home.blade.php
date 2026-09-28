@@ -317,66 +317,39 @@
                  tidak rata abu dari tepi ke tepi. --}}
             <div class="pointer-events-none absolute inset-0 aurora-light opacity-60"></div>
 
-            {{-- Lima lambang pendidikan, dua di antaranya kecil dan diredupkan
-                 sehingga terbaca lebih jauh — itu yang membuat latarnya punya
-                 kedalaman alih-alih menjadi tempelan datar. Tiap lambang punya
-                 tinggi ayun, sudut, lama, dan jeda sendiri, jadi tidak pernah ada
-                 dua yang bergerak seirama; gerak seirama persis yang membuat
-                 hiasan terbaca murahan. --}}
-            <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-                {{-- Toga --}}
-                <svg class="edu-glyph absolute -right-10 top-8 h-56 w-56 text-navy-100 md:h-72 md:w-72"
-                     style="--y:-22px; --r1:-6deg; --r2:4deg; --dur:19s;"
-                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 4 2 8.5 12 13l10-4.5z"/><path d="M6 10.6v4.6c0 1.9 2.7 3.3 6 3.3s6-1.4 6-3.3v-4.6"/><path d="M22 8.5v5.2"/>
-                </svg>
-                {{-- Buku terbuka --}}
-                <svg class="edu-glyph absolute -left-12 bottom-6 h-52 w-52 text-navy-100 md:h-64 md:w-64"
-                     style="--y:-18px; --r1:5deg; --r2:-4deg; --dur:24s; animation-delay:-6s;"
-                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 6.5C10.5 5 8 4.2 4 4.2v13c4 0 6.5.8 8 2.3 1.5-1.5 4-2.3 8-2.3v-13c-4 0-6.5.8-8 2.3z"/><path d="M12 6.5v13"/>
-                </svg>
-                {{-- Lencana --}}
-                <svg class="edu-glyph absolute -bottom-8 right-1/4 hidden h-40 w-40 text-navy-100 lg:block"
-                     style="--y:-13px; --r1:4deg; --r2:-6deg; --dur:17s; animation-delay:-11s;"
-                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="9" r="5.5"/><path d="m9.2 13.7-1.1 6 3.9-2 3.9 2-1.1-6"/>
-                </svg>
-                {{-- Gulungan ijazah — lebih kecil & lebih redup, terbaca lebih jauh --}}
-                <svg class="edu-glyph absolute left-[14%] top-4 hidden h-28 w-28 text-navy-100 opacity-60 md:block"
-                     style="--y:-11px; --r1:-7deg; --r2:6deg; --dur:27s; animation-delay:-3s;"
-                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M7 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7"/><path d="M7 4a2 2 0 0 0-2 2v1.5h2"/><path d="M7 20a2 2 0 0 0 2-2V6"/><path d="M12 9h5M12 13h5"/>
-                </svg>
-                {{-- Pensil --}}
-                <svg class="edu-glyph absolute right-[8%] top-1/2 hidden h-24 w-24 text-navy-100 opacity-60 lg:block"
-                     style="--y:-9px; --r1:8deg; --r2:-5deg; --dur:21s; animation-delay:-15s;"
-                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 20.5 4.9 16 16.4 4.5a2.1 2.1 0 0 1 3 3L7.9 19z"/><path d="m14.5 6.5 3 3"/>
-                </svg>
-            </div>
-
             <div class="container relative">
-                <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-                    <div class="max-w-xl">
+                {{-- Kepala seksi dua kolom. Sebelumnya judul di kiri dan tautan kecil
+                     di kanan, dengan ruang menganga di antaranya. Gambar penilaian
+                     kini mengisi kolom kanan itu: ia punya tempat sendiri, cukup
+                     besar untuk terbaca, dan animasinya sungguh terlihat — sebagai
+                     cap air pucat di belakang kartu, gerak itu akan sia-sia. --}}
+                <div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+                    <div class="lg:col-span-7">
                         <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $isId ? 'Pelatihan Terbaru Kami' : 'Our Latest Training' }}</h2>
                         {{-- Judulnya berdiri sendiri tanpa keterangan apa pun. Satu kalimat
-                             menyebut apa yang akan pengunjung temukan di kartunya: jadwal
-                             dan biaya, dua hal yang memang tercetak di sana. --}}
-                        <p class="mt-4 leading-relaxed text-slate-600 text-pretty" data-aos="fade-up">
+                             menyebut apa yang akan pengunjung temukan di kartunya, yaitu
+                             biayanya, dan itu memang tercetak di sana. --}}
+                        <p class="mt-4 max-w-lg leading-relaxed text-slate-600 text-pretty" data-aos="fade-up">
                             {{ $isId
                                 ? 'Program yang paling baru kami buka, lengkap dengan biayanya.'
                                 : 'The programmes we opened most recently, priced up front.' }}
                         </p>
+                        {{-- Kepingan bergaris, bukan tautan bergaris bawah: di samping judul
+                             sebesar ini, teks bergaris bawah terbaca sebagai catatan kaki
+                             alih-alih jalan menuju seluruh katalog. --}}
+                        <a href="{{ route('services.index') }}" data-aos="fade-up"
+                           class="group mt-7 inline-flex items-center gap-2 rounded-full border border-navy-200 bg-white px-6 py-3 text-sm font-semibold text-navy transition duration-300 hover:border-navy hover:bg-navy hover:text-white active:scale-[0.98]">
+                            {{ $isId ? 'Lihat Semua' : 'View All' }}
+                            <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </a>
                     </div>
-                    {{-- Kepingan bergaris, bukan tautan bergaris bawah: di samping judul
-                         sebesar ini, teks bergaris bawah terbaca sebagai catatan kaki
-                         alih-alih jalan menuju seluruh katalog. --}}
-                    <a href="{{ route('services.index') }}" data-aos="fade-up"
-                       class="group inline-flex shrink-0 items-center gap-2 rounded-full border border-navy-200 bg-white px-6 py-3 text-sm font-semibold text-navy transition duration-300 hover:border-navy hover:bg-navy hover:text-white active:scale-[0.98]">
-                        {{ $isId ? 'Lihat Semua' : 'View All' }}
-                        <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </a>
+
+                    {{-- Gambarnya mengayun sangat pelan agar tidak berdiri kaku,
+                         sementara centangnya yang memikul gerak sesungguhnya. --}}
+                    <div class="hidden justify-end lg:col-span-5 lg:flex" aria-hidden="true">
+                        <x-evaluation-mark class="edu-glyph h-52 w-52 text-navy-300 xl:h-60 xl:w-60"
+                                           style="--y:-10px; --r1:-2deg; --r2:2deg; --dur:14s;" />
+                    </div>
                 </div>
 
                 {{-- Single-row carousel: smaller cards, slides sideways when there are many --}}

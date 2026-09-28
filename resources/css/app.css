@@ -447,6 +447,30 @@
     50%      { transform: translate3d(0, var(--y, -16px), 0) rotate(var(--r2, 4deg)); }
 }
 
+/* Centang pada papan penilaian menggambar dirinya sendiri, lalu terhapus dan
+   mengulang. Geraknya punya arti — satu per satu butir dinilai lalu lulus —
+   bukan sekadar bergoyang supaya terlihat bergerak. Ketiganya diberi jeda
+   berbeda di blade sehingga tercentang berurutan, bukan serentak.
+
+   Panjang garisnya sengaja dilebihkan (26) dari panjang jalur centang yang
+   sebenarnya, supaya garisnya benar-benar tertutup penuh di awal berapa pun
+   pembulatan yang dilakukan browser. */
+@keyframes edu-tick {
+    0%, 6%     { stroke-dashoffset: 26; }
+    20%, 66%   { stroke-dashoffset: 0; }
+    80%, 100%  { stroke-dashoffset: 26; }
+}
+.edu-tick {
+    stroke-dasharray: 26;
+    stroke-dashoffset: 26;
+    animation: edu-tick 6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+    /* Tanpa gerak, centangnya tetap harus terlihat — bila tidak, papannya
+       tampil kosong dan gambarnya kehilangan maksudnya. */
+    .edu-tick { animation: none !important; stroke-dashoffset: 0 !important; }
+}
+
 /* Vertical marquee keyframe (defined here so it isn't purged — used by .marquee-col) */
 @keyframes marquee-y {
     from { transform: translateY(0); }
