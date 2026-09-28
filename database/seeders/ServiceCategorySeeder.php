@@ -21,6 +21,7 @@ class ServiceCategorySeeder extends Seeder
                 [
                     'name' => $cat['name'],
                     'short_description' => $cat['summary'],
+                    'icon' => $cat['icon'],
                     'image' => StoredImages::pick($images, $i),
                     'is_featured' => true,
                     'sort_order' => $i + 1,
@@ -34,8 +35,9 @@ class ServiceCategorySeeder extends Seeder
     }
 
     /**
-     * Kolom icon sengaja tidak diisi: ada di tabel tetapi tidak dibaca satu pun
-     * view — hanya name, short_description, dan image yang benar-benar tampil.
+     * Kunci `icon` merujuk daftar di x-category-icon dan dipilih dari isi tiap
+     * kategori, bukan dari kemiripan gambarnya. Kartu kategori di beranda kini
+     * memakai ikon, jadi kolom yang dulu menganggur ini akhirnya terbaca.
      *
      * @return list<array<string, mixed>>
      */
@@ -44,6 +46,7 @@ class ServiceCategorySeeder extends Seeder
         return [
             [
                 'slug' => 'konsultasi-manajemen',
+                'icon' => 'structure',
                 'name' => ['id' => 'Konsultasi Manajemen', 'en' => 'Management Consulting'],
                 'summary' => [
                     'id' => 'Menata struktur organisasi, alur wewenang, dan uraian tugas agar keputusan tidak tersendat di banyak lapis.',
@@ -52,6 +55,7 @@ class ServiceCategorySeeder extends Seeder
             ],
             [
                 'slug' => 'konsultasi-manajemen-human-capital',
+                'icon' => 'people',
                 'name' => ['id' => 'Konsultasi Manajemen Human Capital', 'en' => 'Human Capital Management Consulting'],
                 'summary' => [
                     'id' => 'Memetakan kompetensi, menyiapkan suksesi jabatan kunci, dan menyusun KPI beserta struktur remunerasinya.',
@@ -60,6 +64,7 @@ class ServiceCategorySeeder extends Seeder
             ],
             [
                 'slug' => 'headhunter',
+                'icon' => 'search-user',
                 'name' => ['id' => 'Headhunter', 'en' => 'Headhunter'],
                 'summary' => [
                     'id' => 'Pencarian tertutup untuk posisi manajerial dan direksi yang sulit diisi lewat lowongan terbuka.',
@@ -68,6 +73,7 @@ class ServiceCategorySeeder extends Seeder
             ],
             [
                 'slug' => 'pelatihan-karyawan',
+                'icon' => 'presentation',
                 'name' => ['id' => 'Pelatihan Karyawan', 'en' => 'Employee Training'],
                 'summary' => [
                     'id' => 'Program in-house yang materinya disusun dari pekerjaan peserta sehari-hari, bukan dari katalog siap pakai.',
@@ -76,6 +82,7 @@ class ServiceCategorySeeder extends Seeder
             ],
             [
                 'slug' => 'sertifikasi-kompetensi',
+                'icon' => 'certificate',
                 'name' => ['id' => 'Sertifikasi Kompetensi', 'en' => 'Competency Certification'],
                 'summary' => [
                     'id' => 'Uji kompetensi skema BNSP yang dapat digelar di tempat kerja Anda, mengikuti pola sif, tanpa menghentikan produksi.',

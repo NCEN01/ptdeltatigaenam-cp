@@ -56,7 +56,29 @@ class ServiceCategoryResource extends Resource
             ])->columns(2),
 
             Forms\Components\Section::make('Media & Tampilan')->schema([
-                MediaUpload::for('image', 'thumbnail', 'service-categories')->label('Gambar'),
+                // Kartu kategori di beranda memakai ikon, bukan foto. Kolom `icon`
+                // sudah lama ada di tabel tetapi tidak pernah diisi maupun dibaca;
+                // sekarang terpakai dan bisa dipilih admin.
+                Forms\Components\Select::make('icon')
+                    ->label('Ikon')
+                    ->options([
+                        'structure' => 'Bagan organisasi',
+                        'people' => 'Orang / tim',
+                        'search-user' => 'Pencarian orang',
+                        'presentation' => 'Papan presentasi',
+                        'certificate' => 'Lencana sertifikat',
+                        'briefcase' => 'Koper kerja',
+                        'chart' => 'Grafik',
+                        'shield' => 'Perisai',
+                        'target' => 'Sasaran',
+                        'book' => 'Buku',
+                    ])
+                    ->native(false)
+                    ->placeholder('Koper kerja (bawaan)')
+                    ->helperText('Tampil pada kartu kategori di beranda. Dikosongkan akan memakai ikon koper.'),
+                MediaUpload::for('image', 'thumbnail', 'service-categories')
+                    ->label('Gambar')
+                    ->helperText('Dipakai halaman Layanan. Kartu kategori di beranda memakai ikon di sebelah.'),
                 Forms\Components\Toggle::make('is_featured')->label('Unggulan')->default(false),
                 Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
             ])->columns(2),

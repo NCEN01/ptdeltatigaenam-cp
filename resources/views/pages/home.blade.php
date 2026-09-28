@@ -137,71 +137,87 @@
         </div>
     </section>
 
-    {{-- ===================== SERVICE CATEGORIES · 3D COVERFLOW ===================== --}}
-    <section class="relative overflow-hidden bg-navy-anim py-14 text-white md:py-20">
-        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
-        <div class="pointer-events-none absolute inset-0 grain opacity-30"></div>
+    {{-- ===================== SERVICE CATEGORIES =====================
+         Kartu kategori tidak lagi berfoto, hanya ikon. Foto kategori dulu
+         diambil dari kolam gambar layanan dan banner, jadi gambar yang sama
+         muncul di beberapa kategori berbeda dan tidak satu pun benar-benar
+         menggambarkan isinya. Ikon tidak berpura-pura menjadi foto.
+         (Kartu LAYANAN di seksi berikutnya tetap berfoto — itu memang karya
+         nyata, bukan lambang kategori.)
 
-        <div class="container relative">
-            {{-- Header --}}
-            <div class="mx-auto max-w-2xl text-center">
-                <h2 class="text-display-lg leading-[1.08]" data-aos="fade-up">
-                    <span class="font-semibold text-white">{{ $isId ? 'Kategori' : 'Service' }}</span>
-                    <span class="italic-accent text-white">{{ $isId ? 'Layanan' : 'Categories' }}</span>
-                </h2>
-                <p class="mx-auto mt-4 max-w-xl text-pretty font-medium leading-relaxed text-gold-soft" data-aos="fade-up" data-aos-delay="80">
-                    {{ $isId ? 'Geser untuk pilih kategori layanan Anda.' : 'Drag to choose your service category.' }}
-                </p>
-            </div>
+         Coverflow 3D-nya diganti rel geser yang sama dengan rail blog di bawah:
+         satu perilaku untuk dua tempat, bisa diseret, dan tidak perlu JS khusus
+         yang hanya melayani satu seksi. --}}
+    <section class="section-sm bg-white">
+        <div class="container">
+            <div class="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
+                {{-- Kiri: judul, kalimat pengantar, jalan ke seluruh kategori --}}
+                <div class="lg:col-span-4" data-aos="fade-up">
+                    <h2 class="font-display text-4xl font-bold leading-[1.1] text-navy text-balance md:text-5xl">
+                        {{ $isId ? 'Pilih kategori Anda' : 'Choose your category' }}
+                    </h2>
+                    <p class="mt-5 max-w-sm leading-relaxed text-slate-600 text-pretty">
+                        {{ $isId
+                            ? 'Dari penataan organisasi sampai uji kompetensi bersertifikat BNSP.'
+                            : 'From organisational restructuring through to BNSP-certified assessment.' }}
+                    </p>
+                    <a href="{{ route('services.index') }}" class="btn-blue mt-8">
+                        {{ $isId ? 'Lihat Semua Kategori' : 'View All Categories' }}
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                </div>
 
-            @if ($categories->isNotEmpty())
-                <div class="mt-10 select-none" data-coverflow data-aos="fade-up">
-                    <div class="cf-stage" data-cf-stage>
-                        @foreach ($categories as $cat)
-                            @php $img = $cat->image ? (str_starts_with($cat->image, 'http') ? $cat->image : Storage::url($cat->image)) : null; @endphp
-                            <a href="{{ route('services.index') }}#{{ $cat->slug }}" class="cf-card group" data-cf-card aria-label="{{ $cat->name }}">
-                                {{-- Image on top --}}
-                                <div class="relative h-[56%] w-full shrink-0 overflow-hidden">
-                                    @if ($img)
-                                        <img src="{{ $img }}" alt="{{ $cat->name }}" loading="lazy" draggable="false" class="h-full w-full object-cover transition-transform duration-[900ms] ease-out-soft group-hover:scale-105">
-                                    @else
-                                        <div class="h-full w-full bg-gradient-to-br from-sky-600 to-navy-900"></div>
-                                    @endif
-                                    <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/40 to-transparent"></div>
-                                </div>
-                                {{-- Caption on the translucent (transparent-blue) card body --}}
-                                <div class="flex flex-1 flex-col justify-center px-5 py-4">
-                                    <p class="font-mono text-[10px] font-semibold uppercase tracking-normal text-gold-soft">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }} · {{ $isId ? 'Layanan' : 'Service' }}</p>
-                                    <h3 class="mt-1.5 font-display text-base font-semibold leading-snug text-white text-balance md:text-lg">{{ $cat->name }}</h3>
-                                    @if (! empty($cat->short_description))
-                                        <p class="mt-1.5 line-clamp-2 text-xs leading-relaxed text-white/70">{{ $cat->short_description }}</p>
-                                    @endif
-                                </div>
-                                <span class="cf-card-ring pointer-events-none absolute inset-0"></span>
-                            </a>
-                        @endforeach
-                    </div>
-
-                    {{-- Controls --}}
-                    <div class="mt-12 flex flex-col items-center gap-7">
-                        <div class="flex items-center gap-4">
-                            <button type="button" data-cf-prev class="grid h-12 w-12 place-items-center rounded-full border border-white/25 text-white transition hover:border-white hover:bg-white/10 active:scale-95" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
+                {{-- Kanan: rel geser --}}
+                @if ($categories->isNotEmpty())
+                    <div class="min-w-0 lg:col-span-8" data-hscroll>
+                        <div class="mb-6 flex items-center gap-3">
+                            <button type="button" data-hscroll-prev class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
-                            <div class="flex items-center gap-2" data-cf-dots></div>
-                            <button type="button" data-cf-next class="grid h-12 w-12 place-items-center rounded-full border border-white/25 text-white transition hover:border-white hover:bg-white/10 active:scale-95" aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
+                            <button type="button" data-hscroll-next class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95" aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                         </div>
-                        <a href="{{ route('services.index') }}" class="btn-blue group mt-2">
-                            {{ $isId ? 'Lihat Semua Kategori' : 'View All Categories' }}
-                            <svg class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </a>
+
+                        {{-- Kartunya sempit dengan sengaja: empat muat sekaligus di layar
+                             lebar dan yang kelima mengintip di tepi, sehingga terlihat
+                             bahwa barisnya masih bisa digeser tanpa perlu diberi tahu.
+
+                             Deskripsi kategori dilepas dari kartu. Di lebar 12rem ia
+                             memanjang lima sampai enam baris dan membuat kartunya tinggi
+                             sekali; nama kategori sudah menjelaskan isinya, dan uraian
+                             lengkapnya memang menunggu di halaman Layanan. --}}
+                        <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none items-stretch gap-4 overflow-x-auto scroll-smooth pb-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                            @foreach ($categories as $cat)
+                                {{-- Seluruh kartu adalah tautannya. Tombol terisi di tiap
+                                     kartu akan menjadi lima tombol biru berjajar di ruang
+                                     sesempit ini; teks berpanah sudah cukup menandai bahwa
+                                     kartunya bisa diklik. --}}
+                                <a href="{{ route('services.index') }}#{{ $cat->slug }}"
+                                   class="group flex w-44 shrink-0 snap-start flex-col rounded-2xl border border-navy-100 bg-white p-5 transition duration-300 ease-out-soft hover:-translate-y-1 hover:border-sky-200 hover:shadow-lift sm:w-48">
+                                    <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-navy-50 text-navy transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">
+                                        <x-category-icon :name="$cat->icon" class="h-6 w-6" />
+                                    </span>
+
+                                    <h3 class="mt-4 font-display text-[15px] font-semibold leading-snug text-navy text-balance">{{ $cat->name }}</h3>
+
+                                    {{-- Pembungkus yang memikul mt-auto, bukan tulisannya
+                                         sendiri: teksnya tetap menempel di dasar kartu dan
+                                         tetap berjarak dari judul, sependek apa pun namanya. --}}
+                                    <span class="mt-auto block pt-5">
+                                        <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-700 transition-colors duration-300 group-hover:text-navy">
+                                            {{ $isId ? 'Selengkapnya' : 'Learn more' }}
+                                            <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </span>
+                                    </span>
+                                </a>
+                            @endforeach
+                        </div>
                     </div>
-                </div>
-            @else
-                <p class="mt-14 text-center text-navy-200">{{ $isId ? 'Belum ada kategori layanan.' : 'No service categories yet.' }}</p>
-            @endif
+                @else
+                    <p class="lg:col-span-8 text-slate-500">{{ $isId ? 'Belum ada kategori layanan.' : 'No service categories yet.' }}</p>
+                @endif
+            </div>
         </div>
     </section>
 
@@ -281,20 +297,16 @@
             'End-to-End Support', 'Applied Material', 'Professional Network', 'Competitive Pricing',
         ];
     @endphp
-    <section class="relative overflow-hidden bg-navy-950 text-white">
-        <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1920&q=80" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover">
-        <div class="absolute inset-0 bg-navy-950/82"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/88"></div>
-        {{-- Butir dan cahaya samar, alat yang sama dengan kepala halaman dan pita
-             Mitra. Tanpa keduanya foto gelap ini rata betul dan terbaca sebagai
-             bidang datar, bukan ruang. --}}
-        <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
-        {{-- /10, bukan /12: 12 di luar skala opasitas Tailwind sehingga kelasnya
-             tidak pernah dibuat dan lingkarannya tampil tanpa warna sama sekali. --}}
-        <div class="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl" data-parallax="0.12"></div>
-        <div class="pointer-events-none absolute -right-24 bottom-0 h-80 w-80 rounded-full bg-cyan/10 blur-3xl" data-parallax="0.08"></div>
-        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
+    {{-- Latar netral, bukan foto gelap. Beranda ini sebelumnya memuat empat
+         bidang gelap — hero, kategori, seksi ini, dan pita Mitra — sehingga
+         putih yang mestinya mendominasi justru menjadi selingan. PRODUCT.md
+         menyebutnya terbalik: "putih dominan + aksen biru".
 
+         Fotonya sendiri foto stok kantor yang tidak menggambarkan apa pun dari
+         ketujuh alasan di sebelahnya, jadi tidak ada yang hilang saat dilepas.
+         Bersamanya ikut lepas empat lapis tirai, butir, dua lingkaran cahaya,
+         dan garis emas — semuanya hanya menopang foto itu. --}}
+    <section class="border-y border-navy-50 bg-neutral-50">
         {{-- Judul di kiri, alasannya di kanan. Sebelumnya judul di tengah lalu
              satu baris tipis di dasar pita setinggi 34rem, dengan justify-between
              menyisakan lubang kosong besar di antaranya. Dua kolom mengisi pita
@@ -305,12 +317,15 @@
                      dan ukurannya ikut lebar layar lewat clamp. Pasangan
                      text-3xl/md:text-5xl sebelumnya melompat sekali di satu
                      titik henti lalu diam di 48px berapa pun lebar layarnya. --}}
+                {{-- Aksennya kembali ke text-gradient (arang pekat + miring).
+                     text-gradient-hero adalah gradasi biru-cyan yang dibuat untuk
+                     latar gelap; di atas neutral-50 ia turun jauh di bawah ambang
+                     kontras. Di latar terang, situs ini menekankan lewat miring. --}}
                 <x-heading
                     :lead="$isId ? 'Alasan Memilih' : 'Why Choose'"
                     :accent="$isId ? 'Kami?' : 'Us?'"
-                    accent-class="text-gradient-hero"
-                    class="text-display-lg font-semibold text-white text-balance" />
-                <p class="mt-6 max-w-md text-lg leading-relaxed text-navy-100 text-pretty">{{ $isId ? 'Keahlian praktisi, pendekatan yang dipersonalisasi, dan komitmen pada hasil nyata bagi organisasi Anda.' : 'Practitioner expertise, a personalized approach, and a commitment to real results for your organization.' }}</p>
+                    class="text-display-lg font-semibold text-navy text-balance" />
+                <p class="mt-6 max-w-md text-lg leading-relaxed text-slate-600 text-pretty">{{ $isId ? 'Keahlian praktisi, pendekatan yang dipersonalisasi, dan komitmen pada hasil nyata bagi organisasi Anda.' : 'Practitioner expertise, a personalized approach, and a commitment to real results for your organization.' }}</p>
             </div>
 
             {{-- Satu daftar, bukan dua salinan. Dulu ada pita berjalan untuk layar
@@ -328,11 +343,14 @@
                  manfaat paket di halaman Kemitraan. --}}
             <ul class="sm:grid sm:grid-cols-2 sm:gap-x-10 lg:col-span-7 lg:gap-x-14">
                 @foreach ($reasons as $i => $r)
-                    <li class="flex items-start gap-3.5 border-t border-white/10 py-5 md:py-6" data-aos="fade-up" data-aos-delay="{{ ($i % 2) * 70 }}">
-                        <svg class="mt-1 h-5 w-5 shrink-0 text-sky-400" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    {{-- Garis rambut dan centang ikut pindah ke nilai latar terang:
+                         white/10 tidak terlihat sama sekali di atas neutral-50, dan
+                         sky-400 hanya 2,3:1 di atasnya. --}}
+                    <li class="flex items-start gap-3.5 border-t border-navy-100 py-5 md:py-6" data-aos="fade-up" data-aos-delay="{{ ($i % 2) * 70 }}">
+                        <svg class="mt-1 h-5 w-5 shrink-0 text-sky-600" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                             <path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <p class="font-display text-lg font-medium leading-snug text-white text-balance md:text-xl">{{ $r }}</p>
+                        <p class="font-display text-lg font-medium leading-snug text-navy text-balance md:text-xl">{{ $r }}</p>
                     </li>
                 @endforeach
             </ul>
@@ -398,15 +416,16 @@
              ini dan seksi Pendiri di halaman Tentang. Lingkaran cahaya yang
              sebelumnya saya tambahkan dilepas: gradien itu sudah membawa pendar
              birunya sendiri, dan menumpuknya justru mengeruhkan sapuan terangnya. --}}
-        <section class="section-sm relative overflow-hidden bg-navy-anim text-white">
-            <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
-            <div class="pointer-events-none absolute inset-0 grain opacity-30"></div>
-
-            <div class="container relative">
+        {{-- Latar putih. Isi seksi ini tiga foto proyek: begitu latarnya ikut
+             pekat, fotonya justru kehilangan tenaga karena bersaing dengan
+             bidang di belakangnya. Di atas putih, fotonyalah satu-satunya warna
+             di layar. --}}
+        <section class="section-sm bg-white">
+            <div class="container">
                 <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
                     <div class="max-w-xl">
-                        <h2 class="text-display-lg font-semibold text-white text-balance" data-aos="fade-up">{{ __('site.home.portfolio_kicker') }}</h2>
-                        <p class="mt-4 text-lg leading-relaxed text-navy-100 text-pretty" data-aos="fade-up">{{ __('site.home.portfolio_title') }}</p>
+                        <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ __('site.home.portfolio_kicker') }}</h2>
+                        <p class="mt-4 text-lg leading-relaxed text-slate-600 text-pretty" data-aos="fade-up">{{ __('site.home.portfolio_title') }}</p>
 
                         {{-- Cakupannya sebagai satu baris keterangan, bukan tiga angka
                              raksasa berjajar: yang terakhir itu pola halaman SaaS yang
@@ -420,16 +439,13 @@
                                     ? [[$portfolioScope->total, 'proyek'], [$portfolioScope->clients, 'klien'], [$portfolioScope->categories, 'bidang layanan']]
                                     : [[$portfolioScope->total, 'projects'], [$portfolioScope->clients, 'clients'], [$portfolioScope->categories, 'service areas']];
                             @endphp
-                            {{-- navy-100, bukan navy-200: sapuan terang di gradien ini
-                                 mencapai #2b83df, dan biru muda di atasnya nyaris
-                                 tidak terbaca saat sapuan itu lewat. --}}
-                            <p class="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-wider text-navy-100" data-aos="fade-up">
+                            <p class="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-wider text-slate-500" data-aos="fade-up">
                                 @foreach ($scope as [$value, $label])
                                     @if (! $loop->first)
-                                        <span class="h-3.5 w-px bg-white/20" aria-hidden="true"></span>
+                                        <span class="h-3.5 w-px bg-navy-200" aria-hidden="true"></span>
                                     @endif
                                     <span class="inline-flex items-baseline gap-1.5">
-                                        <span class="font-display text-base tabular-nums text-white" data-counter="{{ $value }}">{{ $value }}</span>{{ $label }}
+                                        <span class="font-display text-base tabular-nums text-navy" data-counter="{{ $value }}">{{ $value }}</span>{{ $label }}
                                     </span>
                                 @endforeach
                             </p>
@@ -437,7 +453,7 @@
                     </div>
 
                     <a href="{{ route('portfolio.index') }}" data-aos="fade-up"
-                       class="group inline-flex shrink-0 items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-white transition duration-300 hover:border-white hover:bg-white hover:text-navy-950">
+                       class="group inline-flex shrink-0 items-center gap-2 rounded-full border border-navy-200 px-6 py-3 text-sm font-medium text-navy transition duration-300 hover:border-navy hover:bg-navy hover:text-white">
                         {{ $isId ? 'Lihat Semua Portofolio' : 'View All Portfolio' }}
                         <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
@@ -452,7 +468,7 @@
                     @foreach ($portfolios as $p)
                         <a href="{{ route('portfolio.show', $p->slug) }}" class="group block"
                            data-aos="fade-up" data-aos-delay="{{ $loop->index * 90 }}">
-                            <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-navy-900 ring-1 ring-white/10 transition-shadow duration-500 group-hover:shadow-lift">
+                            <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-navy-100 ring-1 ring-navy-100 transition-shadow duration-500 group-hover:shadow-lift">
                                 @if ($p->cover_image)
                                     <img src="{{ str_starts_with($p->cover_image, 'http') ? $p->cover_image : Storage::url($p->cover_image) }}" alt="{{ $p->title }}" loading="lazy"
                                          class="h-full w-full object-cover transition-transform duration-[900ms] ease-out-soft group-hover:scale-[1.07]">
@@ -475,10 +491,10 @@
                                 </div>
                             </div>
 
-                            <h3 class="mt-5 font-display text-lg font-semibold leading-snug text-white text-balance transition-colors duration-300 group-hover:text-sky-300">{{ $p->title }}</h3>
-                            <p class="mt-1.5 flex flex-wrap items-center gap-x-2 text-sm text-navy-100">
+                            <h3 class="mt-5 font-display text-lg font-semibold leading-snug text-navy text-balance transition-colors duration-300 group-hover:text-sky-700">{{ $p->title }}</h3>
+                            <p class="mt-1.5 flex flex-wrap items-center gap-x-2 text-sm text-slate-600">
                                 @if ($p->client_name)<span>{{ $p->client_name }}</span>@endif
-                                @if ($p->client_name && $p->project_date)<span class="text-white/40" aria-hidden="true">·</span>@endif
+                                @if ($p->client_name && $p->project_date)<span class="text-navy-200" aria-hidden="true">·</span>@endif
                                 @if ($p->project_date)<span class="font-mono text-xs">{{ $p->project_date->translatedFormat('Y') }}</span>@endif
                             </p>
                         </a>
