@@ -324,14 +324,22 @@
         mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 100%);
     }
 
-    /* Fade only the right edge — for scroll rails whose first card must stay crisp
-       at the left while the last visible card runs off the right. Tanpa ini kartu
-       yang mengintip terpotong rata di tepi wadahnya dan terbaca sebagai cacat
-       tampilan, bukan sebagai tanda bahwa barisnya masih bisa digeser.
-       Mulai memudar di 88% supaya kartu yang utuh tidak ikut tersentuh. */
-    .mask-fade-right {
-        -webkit-mask-image: linear-gradient(to right, #000 0%, #000 88%, transparent 100%);
-        mask-image: linear-gradient(to right, #000 0%, #000 88%, transparent 100%);
+    /* Peluruhan tepi rel geser, mengikuti posisi gesernya.
+       initHscroll() menyetel data-at-start / data-at-end pada rel; di sini
+       peluruhan hanya dipasang pada sisi yang MASIH menyembunyikan kartu.
+       Tanpa aturan ini, tepi yang sudah mentok tetap meluruh dan kartu terakhir
+       terlihat pudar serta terpotong padahal sudah tampil utuh. */
+    .rail-fade[data-at-start='0'][data-at-end='0'] {
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
+        mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
+    }
+    .rail-fade[data-at-start='1'][data-at-end='0'] {
+        -webkit-mask-image: linear-gradient(to right, #000 0%, #000 94%, transparent 100%);
+        mask-image: linear-gradient(to right, #000 0%, #000 94%, transparent 100%);
+    }
+    .rail-fade[data-at-start='0'][data-at-end='1'] {
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 100%);
+        mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 100%);
     }
 
     /* Grid logo mitra. Jumlah kolom di layar lebar datang dari --mitra-cols yang

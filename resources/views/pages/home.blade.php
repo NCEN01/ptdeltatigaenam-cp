@@ -192,17 +192,23 @@
                              memanjang lima sampai enam baris dan membuat kartunya tinggi
                              sekali; nama kategori sudah menjelaskan isinya, dan uraian
                              lengkapnya memang menunggu di halaman Layanan. --}}
-                        {{-- mask-fade-right: kartu yang mengintip di tepi kanan meluruh,
-                             bukan terpotong rata. Tanpa itu potongannya terbaca sebagai
-                             cacat tampilan alih-alih tanda bahwa barisnya masih panjang.
-                             Hanya tepi kanan — kartu pertama harus tetap tajam.
+                        {{-- rail-fade: hanya sisi yang MASIH menyembunyikan kartu yang
+                             meluruh, mengikuti posisi geser yang disetel initHscroll().
+                             Peluruhan permanen membuat kartu terakhir tetap terlihat pudar
+                             dan terpotong padahal relnya sudah digeser sampai habis.
 
-                             px-1/py-2 memberi ruang bagi bayangan kartu dan angkatnya saat
-                             disentuh kursor; tanpa itu keduanya terpangkas oleh overflow
-                             rel ini, dan kartu paling kiri terlihat bayangannya terpotong
-                             lurus. -mx-1 mengembalikan ruang itu supaya kartu pertama tetap
-                             sejajar dengan tepi kolomnya. --}}
-                        <div data-hscroll-track class="mask-fade-right -mx-1 flex cursor-grab snap-x snap-mandatory select-none items-stretch gap-4 overflow-x-auto scroll-smooth px-1 pb-4 pt-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                             snap-proximity, bukan snap-mandatory. Dengan mandatory, browser
+                             wajib berhenti tepat di awal sebuah kartu; kartu terakhir yang
+                             titik awalnya berada di luar jangkauan geser membuatnya mundur
+                             ke kartu sebelumnya, sehingga yang terakhir tidak pernah bisa
+                             tampil utuh. Proximity tetap membantu merapikan posisi tanpa
+                             menjebak ujungnya.
+
+                             px-1/pt-2/pb-4 memberi ruang bagi bayangan kartu dan angkatnya
+                             saat disentuh kursor; tanpa itu keduanya terpangkas oleh
+                             overflow rel ini. -mx-1 mengembalikan ruang itu supaya kartu
+                             pertama tetap sejajar dengan tepi kolomnya. --}}
+                        <div data-hscroll-track class="rail-fade -mx-1 flex cursor-grab snap-x snap-proximity select-none items-stretch gap-4 overflow-x-auto scroll-smooth px-1 pb-4 pt-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             @foreach ($categories as $cat)
                                 {{-- Seluruh kartu adalah tautannya. Tombol terisi di tiap
                                      kartu akan menjadi lima tombol biru berjajar di ruang

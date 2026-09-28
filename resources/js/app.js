@@ -719,5 +719,22 @@ function initHscroll() {
     root.addEventListener('pointerenter', stopAuto);
     root.addEventListener('pointerleave', startAuto);
     startAuto();
+
+    // Peluruhan tepi mengikuti posisi geser. Peluruhan yang dipasang permanen
+    // membuat kartu terakhir tetap terlihat pudar dan terpotong padahal relnya
+    // sudah digeser sampai habis — tepi yang tidak menyembunyikan apa pun tidak
+    // boleh ikut meluruh. Kedua penanda dibaca CSS lewat [data-at-start] dan
+    // [data-at-end]; rel tanpa kelas .rail-fade tidak terpengaruh sama sekali.
+    const syncEdges = () => {
+        const max = track.scrollWidth - track.clientWidth;
+        track.dataset.atStart = track.scrollLeft <= 2 ? '1' : '0';
+        // max <= 2 berarti isinya muat seluruhnya; keduanya harus dianggap ujung
+        // supaya rel pendek tidak meluruh di sisi mana pun.
+        track.dataset.atEnd = (max <= 2 || track.scrollLeft >= max - 2) ? '1' : '0';
+    };
+    track.addEventListener('scroll', syncEdges, { passive: true });
+    window.addEventListener('resize', syncEdges);
+    window.addEventListener('load', syncEdges);
+    syncEdges();
     });
 }
