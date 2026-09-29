@@ -81,15 +81,6 @@ class PageController extends Controller
             ['title' => 'Action', 'desc' => 'Results-oriented, with real action to achieve goals.', 'img' => 'action'],
         ];
 
-        // Alamat kantor, mengikuti materi resmi perusahaan — sama dengan yang
-        // dipakai ContactController dan footer. Halaman Tentang Kami sebenarnya
-        // belum menampilkannya sama sekali; tetap diperbarui supaya tidak ada
-        // alamat lama yang tertinggal dan diam-diam terpakai lagi nanti.
-        $offices = [
-            ['name' => 'Head Office', 'address' => 'Gedung Bursa Efek Indonesia Tower 1 Level 3, Unit 304, Jalan Jendral Sudirman Kav. 52-53, Senayan, Kebayoran Baru, Jakarta Selatan – DKI Jakarta 12190', 'phone' => '(021) 5890 5002'],
-            ['name' => 'Operational Office', 'address' => 'Delta House, Pejaten Mas Estate Blok D3 No. 6, Pejaten, Kramatwatu, Serang – Banten 42161', 'phone' => '0818 834 766'],
-        ];
-
         return view('pages.about', [
             'about' => $about,
             'vision' => $vision,
@@ -97,7 +88,10 @@ class PageController extends Controller
             'missions' => $missions,
             'stats' => $stats,
             'values' => $values,
-            'offices' => $offices,
+            // Halaman Tentang Kami tidak pernah menampilkan daftar kantor; datanya
+            // tetap dikirim dari config/company.php kalau suatu saat dipakai,
+            // bukan ditulis ulang di sini sebagai salinan ketiga.
+            'offices' => config('company.offices', []),
             'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),
         ]);
     }

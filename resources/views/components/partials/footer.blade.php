@@ -8,8 +8,9 @@
     $linkedin = Setting::get('linkedin_url', 'https://linkedin.com/company/deltatigaenam');
     $year = now()->year;
 
-    // Hardcoded office locations (no longer using OfficeLocation model)
-    $offices = collect([]);
+    // Alamat kantor dibaca dari config/company.php — sumber yang sama dengan
+    // halaman kontak, jadi keduanya tidak bisa berbeda.
+    $offices = config('company.offices', []);
 
     // Footer "Layanan" list — mirror the real, active service categories (top 6 by order).
     $footerServices = \App\Models\ServiceCategory::query()
@@ -139,8 +140,11 @@
         <div class="container pb-10 pt-32 md:pt-36">
             <div class="grid gap-12 lg:grid-cols-12 lg:gap-8">
 
-                {{-- Brand --}}
-                <div class="lg:col-span-4 space-y-6">
+                {{-- Brand. Tiga kolom, bukan empat: isinya paling sedikit, dan
+                     lebar yang dilepasnya pindah ke kolom Kontak yang kini memuat
+                     dua alamat lengkap. Dengan begitu alamatnya jatuh di tiga
+                     baris, bukan empat, dan ketiga kolom lebih seimbang tingginya. --}}
+                <div class="lg:col-span-3 space-y-6">
                     <a href="{{ route('home') }}" class="inline-flex items-center gap-3">
                         <img src="{{ asset('images/logodelta36.png') }}" alt="PT. Delta Tiga Enam" class="h-10 w-10 shrink-0">
                         <span class="font-display text-lg font-semibold tracking-wide text-white">PT. Delta Tiga Enam</span>
@@ -196,77 +200,45 @@
                     </div>
                 </div>
 
-                {{-- Contact --}}
-                <div class="lg:col-span-4">
-                    <p class="text-sm font-semibold text-gold">{{ $id ? 'Kontak' : 'Contact' }}</p>
-                    <ul class="mt-4 space-y-3.5 text-sm text-white/80">
-                        <li class="flex items-start gap-2.5">
-                            <svg class="h-4 w-4 shrink-0 text-white mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                            {{-- Versi ringkas alamat Head Office. "SCBD" dilepas:
-                                 materi resmi perusahaan menyebut Senayan, Kebayoran
-                                 Baru, dan menuliskan dua nama kawasan sekaligus
-                                 membuat alamatnya tidak cocok dengan alamat panjang
-                                 di blok kantor beberapa baris di bawah ini. --}}
-                            <span class="leading-relaxed">
-                                {{ $id
-                                    ? 'Gedung BEI Tower 1 Lantai 3, Unit 304, Senayan, Kebayoran Baru, Jakarta Selatan 12190'
-                                    : 'BEI Tower 1 Floor 3, Unit 304, Senayan, Kebayoran Baru, South Jakarta 12190' }}
-                            </span>
-                        </li>
-                        <li class="flex items-center gap-2.5">
-                            <svg class="h-4 w-4 shrink-0 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            <span>(021) 5890 5002</span>
-                        </li>
-                        <li class="flex items-center gap-2.5">
-                            <svg class="h-4 w-4 shrink-0 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                            <a href="mailto:{{ $email }}" class="transition-colors hover:text-gold">{{ $email }}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+                {{-- Kontak. Blok "Kantor Kami" yang dulu berdiri sendiri selebar
+                     footer di bawah ketiga kolom ini kini masuk ke sini: isinya
+                     memang alamat dan nomor telepon, yaitu kontak — berdiri
+                     terpisah, ia mengulang kolom ini dengan alamat yang sama
+                     ditulis dua versi, ringkas di atas dan panjang di bawah.
 
-            {{-- Offices — full width below --}}
-            <div class="mt-12">
-                <p class="text-sm font-semibold text-gold">{{ $id ? 'Kantor Kami' : 'Our Offices' }}</p>
-                {{-- Dua kolom, bukan tiga: kantornya memang tinggal dua sejak
-                     Kantor Pemasaran ditutup, dan kolom ketiga yang kosong terbaca
-                     sebagai data yang gagal dimuat. --}}
-                <div class="mt-5 grid gap-4 sm:grid-cols-2">
-                    @if ($offices->isNotEmpty())
+                     Tiap kantor dapat satu ikon lokasi dan satu ikon telepon,
+                     dengan namanya sebagai penanda di atasnya. Alamatnya mengalir
+                     mengikuti lebar kolom, tidak lagi dipatah dengan <br>: kolom
+                     ini jauh lebih sempit daripada blok selebar footer tadi,
+                     sehingga patahan yang dipatok akan jatuh di tengah nama
+                     jalan. --}}
+                <div class="lg:col-span-5">
+                    <p class="text-sm font-semibold text-gold">{{ $id ? 'Kontak' : 'Contact' }}</p>
+
+                    <div class="mt-5 space-y-5">
                         @foreach ($offices as $office)
-                            <div>
-                                <p class="text-xs font-semibold uppercase tracking-wider text-gold-soft">{{ $office->name }}</p>
-                                <p class="mt-2 text-sm leading-relaxed text-white/80">
-                                    {!! nl2br(e($office->address)) !!}
-                                </p>
-                                @if ($office->phone)
-                                    <p class="mt-3 text-xs font-medium text-white/60">PH. {{ $office->phone }}</p>
-                                @endif
+                            <div @class(['border-t border-white/10 pt-5' => ! $loop->first])>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gold-soft">{{ $office['name'] }}</p>
+                                <ul class="mt-2.5 space-y-2 text-sm text-white/80">
+                                    <li class="flex items-start gap-2.5">
+                                        <svg class="mt-0.5 h-4 w-4 shrink-0 text-white/45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                        <span class="leading-relaxed">{{ $office['address'] }}</span>
+                                    </li>
+                                    <li class="flex items-center gap-2.5">
+                                        <svg class="h-4 w-4 shrink-0 text-white/45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                        <a href="tel:{{ $office['tel'] }}" class="transition-colors hover:text-gold">{{ $office['phone'] }}</a>
+                                    </li>
+                                </ul>
                             </div>
                         @endforeach
-                    @else
-                        {{-- Nama kantornya tidak diterjemahkan: "Head Office" dan
-                             "Operational Office" adalah sebutan yang dipakai
-                             perusahaan sendiri di materi resminya. --}}
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-gold-soft">Head Office</p>
-                            <p class="mt-2 text-sm leading-relaxed text-white/80">
-                                Gedung Bursa Efek Indonesia Tower 1 Level 3, Unit 304,<br>
-                                Jalan Jendral Sudirman Kav. 52-53, Senayan,<br>
-                                Kebayoran Baru, Jakarta Selatan – DKI Jakarta 12190
-                            </p>
-                            <p class="mt-3 text-xs font-medium text-white/60">PH. (021) 5890 5002</p>
-                        </div>
 
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-gold-soft">Operational Office</p>
-                            <p class="mt-2 text-sm leading-relaxed text-white/80">
-                                Delta House, Pejaten Mas Estate Blok D3 No. 6,<br>
-                                Pejaten, Kramatwatu, Serang – Banten 42161
-                            </p>
-                            <p class="mt-3 text-xs font-medium text-white/60">PH. 0818 834 766</p>
+                        {{-- Surel berdiri di luar kedua kantor: ia satu untuk
+                             keduanya, bukan milik salah satunya. --}}
+                        <div class="flex items-center gap-2.5 border-t border-white/10 pt-5 text-sm text-white/80">
+                            <svg class="h-4 w-4 shrink-0 text-white/45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                            <a href="mailto:{{ $email }}" class="transition-colors hover:text-gold">{{ $email }}</a>
                         </div>
-                    @endif
+                    </div>
                 </div>
             </div>
 
