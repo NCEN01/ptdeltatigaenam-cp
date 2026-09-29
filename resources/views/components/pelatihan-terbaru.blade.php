@@ -44,9 +44,6 @@
                         ? 'Program yang paling baru kami buka, lengkap dengan biayanya.'
                         : 'The programmes we opened most recently, priced up front.' }}
                 </p>
-                <a href="{{ $lihatSemuaUrl }}" class="pt-btn">
-                    {{ $isId ? 'Lihat Semua' : 'View All' }} <span class="pt-btn-ic">&rarr;</span>
-                </a>
             </div>
 
             {{-- Ikon beranimasi: papan tulis + topi toga. Seluruh animasinya
@@ -80,16 +77,35 @@
         </div>
 
         <div class="pt-list">
+            {{-- "Lihat Semua" naik ke kanan atas, tepat di atas deretan kartu, dan
+                 memakai .btn-blue milik situs — bukan tombol gelap bawaan
+                 rancangannya. Dengan begitu bentuk, warna, dan perilaku sentuhnya
+                 sama persis dengan tombol utama di seksi lain, alih-alih menjadi
+                 satu-satunya tombol di halaman yang berperilaku sendiri. --}}
             <div class="pt-toolbar">
                 <div class="pt-count">
                     <strong>{{ str_pad(count($programs), 2, '0', STR_PAD_LEFT) }}</strong>
                     {{ $isId ? 'program tersedia' : 'programmes available' }}
                 </div>
-                <div class="pt-nav">
-                    <button type="button" class="pt-arrow" data-pt-prev aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">&larr;</button>
-                    <button type="button" class="pt-arrow pt-arrow--primary" data-pt-next aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">&rarr;</button>
-                </div>
+                <a href="{{ $lihatSemuaUrl }}" class="btn-blue">
+                    {{ $isId ? 'Lihat Semua' : 'View All' }}
+                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
             </div>
+
+            {{-- Panah pindah ke sisi kiri dan kanan deretan kartu, memakai tampilan
+                 yang sama persis dengan seksi Agenda Mendatang. Di atas deretan,
+                 keduanya berdiri jauh dari benda yang digerakkannya; di sampingnya,
+                 letaknya menjelaskan sendiri apa yang akan bergeser. --}}
+            <div class="pt-rail">
+                <button type="button" data-pt-prev aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}"
+                        class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-40 lg:grid">
+                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" data-pt-next aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}"
+                        class="absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-40 lg:grid">
+                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
 
             <div class="pt-track" data-pt-track>
                 @foreach ($programs as $i => $p)
@@ -134,6 +150,7 @@
                         </div>
                     </a>
                 @endforeach
+            </div>
             </div>
         </div>
     </div>
