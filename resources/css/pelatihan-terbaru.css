@@ -142,7 +142,7 @@
    membuatnya terbaca seperti tautan padahal ia keterangan, dan ia bersaing
    dengan lencana diskon emas di sudut seberangnya. Arang membuat keduanya
    punya peran jelas — satu menerangkan, satu menandai. */
-.pt-chip { position: absolute; left: 14px; top: 14px; max-width: calc(100% - 90px); padding: 6px 11px; border-radius: 999px; background: #ffffffeb; font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--pt-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pt-chip { position: absolute; left: 14px; top: 14px; max-width: calc(100% - 90px); padding: 6px 11px; border-radius: 999px; background: #ffffffeb; font-size: 10px; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: var(--pt-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* Lencana diskon memakai emas, warna aksen situs. Tulisannya arang, bukan
    putih: putih di atas #dab45e hanya 1,9:1 dan praktis tidak terbaca, sedangkan
    arang mencapai 9:1. Pasangan itu sama dengan tombol emas situs. */
