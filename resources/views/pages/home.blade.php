@@ -151,11 +151,18 @@
                          bukan dua penggal terpisah: keduanya satu frasa, dan memutus
                          warnanya di tengah frasa akan membuat jedanya terbaca di
                          tempat yang bukan jeda. --}}
+                    {{-- text-display-lg, sama dengan seluruh judul seksi lain di
+                         beranda. Pasangan text-4xl/md:text-5xl sebelumnya melompat
+                         sekali di satu titik putus lalu diam, dan menjadikan judul
+                         ini satu-satunya yang berskala sendiri. font-display dan
+                         text-balance tidak ditulis: app.css sudah memberikannya ke
+                         setiap h1–h4; font-bold ditulis karena memang menimpa
+                         font-semibold bawaan itu. --}}
                     <x-heading
                         :lead="$isId ? 'Kategori' : 'Our'"
                         :accent="$isId ? 'Layanan Kami' : 'Service Categories'"
                         accent-class="text-sky-700"
-                        class="font-display text-4xl font-bold leading-[1.1] text-navy text-balance md:text-5xl" />
+                        class="text-display-lg font-bold text-navy" />
                     <p class="mt-5 max-w-sm leading-relaxed text-slate-600 text-pretty">
                         {{ $isId
                             ? 'Dari penataan organisasi sampai uji kompetensi bersertifikat BNSP.'
@@ -416,7 +423,7 @@
                         :lead="$isId ? 'Berita Terbaru' : 'Our Latest'"
                         :accent="$isId ? 'Kami' : 'News'"
                         accent-class="text-sky-700"
-                        class="text-display-lg font-semibold text-navy text-balance" />
+                        class="text-display-lg text-navy" />
                     <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-600 text-pretty">
                         {{ $isId
                             ? 'Kabar pelatihan, uji kompetensi BNSP, dan kegiatan kami — diperbarui setiap ada yang baru.'
@@ -440,14 +447,22 @@
                          tulisannya berhenti sebelum kartu, bukan tersembunyi di
                          baliknya.
 
-                         Sejak relnya cukup memuat tiga kartu, panel ini mengambil
-                         empat kolom di semua ukuran — dulu tiga di xl karena rel
-                         perlu ruang untuk kartu keempat. Satu kolom itu pindah ke
-                         panel, jadi kartunya mengecil dan panelnya melebar sekaligus. --}}
-                    <div class="lg:col-span-4" data-aos="fade-up">
+                         Lima kolom di lg, empat di xl. Lebar isi panel ini tidak
+                         pernah bisa melebihi lebar kolomnya dikurangi padding kiri,
+                         berapa pun -mr dan pr-nya disetel — keduanya saling
+                         meniadakan. Di lg dengan empat kolom isinya tinggal 272px
+                         dan judul 24px-nya pecah jadi lima baris; dengan lima kolom
+                         menjadi 354px. Di xl empat kolom sudah memberi 352px. --}}
+                    <div class="lg:col-span-5 xl:col-span-4" data-aos="fade-up">
                         <div class="relative h-full overflow-hidden rounded-3xl bg-navy-anim p-7 text-white shadow-lift sm:p-8 lg:-mr-20 lg:rounded-r-none lg:pr-20 xl:-mr-24 xl:pr-24">
                             <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
                             <div class="pointer-events-none absolute -right-14 -top-14 h-44 w-44 rounded-full bg-sky-400/25 blur-3xl"></div>
+                            {{-- Tirai gelap tipis. bg-navy-anim menyapukan pita terang
+                                 #2b83df melintasi panel tiap 22 detik, dan di bawah pita
+                                 itu teks putih transparan turun sampai 2,4:1. Tirai ini
+                                 menahan dasarnya tetap gelap sehingga teksnya lolos 4,5:1
+                                 di sepanjang sapuan, tanpa mematikan gerak gradasinya. --}}
+                            <div class="pointer-events-none absolute inset-0 bg-navy-950/35"></div>
 
                             <div class="relative flex h-full flex-col">
                                 {{-- Lencana ikon dengan cincin putus-putus yang berputar
@@ -464,12 +479,12 @@
                                     </span>
                                 </span>
 
-                                <h3 class="mt-6 font-display text-xl font-semibold leading-snug text-balance sm:text-2xl">
+                                <h3 class="mt-6 text-xl leading-snug sm:text-2xl">
                                     {{ $isId
                                         ? 'Informasi terkini seputar pelatihan dan sertifikasi'
                                         : 'The latest on our training and certification' }}
                                 </h3>
-                                <p class="mt-3 text-sm leading-relaxed text-white/75 text-pretty">
+                                <p class="mt-3 text-sm leading-relaxed text-white/85 text-pretty">
                                     {{ $isId
                                         ? 'Jadwal kelas, kabar kegiatan, dan hal yang perlu Anda tahu sebelum ikut uji kompetensi.'
                                         : 'Class schedules, event news, and what is worth knowing before you sit an assessment.' }}
@@ -479,7 +494,7 @@
                                      CMS, jadi panel ini ikut menua kalau blognya berhenti
                                      diisi, alih-alih menjanjikan hal yang tidak terjadi. --}}
                                 @if ($posts->first()->published_at)
-                                    <div class="mt-auto flex items-center gap-2 pt-8 font-mono text-[11px] uppercase tracking-wider text-white/60">
+                                    <div class="mt-auto flex items-center gap-2 pt-8 font-mono text-[11px] uppercase tracking-wider text-white/85">
                                         <span class="h-1.5 w-1.5 rounded-full bg-gold"></span>
                                         {{ $isId ? 'Terbit terakhir' : 'Last published' }}
                                         {{ $posts->first()->published_at->translatedFormat('d M Y') }}
@@ -498,7 +513,7 @@
                          panel sementara deretan kartunya tetap setinggi isinya dan
                          menempel di atas, jadi kartunya duduk lebih tinggi dari titik
                          tengah panel dan panahnya pun ikut meleset. --}}
-                    <div class="relative z-10 min-w-0 lg:col-span-8 lg:self-center" data-hscroll data-hscroll-auto data-aos="fade-up" data-aos-delay="80">
+                    <div class="relative z-10 min-w-0 lg:col-span-7 lg:self-center xl:col-span-8" data-hscroll data-hscroll-auto data-aos="fade-up" data-aos-delay="80">
                         {{-- Panah di sisi kiri dan kanan deretan kartu, sama persis
                              dengan seksi Agenda Mendatang dan Pelatihan Terbaru.
 
@@ -538,12 +553,15 @@
                                      rel mana pun, dan sisanya muncul sebagai potongan
                                      itu.
 
-                                     Di xl hasilnya ~282px — masih seukuran kartu
-                                     Agenda. Di lg lebarnya menyusut mengikuti relnya
-                                     yang menyempit jadi 8/12 kolom. Titik putus di
-                                     bawah lg mengikuti Agenda: 80% di layar kecil,
-                                     2 di sm, 3 di md. --}}
-                                <div class="min-w-0 shrink-0 basis-[80%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)]">
+                                     Jumlah per layar: 80% di layar kecil, 2 di sm,
+                                     3 di md, lalu kembali 2 di lg dan 3 lagi di xl.
+                                     Turun di lg karena di titik itu tata letaknya
+                                     berpindah ke grid 12 kolom dan rel ini menyempit
+                                     jadi 7/12 — tiga kartu di situ tinggal ~172px,
+                                     terlalu sempit untuk gambar sampul, tanggal,
+                                     judul, dan tautannya sekaligus. Di xl relnya
+                                     melebar lagi dan tiga kartu mendarat di ~245px. --}}
+                                <div class="min-w-0 shrink-0 basis-[80%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)] lg:basis-[calc((100%_-_1.5rem)/2)] xl:basis-[calc((100%_-_3rem)/3)]">
                                     {{-- Tanpa paragraf ringkasan: bentuknya jadi sama
                                          persis dengan kartu Agenda — gambar, tanggal dan
                                          tempat, judul, lalu tautan. --}}
@@ -572,19 +590,20 @@
          kartunya latar itu menyembul sebagai potongan gambar acak. Bidang gelap
          polos membuat foto proyeknya yang berbicara. --}}
     @if ($portfolios->isNotEmpty())
-        {{-- bg-navy-anim + grain, persis seperti seksi Kategori Layanan di halaman
-             ini dan seksi Pendiri di halaman Tentang. Lingkaran cahaya yang
-             sebelumnya saya tambahkan dilepas: gradien itu sudah membawa pendar
-             birunya sendiri, dan menumpuknya justru mengeruhkan sapuan terangnya. --}}
-        {{-- Latar putih. Isi seksi ini tiga foto proyek: begitu latarnya ikut
-             pekat, fotonya justru kehilangan tenaga karena bersaing dengan
-             bidang di belakangnya. Di atas putih, fotonyalah satu-satunya warna
-             di layar. --}}
-        <section class="section-sm bg-white">
+        {{-- Latar terang, bukan pekat: isi seksi ini tiga foto proyek, dan di atas
+             bidang gelap fotonya kehilangan tenaga karena bersaing dengan latarnya.
+
+             bg-paper, off-white bertinta biru, bukan putih murni. Bersama Berita di
+             atasnya dan Update Terbaru di bawahnya, tiga seksi putih berturut-turut
+             terbaca sebagai satu bidang panjang tanpa jeda; selisih tipis ini cukup
+             untuk memberi irama tanpa mengganggu fotonya.
+
+             --}}
+        <section class="section-sm bg-paper">
             <div class="container">
                 <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
                     <div class="max-w-xl">
-                        <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ __('site.home.portfolio_kicker') }}</h2>
+                        <h2 class="text-display-lg text-navy" data-aos="fade-up">{{ __('site.home.portfolio_kicker') }}</h2>
                         <p class="mt-4 text-lg leading-relaxed text-slate-600 text-pretty" data-aos="fade-up">{{ __('site.home.portfolio_title') }}</p>
 
                         {{-- Cakupannya sebagai satu baris keterangan, bukan tiga angka
@@ -599,7 +618,11 @@
                                     ? [[$portfolioScope->total, 'proyek'], [$portfolioScope->clients, 'klien'], [$portfolioScope->categories, 'bidang layanan']]
                                     : [[$portfolioScope->total, 'projects'], [$portfolioScope->clients, 'clients'], [$portfolioScope->categories, 'service areas']];
                             @endphp
-                            <p class="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-wider text-slate-500" data-aos="fade-up">
+                            {{-- slate-600, bukan slate-500: di atas bg-paper slate-500
+                                 hanya 4,45:1, tepat di bawah ambang 4,5:1 untuk teks
+                                 11px. Di atas putih ia masih lolos, jadi kegagalannya
+                                 baru muncul saat seksi ini berpindah ke bg-paper. --}}
+                            <p class="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-wider text-slate-600" data-aos="fade-up">
                                 @foreach ($scope as [$value, $label])
                                     @if (! $loop->first)
                                         <span class="h-3.5 w-px bg-navy-200" aria-hidden="true"></span>
@@ -612,8 +635,11 @@
                         @endif
                     </div>
 
-                    <a href="{{ route('portfolio.index') }}" data-aos="fade-up"
-                       class="group inline-flex shrink-0 items-center gap-2 rounded-full border border-navy-200 px-6 py-3 text-sm font-medium text-navy transition duration-300 hover:border-navy hover:bg-navy hover:text-white">
+                    {{-- .btn-ghost, bukan salinan tulisan tangannya. Salinan itu sudah
+                         menyimpang dari tokennya (px-6 py-3, bukan px-7 py-3.5, dan
+                         tanpa active:scale), jadi dua tombol "lihat semua" di halaman
+                         yang sama berukuran berbeda. --}}
+                    <a href="{{ route('portfolio.index') }}" data-aos="fade-up" class="btn-ghost group shrink-0">
                         {{ $isId ? 'Lihat Semua Portofolio' : 'View All Portfolio' }}
                         <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
@@ -664,7 +690,11 @@
         </section>
     @endif
 
-    {{-- ===================== UPCOMING AGENDAS ===================== --}}
+    {{-- ===================== UPCOMING AGENDAS =====================
+         Ikut disembunyikan selagi halaman Agenda dimatikan lewat
+         config/company.php: seluruh tombol di seksi ini menuju halaman itu,
+         jadi membiarkannya tampil berarti mengirim pengunjung ke 404. --}}
+    @if (config('company.pages.agenda', true))
     <section class="section relative overflow-hidden border-t border-navy-50 bg-paper">
         {{-- Animated background --}}
         <div class="pointer-events-none absolute inset-0 overflow-hidden">
@@ -678,7 +708,11 @@
         <div class="container relative">
             {{-- Centered header --}}
             <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
-                <h2 class="text-display-lg font-semibold text-navy text-balance">{{ $isId ? 'Agenda Mendatang Kami' : 'Our Upcoming Agenda' }}</h2>
+                <x-heading
+                    :lead="$isId ? 'Agenda Mendatang' : 'Our Upcoming'"
+                    :accent="$isId ? 'Kami' : 'Agenda'"
+                    accent-class="text-sky-700"
+                    class="text-display-lg text-navy" />
                 <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-600">
                     {{ $isId
                         ? 'Ikuti kelas pelatihan, sertifikasi, dan kegiatan terbaru dari kami. Geser untuk melihat jadwal lengkapnya.'
@@ -721,14 +755,21 @@
                                 {{-- Compact date badge --}}
                                 <div class="absolute left-3 top-3 flex w-11 flex-col items-center rounded-xl py-1.5 text-center shadow-lift ring-1 backdrop-blur {{ $isNearest ? 'bg-gradient-to-br from-gold to-gold-soft ring-gold-soft/70' : 'bg-white/95 ring-white/60' }}">
                                     <span class="font-display text-lg font-semibold leading-none {{ $isNearest ? 'text-navy-950' : 'text-navy' }}">{{ $agenda->starts_at->format('d') }}</span>
-                                    <span class="font-mono text-[9px] font-bold uppercase tracking-normal {{ $isNearest ? 'text-navy-950/70' : ($isPast ? 'text-slate-400' : 'text-gold-deep') }}">{{ $agenda->starts_at->translatedFormat('M') }}</span>
+                                    {{-- Bulannya bagian dari tanggal, bukan hiasan, jadi
+                                         ambangnya 4,5:1. slate-400 hanya 2,6:1 dan
+                                         gold-deep 3,3:1 di atas lencana yang hampir
+                                         putih ini. --}}
+                                    <span class="font-mono text-[9px] font-bold uppercase tracking-normal {{ $isNearest ? 'text-navy-950/70' : ($isPast ? 'text-slate-600' : 'text-navy') }}">{{ $agenda->starts_at->translatedFormat('M') }}</span>
                                 </div>
 
                                 {{-- Status pill — Segera Hadir (terdekat) / Akan Datang / Selesai (lewat) --}}
                                 @php
                                     if ($isPast)      { $pillBg = 'bg-slate-500/90 text-white'; $pillDot = 'bg-white/80'; $pillText = $isId ? 'Selesai' : 'Ended'; }
                                     elseif ($isNearest) { $pillBg = 'bg-gold text-navy-950';    $pillDot = 'bg-navy-950/70'; $pillText = $isId ? 'Segera Hadir' : 'Coming Soon'; }
-                                    else              { $pillBg = 'bg-sky-600/90 text-white';  $pillDot = 'bg-white/90';   $pillText = $isId ? 'Akan Datang' : 'Upcoming'; }
+                                    // sky-700, bukan sky-600: putih di atas sky-600 hanya
+                                    // 3,45:1, sedangkan pil 9px tebal ini tetap teks biasa
+                                    // menurut WCAG dan butuh 4,5:1.
+                                    else              { $pillBg = 'bg-sky-700/90 text-white';  $pillDot = 'bg-white/90';   $pillText = $isId ? 'Akan Datang' : 'Upcoming'; }
                                 @endphp
                                 <span class="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-normal shadow-lift backdrop-blur {{ $pillBg }}">
                                     <span class="h-1 w-1 rounded-full {{ $pillDot }}"></span>
@@ -751,7 +792,7 @@
                                     {{ $agenda->title }}
                                 </h3>
 
-                                <span class="mt-auto inline-flex items-center gap-1.5 pt-4 text-xs font-bold uppercase tracking-normal text-sky-600 transition-colors group-hover:text-sky-700">
+                                <span class="mt-auto inline-flex items-center gap-1.5 pt-4 text-xs font-bold uppercase tracking-normal text-sky-700 transition-colors group-hover:text-navy">
                                     {{ $isId ? 'Selengkapnya' : 'Read More' }}
                                     <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </span>
@@ -762,14 +803,20 @@
                 </div>
 
                 <div class="mt-10 text-center" data-aos="fade-up">
-                    <a href="{{ route('agenda.index') }}" class="inline-flex items-center gap-2 rounded-full border border-navy-200 px-6 py-3 text-sm font-medium text-navy transition duration-300 hover:border-navy hover:bg-navy hover:text-white">
+                    {{-- .btn-ghost, bukan salinan tulisan tangannya. Kelas itu sudah
+                         berisi bentuk, jarak, dan wujud sentuh yang sama persis, dan
+                         salinan ini tertinggal dari perilaku tekan .btn yang lain. --}}
+                    <a href="{{ route('agenda.index') }}" class="btn-ghost">
                         {{ $isId ? 'Lihat Semua Agenda' : 'View All Agendas' }}
                         <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
                 </div>
             @else
                 {{-- Premium Empty State / WhatsApp Lead Generation --}}
-                <div class="mt-10 card border-dashed border-2 border-navy-200 bg-navy-50/20 p-8 md:p-12 text-center rounded-3xl" data-aos="fade-up">
+                {{-- Tanpa .card: kelas itu membawa bg-white, border-navy-100, lebar
+                     garis, dan rounded-2xl yang keempatnya ditimpa di sini juga,
+                     jadi yang benar-benar terpakai hanya shadow-card. --}}
+                <div class="mt-10 rounded-3xl border-2 border-dashed border-navy-200 bg-navy-50/20 p-8 text-center shadow-card md:p-12" data-aos="fade-up">
                     <div class="max-w-md mx-auto space-y-4">
                         <span class="grid h-12 w-12 place-items-center rounded-2xl bg-navy-50 text-slate-500 mx-auto">
                             <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
@@ -777,13 +824,17 @@
                         <h3 class="font-display text-lg font-semibold text-navy">
                             {{ $isId ? 'Belum Ada Agenda Terdekat' : 'No Upcoming Agendas' }}
                         </h3>
-                        <p class="text-xs text-slate-500 leading-relaxed text-balance">
+                        <p class="text-xs leading-relaxed text-slate-600 text-balance">
                             {{ $isId
                                 ? 'Kami sedang merancang berbagai kelas pelatihan dan jadwal sertifikasi kompetensi terbaru. Ingin tahu jadwal terdekat atau berdiskusi?'
                                 : 'We are planning various training classes and new competence certification schedules. Want to know the nearest schedule or discuss?' }}
                         </p>
                         <div class="pt-2">
-                            <a href="https://wa.me/62818834766?text=Halo%20Delta%20Tiga%20Enam,%20saya%20ingin%20tahu%20jadwal%20pelatihan%20dan%20sertifikasi%20terdekat..." target="_blank" rel="noopener" class="btn bg-emerald-500 hover:bg-emerald-600 text-white shadow-lift inline-flex items-center gap-2">
+                            {{-- .btn-blue, sama dengan tombol WhatsApp di seksi FAQ.
+                                 Hijau emerald sebelumnya adalah satu-satunya hijau di
+                                 situs ini, dan dua tombol WhatsApp berwarna berbeda di
+                                 satu halaman terbaca sebagai dua tindakan berbeda. --}}
+                            <a href="https://wa.me/62818834766?text=Halo%20Delta%20Tiga%20Enam,%20saya%20ingin%20tahu%20jadwal%20pelatihan%20dan%20sertifikasi%20terdekat..." target="_blank" rel="noopener" class="btn-blue">
                                 <img src="{{ asset('icons/ic_whatsapp.png') }}" class="h-4.5 w-4.5 object-contain" alt="WhatsApp">
                                 <span>WhatsApp Admin</span>
                             </a>
@@ -793,116 +844,132 @@
             @endif
         </div>
     </section>
+    @endif
 
     {{-- ===================== INSTAGRAM UPDATES ===================== --}}
     <section class="section bg-white border-t border-navy-50">
         <div class="container">
+            {{-- Judulnya dulu memakai clamp() yang ditulis sendiri dan tracking
+                 sendiri, tanpa kata beraksen — satu-satunya judul seksi di beranda
+                 yang tidak mengikuti token text-display-lg. Keterangannya pun
+                 memakai slate-500 sementara seksi lain slate-600. --}}
             <div class="mx-auto max-w-2xl text-center mb-12" data-aos="fade-up">
-                <h2 class="leading-[1.05] [font-size:clamp(1.7rem,3.8vw,2.6rem)]">
-                    <span class="block font-display tracking-tight text-navy">{{ $isId ? 'Update Terbaru' : 'Latest Updates' }}</span>
-                </h2>
-                <p class="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-slate-500 text-sm">
+                <x-heading
+                    :lead="$isId ? 'Update Terbaru' : 'Our Latest'"
+                    :accent="$isId ? 'Kami' : 'Updates'"
+                    accent-class="text-sky-700"
+                    class="text-display-lg text-navy" />
+                <p class="mx-auto mt-4 max-w-xl text-pretty text-sm leading-relaxed text-slate-600">
                     {{ $isId
                         ? 'Ikuti kegiatan terbaru dan informasi menarik dari kami di Instagram @deltatigaenam.'
                         : 'Follow our latest activities and interesting information on Instagram @deltatigaenam.' }}
                 </p>
             </div>
 
-            @if (isset($instagramUpdates) && $instagramUpdates->isNotEmpty())
-                <div class="mx-auto grid gap-8 md:grid-cols-2 max-w-4xl">
-                    @foreach ($instagramUpdates as $ig)
-                        @php $igImg = $ig->image ? (str_starts_with($ig->image, 'http') ? $ig->image : \Illuminate\Support\Facades\Storage::url($ig->image)) : null; @endphp
-                        <div class="card overflow-hidden border-navy-100 shadow-card transition-all duration-300 hover:shadow-lift hover:-translate-y-1" data-aos="{{ $loop->first ? 'fade-right' : 'fade-left' }}">
-                            <div class="flex items-center justify-between p-3.5 border-b border-navy-50 bg-white">
-                                <div class="flex items-center gap-2.5">
-                                    <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-6 w-6 shrink-0 rounded-lg object-contain">
-                                    <div class="leading-tight">
-                                        <p class="text-xs font-semibold text-navy">deltatigaenam</p>
-                                        <p class="text-[9px] text-slate-400">Original audio</p>
-                                    </div>
+            {{-- Satu bentuk kartu, satu perulangan. Sebelumnya markah yang sama
+                 persis ditulis dua kali — sekali untuk $instagramUpdates dari CMS
+                 dan sekali untuk contoh cadangan — sehingga tiap perbaikan warna
+                 atau ukuran harus dikerjakan dua kali dan bisa lupa sebelah.
+                 Datanya yang diseragamkan dulu, bukan markahnya yang digandakan. --}}
+            @php
+                $igCards = (isset($instagramUpdates) && $instagramUpdates->isNotEmpty())
+                    ? $instagramUpdates->map(fn ($ig) => [
+                        'img' => $ig->image ? (str_starts_with($ig->image, 'http') ? $ig->image : \Illuminate\Support\Facades\Storage::url($ig->image)) : null,
+                        'label' => $ig->batch_label,
+                        'title' => $ig->title,
+                        'company' => $ig->company,
+                        'date' => $ig->date_range,
+                        'link' => $ig->instagram_url ?: 'https://www.instagram.com/deltatigaenam/',
+                    ])
+                    : collect([
+                        ['img' => asset('images/certified-risk-management.png'), 'label' => 'BATCH IV', 'title' => 'Certified Risk Management', 'company' => 'PT Delta Tiga Enam', 'date' => '19 - 22 Agustus 2025', 'link' => 'https://www.instagram.com/deltatigaenam/'],
+                        ['img' => asset('images/training-seminar.png'), 'label' => 'SEMINAR', 'title' => 'Pengembangan Kompetensi SDM', 'company' => 'PT Delta Tiga Enam', 'date' => '05 - 06 Agustus 2025', 'link' => 'https://www.instagram.com/deltatigaenam/'],
+                    ]);
+            @endphp
+
+            <div class="mx-auto grid max-w-4xl gap-8 md:grid-cols-2">
+                @foreach ($igCards as $ig)
+                    {{-- .card card-hover, bukan salinan tulisan tangannya. Salinan itu
+                         menulis ulang border-navy-100 dan shadow-card yang sudah jadi
+                         isi .card, dan transition-all pada lapis utilitas menimpa
+                         ease-out-soft milik .card — jadi dua kartu ini melandai
+                         berbeda dari seluruh kartu lain di situs. --}}
+                    <div class="card card-hover overflow-hidden" data-aos="{{ $loop->first ? 'fade-right' : 'fade-left' }}">
+                        <div class="flex items-center justify-between border-b border-navy-50 bg-white p-3.5">
+                            <div class="flex items-center gap-2.5">
+                                <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-6 w-6 shrink-0 rounded-lg object-contain">
+                                <div class="leading-tight">
+                                    <p class="text-xs font-semibold text-navy">deltatigaenam</p>
+                                    {{-- slate-500 di 10px, bukan slate-400 di 9px: yang lama
+                                         2,6:1, di bawah ambang 4,5:1, dan 9px terlalu kecil
+                                         untuk ukuran teks terkecil di halaman ini. --}}
+                                    <p class="text-[10px] text-slate-500">Original audio</p>
                                 </div>
-                                @if ($ig->instagram_url)
-                                    <a href="{{ $ig->instagram_url }}" target="_blank" rel="noopener" class="rounded bg-sky hover:bg-sky-600 px-3 py-1 text-[10px] font-semibold text-white transition">View profile</a>
+                            </div>
+                            {{-- py-2 -my-1: kotak sentuhnya naik ke 36px tanpa mengubah
+                                 tinggi tampilnya, karena pil 23px jauh di bawah sasaran
+                                 sentuh yang nyaman di ponsel. --}}
+                            <a href="{{ $ig['link'] }}" target="_blank" rel="noopener" class="-my-1 rounded bg-navy-600 px-3 py-2 text-[10px] font-semibold text-white transition-colors hover:bg-navy-700">View profile</a>
+                        </div>
+
+                        <div class="group relative aspect-[4/5] overflow-hidden bg-navy-950">
+                            @if ($ig['img'])
+                                <img src="{{ $ig['img'] }}" alt="{{ $ig['title'] }}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            @else
+                                <div class="absolute inset-0 aurora opacity-60"></div>
+                            @endif
+                            <div class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent p-5 pt-12 text-white">
+                                @if ($ig['label'])
+                                    <span class="inline-block self-start rounded bg-navy-600 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white">{{ $ig['label'] }}</span>
+                                @endif
+                                <h3 class="mt-2 text-lg leading-tight">{{ $ig['title'] }}</h3>
+                                @if ($ig['company'])<p class="mt-0.5 text-[11px] text-navy-200">{{ $ig['company'] }}</p>@endif
+                                @if ($ig['date'])
+                                    <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3 font-mono text-[10px] text-white/60"><span>{{ $ig['date'] }}</span></div>
                                 @endif
                             </div>
-                            <div class="relative aspect-[4/5] overflow-hidden bg-navy-950 group">
-                                @if ($igImg)
-                                    <img src="{{ $igImg }}" alt="{{ $ig->title }}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
-                                @else
-                                    <div class="absolute inset-0 aurora opacity-60"></div>
-                                @endif
-                                <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent p-5 pt-12 flex flex-col justify-end text-white">
-                                    @if ($ig->batch_label)
-                                        <span class="inline-block self-start rounded bg-sky px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white">{{ $ig->batch_label }}</span>
-                                    @endif
-                                    <h3 class="font-display text-lg font-bold mt-2 leading-tight">{{ $ig->title }}</h3>
-                                    @if ($ig->company)<p class="text-[11px] text-navy-200 mt-0.5">{{ $ig->company }}</p>@endif
-                                    @if ($ig->date_range)
-                                        <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-mono text-slate-400"><span>{{ $ig->date_range }}</span></div>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="p-3.5 border-t border-navy-50 flex items-center justify-between bg-white text-slate-500">
-                                <div class="flex items-center gap-3.5">
-                                    <a href="{{ $ig->instagram_url ?? 'https://www.instagram.com/deltatigaenam/' }}" target="_blank" rel="noopener" class="hover:text-rose-500 transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></a>
-                                    <a href="{{ $ig->instagram_url ?? 'https://www.instagram.com/deltatigaenam/' }}" target="_blank" rel="noopener" class="hover:text-sky transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-1.923 2.202 4.968 4.968 0 0 0 2.803-.832c.43-.284.974-.354 1.5-.178 1.12.375 2.316.577 3.561.577z"/></svg></a>
-                                </div>
-                                <a href="{{ $ig->instagram_url ?? 'https://www.instagram.com/deltatigaenam/' }}" target="_blank" rel="noopener" class="text-xs font-semibold text-sky hover:underline inline-flex items-center gap-1"><span>{{ $isId ? 'Lihat di Instagram' : 'View on Instagram' }}</span><span>&rarr;</span></a>
-                            </div>
                         </div>
-                    @endforeach
-                </div>
-            @else
-                <div class="mx-auto grid gap-8 md:grid-cols-2 max-w-4xl">
-                    @php $fallbackIg = [['img' => '/images/certified-risk-management.png', 'label' => 'BATCH IV', 'title' => 'Certified Risk Management', 'company' => 'PT Delta Tiga Enam', 'date' => '19 - 22 Agustus 2025', 'link' => 'https://www.instagram.com/deltatigaenam/'], ['img' => '/images/training-seminar.png', 'label' => 'SEMINAR', 'title' => 'Pengembangan Kompetensi SDM', 'company' => 'PT Delta Tiga Enam', 'date' => '05 - 06 Agustus 2025', 'link' => 'https://www.instagram.com/deltatigaenam/']]; @endphp
-                    @foreach ($fallbackIg as $fi)
-                        <div class="card overflow-hidden border-navy-100 shadow-card transition-all duration-300 hover:shadow-lift hover:-translate-y-1" data-aos="{{ $loop->first ? 'fade-right' : 'fade-left' }}">
-                            <div class="flex items-center justify-between p-3.5 border-b border-navy-50 bg-white">
-                                <div class="flex items-center gap-2.5">
-                                    <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-6 w-6 shrink-0 rounded-lg object-contain">
-                                    <div class="leading-tight">
-                                        <p class="text-xs font-semibold text-navy">deltatigaenam</p>
-                                        <p class="text-[9px] text-slate-400">Original audio</p>
-                                    </div>
-                                </div>
-                                <a href="{{ $fi['link'] }}" target="_blank" rel="noopener" class="rounded bg-sky hover:bg-sky-600 px-3 py-1 text-[10px] font-semibold text-white transition">View profile</a>
+
+                        <div class="flex items-center justify-between border-t border-navy-50 bg-white p-3.5 text-slate-500">
+                            {{-- p-2.5 -m-2.5 pada kedua ikon: bidang sentuhnya jadi 40px
+                                 sementara ikonnya tetap 20px, karena dua tautan 20px yang
+                                 hanya berjarak 14px mudah salah tekan di ponsel. --}}
+                            <div class="flex items-center gap-1.5">
+                                <a href="{{ $ig['link'] }}" target="_blank" rel="noopener" aria-label="{{ $isId ? 'Suka di Instagram' : 'Like on Instagram' }}" class="p-2.5 transition-colors hover:text-sky-700"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></a>
+                                <a href="{{ $ig['link'] }}" target="_blank" rel="noopener" aria-label="{{ $isId ? 'Komentar di Instagram' : 'Comment on Instagram' }}" class="p-2.5 transition-colors hover:text-sky-700"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-1.923 2.202 4.968 4.968 0 0 0 2.803-.832c.43-.284.974-.354 1.5-.178 1.12.375 2.316.577 3.561.577z"/></svg></a>
                             </div>
-                            <div class="relative aspect-[4/5] overflow-hidden bg-navy-950 group">
-                                <img src="{{ $fi['img'] }}" alt="{{ $fi['title'] }}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
-                                <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent p-5 pt-12 flex flex-col justify-end text-white">
-                                    <span class="inline-block self-start rounded bg-sky px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white">{{ $fi['label'] }}</span>
-                                    <h3 class="font-display text-lg font-bold mt-2 leading-tight">{{ $fi['title'] }}</h3>
-                                    <p class="text-[11px] text-navy-200 mt-0.5">{{ $fi['company'] }}</p>
-                                    <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-mono text-slate-400"><span>{{ $fi['date'] }}</span></div>
-                                </div>
-                            </div>
-                            <div class="p-3.5 border-t border-navy-50 flex items-center justify-between bg-white text-slate-500">
-                                <div class="flex items-center gap-3.5">
-                                    <a href="{{ $fi['link'] }}" target="_blank" rel="noopener" class="hover:text-rose-500 transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></a>
-                                    <a href="{{ $fi['link'] }}" target="_blank" rel="noopener" class="hover:text-sky transition"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-1.923 2.202 4.968 4.968 0 0 0 2.803-.832c.43-.284.974-.354 1.5-.178 1.12.375 2.316.577 3.561.577z"/></svg></a>
-                                </div>
-                                <a href="{{ $fi['link'] }}" target="_blank" rel="noopener" class="text-xs font-semibold text-sky hover:underline inline-flex items-center gap-1"><span>{{ $isId ? 'Lihat di Instagram' : 'View on Instagram' }}</span><span>&rarr;</span></a>
-                            </div>
+                            <a href="{{ $ig['link'] }}" target="_blank" rel="noopener" class="group/ig -my-2 inline-flex items-center gap-1.5 py-2 text-xs font-semibold text-sky-700 transition-colors hover:text-navy"><span>{{ $isId ? 'Lihat di Instagram' : 'View on Instagram' }}</span><svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover/ig:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
                         </div>
-                    @endforeach
-                </div>
-            @endif
+                    </div>
+                @endforeach
+            </div>
         </div>
     </section>
 
-    {{-- ===================== FAQ SECTION ===================== --}}
-    <section class="section bg-white border-t border-navy-50">
-        <div class="container grid gap-12 lg:grid-cols-12 lg:gap-16">
-            
+    {{-- ===================== FAQ SECTION =====================
+         bg-paper, bukan putih. Empat seksi putih berturut-turut membuat bagian
+         bawah beranda terbaca sebagai satu bidang panjang tanpa jeda; latar
+         bertinta biru ini memberi irama sekaligus mengangkat panel akordeon
+         yang memang putih. --}}
+    <section class="section relative overflow-hidden border-t border-navy-50 bg-paper">
+        <div class="pointer-events-none absolute inset-0 aurora-light opacity-50"></div>
+
+        <div class="container relative grid gap-12 lg:grid-cols-12 lg:gap-16">
+
             {{-- Left Side: Heading & WhatsApp CTA --}}
             <div class="lg:col-span-5 flex flex-col space-y-8 lg:sticky lg:top-28 lg:self-start" data-aos="fade-right">
                 <div class="space-y-4">
                     {{-- .kicker, not .eyebrow: the latter is display:none site-wide, so this
-                         label never actually rendered. --}}
+                         label never actually rendered. Satu-satunya kicker di beranda,
+                         jadi ia masih terbaca sebagai label yang disengaja, bukan
+                         perancah yang diulang di tiap seksi. --}}
                     <p class="kicker">FAQ</p>
-                    <h2 class="text-display-lg font-semibold text-navy text-balance">
-                        {{ $isId ? 'Pertanyaan yang Sering Diajukan' : 'Frequently Asked Questions' }}
-                    </h2>
+                    {{-- Aksen miring berwarna, sama dengan judul seksi lain di beranda. --}}
+                    <x-heading
+                        :lead="$isId ? 'Pertanyaan yang' : 'Frequently Asked'"
+                        :accent="$isId ? 'Sering Diajukan' : 'Questions'"
+                        accent-class="text-sky-700"
+                        class="text-display-lg text-navy" />
                     <p class="max-w-md text-[15px] leading-relaxed text-slate-600 text-pretty">
                         {{ $isId
                             ? 'Temukan jawaban cepat untuk pertanyaan umum mengenai sertifikasi, pelatihan, rekrutmen, dan kemitraan di PT Delta Tiga Enam.'
@@ -915,7 +982,11 @@
                     <div class="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-sky-400/15 blur-3xl"></div>
                     <div class="pointer-events-none absolute -bottom-16 -left-10 h-40 w-40 rounded-full bg-gold/10 blur-3xl"></div>
                     <div class="relative flex items-center gap-3">
-                        <span class="grid h-10 w-10 place-items-center rounded-xl bg-sky-400 text-white ring-1 ring-white/20">
+                        {{-- Ubin putih berikon navy, bukan sky-400 berikon putih:
+                             putih di atas #34d3f4 hanya 1,9:1, jadi ikonnya nyaris
+                             tidak terbaca. Bentuknya pun kini sama dengan lencana
+                             ikon di panel Berita. --}}
+                        <span class="grid h-10 w-10 place-items-center rounded-xl bg-white text-navy ring-1 ring-white/20">
                             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.2 4.79 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.16c-.24.68-1.42 1.31-1.95 1.36-.5.05-.96.24-3.23-.67-2.73-1.08-4.47-3.86-4.6-4.04-.14-.18-1.11-1.48-1.11-2.82 0-1.34.7-2 .95-2.28.24-.27.53-.34.7-.34.18 0 .35 0 .5.01.16.01.38-.06.59.45.22.52.73 1.8.8 1.93.06.13.11.28.02.46-.09.18-.13.29-.26.45-.13.16-.28.36-.4.48-.13.13-.27.28-.12.54.15.26.66 1.09 1.42 1.76.97.87 1.79 1.14 2.05 1.27.26.13.41.11.56-.07.15-.18.65-.76.82-1.02.17-.26.35-.22.59-.13.24.09 1.52.72 1.78.85.26.13.43.2.5.31.06.11.06.64-.18 1.32z"/></svg>
                         </span>
                         <h3 class="font-display font-semibold text-white text-base">{{ $isId ? 'Punya pertanyaan lain?' : 'Have more questions?' }}</h3>
@@ -1001,8 +1072,12 @@
 
                                 {{-- Active marker: a hairline on the row's leading edge, drawn with a
                                      pseudo-free span so it scales rather than shifting the text. --}}
+                                {{-- Gradasinya memakai pasangan biru yang sama dengan
+                                     .btn-blue (navy-500 → sky-400). Sebelumnya biru ke
+                                     emas — satu-satunya tempat di situs ini yang
+                                     mencampur aksen dengan emas dalam satu gradasi. --}}
                                 <span aria-hidden="true"
-                                      class="pointer-events-none absolute inset-y-0 left-0 w-[3px] origin-center bg-gradient-to-b from-sky-500 to-gold transition-transform duration-300 ease-out-soft"
+                                      class="pointer-events-none absolute inset-y-0 left-0 w-[3px] origin-center bg-gradient-to-b from-navy-500 to-sky-400 transition-transform duration-300 ease-out-soft"
                                       :class="activeFaq === {{ $i }} ? 'scale-y-100' : 'scale-y-0'"></span>
 
                                 <h3>
@@ -1012,15 +1087,26 @@
                                             aria-controls="faq-panel-{{ $i }}"
                                             class="flex w-full items-start gap-4 px-5 py-5 text-left transition-colors md:gap-5 md:px-7">
 
-                                        <span class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg font-mono text-[11px] font-bold tabular-nums transition-all duration-300" aria-hidden="true"
-                                              :class="activeFaq === {{ $i }} ? 'bg-navy text-white' : 'bg-navy-50 text-slate-500 group-hover/faq:bg-navy-100'">{{ sprintf('%02d', $i + 1) }}</span>
+                                        {{-- transition-colors: yang berubah hanya dua warna.
+                                             slate-600 di atas navy-50, bukan slate-500 —
+                                             pasangan yang lama 4,33:1, di bawah ambang. --}}
+                                        <span class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg font-mono text-[11px] font-bold tabular-nums transition-colors duration-300" aria-hidden="true"
+                                              :class="activeFaq === {{ $i }} ? 'bg-navy text-white' : 'bg-navy-50 text-slate-600 group-hover/faq:bg-navy-100'">{{ sprintf('%02d', $i + 1) }}</span>
 
+                                        {{-- text-slate-600, bukan text-navy/85: warna teks
+                                             sekunder yang sudah dipakai seluruh situs,
+                                             bukan satu-satunya tempat yang memakai navy
+                                             beropasitas. --}}
                                         <span class="flex-1 font-display text-[15px] font-semibold leading-snug transition-colors duration-300 md:text-[17px]"
-                                              :class="activeFaq === {{ $i }} ? 'text-navy' : 'text-navy/85'">{{ $faq['q'] }}</span>
+                                              :class="activeFaq === {{ $i }} ? 'text-navy' : 'text-slate-600'">{{ $faq['q'] }}</span>
 
                                         {{-- Plus that rotates into a minus. --}}
                                         <span class="relative mt-0.5 grid h-7 w-7 shrink-0 place-items-center transition-transform duration-300 ease-out-soft"
-                                              :class="activeFaq === {{ $i }} ? 'rotate-180 text-sky-600' : 'text-slate-400'"
+                                              {{-- slate-500, bukan slate-400: tanda + ini
+                                                   satu-satunya isyarat bahwa barisnya bisa
+                                                   dibuka, jadi ia komponen antarmuka yang
+                                                   harus mencapai 3:1. slate-400 hanya 2,6:1. --}}
+                                              :class="activeFaq === {{ $i }} ? 'rotate-180 text-sky-700' : 'text-slate-500'"
                                               aria-hidden="true">
                                             <span class="absolute h-0.5 w-3.5 rounded-full bg-current"></span>
                                             <span class="absolute h-3.5 w-0.5 rounded-full bg-current transition-transform duration-300 ease-out-soft"

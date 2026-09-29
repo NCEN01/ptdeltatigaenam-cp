@@ -36,7 +36,10 @@
         ];
     }
 
-    if ($topbarActive && (bool) Setting::get('topbar_agenda_active')) {
+    // Selagi halaman Agenda disembunyikan lewat config/company.php, slide ini
+    // ikut dilewati walau saklarnya di CMS menyala: tanpa itu bilah promo
+    // mengirim pengunjung ke halaman yang menjawab 404.
+    if ($topbarActive && config('company.pages.agenda', true) && (bool) Setting::get('topbar_agenda_active')) {
         $slides[] = [
             'type' => 'agenda',
             'text' => $L('topbar_agenda_text') ?: ($loc === 'id' ? 'Pelatihan & sertifikasi terbaru — lihat jadwal terdekat' : 'Latest training & certification — see the upcoming schedule'),

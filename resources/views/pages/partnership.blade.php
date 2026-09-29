@@ -337,7 +337,7 @@
                                     @foreach ($packages as $package)
                                         <label class="cursor-pointer">
                                             <input type="radio" name="partnership_package_id" value="{{ $package->id }}" x-model="pkg" class="peer sr-only">
-                                            <span class="block rounded-2xl border border-navy-200 bg-white px-4 py-3 text-center font-display text-navy transition-all hover:border-navy-300 peer-checked:border-sky-500 peer-checked:text-sky-700 peer-checked:ring-1 peer-checked:ring-sky-500">{{ $package->name }}</span>
+                                            <span class="block rounded-2xl border border-navy-200 bg-white px-4 py-3 text-center font-display text-navy transition-all hover:border-navy-300 peer-checked:border-sky-700 peer-checked:text-sky-700 peer-checked:ring-1 peer-checked:ring-sky-700">{{ $package->name }}</span>
                                         </label>
                                     @endforeach
                                 </div>
@@ -351,11 +351,11 @@
                                 <div class="mt-5 grid gap-5 sm:grid-cols-2">
                                     <div class="min-w-0">
                                         <label for="preferred_meeting_at" class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'Waktu Diinginkan' : 'Preferred Time' }}</label>
-                                        <input type="datetime-local" id="preferred_meeting_at" name="preferred_meeting_at" value="{{ old('preferred_meeting_at') }}" class="w-full min-w-0 rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                        <input type="datetime-local" id="preferred_meeting_at" name="preferred_meeting_at" value="{{ old('preferred_meeting_at') }}" class="w-full min-w-0 rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-700">
                                     </div>
                                     <div class="min-w-0">
                                         <label for="alternative_meeting_at" class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'Waktu Alternatif' : 'Alternative Time' }}</label>
-                                        <input type="datetime-local" id="alternative_meeting_at" name="alternative_meeting_at" value="{{ old('alternative_meeting_at') }}" class="w-full min-w-0 rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                        <input type="datetime-local" id="alternative_meeting_at" name="alternative_meeting_at" value="{{ old('alternative_meeting_at') }}" class="w-full min-w-0 rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-700">
                                     </div>
                                 </div>
                             </div>

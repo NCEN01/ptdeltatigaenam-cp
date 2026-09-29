@@ -25,7 +25,10 @@
         'certificates.index' => __('site.nav.certificates'),
         'portfolio.index' => __('site.nav.portfolio'),
         'blog.index' => __('site.nav.blog'),
-        'agenda.index' => __('site.nav.agenda'),
+        // Agenda disembunyikan lewat config/company.php, sama seperti di menu atas.
+        ...(config('company.pages.agenda', true)
+            ? ['agenda.index' => __('site.nav.agenda')]
+            : []),
         'partnership.index' => __('site.nav.partnership'),
         'contact.index' => __('site.nav.contact'),
     ];
@@ -98,16 +101,16 @@
                             : 'Certification, training, selection, and placement of workforce in Indonesia.' }}
                     </p>
                     <div class="flex items-center gap-3 pt-1">
-                        <a href="{{ $linkedin }}" target="_blank" rel="noopener" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:text-navy-950 hover:ring-gold-soft" aria-label="LinkedIn">
+                        <a href="{{ $linkedin }}" target="_blank" rel="noopener" class="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:text-navy-950 hover:ring-gold-soft" aria-label="LinkedIn">
                             <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                         </a>
-                        <a href="mailto:{{ $email }}" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:text-navy-950 hover:ring-gold-soft" aria-label="Email">
+                        <a href="mailto:{{ $email }}" class="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:text-navy-950 hover:ring-gold-soft" aria-label="Email">
                             <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                         </a>
-                        <a href="{{ $facebook }}" target="_blank" rel="noopener" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:text-navy-950 hover:ring-gold-soft" aria-label="Facebook">
+                        <a href="{{ $facebook }}" target="_blank" rel="noopener" class="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:text-navy-950 hover:ring-gold-soft" aria-label="Facebook">
                             <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                         </a>
-                        <a href="{{ $instagram }}" target="_blank" rel="noopener" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:text-navy-950 hover:ring-gold-soft" aria-label="Instagram">
+                        <a href="{{ $instagram }}" target="_blank" rel="noopener" class="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:text-navy-950 hover:ring-gold-soft" aria-label="Instagram">
                             <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
                         </a>
                     </div>
@@ -115,14 +118,14 @@
 
                 {{-- Layanan --}}
                 <div class="lg:col-span-2">
-                    <p class="text-sm font-semibold text-gold">{{ $id ? 'Layanan' : 'Services' }}</p>
+                    <p class="text-sm font-semibold text-gold-soft">{{ $id ? 'Layanan' : 'Services' }}</p>
                     <ul class="mt-5 space-y-3 text-sm">
                         @forelse ($footerServices as $svc)
-                            <li><a href="{{ route('services.index') }}#{{ $svc->slug }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
+                            <li><a href="{{ route('services.index') }}#{{ $svc->slug }}" class="group -my-1.5 inline-flex items-center py-1.5 text-white/75 transition-colors hover:text-gold">
                                 <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $svc->name }}
                             </a></li>
                         @empty
-                            <li><a href="{{ route('services.index') }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
+                            <li><a href="{{ route('services.index') }}" class="group -my-1.5 inline-flex items-center py-1.5 text-white/75 transition-colors hover:text-gold">
                                 <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $id ? 'Semua Layanan' : 'All Services' }}
                             </a></li>
                         @endforelse
@@ -131,10 +134,10 @@
 
                 {{-- Tautan --}}
                 <div class="lg:col-span-2">
-                    <p class="text-sm font-semibold text-gold">{{ __('site.common.quick_links') }}</p>
+                    <p class="text-sm font-semibold text-gold-soft">{{ __('site.common.quick_links') }}</p>
                     <ul class="mt-5 space-y-3 text-sm">
                         @foreach ($nav as $route => $label)
-                            <li><a href="{{ route($route) }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
+                            <li><a href="{{ route($route) }}" class="group -my-1.5 inline-flex items-center py-1.5 text-white/75 transition-colors hover:text-gold">
                                 <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $label }}
                             </a></li>
                         @endforeach
@@ -154,7 +157,7 @@
                      sehingga patahan yang dipatok akan jatuh di tengah nama
                      jalan. --}}
                 <div class="sm:col-span-2 lg:col-span-5">
-                    <p class="text-sm font-semibold text-gold">{{ $id ? 'Kontak' : 'Contact' }}</p>
+                    <p class="text-sm font-semibold text-gold-soft">{{ $id ? 'Kontak' : 'Contact' }}</p>
 
                     <div class="mt-5 space-y-5">
                         @foreach ($offices as $office)
@@ -188,7 +191,10 @@
                 <p>© {{ $year }} PT. Delta Tiga Enam. {{ $id ? 'Hak Cipta Dilindungi Undang-Undang.' : 'All rights reserved.' }}</p>
                 <div class="flex items-center gap-5">
                     <a href="#" class="transition-colors hover:text-gold">{{ $id ? 'Kebijakan Privasi' : 'Privacy Policy' }}</a>
-                    <span class="text-white/25">|</span>
+                    {{-- Garis, bukan huruf "|": pemisah ini tidak membawa makna, dan
+                         sebagai teks ia hanya 2,2:1 sekaligus ikut dibacakan pembaca
+                         layar. --}}
+                    <span class="h-3 w-px bg-white/30" aria-hidden="true"></span>
                     <a href="#" class="transition-colors hover:text-gold">{{ $id ? 'Syarat & Ketentuan' : 'Terms & Conditions' }}</a>
                 </div>
             </div>

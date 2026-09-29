@@ -90,7 +90,7 @@
                                 <p class="mt-0.5 truncate text-sm font-semibold text-navy">{{ $row['value'] }}</p>
                             </div>
                             @if ($row['href'])
-                                <svg class="ml-auto h-4 w-4 shrink-0 text-slate-400 transition duration-300 group-hover:translate-x-0.5 group-hover:text-sky-700" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg class="ml-auto h-4 w-4 shrink-0 text-slate-500 transition duration-300 group-hover:translate-x-0.5 group-hover:text-sky-700" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             @endif
                         </{{ $tag }}>
                     @endforeach
@@ -174,7 +174,7 @@
                              mengawasi tinggi serta lebar tombol saat tata letaknya
                              dihitung ulang. --}}
                         <button type="button" x-on:click="activeOffice = {{ $index }}"
-                                class="group flex flex-col gap-2.5 rounded-2xl border bg-white p-5 text-left transition duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
+                                class="group flex flex-col gap-2.5 rounded-2xl border bg-white p-5 text-left transition duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"
                                 x-bind:class="activeOffice === {{ $index }} ? 'border-navy-500 shadow-lift' : 'border-navy-100 hover:border-navy-200 hover:shadow-card'">
                             <div class="flex items-center gap-3">
                                 {{-- Satu penanda terpilih, bukan tiga. Warna garis tepi,

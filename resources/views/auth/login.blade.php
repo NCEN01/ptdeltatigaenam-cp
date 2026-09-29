@@ -13,7 +13,7 @@
             {{-- Cincin fokusnya biru seperti sisa situs; emas di atas putih tidak
                  cukup kontras untuk penanda fokus. --}}
             <label class="flex cursor-pointer items-center gap-2.5 text-sm text-slate-700">
-                <input type="checkbox" name="remember" class="h-4 w-4 rounded border-navy-200 text-sky-600 focus:ring-sky-500">
+                <input type="checkbox" name="remember" class="h-4 w-4 rounded border-navy-200 text-sky-600 focus:ring-sky-700">
                 {{ $id ? 'Ingat saya' : 'Remember me' }}
             </label>
             <a href="{{ route('password.request') }}" class="text-sm link-underline">{{ $id ? 'Lupa kata sandi?' : 'Forgot password?' }}</a>

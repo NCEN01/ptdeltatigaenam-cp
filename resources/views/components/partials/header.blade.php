@@ -11,7 +11,11 @@
         ['route' => 'certificates.index', 'label' => __('site.nav.certificates')],
         ['route' => 'portfolio.index', 'label' => __('site.nav.portfolio')],
         ['route' => 'blog.index', 'label' => __('site.nav.blog')],
-        ['route' => 'agenda.index', 'label' => __('site.nav.agenda')],
+        // Agenda disembunyikan lewat config/company.php; ubah saklarnya ke true
+        // dan butir ini kembali ke menu tanpa menyentuh berkas ini.
+        ...(config('company.pages.agenda', true)
+            ? [['route' => 'agenda.index', 'label' => __('site.nav.agenda')]]
+            : []),
         ['route' => 'contact.index', 'label' => __('site.nav.contact')],
     ];
 @endphp
@@ -72,15 +76,15 @@
                             </a>
                             <div class="invisible absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 ease-out-soft group-hover:visible group-hover:opacity-100">
                                 <div class="overflow-hidden rounded-2xl border border-navy-100 bg-white p-2 shadow-lift">
-                                    <p class="px-3.5 pb-1.5 pt-2 font-mono text-[10px] uppercase tracking-normal text-slate-400">{{ $current === 'id' ? 'Kategori Layanan' : 'Service Categories' }}</p>
+                                    <p class="px-3.5 pb-1.5 pt-2 font-mono text-[10px] uppercase tracking-normal text-slate-500">{{ $current === 'id' ? 'Kategori Layanan' : 'Service Categories' }}</p>
                                     @foreach ($serviceCategories as $cat)
                                         <a href="{{ route('services.index') }}#{{ $cat->slug }}" class="group/it flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-sm text-slate-700 transition-colors hover:bg-mist hover:text-navy">
                                             <span>{{ $cat->name }}</span>
-                                            <svg class="h-3.5 w-3.5 shrink-0 text-navy-200 transition-all duration-200 group-hover/it:translate-x-0.5 group-hover/it:text-sky-600" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            <svg class="h-3.5 w-3.5 shrink-0 text-navy-200 transition-all duration-200 group-hover/it:translate-x-0.5 group-hover/it:text-sky-700" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </a>
                                     @endforeach
                                     <div class="my-1.5 h-px bg-navy-50"></div>
-                                    <a href="{{ route('services.index') }}" class="flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-medium text-sky-600 transition-colors hover:bg-mist">
+                                    <a href="{{ route('services.index') }}" class="flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-medium text-sky-700 transition-colors hover:bg-mist">
                                         {{ $current === 'id' ? 'Lihat Semua Layanan' : 'View All Services' }}
                                         <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                     </a>
@@ -115,7 +119,7 @@
                             <a href="{{ Locale::alternate($loc) }}"
                                class="flex items-center justify-between rounded-xl px-3 py-2 text-sm transition-colors {{ $loc === $current ? 'bg-mist text-navy' : 'text-slate-600 hover:bg-mist' }}">
                                 {{ Locale::label($loc) }}
-                                <span class="font-mono text-[10px] text-slate-400">{{ strtoupper($loc) }}</span>
+                                <span class="font-mono text-[10px] text-slate-500">{{ strtoupper($loc) }}</span>
                             </a>
                         @endforeach
                     </div>
@@ -162,7 +166,7 @@
                             <button type="button" @click="svcOpen = !svcOpen"
                                     class="flex w-full items-center justify-between rounded-2xl px-4 py-3.5 text-left font-display text-xl text-navy transition-colors hover:bg-mist {{ request()->routeIs($item['route']) ? 'bg-mist' : '' }}">
                                 {{ $item['label'] }}
-                                <svg class="h-4 w-4 shrink-0 text-slate-400 transition-transform duration-300" :class="svcOpen && 'rotate-180'" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg class="h-4 w-4 shrink-0 text-slate-500 transition-transform duration-300" :class="svcOpen && 'rotate-180'" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                             <div x-show="svcOpen" x-cloak
                                  x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0"
@@ -170,7 +174,7 @@
                                 @foreach ($serviceCategories as $cat)
                                     <a href="{{ route('services.index') }}#{{ $cat->slug }}" @click="open = false" class="rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-mist hover:text-navy">{{ $cat->name }}</a>
                                 @endforeach
-                                <a href="{{ route('services.index') }}" @click="open = false" class="rounded-lg px-3 py-2 text-sm font-medium text-sky-600 transition-colors hover:bg-mist">{{ $current === 'id' ? 'Lihat Semua Layanan' : 'View All Services' }}</a>
+                                <a href="{{ route('services.index') }}" @click="open = false" class="rounded-lg px-3 py-2 text-sm font-medium text-sky-700 transition-colors hover:bg-mist">{{ $current === 'id' ? 'Lihat Semua Layanan' : 'View All Services' }}</a>
                             </div>
                         </div>
                     @else

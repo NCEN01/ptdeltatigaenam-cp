@@ -4,6 +4,29 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Halaman yang ditampilkan
+    |--------------------------------------------------------------------------
+    |
+    | Saklar untuk menyembunyikan satu halaman dari pengunjung tanpa menghapus
+    | apa pun. Ubah ke true, dan halamannya muncul kembali utuh — tautannya di
+    | menu atas, di tautan cepat footer, di bilah promo, seksinya di beranda,
+    | dan halamannya sendiri. Tidak ada berkas yang perlu dipulihkan.
+    |
+    | Isinya sendiri tidak disentuh: datanya tetap di basis data dan tetap bisa
+    | disunting lewat panel admin selagi halamannya disembunyikan, jadi begitu
+    | dinyalakan lagi ia langsung berisi.
+    |
+    | 'agenda' => false sejak 29 September 2026 atas permintaan, sementara
+    | sampai isi situs benar-benar final.
+    |
+    */
+
+    'pages' => [
+        'agenda' => false,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Kantor
     |--------------------------------------------------------------------------
     |

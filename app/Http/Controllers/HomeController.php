@@ -61,11 +61,16 @@ class HomeController extends Controller
             'clients' => Client::where('is_active', true)->orderBy('sort_order')->get(),
             'posts' => BlogPost::published()->with('category')->latest('published_at')->take(9)->get(),
             // Show all agendas — upcoming (soonest first) lead, past events trail (most recent first).
-            'upcomingAgendas' => \App\Models\Agenda::published()
-                ->orderByRaw('starts_at >= NOW() DESC')
-                ->orderByRaw('CASE WHEN starts_at >= NOW() THEN starts_at END ASC')
-                ->orderByDesc('starts_at')
-                ->take(12)->get(),
+            // Tidak diambil sama sekali selagi halaman Agenda disembunyikan lewat
+            // config/company.php: seksinya di beranda pun tidak dirender, jadi
+            // query ini hanya membebani setiap kunjungan beranda tanpa hasil.
+            'upcomingAgendas' => config('company.pages.agenda', true)
+                ? \App\Models\Agenda::published()
+                    ->orderByRaw('starts_at >= NOW() DESC')
+                    ->orderByRaw('CASE WHEN starts_at >= NOW() THEN starts_at END ASC')
+                    ->orderByDesc('starts_at')
+                    ->take(12)->get()
+                : collect(),
             'instagramUpdates' => InstagramUpdate::where('is_active', true)->orderBy('sort_order')->take(2)->get(),
         ]);
     }

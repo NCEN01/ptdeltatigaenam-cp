@@ -12,6 +12,11 @@ class AgendaController extends Controller
 
     public function index(Request $request)
     {
+        // Halaman ini bisa disembunyikan lewat config/company.php. Rutenya tetap
+        // terdaftar walau disembunyikan supaya route('agenda.index') di mana pun
+        // tidak melempar galat; yang ditutup hanya halamannya.
+        abort_unless(config('company.pages.agenda', true), 404);
+
         $q = trim((string) $request->query('q', ''));
 
         // Satu definisi pencarian dipakai tiga kali: untuk daftarnya dan untuk

@@ -134,7 +134,7 @@
                  x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
                  class="absolute bottom-1/2 right-[4.5rem] flex translate-y-1/2 items-center gap-2 whitespace-nowrap rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-navy shadow-lift ring-1 ring-navy-100">
                 <span>{{ $locale === 'id' ? 'Butuh bantuan?' : 'Need help?' }}</span>
-                <button type="button" @click.stop="showBubble = false" aria-label="{{ $locale === 'id' ? 'Tutup' : 'Close' }}" class="text-slate-400 transition-colors hover:text-navy">
+                <button type="button" @click.stop="showBubble = false" aria-label="{{ $locale === 'id' ? 'Tutup' : 'Close' }}" class="text-slate-500 transition-colors hover:text-navy">
                     <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
                 </button>
                 <span class="absolute left-full top-1/2 -translate-y-1/2 border-8 border-transparent border-l-white"></span>
