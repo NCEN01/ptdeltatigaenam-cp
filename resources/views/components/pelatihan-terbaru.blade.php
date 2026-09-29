@@ -33,7 +33,9 @@
     <div class="pt-container">
         <div class="pt-head">
             <div class="pt-copy">
-                <div class="pt-eyebrow"><span></span>{{ $isId ? 'Program Baru Dibuka' : 'Newly Opened' }}</div>
+                {{-- Label kecil "Program Baru Dibuka" dihapus: judulnya sudah
+                     menyebut hal yang sama, dan label huruf kapital kecil di atas
+                     judul memang sudah lama ditiadakan di seluruh situs ini. --}}
                 <h2 id="pt-title" class="pt-title">
                     {{ $isId ? 'Pelatihan Terbaru' : 'Our Latest' }} <em>{{ $isId ? 'Kami' : 'Training' }}</em>
                 </h2>

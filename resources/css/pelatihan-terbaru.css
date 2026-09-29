@@ -41,7 +41,6 @@
 .pt-title,
 .pt-card-title,
 .pt-price,
-.pt-eyebrow,
 .pt-chip,
 .pt-off,
 .pt-count strong { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
@@ -75,17 +74,20 @@
 
 .pt-head { display: flex; flex-wrap: wrap-reverse; align-items: center; justify-content: space-between; gap: clamp(16px, 4vw, 48px); }
 .pt-copy { flex: 1 1 420px; display: flex; flex-direction: column; align-items: flex-start; gap: clamp(14px, 2vw, 22px); max-width: 640px; }
-.pt-eyebrow { display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--pt-blue); }
-.pt-eyebrow span { width: 28px; height: 2px; background: var(--pt-blue); }
-.pt-title { margin: 0; font-size: clamp(38px, 5.2vw, 72px); font-weight: 800; letter-spacing: -.035em; line-height: 1.02; }
+/* Judul disamakan dengan text-display-lg situs, clamp(1.85rem, 3.6vw, 2.75rem).
+   Ukuran aslinya sampai 72px — hampir dua kali judul seksi lain di halaman ini,
+   sehingga seksi ini berteriak lebih keras daripada tetangganya tanpa alasan. */
+.pt-title { margin: 0; font-size: clamp(30px, 3.6vw, 44px); font-weight: 800; letter-spacing: -.03em; line-height: 1.08; }
 .pt-title em { font-style: italic; color: var(--pt-blue); }
-.pt-lead { margin: 0; font-size: clamp(16px, 1.4vw, 19px); line-height: 1.6; color: var(--pt-muted); max-width: 460px; text-wrap: pretty; }
-.pt-btn { margin-top: 8px; display: inline-flex; align-items: center; gap: 14px; padding: 14px 16px 14px 26px; border-radius: 999px; background: var(--pt-ink); color: #fff; font-weight: 600; font-size: 16px; text-decoration: none; transition: background .2s; }
+.pt-lead { margin: 0; font-size: clamp(15px, 1.1vw, 17px); line-height: 1.65; color: var(--pt-muted); max-width: 440px; text-wrap: pretty; }
+.pt-btn { margin-top: 6px; display: inline-flex; align-items: center; gap: 12px; padding: 12px 14px 12px 22px; border-radius: 999px; background: var(--pt-ink); color: #fff; font-weight: 600; font-size: 15px; text-decoration: none; transition: background .2s; }
 .pt-btn:hover { background: var(--pt-blue); color: #fff; }
-.pt-btn-ic { width: 32px; height: 32px; border-radius: 50%; background: #ffffff26; display: flex; align-items: center; justify-content: center; transition: transform .2s; }
+.pt-btn-ic { width: 28px; height: 28px; border-radius: 50%; background: #ffffff26; display: flex; align-items: center; justify-content: center; transition: transform .2s; }
 .pt-btn:hover .pt-btn-ic { transform: translateX(3px); }
 
-.pt-illus { flex: 0 1 auto; position: relative; width: clamp(180px, 30vw, 400px); aspect-ratio: 1/1; }
+/* Ikon diperkecil dari clamp(180px,30vw,400px). Pada 400px ia sebesar judulnya
+   sendiri dan menarik perhatian menjauh dari kartu yang justru bisa diklik. */
+.pt-illus { flex: 0 1 auto; position: relative; width: clamp(140px, 19vw, 240px); aspect-ratio: 1/1; }
 .pt-orbit { position: absolute; inset: 2%; border-radius: 50%; border: 1.5px dashed #2b83df55; animation: pt-spin 40s linear infinite; }
 .pt-orbit i { position: absolute; border-radius: 50%; }
 .pt-dot-a { top: -6px; left: 50%; width: 12px; height: 12px; margin-left: -6px; background: var(--pt-blue); }
@@ -140,7 +142,10 @@
 @media (max-width: 640px) {
     .pt-head { flex-direction: column-reverse; align-items: flex-start; }
     .pt-copy { flex-basis: auto; }
-    .pt-illus { width: 180px; align-self: flex-end; margin: -8px -8px -40px 0; }
+    /* 140px, bukan 180px. Sejak ikon di layar lebar diperkecil, patokan lama
+       justru membuatnya lebih besar di ponsel daripada di tablet — dan di layar
+       375px, 180px memakan hampir separuh lebarnya. */
+    .pt-illus { width: 140px; align-self: flex-end; margin: -8px -8px -32px 0; }
     .pt-nav { display: none; }
     /* Ditarik selebar padding container lalu diberi padding yang sama, supaya
        kartunya bisa digeser sampai tepi layar tanpa memunculkan gulir mendatar
@@ -159,7 +164,16 @@
 @keyframes pt-spin   { to { transform: rotate(360deg) } }
 @keyframes pt-up     { from { opacity: 0; transform: translateY(24px) } to { opacity: 1; transform: none } }
 
+/* Berkas aslinya mematikan SELURUH animasi seksi ini saat sistem meminta
+   kurangi gerak. Di situs ini aturan itu membuat ikonnya diam total: banyak
+   desktop menyalakan setelan tersebut, dan proyek ini sudah memutuskan
+   animasinya tetap menyala tanpa memandang setelan sistem — lihat
+   `const reduceMotion = false` di resources/js/app.js beserta catatannya,
+   yang ditulis persis karena masalah yang sama pada layar pembuka.
+
+   Jadi aturannya disamakan dengan kebijakan situs, bukan dibiarkan bertolak
+   belakang: ikonnya tetap bergerak. Yang dihentikan hanya animasi masuk kartu,
+   sebab yang itu memang mengganggu pembacaan dan bukan bagian dari gambarnya. */
 @media (prefers-reduced-motion: reduce) {
-    .pt-section * { animation: none !important; transition: none !important; }
-    .pt-line { stroke-dashoffset: 0; }
+    .pt-card { animation: none !important; }
 }
