@@ -396,50 +396,123 @@
         </div>
     </section>
 
-    {{-- ===================== BLOG (heading + horizontal carousel) ===================== --}}
+    {{-- ===================== BERITA (panel + rel kartu) =====================
+         Susunannya mengikuti rujukan yang diberikan: judul terpusat, satu panel
+         berwarna di kiri, deretan kartu yang bisa digeser di kanan, dan satu
+         tombol di bawah tengah. Warnanya dipindah ke navy–biru situs ini, bukan
+         jingga–merah rujukannya, dan hurufnya tetap Plus Jakarta Sans + Figtree.
+
+         Relnya tetap trek scroll-snap bawaan (data-hscroll), bukan Swiper:
+         kolom ini sel grid, dan Swiper runtuh jadi kotak kosong di dalamnya.
+         Kartunya <x-blog-card> yang sama dengan halaman blog. --}}
     @if ($posts->isNotEmpty())
-        <section class="section bg-white">
-            <div class="container">
-                <div class="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
-                    {{-- Left --}}
-                    <div class="lg:col-span-4" data-aos="fade-up">
-                        <h2 class="font-display text-4xl font-bold leading-[1.1] text-navy text-balance md:text-5xl">{{ $isId ? 'Wawasan & artikel terbaru kami' : 'Our latest insights & articles' }}</h2>
-                        <p class="mt-5 max-w-sm leading-relaxed text-slate-600 text-pretty">{{ $isId ? 'Perspektif, riset, dan praktik terbaik seputar human capital.' : 'Perspectives, research, and best practices on human capital.' }}</p>
-                        <a href="{{ route('blog.index') }}" class="btn-blue mt-8">{{ $isId ? 'Semua Artikel' : 'All Articles' }}
-                            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </a>
+        <section class="section relative overflow-hidden border-t border-navy-50 bg-white">
+            <div class="pointer-events-none absolute inset-0 aurora-light opacity-60"></div>
+
+            <div class="container relative">
+                {{-- Kepala terpusat --}}
+                <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
+                    <x-heading
+                        :lead="$isId ? 'Berita Terbaru' : 'Our Latest'"
+                        :accent="$isId ? 'Kami' : 'News'"
+                        accent-class="text-sky-700"
+                        class="text-display-lg font-semibold text-navy text-balance" />
+                    <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-600 text-pretty">
+                        {{ $isId
+                            ? 'Kabar pelatihan, uji kompetensi BNSP, dan kegiatan kami — diperbarui setiap ada yang baru.'
+                            : 'News on our training, BNSP competence assessments, and events — updated as it happens.' }}
+                    </p>
+                </div>
+
+                <div class="mt-12 grid gap-6 lg:grid-cols-12">
+                    {{-- Panel kiri. bg-navy-anim dipakai supaya panel ini satu-satunya
+                         bidang berwarna di seksi putih ini, sekaligus memberi kontras
+                         yang di rujukannya dibawa warna jingga. --}}
+                    <div class="lg:col-span-4 xl:col-span-3" data-aos="fade-up">
+                        <div class="relative h-full overflow-hidden rounded-3xl bg-navy-anim p-7 text-white shadow-lift sm:p-8">
+                            <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
+                            <div class="pointer-events-none absolute -right-14 -top-14 h-44 w-44 rounded-full bg-sky-400/25 blur-3xl"></div>
+
+                            <div class="relative flex h-full flex-col">
+                                {{-- Lencana ikon dengan cincin putus-putus yang berputar
+                                     pelan. Satu-satunya gerak di panel ini, dan memakai
+                                     animasi yang memang sudah ada di situs. --}}
+                                <span class="relative grid h-14 w-14 shrink-0 place-items-center">
+                                    <span class="absolute inset-0 animate-spin-slow rounded-full border border-dashed border-white/30"></span>
+                                    <span class="grid h-11 w-11 place-items-center rounded-full bg-white text-navy shadow-lift">
+                                        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <rect x="3.25" y="5.25" width="13" height="13.5" rx="1.75"/>
+                                            <path d="M16.25 9.5h3.25a1.25 1.25 0 0 1 1.25 1.25V17a1.75 1.75 0 0 1-1.75 1.75h-2.75"/>
+                                            <path d="M6.5 9h6.5M6.5 12h6.5M6.5 15h4"/>
+                                        </svg>
+                                    </span>
+                                </span>
+
+                                <h3 class="mt-6 font-display text-xl font-semibold leading-snug text-balance sm:text-2xl">
+                                    {{ $isId
+                                        ? 'Informasi terkini seputar pelatihan dan sertifikasi'
+                                        : 'The latest on our training and certification' }}
+                                </h3>
+                                <p class="mt-3 text-sm leading-relaxed text-white/75 text-pretty">
+                                    {{ $isId
+                                        ? 'Jadwal kelas, kabar kegiatan, dan hal yang perlu Anda tahu sebelum ikut uji kompetensi.'
+                                        : 'Class schedules, event news, and what is worth knowing before you sit an assessment.' }}
+                                </p>
+
+                                {{-- Tanggal terbit tulisan terbaru — tanggal sungguhan dari
+                                     CMS, jadi panel ini ikut menua kalau blognya berhenti
+                                     diisi, alih-alih menjanjikan hal yang tidak terjadi. --}}
+                                @if ($posts->first()->published_at)
+                                    <div class="mt-auto flex items-center gap-2 pt-8 font-mono text-[11px] uppercase tracking-wider text-white/60">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-gold"></span>
+                                        {{ $isId ? 'Terbit terakhir' : 'Last published' }}
+                                        {{ $posts->first()->published_at->translatedFormat('d M Y') }}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
 
-                    {{-- Right: carousel.
-                         Deliberately the native scroll-snap track (data-hscroll) rather than
-                         Swiper: this column is a grid item, and the Swiper build collapsed to
-                         an empty box here. The track needs no JS to lay out, so it degrades
-                         safely. Cards are the shared <x-blog-card>, same as the blog index and
-                         the "Terus Membaca" rail. --}}
-                    <div class="min-w-0 lg:col-span-8" data-hscroll data-hscroll-auto>
-                        <div class="mb-6 flex items-center gap-3">
-                            <button type="button" data-hscroll-prev class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
-                                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            </button>
-                            <button type="button" data-hscroll-next class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95" aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
-                                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            </button>
-                        </div>
+                    {{-- Rel kanan. data-hscroll-auto: bergeser sendiri tiap beberapa
+                         detik, berhenti saat kursor di atasnya, dan hanya menyala bila
+                         memang ada kartu yang tersembunyi. Penandanya dipasang di kolom
+                         ini saja — kalau dipasang di grid, menunjuk panel kiri pun ikut
+                         menghentikan gesernya. --}}
+                    <div class="relative min-w-0 lg:col-span-8 xl:col-span-9" data-hscroll data-hscroll-auto data-aos="fade-up" data-aos-delay="80">
+                        {{-- Panah di sisi kiri dan kanan deretan kartu, sama persis
+                             dengan seksi Agenda Mendatang dan Pelatihan Terbaru. --}}
+                        <button type="button" data-hscroll-prev aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}"
+                            class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 lg:grid">
+                            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <button type="button" data-hscroll-next aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}"
+                            class="absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 lg:grid">
+                            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
 
-                        <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none items-stretch gap-6 overflow-x-auto scroll-smooth pb-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        {{-- snap-proximity, bukan snap-mandatory: yang terakhir pernah
+                             tertahan di luar jangkauan karena titik jepretnya menarik
+                             balik. -mx-1/px-1 memberi ruang bayangan kartu saat diangkat. --}}
+                        <div data-hscroll-track class="rail-fade -mx-1 flex cursor-grab snap-x snap-proximity select-none items-stretch gap-6 overflow-x-auto scroll-smooth px-1 pb-4 pt-1 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             @foreach ($posts as $post)
-                                {{-- Card width is matched to the "Terus Membaca" rail on an article
-                                     page so both surfaces show the same size card. That rail spans the
-                                     full container; this one sits in an 8/12 column, so it fits fewer
-                                     cards per view to land on the same width:
-                                       lg  → column ~608px / 2 cards  ≈ 292px (rail: 307px)
-                                       xl  → column ~768px / 2.5      ≈ 288px (rail: 285px) --}}
-                                <div class="min-w-0 shrink-0 basis-[76%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_1.5rem)/2)] xl:basis-[calc((100%_-_3rem)/2.5)]">
+                                {{-- 2 kartu di lg, 3 di xl — rujukannya menampilkan tiga,
+                                     dan di kolom 9/12 lebarnya mendarat di ~276px, sama
+                                     dengan kartu di rel "Terus Membaca" halaman artikel. --}}
+                                <div class="min-w-0 shrink-0 basis-[85%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] xl:basis-[calc((100%_-_3rem)/3)]">
                                     <x-blog-card :post="$post" :animate="false" />
                                 </div>
                             @endforeach
                         </div>
                     </div>
+                </div>
+
+                {{-- Tombol tunggal di bawah tengah, menggantikan tombol yang dulu
+                     menempel di kolom kiri. --}}
+                <div class="mt-10 text-center" data-aos="fade-up">
+                    <a href="{{ route('blog.index') }}" class="btn-blue">
+                        {{ $isId ? 'Lihat Semua Berita' : 'View All News' }}
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
                 </div>
             </div>
         </section>
