@@ -129,7 +129,11 @@
     color: var(--pt-ink); text-decoration: none;
     box-shadow: 0 18px 40px -26px #0e223740;
     transition: transform .25s, box-shadow .25s;
-    animation: pt-up .7s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(.15s + var(--i) * .1s);
+    /* Animasi muat pt-up dilepas. Ia berjalan sekali saat halaman dimuat, jadi
+       untuk seksi yang letaknya jauh di bawah layar pertama, animasinya sudah
+       selesai sebelum pengunjung sampai ke sini — kartunya tampil begitu saja
+       tanpa gerak apa pun. Penggantinya AOS pada markahnya, yang memang
+       dipicu saat elemennya masuk layar dan dipakai seluruh seksi lain. */
 }
 .pt-card:hover { transform: translateY(-6px); box-shadow: 0 28px 50px -24px #2b83df60; color: var(--pt-ink); }
 /* Kartunya dirampingkan: gambar dari 16/10 ke 16/9, isian 22px ke 18px, dan
@@ -191,7 +195,8 @@
 @keyframes pt-tassel { 0%, 100% { transform: rotate(-6deg) } 50% { transform: rotate(8deg) } }
 @keyframes pt-ring   { 0% { transform: scale(.9); opacity: .6 } 100% { transform: scale(1.18); opacity: 0 } }
 @keyframes pt-spin   { to { transform: rotate(360deg) } }
-@keyframes pt-up     { from { opacity: 0; transform: translateY(24px) } to { opacity: 1; transform: none } }
+/* Keyframe pt-up dihapus bersama pemakaiannya — AOS yang kini menangani
+   kemunculan kartunya saat seksi ini masuk layar. */
 
 /* Berkas aslinya mematikan SELURUH animasi seksi ini saat sistem meminta
    kurangi gerak. Di situs ini aturan itu membuat ikonnya diam total: banyak
@@ -203,6 +208,8 @@
    Jadi aturannya disamakan dengan kebijakan situs, bukan dibiarkan bertolak
    belakang: ikonnya tetap bergerak. Yang dihentikan hanya animasi masuk kartu,
    sebab yang itu memang mengganggu pembacaan dan bukan bagian dari gambarnya. */
-@media (prefers-reduced-motion: reduce) {
-    .pt-card { animation: none !important; }
-}
+/* Blok prefers-reduced-motion dihapus: satu-satunya isinya dulu menghentikan
+   animasi muat kartu, dan animasi itu sendiri sudah tidak ada. Animasi ikonnya
+   sengaja tidak dihentikan — proyek ini memang memaksa animasi tetap menyala
+   tanpa memandang setelan sistem, lihat `const reduceMotion = false` di
+   resources/js/app.js. */

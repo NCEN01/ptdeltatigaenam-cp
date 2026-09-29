@@ -169,7 +169,12 @@
 
                 {{-- Kanan: rel geser --}}
                 @if ($categories->isNotEmpty())
-                    <div class="min-w-0 lg:col-span-8" data-hscroll>
+                    {{-- data-hscroll-auto: barisnya bergeser sendiri tiap beberapa
+                         detik. initHscroll() hanya menyalakannya bila isinya memang
+                         melebihi lebar rel, jadi saat kategorinya sedikit dan sudah
+                         muat seluruhnya ia diam — bergerak tanpa ada yang tersembunyi
+                         hanya mengganggu. Berhenti saat kursor berada di atasnya. --}}
+                    <div class="min-w-0 lg:col-span-8" data-hscroll data-hscroll-auto>
                         {{-- Panah bergaris, bukan bulatan biru terisi. Dengan tombol
                              ajakan biru di kolom kiri, dua bulatan biru di sini membuat
                              tiga benda paling mencolok berebut perhatian di satu seksi,

@@ -32,7 +32,7 @@
 
     <div class="pt-container">
         <div class="pt-head">
-            <div class="pt-copy">
+            <div class="pt-copy" data-aos="fade-up">
                 {{-- Label kecil "Program Baru Dibuka" dihapus: judulnya sudah
                      menyebut hal yang sama, dan label huruf kapital kecil di atas
                      judul memang sudah lama ditiadakan di seluruh situs ini. --}}
@@ -49,7 +49,7 @@
             {{-- Ikon beranimasi: papan tulis + topi toga. Seluruh animasinya
                  dipertahankan; hanya warna goresannya yang disesuaikan —
                  #0f2238 jadi navy situs #0e2237, #1f6fd6 jadi biru logo #2b83df. --}}
-            <div class="pt-illus" aria-hidden="true">
+            <div class="pt-illus" aria-hidden="true" data-aos="fade-left" data-aos-delay="120">
                 <div class="pt-orbit"><i class="pt-dot-a"></i><i class="pt-dot-b"></i></div>
                 <div class="pt-pulse"></div>
                 <div class="pt-disc"></div>
@@ -82,7 +82,7 @@
                  rancangannya. Dengan begitu bentuk, warna, dan perilaku sentuhnya
                  sama persis dengan tombol utama di seksi lain, alih-alih menjadi
                  satu-satunya tombol di halaman yang berperilaku sendiri. --}}
-            <div class="pt-toolbar">
+            <div class="pt-toolbar" data-aos="fade-up">
                 <a href="{{ $lihatSemuaUrl }}" class="btn-blue">
                     {{ $isId ? 'Lihat Semua' : 'View All' }}
                     <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -97,7 +97,7 @@
                  yang sama persis dengan seksi Agenda Mendatang. Di atas deretan,
                  keduanya berdiri jauh dari benda yang digerakkannya; di sampingnya,
                  letaknya menjelaskan sendiri apa yang akan bergeser. --}}
-            <div class="pt-rail">
+            <div class="pt-rail" data-aos="fade-up" data-aos-delay="80">
                 <button type="button" data-pt-prev aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}"
                         class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-40 lg:grid">
                     <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -114,7 +114,10 @@
                         $diskon = ! empty($p->harga_awal) && $p->harga_awal > $p->harga
                             ? round((1 - $p->harga / $p->harga_awal) * 100) : null;
                     @endphp
-                    <a href="{{ $p->url ?? '#' }}" class="pt-card" style="--i:{{ $i }}">
+                    {{-- style="--i:.." dilepas: nilainya dulu hanya memberi jeda
+                         berurutan pada animasi muat kartu, dan animasi itu sudah
+                         tidak ada. --}}
+                    <a href="{{ $p->url ?? '#' }}" class="pt-card">
                         <div class="pt-media">
                             @if (! empty($p->gambar))
                                 <img src="{{ $p->gambar }}" alt="{{ $p->judul }}" loading="lazy">
