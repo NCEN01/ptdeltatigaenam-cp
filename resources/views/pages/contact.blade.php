@@ -10,7 +10,7 @@
     $contactRows = [
         ['label' => 'Email', 'value' => $email, 'href' => 'mailto:'.$email, 'icon' => 'mail'],
         ['label' => 'WhatsApp', 'value' => '0818 834 766', 'href' => 'https://wa.me/'.$waNumber.'?text='.$waText, 'icon' => 'whatsapp'],
-        ['label' => $id ? 'Telepon' : 'Phone', 'value' => '021-5890 5002', 'href' => 'tel:+622158905002', 'icon' => 'phone'],
+        ['label' => $id ? 'Telepon' : 'Phone', 'value' => '(021) 5890 5002', 'href' => 'tel:+622158905002', 'icon' => 'phone'],
         ['label' => $id ? 'Jam Operasional' : 'Office Hours', 'value' => $id ? 'Senin – Jumat · 08.00–17.00' : 'Mon – Fri · 8am–5pm', 'href' => null, 'icon' => 'clock'],
     ];
 @endphp

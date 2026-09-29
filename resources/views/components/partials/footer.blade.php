@@ -202,15 +202,20 @@
                     <ul class="mt-4 space-y-3.5 text-sm text-white/80">
                         <li class="flex items-start gap-2.5">
                             <svg class="h-4 w-4 shrink-0 text-white mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                            {{-- Versi ringkas alamat Head Office. "SCBD" dilepas:
+                                 materi resmi perusahaan menyebut Senayan, Kebayoran
+                                 Baru, dan menuliskan dua nama kawasan sekaligus
+                                 membuat alamatnya tidak cocok dengan alamat panjang
+                                 di blok kantor beberapa baris di bawah ini. --}}
                             <span class="leading-relaxed">
                                 {{ $id
-                                    ? 'Gedung BEI Tower 1 Lantai 3, Unit 304, SCBD, Senayan, Jakarta Selatan'
-                                    : 'BEI Tower 1 Floor 3, Unit 304, SCBD, Senayan, South Jakarta' }}
+                                    ? 'Gedung BEI Tower 1 Lantai 3, Unit 304, Senayan, Kebayoran Baru, Jakarta Selatan 12190'
+                                    : 'BEI Tower 1 Floor 3, Unit 304, Senayan, Kebayoran Baru, South Jakarta 12190' }}
                             </span>
                         </li>
                         <li class="flex items-center gap-2.5">
                             <svg class="h-4 w-4 shrink-0 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            <span>021-5890 5002</span>
+                            <span>(021) 5890 5002</span>
                         </li>
                         <li class="flex items-center gap-2.5">
                             <svg class="h-4 w-4 shrink-0 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
@@ -223,7 +228,10 @@
             {{-- Offices — full width below --}}
             <div class="mt-12">
                 <p class="text-sm font-semibold text-gold">{{ $id ? 'Kantor Kami' : 'Our Offices' }}</p>
-                <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {{-- Dua kolom, bukan tiga: kantornya memang tinggal dua sejak
+                     Kantor Pemasaran ditutup, dan kolom ketiga yang kosong terbaca
+                     sebagai data yang gagal dimuat. --}}
+                <div class="mt-5 grid gap-4 sm:grid-cols-2">
                     @if ($offices->isNotEmpty())
                         @foreach ($offices as $office)
                             <div>
@@ -237,36 +245,26 @@
                             </div>
                         @endforeach
                     @else
-                        {{-- Kantor Pusat --}}
+                        {{-- Nama kantornya tidak diterjemahkan: "Head Office" dan
+                             "Operational Office" adalah sebutan yang dipakai
+                             perusahaan sendiri di materi resminya. --}}
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-gold-soft">{{ $id ? 'Kantor Pusat' : 'Head Office' }}</p>
+                            <p class="text-xs font-semibold uppercase tracking-wider text-gold-soft">Head Office</p>
                             <p class="mt-2 text-sm leading-relaxed text-white/80">
-                                Gedung Bursa Efek Indonesia Tower 1 Level 3, Unit 304<br>
-                                Jalan Jendral Sudirman Kav. 52-53, SCBD Senayan,<br>
-                                Kebayoran Baru, Jakarta Selatan, DKI Jakarta
+                                Gedung Bursa Efek Indonesia Tower 1 Level 3, Unit 304,<br>
+                                Jalan Jendral Sudirman Kav. 52-53, Senayan,<br>
+                                Kebayoran Baru, Jakarta Selatan – DKI Jakarta 12190
                             </p>
-                            <p class="mt-3 text-xs font-medium text-white/60">PH. 021-5890 5002, 0818 834 766</p>
+                            <p class="mt-3 text-xs font-medium text-white/60">PH. (021) 5890 5002</p>
                         </div>
 
-                        {{-- Kantor Pemasaran --}}
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-gold-soft">{{ $id ? 'Kantor Pemasaran' : 'Marketing Office' }}</p>
+                            <p class="text-xs font-semibold uppercase tracking-wider text-gold-soft">Operational Office</p>
                             <p class="mt-2 text-sm leading-relaxed text-white/80">
-                                Cikarang Technopark, Jalan Inti I Blok C1 No. 7<br>
-                                Cibatu, Cikarang Selatan, Kabupaten Bekasi<br>
-                                Jawa Barat 17530
+                                Delta House, Pejaten Mas Estate Blok D3 No. 6,<br>
+                                Pejaten, Kramatwatu, Serang – Banten 42161
                             </p>
-                            <p class="mt-3 text-xs font-medium text-white/60">PH. 021-8988 1110</p>
-                        </div>
-
-                        {{-- Kantor Operasional --}}
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-gold-soft">{{ $id ? 'Kantor Operasional' : 'Operational Office' }}</p>
-                            <p class="mt-2 text-sm leading-relaxed text-white/80">
-                                Taman Widya Asri Blok GG No. 18, Serang<br>
-                                Kota Serang, Banten 46111
-                            </p>
-                            <p class="mt-3 text-xs font-medium text-white/60">PH. 0817 018 6104</p>
+                            <p class="mt-3 text-xs font-medium text-white/60">PH. 0818 834 766</p>
                         </div>
                     @endif
                 </div>

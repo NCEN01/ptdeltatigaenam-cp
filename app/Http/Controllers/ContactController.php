@@ -9,25 +9,21 @@ class ContactController extends Controller
 {
     public function index()
     {
-        $id = app()->getLocale() === 'id';
+        // Alamat kantor mengikuti materi resmi perusahaan. Namanya sengaja tidak
+        // diterjemahkan: "Head Office" dan "Operational Office" adalah sebutan
+        // yang dipakai perusahaan sendiri di materi itu, jadi sama di kedua bahasa.
         $offices = [
             [
-                'name' => 'Kantor Pusat (SCBD)',
-                'address' => 'Gedung Bursa Efek Indonesia Tower 1 Level 3, Unit 304, Jalan Jendral Sudirman Kav. 52-53, SCBD Senayan, Kebayoran Baru, Jakarta Selatan',
-                'phone' => '021-5890 5002',
-                'maps' => 'Gedung Bursa Efek Indonesia Tower 1, SCBD, Jakarta Selatan',
+                'name' => 'Head Office',
+                'address' => 'Gedung Bursa Efek Indonesia Tower 1 Level 3, Unit 304, Jalan Jendral Sudirman Kav. 52-53, Senayan, Kebayoran Baru, Jakarta Selatan – DKI Jakarta 12190',
+                'phone' => '(021) 5890 5002',
+                'maps' => 'Gedung Bursa Efek Indonesia Tower 1, Jalan Jenderal Sudirman Kav. 52-53, Senayan, Kebayoran Baru, Jakarta Selatan 12190',
             ],
             [
-                'name' => $id ? 'Kantor Pemasaran' : 'Marketing Office',
-                'address' => 'Cikarang Technopark, Jalan Inti I Blok C1 No. 7, Cibatu, Cikarang Selatan, Kabupaten Bekasi, Jawa Barat 17530',
-                'phone' => '021-8988 1110',
-                'maps' => 'Cikarang Technopark, Cikarang Selatan, Bekasi',
-            ],
-            [
-                'name' => $id ? 'Kantor Operasional' : 'Operational Office',
-                'address' => 'Taman Widya Asri Blok GG No. 18, Serang, Kota Serang, Banten 46111',
-                'phone' => '0817 018 6104',
-                'maps' => 'Taman Widya Asri, Serang, Banten',
+                'name' => 'Operational Office',
+                'address' => 'Delta House, Pejaten Mas Estate Blok D3 No. 6, Pejaten, Kramatwatu, Serang – Banten 42161',
+                'phone' => '0818 834 766',
+                'maps' => 'Pejaten Mas Estate Blok D3 No. 6, Pejaten, Kramatwatu, Serang, Banten 42161',
             ],
         ];
 
