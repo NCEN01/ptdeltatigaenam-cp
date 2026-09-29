@@ -3,7 +3,6 @@
 
     $email = 'info@deltatigaenam.com';
 
-
     $waNumber = '62818834766';
     $waText = rawurlencode($id ? 'Halo Delta Tiga Enam, saya ingin bertanya seputar layanan Anda.' : 'Hello Delta Tiga Enam, I would like to ask about your services.');
 
@@ -16,35 +15,66 @@
 @endphp
 
 <x-layout :title="__('site.nav.contact')">
+    {{-- Tanpa :eyebrow. .eyebrow bernilai display:none !important di seluruh
+         situs ini, jadi "PT Delta Tiga Enam" tidak pernah tampil — yang tersisa
+         hanya simpul DOM mati beserta satu pendaftaran pengamat AOS. --}}
     <x-page-header
-        :eyebrow="'PT Delta Tiga Enam'"
         :title="__('site.contact.title')"
         :subtitle="$id ? 'Ceritakan kebutuhan organisasi Anda. Tim kami akan merespons dengan cepat.' : 'Tell us about your needs — our team will respond promptly.'"
         placement="contact"
         image="photo-1497366754035-f200968a6e72" />
 
     {{-- ===================== CONTACT + FORM ===================== --}}
-    <section class="section bg-white">
-        <div class="container grid gap-12 lg:grid-cols-12 lg:gap-16">
+    <section class="section relative overflow-hidden bg-white">
+        <div class="pointer-events-none absolute inset-0 aurora-light opacity-60"></div>
+
+        <div class="container relative grid gap-12 lg:grid-cols-12 lg:gap-16">
 
             {{-- Left: intro + quick contact --}}
             <div class="lg:col-span-5" data-aos="fade-right">
-                <p class="eyebrow">{{ $id ? 'Hubungi Kami' : 'Get in Touch' }}</p>
-                <h2 class="mt-4 font-display text-3xl leading-tight text-navy text-balance md:text-4xl">
-                    {{ $id ? 'Mari bicarakan kebutuhan Anda' : "Let's talk about your needs" }}
-                </h2>
+                {{-- Label "Hubungi Kami" di atas judul ikut dilepas, alasan yang sama.
+
+                     Ukurannya memakai token text-display-lg, bukan text-4xl/md:text-5xl
+                     yang ditulis sendiri: yang kedua melompat sekali di satu titik
+                     putus, sedangkan tokennya clamp() yang mengalir, dan judul seksi
+                     kedua di halaman ini sudah memakai token itu. Dua skala judul
+                     dalam satu halaman tidak ada yang menuntutnya.
+
+                     font-display dan text-balance tidak ditulis: app.css sudah
+                     memberikannya ke setiap h1–h4. font-bold ditulis karena memang
+                     menimpa font-semibold bawaan itu. --}}
+                <x-heading
+                    :lead="$id ? 'Mari bicarakan' : 'Let\'s talk about'"
+                    :accent="$id ? 'kebutuhan Anda' : 'your needs'"
+                    accent-class="text-sky-700"
+                    class="text-display-lg font-bold text-navy" />
                 <p class="mt-5 max-w-md text-pretty leading-relaxed text-slate-600">
                     {{ $id
                         ? 'Punya pertanyaan seputar pelatihan, sertifikasi, atau rekrutmen? Isi formulir di samping atau hubungi kami langsung. Tim kami siap membantu.'
                         : 'Questions about training, certification, or recruitment? Fill out the form or reach us directly — our team is ready to help.' }}
                 </p>
 
-                <div class="mt-9 space-y-3">
+                {{-- Satu panel bergaris pemisah, bukan empat kartu terpisah.
+                     Empat kartu sejajar dengan ikon-label-nilai yang sama persis
+                     adalah bentuk yang justru dihindari PRODUCT.md, dan empat
+                     ubin gradien biru berturut-turut membuat kolom ini lebih
+                     ramai daripada formulir di sebelahnya — padahal formulir
+                     itulah tujuan halaman ini. --}}
+                {{-- .card sudah berisi rounded-2xl + border-navy-100 + bg-white +
+                     shadow-card; ditulis ulang di sini berarti permukaan yang sama
+                     punya dua sumber yang bisa menyimpang. overflow-hidden tetap
+                     ditulis: tanpa itu latar sentuh baris pertama dan terakhir
+                     menyiku di sudut panel. --}}
+                <div class="card mt-9 divide-y divide-navy-100 overflow-hidden">
                     @foreach ($contactRows as $row)
-                        <{{ $row['href'] ? 'a' : 'div' }} @if ($row['href']) href="{{ $row['href'] }}" @endif
+                        {{-- Nama tagnya dihitung sekali. Sebelumnya syarat yang sama
+                             diuji di tag buka dan tag tutup sebagai dua tulisan
+                             terpisah, dan tidak ada yang menjaga keduanya tetap sama. --}}
+                        @php $tag = $row['href'] ? 'a' : 'div'; @endphp
+                        <{{ $tag }} @if ($row['href']) href="{{ $row['href'] }}" @endif
                             @if ($row['href'] && str_starts_with($row['href'], 'http')) target="_blank" rel="noopener" @endif
-                            class="group flex items-center gap-4 rounded-2xl border border-navy-100 bg-white p-4 transition-all duration-300 {{ $row['href'] ? 'hover:-translate-y-0.5 hover:border-navy-200 hover:shadow-card' : '' }}">
-                            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-navy-500 to-sky-400 text-white transition-all duration-300 {{ $row['href'] ? 'group-hover:from-navy-600 group-hover:to-navy-500' : '' }}">
+                            class="group flex items-center gap-4 px-5 py-4 {{ $row['href'] ? 'transition-colors duration-300 hover:bg-navy-50/60' : '' }}">
+                            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-sky-50 text-sky-700 {{ $row['href'] ? 'transition-colors duration-300 group-hover:bg-navy-500 group-hover:text-white' : '' }}">
                                 @if ($row['icon'] === 'mail')
                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                                 @elseif ($row['icon'] === 'whatsapp')
@@ -57,12 +87,12 @@
                             </span>
                             <div class="min-w-0">
                                 <p class="font-mono text-[10px] uppercase tracking-normal text-slate-500">{{ $row['label'] }}</p>
-                                <p class="mt-1 truncate text-sm font-semibold text-navy">{{ $row['value'] }}</p>
+                                <p class="mt-0.5 truncate text-sm font-semibold text-navy">{{ $row['value'] }}</p>
                             </div>
                             @if ($row['href'])
-                                <svg class="ml-auto h-4 w-4 shrink-0 text-slate-400 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-sky-600" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <svg class="ml-auto h-4 w-4 shrink-0 text-slate-400 transition duration-300 group-hover:translate-x-0.5 group-hover:text-sky-700" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             @endif
-                        </{{ $row['href'] ? 'a' : 'div' }}>
+                        </{{ $tag }}>
                     @endforeach
                 </div>
             </div>
@@ -70,8 +100,13 @@
             {{-- Right: form --}}
             <div class="lg:col-span-7" data-aos="fade-left">
                 <div class="rounded-3xl border border-navy-100 bg-white p-8 shadow-lift md:p-10">
-                    <p class="eyebrow mb-3">{{ $id ? 'Kirim Pesan' : 'Send a Message' }}</p>
-                    <h2 class="mb-7 font-display text-2xl text-navy text-balance md:text-3xl">{{ $id ? 'Isi formulir di bawah ini' : 'Fill out the form below' }}</h2>
+                    {{-- Label "Kirim Pesan" di atas judul dilepas dengan alasan yang
+                         sama seperti di kolom kiri: .eyebrow tidak pernah tampil. --}}
+                    <x-heading
+                        :lead="$id ? 'Kirim' : 'Send'"
+                        :accent="$id ? 'pesan Anda' : 'your message'"
+                        accent-class="text-sky-700"
+                        class="mb-7 text-2xl font-bold text-navy md:text-3xl" />
 
                     @if (session('status'))
                         <div class="mb-6 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-800" role="status" aria-live="polite">
@@ -110,30 +145,47 @@
     </section>
 
     {{-- ===================== OFFICES + MAP ===================== --}}
-    <section class="section-sm border-t border-navy-50 bg-neutral-50" x-data="{ activeOffice: 0, offices: {{ json_encode($offices) }} }">
-        <div class="container">
-            <div class="text-center" data-aos="fade-up">
-                <p class="eyebrow inline-flex items-center justify-center">{{ $id ? 'Lokasi Kantor' : 'Office Locations' }}</p>
-                <h2 class="mt-4 font-display text-3xl text-navy md:text-4xl">{{ $id ? 'Temui kami di lokasi berikut' : 'Find us at these locations' }}</h2>
+    {{-- bg-paper, bukan bg-neutral-50: seluruh situs ini memakai off-white
+         bertinta biru untuk irama antar-seksi, dan satu abu-abu netral di
+         sini berdiri sendiri di antaranya. --}}
+    <section class="section-sm relative overflow-hidden border-t border-navy-50 bg-paper" x-data="{ activeOffice: 0, offices: {{ json_encode($offices) }} }">
+        <div class="pointer-events-none absolute inset-0 aurora-light opacity-50"></div>
+
+        <div class="container relative">
+            <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
+                <x-heading
+                    :lead="$id ? 'Temui kami di' : 'Find us at'"
+                    :accent="$id ? 'lokasi berikut' : 'these locations'"
+                    accent-class="text-sky-700"
+                    class="text-display-lg text-navy" />
             </div>
 
             <div class="mt-12 grid items-stretch gap-6 lg:grid-cols-12">
-                {{-- Switcher --}}
-                <div class="space-y-3 lg:col-span-5" data-aos="fade-up">
+                {{-- Deretan kartu inilah yang menentukan tinggi baris, dan petanya
+                     yang mengikuti — bukan sebaliknya. Sebelumnya petanya dipatok
+                     380px lalu kartunya diregangkan supaya tidak menyisakan ruang
+                     kosong; angka itu ikut jumlah kantor yang kebetulan ada
+                     sekarang, jadi begitu kantornya bertambah atau berkurang
+                     regangannya salah lagi. --}}
+                <div class="flex flex-col gap-4 lg:col-span-5" data-aos="fade-up">
                     @foreach ($offices as $index => $office)
+                        {{-- transition, bukan transition-all: yang berubah hanya warna
+                             garis tepi dan bayangannya, dan transition-all ikut
+                             mengawasi tinggi serta lebar tombol saat tata letaknya
+                             dihitung ulang. --}}
                         <button type="button" x-on:click="activeOffice = {{ $index }}"
-                                class="group flex w-full flex-col gap-2 rounded-2xl border bg-white p-5 text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
-                                x-bind:class="activeOffice === {{ $index }} ? 'border-sky-500 shadow-lift' : 'border-navy-100 hover:border-navy-200 hover:shadow-card'">
-                            <div class="flex items-center justify-between gap-3">
-                                <div class="flex items-center gap-3">
-                                    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br text-white transition-all duration-300 group-hover:from-navy-600 group-hover:to-navy-500"
-                                          x-bind:class="activeOffice === {{ $index }} ? 'from-navy-600 to-navy-500' : 'from-navy-500 to-sky-400'">
-                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M15 9h.01M9 13h.01M15 13h.01M10 21v-4h4v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    </span>
-                                    <span class="font-display text-[17px] text-navy">{{ $office['name'] }}</span>
-                                </div>
-                                <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-sky-500 transition-transform duration-300"
-                                      x-bind:class="activeOffice === {{ $index }} ? 'scale-100' : 'scale-0'"></span>
+                                class="group flex flex-col gap-2.5 rounded-2xl border bg-white p-5 text-left transition duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
+                                x-bind:class="activeOffice === {{ $index }} ? 'border-navy-500 shadow-lift' : 'border-navy-100 hover:border-navy-200 hover:shadow-card'">
+                            <div class="flex items-center gap-3">
+                                {{-- Satu penanda terpilih, bukan tiga. Warna garis tepi,
+                                     ubin ikon, dan titik kecil di kanan dulu menyatakan
+                                     hal yang sama persis; titiknya yang paling sulit
+                                     dilihat, jadi itu yang dilepas. --}}
+                                <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl transition-colors duration-300"
+                                      x-bind:class="activeOffice === {{ $index }} ? 'bg-navy-500 text-white' : 'bg-sky-50 text-sky-700 group-hover:bg-navy-100'">
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M15 9h.01M9 13h.01M15 13h.01M10 21v-4h4v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
+                                <span class="text-[17px] font-semibold text-navy">{{ $office['name'] }}</span>
                             </div>
                             <p class="text-sm leading-relaxed text-slate-600">{{ $office['address'] }}</p>
                             <div class="mt-1 flex items-center gap-2 border-t border-navy-100 pt-3 font-mono text-[11px] text-slate-500">
@@ -144,12 +196,17 @@
                     @endforeach
                 </div>
 
-                {{-- Live map --}}
+                {{-- Live map. Mulai lg tingginya mengikuti kolom kartu lewat h-full
+                     (grid-nya items-stretch), jadi tidak ada angka piksel yang harus
+                     ditebak. Di bawah lg h-full tidak punya acuan karena grid-nya
+                     satu kolom, sehingga di sana ia memakai rasio 4:3. Angka 380px
+                     dulu ditulis dua kali — di pembungkus dan di iframe — dan dua
+                     salinan seperti itu bisa berbeda tanpa ada yang menyadarinya. --}}
                 <div class="lg:col-span-7" data-aos="fade-up" data-aos-delay="80">
-                    <div class="h-full min-h-[380px] overflow-hidden rounded-3xl border border-navy-100 shadow-lift">
+                    <div class="aspect-[4/3] overflow-hidden rounded-3xl border border-navy-100 shadow-lift lg:aspect-auto lg:h-full">
                         <iframe
                             x-bind:src="'https://www.google.com/maps?q=' + encodeURIComponent(offices[activeOffice].maps) + '&output=embed'"
-                            class="h-full min-h-[380px] w-full border-0"
+                            class="h-full w-full border-0"
                             loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade"
                             x-bind:title="offices[activeOffice].name"
