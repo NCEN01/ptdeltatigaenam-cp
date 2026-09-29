@@ -30,77 +30,11 @@
         'contact.index' => __('site.nav.contact'),
     ];
 
-    // Contextual CTA — the footer card's copy + button adapt to the current page.
-    $rn = request()->route()?->getName() ?? '';
-    $ctaKey = match (true) {
-        str_contains($rn, 'services') => 'services',
-        str_contains($rn, 'certificate') => 'certificates',
-        str_contains($rn, 'portfolio') => 'portfolio',
-        str_contains($rn, 'blog') => 'blog',
-        str_contains($rn, 'agenda') => 'agenda',
-        str_contains($rn, 'partnership') => 'partnership',
-        str_contains($rn, 'contact') => 'contact',
-        $rn === 'about' => 'about',
-        default => 'home',
-    };
-    // [eyebrow, title, subtitle, button label, button route]
-    $ctaSet = [
-        'home' => [
-            $id ? 'Konsultasi Gratis' : 'Free Consultation',
-            $id ? 'Siap melakukan transformasi human capital?' : 'Ready to transform your human capital?',
-            $id ? 'Konsultasikan kebutuhan pelatihan, sertifikasi, atau rekrutmen organisasi Anda bersama tim ahli kami.' : 'Consult your training, certification, or recruitment needs with our team of experts.',
-            $id ? 'Konsultasi Gratis' : 'Free Consultation', 'contact.index',
-        ],
-        'about' => [
-            $id ? 'Tentang Kami' : 'About Us',
-            $id ? 'Mari berkembang bersama Delta Tiga Enam.' : "Let's grow together with Delta Tiga Enam.",
-            $id ? 'Pelajari bagaimana pengalaman dan keahlian kami dapat mendukung tujuan organisasi Anda.' : "Discover how our experience and expertise can support your organization's goals.",
-            $id ? 'Jelajahi Layanan' : 'Explore Services', 'services.index',
-        ],
-        'services' => [
-            $id ? 'Layanan' : 'Services',
-            $id ? 'Temukan layanan yang tepat untuk tim Anda.' : 'Find the right service for your team.',
-            $id ? 'Diskusikan kebutuhan spesifik organisasi Anda dan dapatkan rekomendasi terbaik dari kami.' : "Discuss your organization's specific needs and get our best recommendations.",
-            $id ? 'Konsultasi Gratis' : 'Free Consultation', 'contact.index',
-        ],
-        'certificates' => [
-            $id ? 'Sertifikasi' : 'Certification',
-            $id ? 'Tingkatkan kredibilitas lewat sertifikasi resmi.' : 'Boost credibility with official certification.',
-            $id ? 'Ikuti program sertifikasi kompetensi yang diakui secara nasional bersama LSP mitra kami.' : 'Join nationally recognized competency certification programs with our partner LSPs.',
-            $id ? 'Konsultasi Sertifikasi' : 'Certification Enquiry', 'contact.index',
-        ],
-        'portfolio' => [
-            $id ? 'Portofolio' : 'Portfolio',
-            $id ? 'Wujudkan proyek pengembangan SDM Anda.' : 'Bring your human capital project to life.',
-            $id ? 'Lihat bagaimana kami membantu berbagai organisasi, lalu mulai proyek Anda bersama kami.' : "See how we've helped organizations, then start your project with us.",
-            $id ? 'Mulai Proyek' : 'Start a Project', 'contact.index',
-        ],
-        'blog' => [
-            $id ? 'Wawasan' : 'Insights',
-            $id ? 'Dapatkan wawasan human capital terbaru.' : 'Get the latest human capital insights.',
-            $id ? 'Selain membaca artikel kami, konsultasikan langsung tantangan SDM Anda dengan tim ahli.' : 'Beyond our articles, discuss your HR challenges directly with our experts.',
-            $id ? 'Konsultasi Gratis' : 'Free Consultation', 'contact.index',
-        ],
-        'agenda' => [
-            $id ? 'Agenda' : 'Agenda',
-            $id ? 'Ikuti agenda & pelatihan mendatang.' : 'Join our upcoming events & training.',
-            $id ? 'Jangan lewatkan program pelatihan dan sertifikasi kami. Hubungi kami untuk info & pendaftaran.' : "Don't miss our training and certification programs. Contact us for info & registration.",
-            $id ? 'Hubungi Kami' : 'Contact Us', 'contact.index',
-        ],
-        'partnership' => [
-            $id ? 'Kemitraan' : 'Partnership',
-            $id ? 'Jalin kemitraan strategis dengan kami.' : 'Build a strategic partnership with us.',
-            $id ? 'Bergabunglah sebagai mitra dan tumbuh bersama dalam ekosistem pengembangan SDM kami.' : 'Join as a partner and grow within our human capital ecosystem.',
-            $id ? 'Ajukan Kemitraan' : 'Apply for Partnership', 'contact.index',
-        ],
-        'contact' => [
-            $id ? 'Layanan' : 'Services',
-            $id ? 'Sudah tahu kebutuhan Anda?' : 'Know what you need?',
-            $id ? 'Jelajahi ragam layanan pengembangan human capital kami untuk menemukan solusi yang pas.' : 'Explore our range of human capital services to find the right fit.',
-            $id ? 'Lihat Layanan' : 'View Services', 'services.index',
-        ],
-    ];
-    [$ctaEyebrow, $ctaTitle, $ctaSub, $ctaBtn, $ctaRoute] = $ctaSet[$ctaKey];
+    // Kartu ajakan yang dulu melayang di atas footer sudah dilepas, beserta
+    // seluruh tabel salinannya per halaman. Halaman-halaman itu sudah punya
+    // ajakan sendiri di dalam isinya; yang di sini hanya mengulang, dan
+    // kartunya yang menimpa tepi footer memaksa footer memakai -mt-24 dengan
+    // pt-32 sebagai penyeimbang — dua angka yang harus dijaga bersamaan.
 @endphp
 
 {{-- Solid blue-gradient footer: white text, gold sub-headings, gold hover --}}
@@ -112,39 +46,37 @@
     <div class="pointer-events-none absolute inset-0 grain opacity-20"></div>
     <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 
-    {{-- CTA card — background image with a slight blur + blue gradient overlay --}}
-    <div class="container pt-16 md:pt-20">
-        <div class="relative z-20 mx-auto max-w-7xl overflow-hidden rounded-3xl px-6 py-12 text-center shadow-2xl ring-1 ring-white/15 md:px-20 md:py-16" data-aos="fade-up">
-            {{-- image bg (visible) + navy gradient — same treatment as the "Arah & Komitmen" band --}}
-            <img src="{{ asset('images/training-seminar.png') }}" alt="" loading="lazy"
-                 class="pointer-events-none absolute inset-0 h-full w-full object-cover">
-            <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-navy-950/80 via-navy-950/55 to-navy-950/90"></div>
-            <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-20"></div>
-            <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
-            <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/50 to-transparent"></div>
+    {{-- Logo besar samar di pojok kanan atas.
 
-            <div class="relative">
-                <p class="eyebrow mb-4 inline-flex items-center justify-center text-gold-soft">{{ $ctaEyebrow }}</p>
-                <h3 class="mx-auto max-w-2xl text-3xl font-semibold leading-[1.1] text-white text-balance md:text-[2.75rem]">{{ $ctaTitle }}</h3>
-                <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/85 md:text-base">{{ $ctaSub }}</p>
-                <a href="{{ route($ctaRoute) }}" class="group mt-8 inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3.5 text-sm font-semibold text-navy-950 shadow-gold ring-1 ring-transparent transition duration-200 hover:-translate-y-0.5 hover:bg-gold-soft">
-                    {{ $ctaBtn }}
-                    <svg class="h-4 w-4 text-navy-950 transition-transform duration-200 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9 4 13 8 9 12"/></svg>
-                </a>
-            </div>
-        </div>
+         Berkas logonya memuat segitiga di atas dan tulisan "DELTA TIGA ENAM"
+         emas di bawah. Tulisannya tidak ikut ditampilkan: pembungkusnya dipatok
+         pada rasio segitiganya saja (1600:1310 dari 1600x1588 piksel aslinya)
+         lalu overflow-hidden memotong sisanya, jadi yang tersisa hanya bentuk
+         segitiganya. Memperkecil opasitas saja tidak cukup — tulisannya akan
+         tetap terbaca samar dan mengulang nama yang sudah tertulis di kolom
+         kiri.
+
+         aria-hidden + alt kosong: ini ornamen, dan pembaca layar sudah
+         mendapat nama perusahaan dari tautan logo di kolom brand. --}}
+    <div aria-hidden="true"
+         class="pointer-events-none absolute -right-20 -top-10 aspect-[1600/1310] w-[22rem] overflow-hidden opacity-[0.07] sm:-right-24 sm:w-[30rem] lg:-right-28 lg:w-[40rem]">
+        <img src="{{ asset('images/logodelta36.png') }}" alt="" loading="lazy" class="w-full">
     </div>
 
-    {{-- Full-width footer columns — pulled up so the card overlaps its top edge --}}
-    <div class="relative z-10 -mt-24">
-        <div class="container pb-10 pt-32 md:pt-36">
-            <div class="grid gap-12 lg:grid-cols-12 lg:gap-8">
+    {{-- Kolom footer. Dulu ditarik naik dengan -mt-24 lalu didorong balik
+         dengan pt-32 supaya kartu ajakan bisa menimpa tepi atasnya; tanpa
+         kartu itu keduanya tidak ada gunanya lagi dan jaraknya kembali
+         sederhana. --}}
+    <div class="relative z-10">
+        <div class="container py-16 md:py-20">
+            <div class="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-12">
 
-                {{-- Brand. Tiga kolom, bukan empat: isinya paling sedikit, dan
-                     lebar yang dilepasnya pindah ke kolom Kontak yang kini memuat
-                     dua alamat lengkap. Dengan begitu alamatnya jatuh di tiga
-                     baris, bukan empat, dan ketiga kolom lebih seimbang tingginya. --}}
-                <div class="lg:col-span-3 space-y-6">
+                {{-- Brand. Layanan dan Tautan sekarang berdiri sebagai kolom
+                     tersendiri, bukan satu kolom berisi dua daftar, sehingga
+                     keempatnya sejajar dalam satu baris: 3-2-2-5. Kontak yang
+                     paling berisi dapat porsi terlebar, Layanan dan Tautan yang
+                     hanya daftar pendek cukup sempit. --}}
+                <div class="space-y-6 sm:col-span-2 lg:col-span-3">
                     <a href="{{ route('home') }}" class="inline-flex items-center gap-3">
                         <img src="{{ asset('images/logodelta36.png') }}" alt="PT. Delta Tiga Enam" class="h-10 w-10 shrink-0">
                         <span class="font-display text-lg font-semibold tracking-wide text-white">PT. Delta Tiga Enam</span>
@@ -170,34 +102,32 @@
                     </div>
                 </div>
 
-                {{-- Services + Quick Links --}}
-                <div class="lg:col-span-4">
-                    <div class="grid gap-x-12 gap-y-8 sm:grid-cols-2">
-                        <div>
-                            <p class="text-sm font-semibold text-gold">{{ $id ? 'Layanan' : 'Services' }}</p>
-                            <ul class="mt-5 space-y-3.5 text-sm">
-                                @forelse ($footerServices as $svc)
-                                    <li><a href="{{ route('services.index') }}#{{ $svc->slug }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
-                                        <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $svc->name }}
-                                    </a></li>
-                                @empty
-                                    <li><a href="{{ route('services.index') }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
-                                        <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $id ? 'Semua Layanan' : 'All Services' }}
-                                    </a></li>
-                                @endforelse
-                            </ul>
-                        </div>
-                        <div>
-                            <p class="text-sm font-semibold text-gold">{{ __('site.common.quick_links') }}</p>
-                            <ul class="mt-5 space-y-3.5 text-sm">
-                                @foreach ($nav as $route => $label)
-                                    <li><a href="{{ route($route) }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
-                                        <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $label }}
-                                    </a></li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
+                {{-- Layanan --}}
+                <div class="lg:col-span-2">
+                    <p class="text-sm font-semibold text-gold">{{ $id ? 'Layanan' : 'Services' }}</p>
+                    <ul class="mt-5 space-y-3 text-sm">
+                        @forelse ($footerServices as $svc)
+                            <li><a href="{{ route('services.index') }}#{{ $svc->slug }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
+                                <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $svc->name }}
+                            </a></li>
+                        @empty
+                            <li><a href="{{ route('services.index') }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
+                                <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $id ? 'Semua Layanan' : 'All Services' }}
+                            </a></li>
+                        @endforelse
+                    </ul>
+                </div>
+
+                {{-- Tautan --}}
+                <div class="lg:col-span-2">
+                    <p class="text-sm font-semibold text-gold">{{ __('site.common.quick_links') }}</p>
+                    <ul class="mt-5 space-y-3 text-sm">
+                        @foreach ($nav as $route => $label)
+                            <li><a href="{{ route($route) }}" class="group inline-flex items-center text-white/75 transition-colors hover:text-gold">
+                                <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $label }}
+                            </a></li>
+                        @endforeach
+                    </ul>
                 </div>
 
                 {{-- Kontak. Blok "Kantor Kami" yang dulu berdiri sendiri selebar
@@ -212,7 +142,7 @@
                      ini jauh lebih sempit daripada blok selebar footer tadi,
                      sehingga patahan yang dipatok akan jatuh di tengah nama
                      jalan. --}}
-                <div class="lg:col-span-5">
+                <div class="sm:col-span-2 lg:col-span-5">
                     <p class="text-sm font-semibold text-gold">{{ $id ? 'Kontak' : 'Contact' }}</p>
 
                     <div class="mt-5 space-y-5">
@@ -243,7 +173,7 @@
             </div>
 
             {{-- Bottom bar --}}
-            <div class="mt-14 flex flex-col items-start justify-between gap-4 border-t border-white/15 pt-8 text-xs text-white/60 md:flex-row md:items-center">
+            <div class="mt-12 flex flex-col items-start justify-between gap-4 border-t border-white/15 pt-7 text-xs text-white/60 md:flex-row md:items-center">
                 <p>© {{ $year }} PT. Delta Tiga Enam. {{ $id ? 'Hak Cipta Dilindungi Undang-Undang.' : 'All rights reserved.' }}</p>
                 <div class="flex items-center gap-5">
                     <a href="#" class="transition-colors hover:text-gold">{{ $id ? 'Kebijakan Privasi' : 'Privacy Policy' }}</a>
