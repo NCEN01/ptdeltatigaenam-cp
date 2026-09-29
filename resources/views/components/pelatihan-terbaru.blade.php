@@ -83,14 +83,14 @@
                  sama persis dengan tombol utama di seksi lain, alih-alih menjadi
                  satu-satunya tombol di halaman yang berperilaku sendiri. --}}
             <div class="pt-toolbar">
-                <div class="pt-count">
-                    <strong>{{ str_pad(count($programs), 2, '0', STR_PAD_LEFT) }}</strong>
-                    {{ $isId ? 'program tersedia' : 'programmes available' }}
-                </div>
                 <a href="{{ $lihatSemuaUrl }}" class="btn-blue">
                     {{ $isId ? 'Lihat Semua' : 'View All' }}
                     <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </a>
+                <div class="pt-count">
+                    <strong>{{ str_pad(count($programs), 2, '0', STR_PAD_LEFT) }}</strong>
+                    {{ $isId ? 'program tersedia' : 'programmes available' }}
+                </div>
             </div>
 
             {{-- Panah pindah ke sisi kiri dan kanan deretan kartu, memakai tampilan
