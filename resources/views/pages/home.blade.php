@@ -521,21 +521,21 @@
                              hanya noda. Timpaan kartunya sendiri sudah mengatakan itu. --}}
                         <div data-hscroll-track class="-mx-1 flex cursor-grab snap-x snap-proximity select-none items-stretch gap-6 overflow-x-auto scroll-smooth px-1 pb-4 pt-1 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             @foreach ($posts as $post)
-                                {{-- Mulai lg lebarnya dipatok 280px, bukan pecahan dari
-                                     lebar rel. Kartu Agenda memakai container penuh dan
-                                     empat kartu, jadi lebarnya ~266px di lg dan ~282px
-                                     di xl; rel ini cuma 8–9/12 kolom, dan pecahan apa
-                                     pun di situ menghasilkan angka yang meleset di
-                                     salah satu ukuran layar. Lebar tetap 280px mendarat
-                                     di antara keduanya, jadi kartunya seukuran kartu
-                                     Agenda di kedua ukuran itu.
+                                {{-- Lebarnya pecahan dari lebar rel, bukan angka tetap:
+                                     pecahan selalu habis dibagi tiga, jadi tepat tiga
+                                     kartu yang tampak dan tidak pernah ada potongan
+                                     kartu keempat mengintip di tepi kanan. Lebar tetap
+                                     280px sempat dicoba supaya persis seukuran kartu
+                                     Agenda, tapi 280px tidak pernah membagi habis lebar
+                                     rel mana pun, dan sisanya muncul sebagai potongan
+                                     itu.
 
-                                     Akibatnya kartu ketiga terpotong sedikit di lg —
-                                     itu justru yang menerangkan bahwa deretnya bisa
-                                     digeser. Di bawah lg pecahannya tetap dipakai
-                                     karena di sana relnya selebar container, sama
-                                     dengan Agenda: 80% di layar kecil, 2 di sm, 3 di md. --}}
-                                <div class="min-w-0 shrink-0 basis-[80%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)] lg:basis-[280px]">
+                                     Di xl hasilnya ~282px — masih seukuran kartu
+                                     Agenda. Di lg lebarnya menyusut mengikuti relnya
+                                     yang menyempit jadi 8/12 kolom. Titik putus di
+                                     bawah lg mengikuti Agenda: 80% di layar kecil,
+                                     2 di sm, 3 di md. --}}
+                                <div class="min-w-0 shrink-0 basis-[80%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)]">
                                     {{-- Tanpa paragraf ringkasan: bentuknya jadi sama
                                          persis dengan kartu Agenda — gambar, tanggal dan
                                          tempat, judul, lalu tautan. --}}
