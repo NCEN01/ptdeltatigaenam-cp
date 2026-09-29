@@ -521,10 +521,17 @@
                              hanya noda. Timpaan kartunya sendiri sudah mengatakan itu. --}}
                         <div data-hscroll-track class="-mx-1 flex cursor-grab snap-x snap-proximity select-none items-stretch gap-6 overflow-x-auto scroll-smooth px-1 pb-4 pt-1 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             @foreach ($posts as $post)
-                                {{-- 2 kartu di sm, 3 di lg, 4 di xl. Di kolom 9/12
-                                     lebarnya mendarat di ~205px — kartu yang sama,
-                                     hanya lebih ramping. --}}
-                                <div class="min-w-0 shrink-0 basis-[85%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)] xl:basis-[calc((100%_-_4.5rem)/4)]">
+                                {{-- Lebarnya disamakan dengan kartu Agenda Mendatang.
+                                     Agenda memakai selebar container penuh dan empat
+                                     kartu, jadi kartunya ~282px di xl; rel ini hanya
+                                     9/12 kolom, dan empat kartu di situ tinggal ~205px.
+                                     Tiga kartu di sini mendarat di ~282px — angka yang
+                                     sama persis, jadi dua seksi itu memakai ukuran
+                                     kartu yang sama meski jumlah per layarnya berbeda.
+
+                                     Titik putusnya pun ikut Agenda: 80% di layar kecil,
+                                     2 di sm, 3 dari md ke atas. --}}
+                                <div class="min-w-0 shrink-0 basis-[80%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)]">
                                     <x-blog-card :post="$post" :animate="false" />
                                 </div>
                             @endforeach
