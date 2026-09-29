@@ -69,8 +69,9 @@
     display: flex; flex-direction: column;
     /* Dirapatkan dari clamp(32px,5vw,64px): dengan ikon dan judul yang sudah
        diperkecil, jarak selebar itu menyisakan lubang kosong antara kepala
-       seksi dan deretan kartunya. */
-    gap: clamp(20px, 2.6vw, 36px);
+       seksi dan deretan kartunya. Nilai maksimalnya menyisakan jarak bagi ikon
+       yang diturunkan 14px di atas, jadi keduanya tidak saling menempel. */
+    gap: clamp(14px, 2vw, 28px);
 }
 @media (min-width: 1024px) { .pt-container { padding: 0 2rem; } }
 @media (min-width: 1280px) { .pt-container { padding: 0 2.5rem; } }
@@ -90,6 +91,14 @@
 /* Ikon diperkecil dari clamp(180px,30vw,400px). Pada 400px ia sebesar judulnya
    sendiri dan menarik perhatian menjauh dari kartu yang justru bisa diklik. */
 .pt-illus { flex: 0 1 auto; position: relative; width: clamp(140px, 19vw, 240px); aspect-ratio: 1/1; }
+
+/* Ikon diturunkan sedikit. Memakai transform, bukan margin: ikon adalah benda
+   tertinggi di kepala seksi, jadi margin akan ikut menambah tinggi kepalanya
+   dan justru mendorong kartu ke bawah — kebalikan dari yang diinginkan.
+   Hanya di layar lebar; di ponsel ikonnya sudah punya penempatan sendiri. */
+@media (min-width: 641px) {
+    .pt-illus { transform: translateY(14px); }
+}
 .pt-orbit { position: absolute; inset: 2%; border-radius: 50%; border: 1.5px dashed #2b83df55; animation: pt-spin 40s linear infinite; }
 .pt-orbit i { position: absolute; border-radius: 50%; }
 .pt-dot-a { top: -6px; left: 50%; width: 12px; height: 12px; margin-left: -6px; background: var(--pt-blue); }
