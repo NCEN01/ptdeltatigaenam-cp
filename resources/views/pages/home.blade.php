@@ -440,10 +440,11 @@
                          tulisannya berhenti sebelum kartu, bukan tersembunyi di
                          baliknya.
 
-                         Lebar kolomnya sendiri tidak ditambah: relnya harus memuat
-                         empat kartu, dan setiap kolom yang diambil panel ini
-                         memotong lebar kartu. Melebarnya datang dari -mr tadi. --}}
-                    <div class="lg:col-span-4 xl:col-span-3" data-aos="fade-up">
+                         Sejak relnya cukup memuat tiga kartu, panel ini mengambil
+                         empat kolom di semua ukuran — dulu tiga di xl karena rel
+                         perlu ruang untuk kartu keempat. Satu kolom itu pindah ke
+                         panel, jadi kartunya mengecil dan panelnya melebar sekaligus. --}}
+                    <div class="lg:col-span-4" data-aos="fade-up">
                         <div class="relative h-full overflow-hidden rounded-3xl bg-navy-anim p-7 text-white shadow-lift sm:p-8 lg:-mr-20 lg:rounded-r-none lg:pr-20 xl:-mr-24 xl:pr-24">
                             <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
                             <div class="pointer-events-none absolute -right-14 -top-14 h-44 w-44 rounded-full bg-sky-400/25 blur-3xl"></div>
@@ -493,7 +494,11 @@
                          memang ada kartu yang tersembunyi. Penandanya dipasang di kolom
                          ini saja — kalau dipasang di grid, menunjuk panel kiri pun ikut
                          menghentikan gesernya. --}}
-                    <div class="relative z-10 min-w-0 lg:col-span-8 xl:col-span-9" data-hscroll data-hscroll-auto data-aos="fade-up" data-aos-delay="80">
+                    {{-- lg:self-center — tanpa ini kolomnya ikut meregang setinggi
+                         panel sementara deretan kartunya tetap setinggi isinya dan
+                         menempel di atas, jadi kartunya duduk lebih tinggi dari titik
+                         tengah panel dan panahnya pun ikut meleset. --}}
+                    <div class="relative z-10 min-w-0 lg:col-span-8 lg:self-center" data-hscroll data-hscroll-auto data-aos="fade-up" data-aos-delay="80">
                         {{-- Panah di sisi kiri dan kanan deretan kartu, sama persis
                              dengan seksi Agenda Mendatang dan Pelatihan Terbaru.
 
@@ -519,7 +524,10 @@
                              atas panel navy, dan kartu yang meluruh di sana menampilkan
                              navy menembus badan kartu — bukan isyarat "masih ada lagi",
                              hanya noda. Timpaan kartunya sendiri sudah mengatakan itu. --}}
-                        <div data-hscroll-track class="-mx-1 flex cursor-grab snap-x snap-proximity select-none items-stretch gap-6 overflow-x-auto scroll-smooth px-1 pb-4 pt-1 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        {{-- py-3, bukan pt-1/pb-4: ruang bayangan kartu harus sama di
+                             atas dan di bawah, kalau tidak kartunya terbaca turun
+                             sedikit dari tengah panel walaupun kolomnya sudah pas. --}}
+                        <div data-hscroll-track class="-mx-1 flex cursor-grab snap-x snap-proximity select-none items-stretch gap-6 overflow-x-auto scroll-smooth px-1 py-3 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             @foreach ($posts as $post)
                                 {{-- Lebarnya pecahan dari lebar rel, bukan angka tetap:
                                      pecahan selalu habis dibagi tiga, jadi tepat tiga
