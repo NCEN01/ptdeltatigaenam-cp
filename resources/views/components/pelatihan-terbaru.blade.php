@@ -145,7 +145,14 @@
                                         @endif
                                     </div>
                                 </div>
-                                <span class="pt-go">&rarr;</span>
+                                {{-- Panah SVG yang sama dengan kartu portofolio dan
+                                     layanan, bukan entitas &rarr;. Entitas mengikuti
+                                     bentuk panah bawaan jenis huruf, jadi tebal dan
+                                     sudutnya tidak pernah cocok dengan panah di
+                                     kartu lain pada halaman yang sama. --}}
+                                <span class="pt-go">
+                                    <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
                             </div>
                         </div>
                     </a>

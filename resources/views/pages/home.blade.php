@@ -322,16 +322,23 @@
             'End-to-End Support', 'Applied Material', 'Professional Network', 'Competitive Pricing',
         ];
     @endphp
-    {{-- Latar netral, bukan foto gelap. Beranda ini sebelumnya memuat empat
-         bidang gelap — hero, kategori, seksi ini, dan pita Mitra — sehingga
-         putih yang mestinya mendominasi justru menjadi selingan. PRODUCT.md
-         menyebutnya terbalik: "putih dominan + aksen biru".
-
-         Fotonya sendiri foto stok kantor yang tidak menggambarkan apa pun dari
-         ketujuh alasan di sebelahnya, jadi tidak ada yang hilang saat dilepas.
-         Bersamanya ikut lepas empat lapis tirai, butir, dua lingkaran cahaya,
-         dan garis emas — semuanya hanya menopang foto itu. --}}
-    <section class="border-y border-navy-50 bg-neutral-50">
+    {{-- Pita berfoto gelap, dikembalikan atas permintaan setelah sempat
+         dinetralkan. Setelah seksi Kategori Layanan dan Portofolio kini terang,
+         beranda ini tidak lagi bertumpuk bidang gelap seperti dulu, jadi satu
+         pita gelap di sini justru memberi jeda — bukan lagi keempat kalinya. --}}
+    <section class="relative overflow-hidden bg-navy-950 text-white">
+        <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1920&q=80" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover">
+        <div class="absolute inset-0 bg-navy-950/82"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/88"></div>
+        {{-- Butir dan cahaya samar, alat yang sama dengan kepala halaman dan pita
+             Mitra. Tanpa keduanya foto gelap ini rata betul dan terbaca sebagai
+             bidang datar, bukan ruang. --}}
+        <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
+        {{-- /10, bukan /12: 12 di luar skala opasitas Tailwind sehingga kelasnya
+             tidak pernah dibuat dan lingkarannya tampil tanpa warna sama sekali. --}}
+        <div class="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl" data-parallax="0.12"></div>
+        <div class="pointer-events-none absolute -right-24 bottom-0 h-80 w-80 rounded-full bg-cyan/10 blur-3xl" data-parallax="0.08"></div>
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
         {{-- Judul di kiri, alasannya di kanan. Sebelumnya judul di tengah lalu
              satu baris tipis di dasar pita setinggi 34rem, dengan justify-between
              menyisakan lubang kosong besar di antaranya. Dua kolom mengisi pita
@@ -342,15 +349,17 @@
                      dan ukurannya ikut lebar layar lewat clamp. Pasangan
                      text-3xl/md:text-5xl sebelumnya melompat sekali di satu
                      titik henti lalu diam di 48px berapa pun lebar layarnya. --}}
-                {{-- Aksennya kembali ke text-gradient (arang pekat + miring).
-                     text-gradient-hero adalah gradasi biru-cyan yang dibuat untuk
-                     latar gelap; di atas neutral-50 ia turun jauh di bawah ambang
-                     kontras. Di latar terang, situs ini menekankan lewat miring. --}}
+                {{-- Aksen miring bergradasi biru-cyan, dibuat khusus untuk latar
+                     gelap. Ia sempat diturunkan ke arang pekat saat pita ini
+                     sempat terang; sekarang fotonya kembali, jadi gradasinya pun
+                     kembali — di atas navy pekat justru warna inilah yang
+                     kontrasnya paling kuat. --}}
                 <x-heading
                     :lead="$isId ? 'Alasan Memilih' : 'Why Choose'"
                     :accent="$isId ? 'Kami?' : 'Us?'"
-                    class="text-display-lg font-semibold text-navy text-balance" />
-                <p class="mt-6 max-w-md text-lg leading-relaxed text-slate-600 text-pretty">{{ $isId ? 'Keahlian praktisi, pendekatan yang dipersonalisasi, dan komitmen pada hasil nyata bagi organisasi Anda.' : 'Practitioner expertise, a personalized approach, and a commitment to real results for your organization.' }}</p>
+                    accent-class="text-gradient-hero"
+                    class="text-display-lg font-semibold text-white text-balance" />
+                <p class="mt-6 max-w-md text-lg leading-relaxed text-navy-100 text-pretty">{{ $isId ? 'Keahlian praktisi, pendekatan yang dipersonalisasi, dan komitmen pada hasil nyata bagi organisasi Anda.' : 'Practitioner expertise, a personalized approach, and a commitment to real results for your organization.' }}</p>
             </div>
 
             {{-- Satu daftar, bukan dua salinan. Dulu ada pita berjalan untuk layar
@@ -368,14 +377,14 @@
                  manfaat paket di halaman Kemitraan. --}}
             <ul class="sm:grid sm:grid-cols-2 sm:gap-x-10 lg:col-span-7 lg:gap-x-14">
                 @foreach ($reasons as $i => $r)
-                    {{-- Garis rambut dan centang ikut pindah ke nilai latar terang:
-                         white/10 tidak terlihat sama sekali di atas neutral-50, dan
-                         sky-400 hanya 2,3:1 di atasnya. --}}
-                    <li class="flex items-start gap-3.5 border-t border-navy-100 py-5 md:py-6" data-aos="fade-up" data-aos-delay="{{ ($i % 2) * 70 }}">
-                        <svg class="mt-1 h-5 w-5 shrink-0 text-sky-600" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    {{-- Garis rambut dan centang kembali ke nilai latar gelap
+                         bersama fotonya: navy-100 hampir tak terlihat di atas
+                         navy pekat, dan sky-600 terlalu gelap di sana. --}}
+                    <li class="flex items-start gap-3.5 border-t border-white/10 py-5 md:py-6" data-aos="fade-up" data-aos-delay="{{ ($i % 2) * 70 }}">
+                        <svg class="mt-1 h-5 w-5 shrink-0 text-sky-400" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                             <path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <p class="font-display text-lg font-medium leading-snug text-navy text-balance md:text-xl">{{ $r }}</p>
+                        <p class="font-display text-lg font-medium leading-snug text-white text-balance md:text-xl">{{ $r }}</p>
                     </li>
                 @endforeach
             </ul>
