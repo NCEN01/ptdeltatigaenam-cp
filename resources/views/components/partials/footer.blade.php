@@ -56,11 +56,22 @@
          tetap terbaca samar dan mengulang nama yang sudah tertulis di kolom
          kiri.
 
+         Mulai lg tingginya yang jadi patokan, bukan lebarnya: top-0 dan
+         bottom-0 membuatnya setinggi footer, lalu rasio tadi yang menghitung
+         lebarnya. Jadi alas segitiganya berhenti tepat di tepi bawah footer
+         berapa pun tinggi isinya — lebar tetap yang dipakai sebelumnya selalu
+         meleset begitu jumlah baris di kolom Kontak berubah.
+
+         Di bawah lg lebarnya tetap yang jadi patokan. Di layar sempit
+         kolomnya menumpuk sehingga footer jadi jauh lebih tinggi daripada
+         lebarnya, dan logo setinggi itu akan melebar sampai menutupi seluruh
+         isi footer.
+
          aria-hidden + alt kosong: ini ornamen, dan pembaca layar sudah
          mendapat nama perusahaan dari tautan logo di kolom brand. --}}
     <div aria-hidden="true"
-         class="pointer-events-none absolute -right-20 -top-10 aspect-[1600/1310] w-[22rem] overflow-hidden opacity-[0.07] sm:-right-24 sm:w-[30rem] lg:-right-28 lg:w-[40rem]">
-        <img src="{{ asset('images/logodelta36.png') }}" alt="" loading="lazy" class="w-full">
+         class="pointer-events-none absolute -right-20 -top-10 aspect-[1600/1310] w-[22rem] overflow-hidden opacity-[0.07] sm:-right-24 sm:w-[30rem] lg:-right-28 lg:bottom-0 lg:top-0 lg:h-full lg:w-auto">
+        <img src="{{ asset('images/logodelta36.png') }}" alt="" loading="lazy" class="h-auto w-full max-w-none">
     </div>
 
     {{-- Kolom footer. Dulu ditarik naik dengan -mt-24 lalu didorong balik
