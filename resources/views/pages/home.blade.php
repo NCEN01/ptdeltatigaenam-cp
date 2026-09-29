@@ -521,18 +521,25 @@
                              hanya noda. Timpaan kartunya sendiri sudah mengatakan itu. --}}
                         <div data-hscroll-track class="-mx-1 flex cursor-grab snap-x snap-proximity select-none items-stretch gap-6 overflow-x-auto scroll-smooth px-1 pb-4 pt-1 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             @foreach ($posts as $post)
-                                {{-- Lebarnya disamakan dengan kartu Agenda Mendatang.
-                                     Agenda memakai selebar container penuh dan empat
-                                     kartu, jadi kartunya ~282px di xl; rel ini hanya
-                                     9/12 kolom, dan empat kartu di situ tinggal ~205px.
-                                     Tiga kartu di sini mendarat di ~282px — angka yang
-                                     sama persis, jadi dua seksi itu memakai ukuran
-                                     kartu yang sama meski jumlah per layarnya berbeda.
+                                {{-- Mulai lg lebarnya dipatok 280px, bukan pecahan dari
+                                     lebar rel. Kartu Agenda memakai container penuh dan
+                                     empat kartu, jadi lebarnya ~266px di lg dan ~282px
+                                     di xl; rel ini cuma 8–9/12 kolom, dan pecahan apa
+                                     pun di situ menghasilkan angka yang meleset di
+                                     salah satu ukuran layar. Lebar tetap 280px mendarat
+                                     di antara keduanya, jadi kartunya seukuran kartu
+                                     Agenda di kedua ukuran itu.
 
-                                     Titik putusnya pun ikut Agenda: 80% di layar kecil,
-                                     2 di sm, 3 dari md ke atas. --}}
-                                <div class="min-w-0 shrink-0 basis-[80%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)]">
-                                    <x-blog-card :post="$post" :animate="false" />
+                                     Akibatnya kartu ketiga terpotong sedikit di lg —
+                                     itu justru yang menerangkan bahwa deretnya bisa
+                                     digeser. Di bawah lg pecahannya tetap dipakai
+                                     karena di sana relnya selebar container, sama
+                                     dengan Agenda: 80% di layar kecil, 2 di sm, 3 di md. --}}
+                                <div class="min-w-0 shrink-0 basis-[80%] snap-start sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)] lg:basis-[280px]">
+                                    {{-- Tanpa paragraf ringkasan: bentuknya jadi sama
+                                         persis dengan kartu Agenda — gambar, tanggal dan
+                                         tempat, judul, lalu tautan. --}}
+                                    <x-blog-card :post="$post" :animate="false" :excerpt="false" />
                                 </div>
                             @endforeach
                         </div>

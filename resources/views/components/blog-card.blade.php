@@ -4,6 +4,9 @@
     // Off inside carousels: slides are laid out horizontally, so a scroll-triggered
     // reveal on each card fights the slider instead of helping.
     'animate' => true,
+    // Off on the home rail, where the card is asked to carry the same shape as an
+    // Agenda card: gambar → tanggal/tempat → judul → tautan, tanpa paragraf.
+    'excerpt' => true,
 ])
 
 @php
@@ -42,7 +45,7 @@
              card fills the row, so the extra blank line is wasted height. --}}
         <h3 class="mt-2 line-clamp-2 font-display text-base leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700 sm:mt-2.5 sm:min-h-[3.25rem] sm:text-lg">{{ $post->title }}</h3>
 
-        @if ($post->excerpt)
+        @if ($excerpt && $post->excerpt)
             <p class="mt-1.5 line-clamp-2 text-pretty text-sm leading-relaxed text-slate-600 sm:mt-2 sm:line-clamp-3">{{ $post->excerpt }}</p>
         @endif
 
