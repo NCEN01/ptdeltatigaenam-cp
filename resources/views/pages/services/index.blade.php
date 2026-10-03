@@ -156,14 +156,31 @@
     </section>
 
     @forelse ($categories as $cat)
-        <section id="{{ $cat->slug }}" class="scroll-mt-28 section-sm {{ $loop->odd ? '' : 'bg-mist' }}">
+        {{-- bg-paper, bukan bg-mist. Keduanya off-white kebiruan yang nyaris sama
+             (#f2f8fd dan #eaf3fb), dan seluruh situs memakai bg-paper untuk irama
+             antar-seksi; dua nada yang beda tipis hanya terbaca sebagai ketidak-
+             rapian, bukan sebagai irama. --}}
+        <section id="{{ $cat->slug }}" class="scroll-mt-28 section-sm {{ $loop->odd ? '' : 'bg-paper' }}">
             <div class="container">
-                <div class="flex flex-col gap-4 border-b border-navy-100 pb-6 md:flex-row md:items-end md:justify-between">
+                {{-- Penomoran 01/02/03 di atas judul dilepas. Kategori layanan bukan
+                     urutan langkah: nomornya tidak memberi tahu apa pun yang tidak
+                     sudah dikatakan judulnya, dan perancah bernomor di atas tiap
+                     seksi adalah pola yang justru dihindari PRODUCT.md.
+
+                     Yang menggantikannya di sisi kanan adalah jumlah layanan di
+                     kategori itu — keterangan yang benar-benar membawa kabar, dan
+                     bentuk yang sama dengan kepala halaman Blog serta Portofolio. --}}
+                <div class="flex flex-col gap-4 border-b border-navy-100 pb-6 md:flex-row md:items-end md:justify-between md:gap-10">
                     <div class="max-w-2xl">
-                        <p class="mb-3 font-mono text-[11px] uppercase tracking-normal text-gold-deep">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</p>
                         <h2 class="text-display-lg text-navy">{{ $cat->name }}</h2>
                         @if ($cat->short_description)<p class="mt-3 text-pretty text-slate-600">{{ $cat->short_description }}</p>@endif
                     </div>
+                    @if ($cat->services->isNotEmpty())
+                        <p class="shrink-0 font-mono text-xs text-slate-600">
+                            <span class="text-sm font-semibold text-navy">{{ str_pad($cat->services->count(), 2, '0', STR_PAD_LEFT) }}</span>
+                            {{ $id ? 'layanan' : 'services' }}
+                        </p>
+                    @endif
                 </div>
 
                 @if ($cat->services->isNotEmpty())
@@ -189,8 +206,15 @@
 
                                          Judul dijatah dua baris agar bagian atas kartu juga rata,
                                          bukan hanya harganya. --}}
+                                    {{-- min-h-14 pada judul dilepas. Ia menjatah dua baris
+                                         supaya deskripsi tiap kartu mulai di ketinggian
+                                         yang sama, tapi judul satu baris jadi menyisakan
+                                         28px kosong yang terbaca sebagai cacat, bukan
+                                         sebagai perataan. Perataan harganya tetap aman:
+                                         yang mengerjakannya flex-1 di pembungkus ini,
+                                         bukan jatah baris judulnya. --}}
                                     <div class="flex-1">
-                                        <h3 class="line-clamp-2 min-h-14 text-xl leading-snug text-navy">{{ $service->title }}</h3>
+                                        <h3 class="line-clamp-2 text-xl leading-snug text-navy">{{ $service->title }}</h3>
                                         @if ($service->short_description)<p class="mt-2 line-clamp-2 text-sm text-slate-600">{{ $service->short_description }}</p>@endif
                                     </div>
                                     <div class="mt-6 flex items-end justify-between border-t border-navy-100 pt-5">
@@ -199,7 +223,11 @@
                                                 @if ($service->hasDiscount())
                                                     <p class="flex flex-wrap items-center gap-1.5">
                                                         <span class="font-mono text-[11px] text-slate-500 line-through">Rp {{ number_format((float) $service->discount_original_price, 0, ',', '.') }}</span>
-                                                        <span class="rounded bg-rose-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-rose-600">-{{ $service->discountPercent() }}%</span>
+                                                        {{-- Emas berteks tinta, bukan merah muda
+                                                             berteks merah. Merah itu satu-satunya
+                                                             di situs ini, dan lencana diskon di
+                                                             kartu Pelatihan sudah memakai emas. --}}
+                                                        <span class="rounded bg-gold px-1.5 py-0.5 font-mono text-[10px] font-bold text-ink">-{{ $service->discountPercent() }}%</span>
                                                     </p>
                                                     <p class="text-lg text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
                                                 @else
@@ -215,7 +243,12 @@
                                                 <p class="text-lg text-navy">{{ $id ? 'Hubungi kami' : 'Contact us' }}</p>
                                             @endif
                                         </div>
-                                        <span class="grid h-10 w-10 place-items-center rounded-full border border-navy-200 transition-all group-hover:border-gold group-hover:bg-gold group-hover:text-ink">
+                                        {{-- Sentuhnya ke navy, bukan emas. Panah bundar di
+                                             seluruh situs — rel Pelatihan, Agenda, Berita —
+                                             semuanya berisi navy saat disentuh, dan emas di
+                                             sini membuat kartu layanan satu-satunya yang
+                                             berbeda. --}}
+                                        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-navy-200 text-navy transition-colors group-hover:border-navy group-hover:bg-navy group-hover:text-white">
                                             <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </span>
                                     </div>
