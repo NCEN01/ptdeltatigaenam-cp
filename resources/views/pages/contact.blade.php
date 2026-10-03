@@ -148,7 +148,11 @@
 
         <div class="container relative">
             <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
-                <h2 class="text-display-lg text-navy">{{ $id ? 'Alamat & Lokasi Kantor' : 'Office Addresses & Locations' }}</h2>
+                {{-- "Alamat & Peta Kantor", bukan "Alamat & Lokasi Kantor": salah
+                     satu kartu di bawahnya kini bernama "Lokasi Kantor", dan judul
+                     yang mengandung nama kartunya membuat keduanya terbaca sebagai
+                     hal yang sama. --}}
+                <h2 class="text-display-lg text-navy">{{ $id ? 'Alamat & Peta Kantor' : 'Office Addresses & Map' }}</h2>
             </div>
 
             <div class="mt-12 grid items-stretch gap-6 lg:grid-cols-12">

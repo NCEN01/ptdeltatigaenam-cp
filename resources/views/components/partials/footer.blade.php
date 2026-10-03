@@ -10,7 +10,7 @@
 
     // Alamat kantor dibaca dari config/company.php — sumber yang sama dengan
     // halaman kontak, jadi keduanya tidak bisa berbeda.
-    $offices = config('company.offices', []);
+    $offices = \App\Support\Company::offices();
 
     // Footer "Layanan" list — mirror the real, active service categories (top 6 by order).
     $footerServices = \App\Models\ServiceCategory::query()

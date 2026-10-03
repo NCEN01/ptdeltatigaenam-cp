@@ -10,9 +10,10 @@ class ContactController extends Controller
     public function index()
     {
         return view('pages.contact', [
-            // config/company.php — sumber yang sama dengan footer, jadi alamat di
-            // halaman ini tidak bisa berbeda dari alamat di kakinya.
-            'offices' => config('company.offices', []),
+            // Sumber yang sama dengan footer, jadi alamat di halaman ini tidak
+            // bisa berbeda dari alamat di kakinya. Nama kantornya sudah dipilih
+            // menurut bahasa aktif di dalam Company::offices().
+            'offices' => \App\Support\Company::offices(),
         ]);
     }
 

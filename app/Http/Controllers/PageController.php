@@ -91,7 +91,7 @@ class PageController extends Controller
             // Halaman Tentang Kami tidak pernah menampilkan daftar kantor; datanya
             // tetap dikirim dari config/company.php kalau suatu saat dipakai,
             // bukan ditulis ulang di sini sebagai salinan ketiga.
-            'offices' => config('company.offices', []),
+            'offices' => \App\Support\Company::offices(),
             'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),
         ]);
     }

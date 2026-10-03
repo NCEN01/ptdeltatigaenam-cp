@@ -35,9 +35,12 @@ return [
     | yang harus diperbarui bersamaan setiap kali alamatnya berubah, dan
     | tidak ada yang mengingatkan kalau salah satunya terlewat.
     |
-    | Namanya tidak diterjemahkan: "Head Office" dan "Operational Office"
-    | adalah sebutan yang dipakai perusahaan sendiri di materi resminya,
-    | jadi sama di kedua bahasa.
+    | Namanya mengikuti bahasa. Materi resmi perusahaan memakai istilah Inggris
+    | dan itu dipertahankan di versi Inggris, sementara versi Indonesia memakai
+    | sebutan Indonesia. Nilainya dibaca lewat App\Support\Company::offices(),
+    | yang memilih satu bahasa lalu mengembalikannya sebagai teks biasa —
+    | sehingga pemakainya di footer, halaman kontak, dan peta sematannya tidak
+    | perlu tahu bahwa aslinya dwibahasa.
     |
     | 'address' ditulis sebagai satu kalimat tanpa pemutus baris supaya bisa
     | mengalir mengikuti lebar tempatnya dipasang — kolom footer jauh lebih
@@ -52,14 +55,14 @@ return [
 
     'offices' => [
         [
-            'name' => 'Head Office',
+            'name' => ['id' => 'Lokasi Kantor', 'en' => 'Head Office'],
             'address' => 'Gedung Bursa Efek Indonesia Tower 1 Level 3, Unit 304, Jalan Jendral Sudirman Kav. 52-53, Senayan, Kebayoran Baru, Jakarta Selatan – DKI Jakarta 12190',
             'phone' => '(021) 5890 5002',
             'tel' => '+622158905002',
             'maps' => 'Gedung Bursa Efek Indonesia Tower 1, Jalan Jenderal Sudirman Kav. 52-53, Senayan, Kebayoran Baru, Jakarta Selatan 12190',
         ],
         [
-            'name' => 'Operational Office',
+            'name' => ['id' => 'Kantor Operasional', 'en' => 'Operational Office'],
             'address' => 'Delta House, Pejaten Mas Estate Blok D3 No. 6, Pejaten, Kramatwatu, Serang – Banten 42161',
             'phone' => '0818 834 766',
             'tel' => '+62818834766',
