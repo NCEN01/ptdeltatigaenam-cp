@@ -257,9 +257,14 @@
     <section class="section border-t border-navy-50 bg-paper">
         <div class="container">
             <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
-                <h2 class="font-display text-4xl font-bold text-navy text-balance md:text-5xl">{{ $isId ? 'Nilai Perusahaan' : 'Our Core Values' }}</h2>
+                <h2 class="text-display-lg font-bold text-navy">{{ $isId ? 'Nilai Perusahaan' : 'Our Core Values' }}</h2>
+                {{-- Kalimat pengantarnya menyebut akronimnya. Tanpa itu, huruf emas
+                     di tiap nama hanya terbaca sebagai hiasan; dengan itu, ia jadi
+                     keterangan. --}}
                 <p class="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-slate-600">
-                    {{ $isId ? 'Prinsip yang memandu cara kami bekerja dan melayani setiap klien.' : 'The principles that guide how we work and serve every client.' }}
+                    {{ $isId
+                        ? 'Lima prinsip yang memandu cara kami bekerja. Huruf depannya mengeja nama kami sendiri: DELTA.'
+                        : 'Five principles that guide how we work. Their initials spell our own name: DELTA.' }}
                 </p>
             </div>
 
@@ -293,10 +298,26 @@
                         </div>
                         {{-- One navy for all five: the previous odd/even navy-900 / navy-600 zebra
                              carried no meaning, it just striped the strip. --}}
-                        <div class="flex flex-1 flex-col justify-center bg-navy-900 px-4 py-6 text-center text-white transition-colors duration-300 group-hover:bg-navy-800 md:px-5 md:py-7">
-                            <h3 class="w-full font-display text-base font-bold md:text-lg">{{ $value['title'] }}</h3>
-                            <span class="mx-auto mt-2 block h-px w-8 bg-gold-soft/50 transition-all duration-300 group-hover:w-12" aria-hidden="true"></span>
-                            <p class="mx-auto mt-2.5 w-full max-w-[34ch] text-[13px] leading-relaxed text-white/85">{{ $value['desc'] }}</p>
+                        {{-- Rata kiri, bukan rata tengah. Kolomnya hanya ~225px, jadi
+                             keterangannya pecah tiga sampai empat kata per baris;
+                             teks seperti itu yang diratakan tengah menghasilkan tepi
+                             bergerigi di kedua sisi dan justru terbaca berantakan.
+                             Rata kiri memberi satu tepi lurus untuk mata bertumpu.
+
+                             max-w-[34ch] dilepas: di lebar kolom ini batas itu tidak
+                             pernah tercapai, jadi ia hanya menahan teks tanpa guna. --}}
+                        <div class="flex flex-1 flex-col bg-navy-900 px-5 py-6 text-white transition-colors duration-300 group-hover:bg-navy-800 md:py-7">
+                            {{-- Huruf pertama berwarna emas: kelimanya berurutan
+                                 mengeja DELTA. Garis emas kecil yang dulu ada di bawah
+                                 tiap judul dilepas — lima garis emas di satu deret
+                                 adalah hiasan, sedangkan lima huruf emas ini membawa
+                                 nama perusahaannya. --}}
+                            <h3 class="text-lg font-bold leading-none md:text-xl">
+                                <span class="text-gold-soft">{{ mb_substr($value['title'], 0, 1) }}</span>{{ mb_substr($value['title'], 1) }}
+                            </h3>
+                            {{-- Naik dari 13px ke 14px, dan dari white/85 ke putih
+                                 penuh: ini teks terkecil di halaman, di atas navy. --}}
+                            <p class="mt-3 text-sm leading-relaxed text-white">{{ $value['desc'] }}</p>
                         </div>
                     </div>
                 @endforeach
@@ -305,7 +326,7 @@
                 {{-- Mobile controls: prev / dots / next — clear swipe affordance (hidden on desktop grid) --}}
                 <div class="mt-6 flex items-center justify-center gap-4 lg:hidden">
                     <button type="button" @click="go(active - 1)" :disabled="active === 0"
-                            class="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-navy-200 text-navy transition enabled:hover:border-gold enabled:hover:text-gold disabled:opacity-30"
+                            class="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-navy-200 text-navy transition-colors enabled:hover:border-navy enabled:hover:bg-navy enabled:hover:text-white disabled:opacity-30"
                             aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
                         <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
@@ -318,7 +339,7 @@
                         @endforeach
                     </div>
                     <button type="button" @click="go(active + 1)" :disabled="active === n - 1"
-                            class="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-navy-200 text-navy transition enabled:hover:border-gold enabled:hover:text-gold disabled:opacity-30"
+                            class="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-navy-200 text-navy transition-colors enabled:hover:border-navy enabled:hover:bg-navy enabled:hover:text-white disabled:opacity-30"
                             aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
                         <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>

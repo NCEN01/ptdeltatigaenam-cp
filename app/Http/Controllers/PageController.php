@@ -63,16 +63,22 @@ class PageController extends Controller
             ];
         }
 
-        // Huruf akronim DELTA dihapus dari tiap kartu: di bahasa Indonesia
-        // akronimnya memang tidak jalan (Dinamis/Keunggulan/Terdepan/Transenden/
-        // Aksi berbunyi D-K-T-T-A), sehingga huruf E dan L tidak cocok dengan
-        // kata di bawahnya dan justru membingungkan.
+        // Nama nilainya tetap berbahasa Inggris di kedua bahasa, hanya
+        // keterangannya yang diterjemahkan.
+        //
+        // Alasannya huruf depannya: Dynamic, Excellence, Leading, Transcendent,
+        // Action mengeja DELTA, yaitu nama perusahaan itu sendiri. Begitu
+        // namanya diterjemahkan jadi Dinamis/Keunggulan/Terdepan/Transenden/
+        // Aksi, susunannya berbunyi D-K-T-T-A dan akronimnya hilang — dan
+        // dengan itu hilang pula alasan kelima nilai ini berjumlah lima dan
+        // berurutan seperti ini. Halaman ini menampilkan huruf depannya dengan
+        // warna emas supaya kaitannya terbaca.
         $values = $id ? [
-            ['title' => 'Dinamis', 'desc' => 'Selalu adaptif terhadap perubahan dan inovasi dalam dunia kerja.', 'img' => 'dynamic'],
-            ['title' => 'Keunggulan', 'desc' => 'Unggul dalam setiap layanan yang diberikan.', 'img' => 'excellence'],
-            ['title' => 'Terdepan', 'desc' => 'Pionir dalam pengembangan solusi human capital yang inovatif.', 'img' => 'leading'],
-            ['title' => 'Transenden', 'desc' => 'Melampaui ekspektasi klien dan memberikan nilai tambah yang berkelanjutan.', 'img' => 'transcendent'],
-            ['title' => 'Aksi', 'desc' => 'Berorientasi pada hasil dan tindakan nyata untuk mencapai tujuan.', 'img' => 'action'],
+            ['title' => 'Dynamic', 'desc' => 'Selalu adaptif terhadap perubahan dan inovasi dalam dunia kerja.', 'img' => 'dynamic'],
+            ['title' => 'Excellence', 'desc' => 'Unggul dalam setiap layanan yang diberikan.', 'img' => 'excellence'],
+            ['title' => 'Leading', 'desc' => 'Pionir dalam pengembangan solusi human capital yang inovatif.', 'img' => 'leading'],
+            ['title' => 'Transcendent', 'desc' => 'Melampaui ekspektasi klien dan memberikan nilai tambah yang berkelanjutan.', 'img' => 'transcendent'],
+            ['title' => 'Action', 'desc' => 'Berorientasi pada hasil dan tindakan nyata untuk mencapai tujuan.', 'img' => 'action'],
         ] : [
             ['title' => 'Dynamic', 'desc' => 'Always adaptive to change and innovation in the world of work.', 'img' => 'dynamic'],
             ['title' => 'Excellence', 'desc' => 'Excelling in every service we deliver.', 'img' => 'excellence'],
