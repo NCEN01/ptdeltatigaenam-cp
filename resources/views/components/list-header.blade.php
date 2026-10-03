@@ -23,17 +23,20 @@
     entitas HTML lawan huruf sungguhan. Satu komponen menutup celah itu dan
     membuat halaman daftar berikutnya ikut benar tanpa disalin.
 
-    Tata letaknya tidak lagi "judul kiri, pencarian kanan" yang menempel di
-    garis dasar yang sama: di md kolom kanannya hanya selebar 18rem sementara
-    judulnya bisa tiga baris, sehingga keduanya tidak pernah sejajar dan
-    pencariannya menggantung. Kini pencarian berdiri di barisnya sendiri di
-    atas garis pemisah, jadi ia terbaca sebagai alat untuk daftar di bawahnya,
-    bukan sebagai pelengkap judul.
+    Pencarian berdiri di samping kanan tulisannya, bukan di baris sendiri di
+    bawah garis pemisah. Keduanya diratakan ke garis bawah (md:items-end),
+    jadi kolom pencarian sejajar dengan akhir kalimat pengantar berapa pun
+    jumlah barisnya — perataan ke atas akan melepaskannya menggantung begitu
+    judulnya lebih dari dua baris.
+
+    Di bawah md keduanya menumpuk: kolom kanan hanya selebar 18rem, dan
+    memaksanya berdampingan dengan judul di layar sempit menyisakan dua kolom
+    yang sama-sama terlalu sempit.
 --}}
 
 @php $isId = app()->getLocale() === 'id'; @endphp
 
-<div class="mb-12">
+<div class="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-10">
     <div class="max-w-2xl">
         <x-heading
             :lead="$lead"
@@ -47,7 +50,9 @@
         @endif
     </div>
 
-    <div class="mt-9 flex flex-col gap-4 border-t border-navy-100 pt-6 sm:flex-row sm:items-center sm:justify-between" data-aos="fade-up">
+    {{-- Jumlah hasil di bawah kolom pencarian, dirapatkan ke kanan mengikuti
+         kolomnya mulai md. --}}
+    <div class="flex shrink-0 flex-col items-start gap-2.5 md:items-end" data-aos="fade-up">
         <x-search-form
             :id="$searchId"
             :action="$searchAction"
