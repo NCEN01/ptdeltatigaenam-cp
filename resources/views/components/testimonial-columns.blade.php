@@ -17,6 +17,22 @@
         $offset = intdiv($all->count() * $c, 3);
         $groups[] = $all->slice($offset)->concat($all->take($offset))->values();
     }
+
+    // Lamanya satu putaran dihitung dari banyaknya kartu, bukan dipatok angka
+    // tetap.
+    //
+    // Satu putaran menggeser tepat sejumlah kartu di kolomnya (isinya digandakan
+    // lalu digeser -50%). Dengan durasi tetap, makin banyak testimoni makin
+    // cepat jalannya — dan itulah yang terjadi: saat tiap kolom diubah memuat
+    // seluruh testimoni (dulu hanya sepertiga), isinya bertambah tiga kali lipat
+    // sementara durasinya cuma naik dari 22 ke 36 detik, jadi justru hampir dua
+    // kali lebih cepat daripada sebelumnya. Halaman Portofolio paling terasa
+    // karena ia memuat seluruh testimoni tanpa batas, sedangkan beranda 12.
+    //
+    // 10 detik per kartu membuat kecepatannya sama di halaman mana pun, berapa
+    // pun jumlah testimoninya. Dasar 45 detik menjaga daftar yang sangat pendek
+    // tidak berputar terlalu rapat.
+    $marqueeDur = fn (int $col): int => max(45, $all->count() * 10 + $col * 10);
 @endphp
 
 @if ($testimonials->isNotEmpty())
@@ -43,13 +59,9 @@
                 @foreach ($groups as $ci => $col)
                     @if ($col->isNotEmpty())
                         <div class="min-w-0 {{ $ci === 1 ? 'hidden md:block' : ($ci === 2 ? 'hidden lg:block' : '') }}">
-                            {{-- 36/44/52 detik, dari 22/26/30 sebelumnya. Kolomnya
-                                 memuat kutipan beberapa baris, dan pada kecepatan
-                                 lama baris paling bawah sudah lewat sebelum orang
-                                 selesai membacanya. Selisih antar-kolom dilebarkan
-                                 jadi 8 detik supaya ketiganya tetap terlihat tidak
-                                 serempak meski semuanya melambat. --}}
-                            <div class="marquee-col flex flex-col gap-6 {{ $ci === 1 ? '[animation-direction:reverse]' : '' }}" style="--dur: {{ 36 + $ci * 8 }}s">
+                            {{-- Selisih 10 detik antar-kolom menjaga ketiganya tidak
+                                 berjalan serempak. --}}
+                            <div class="marquee-col flex flex-col gap-6 {{ $ci === 1 ? '[animation-direction:reverse]' : '' }}" style="--dur: {{ $marqueeDur($ci) }}s">
                                 @foreach ($col->concat($col) as $t)
                                     {{-- w-[17rem] di lg: tiga kartu 19rem + dua jarak 1,5rem
                                          berjumlah tepat 960px, yaitu lebar isi container di
