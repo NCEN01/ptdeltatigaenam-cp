@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Partner;
 use App\Models\Setting;
 use Illuminate\Support\Collection;
 
@@ -63,42 +62,20 @@ class PageController extends Controller
             ];
         }
 
-        // Nama nilainya tetap berbahasa Inggris di kedua bahasa, hanya
-        // keterangannya yang diterjemahkan.
-        //
-        // Alasannya huruf depannya: Dynamic, Excellence, Leading, Transcendent,
-        // Action mengeja DELTA, yaitu nama perusahaan itu sendiri. Begitu
-        // namanya diterjemahkan jadi Dinamis/Keunggulan/Terdepan/Transenden/
-        // Aksi, susunannya berbunyi D-K-T-T-A dan akronimnya hilang — dan
-        // dengan itu hilang pula alasan kelima nilai ini berjumlah lima dan
-        // berurutan seperti ini. Halaman ini menampilkan huruf depannya dengan
-        // warna emas supaya kaitannya terbaca.
-        $values = $id ? [
-            ['title' => 'Dynamic', 'desc' => 'Selalu adaptif terhadap perubahan dan inovasi dalam dunia kerja.', 'img' => 'dynamic'],
-            ['title' => 'Excellence', 'desc' => 'Unggul dalam setiap layanan yang diberikan.', 'img' => 'excellence'],
-            ['title' => 'Leading', 'desc' => 'Pionir dalam pengembangan solusi human capital yang inovatif.', 'img' => 'leading'],
-            ['title' => 'Transcendent', 'desc' => 'Melampaui ekspektasi klien dan memberikan nilai tambah yang berkelanjutan.', 'img' => 'transcendent'],
-            ['title' => 'Action', 'desc' => 'Berorientasi pada hasil dan tindakan nyata untuk mencapai tujuan.', 'img' => 'action'],
-        ] : [
-            ['title' => 'Dynamic', 'desc' => 'Always adaptive to change and innovation in the world of work.', 'img' => 'dynamic'],
-            ['title' => 'Excellence', 'desc' => 'Excelling in every service we deliver.', 'img' => 'excellence'],
-            ['title' => 'Leading', 'desc' => 'A pioneer in developing innovative human capital solutions.', 'img' => 'leading'],
-            ['title' => 'Transcendent', 'desc' => 'Exceeding client expectations and delivering sustainable added value.', 'img' => 'transcendent'],
-            ['title' => 'Action', 'desc' => 'Results-oriented, with real action to achieve goals.', 'img' => 'action'],
-        ];
-
         return view('pages.about', [
             'about' => $about,
             'vision' => $vision,
             'tagline' => $tagline,
             'missions' => $missions,
             'stats' => $stats,
-            'values' => $values,
-            // Halaman Tentang Kami tidak pernah menampilkan daftar kantor; datanya
-            // tetap dikirim dari config/company.php kalau suatu saat dipakai,
-            // bukan ditulis ulang di sini sebagai salinan ketiga.
-            'offices' => \App\Support\Company::offices(),
-            'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),
+            // Nilainya dari config/company.php, sumber yang sama dengan seksi
+            // "Alasan Memilih Kami" di beranda.
+            'values' => \App\Support\Company::values(),
+            // 'offices' dan 'partners' dilepas: keduanya tidak pernah dipakai
+            // about.blade.php, dan 'partners' menjalankan satu query beserta
+            // hidrasi modelnya di tiap kunjungan halaman ini lalu membuangnya.
+            // Footer memanggil Company::offices() sendiri, jadi salinan di sini
+            // memang tidak punya pemakai.
         ]);
     }
 }

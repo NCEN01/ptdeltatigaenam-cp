@@ -21,6 +21,28 @@ class Company
      *
      * @return array<int, array<string, string>>
      */
+    /**
+     * Nilai perusahaan dari config/company.php, dengan keterangan yang sudah
+     * dipilih menurut bahasa yang sedang aktif.
+     *
+     * Namanya sengaja tidak ikut diterjemahkan: huruf depan kelimanya mengeja
+     * DELTA, dan terjemahan apa pun menghapus akronim itu.
+     *
+     * @return array<int, array<string, string>>
+     */
+    public static function values(): array
+    {
+        $locale = app()->getLocale();
+
+        return array_map(static function (array $value) use ($locale): array {
+            if (is_array($value['desc'] ?? null)) {
+                $value['desc'] = $value['desc'][$locale] ?? reset($value['desc']);
+            }
+
+            return $value;
+        }, config('company.values', []));
+    }
+
     public static function offices(): array
     {
         $locale = app()->getLocale();

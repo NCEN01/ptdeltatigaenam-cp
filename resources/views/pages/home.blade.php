@@ -329,28 +329,10 @@
 
     {{-- ===================== WHY CHOOSE US (image band + numbered row) ===================== --}}
     @php
-        // Tiap alasan kini berpasangan judul dan keterangan. Sebelumnya hanya
-        // tujuh frasa pendek berdiri sendiri: "Materi Aplikatif" dan
-        // "Pendampingan Menyeluruh" bisa berarti apa saja, dan pembaca harus
-        // menebak sendiri maksudnya. Keterangannya menyebut hal yang konkret
-        // dan bisa diperiksa, bukan janji yang berulang.
-        $reasons = $isId ? [
-            ['title' => 'Dibimbing Praktisi Ahli', 'desc' => 'Pengajar dan asesor kami bekerja di bidangnya, bukan hanya mengajarkannya.'],
-            ['title' => 'Program Dipersonalisasi', 'desc' => 'Materi disusun ulang mengikuti proses kerja dan peralatan yang dipakai tim Anda.'],
-            ['title' => 'Sertifikasi Diakui Industri', 'desc' => 'Sertifikat terbit lewat skema BNSP bersama LSP mitra, berlaku untuk audit dan tender.'],
-            ['title' => 'Pendampingan Menyeluruh', 'desc' => 'Dari pemetaan kebutuhan, pelaksanaan, sampai uji kompetensi dan laporan hasilnya.'],
-            ['title' => 'Materi Aplikatif', 'desc' => 'Studi kasus dan praktiknya diambil dari pekerjaan yang benar-benar ditangani peserta.'],
-            ['title' => 'Jaringan Profesional', 'desc' => 'Peserta bertemu praktisi dari industri lain di kelas yang sama.'],
-            ['title' => 'Harga Kompetitif', 'desc' => 'Biaya tertulis sejak awal, tanpa tambahan yang muncul di tengah jalan.'],
-        ] : [
-            ['title' => 'Expert Practitioners', 'desc' => 'Our trainers and assessors work in the field, not only teach it.'],
-            ['title' => 'Personalized Programs', 'desc' => 'Material is rebuilt around the processes and equipment your team actually uses.'],
-            ['title' => 'Recognized Certification', 'desc' => 'Certificates are issued through BNSP schemes with partner LSPs, valid for audits and tenders.'],
-            ['title' => 'End-to-End Support', 'desc' => 'From needs mapping and delivery through to assessment and the written results.'],
-            ['title' => 'Applied Material', 'desc' => 'Case studies and practicals are drawn from work the participants actually handle.'],
-            ['title' => 'Professional Network', 'desc' => 'Participants meet practitioners from other industries in the same room.'],
-            ['title' => 'Competitive Pricing', 'desc' => 'Costs are stated up front, with nothing added partway through.'],
-        ];
+        // Lima nilai DELTA, dari config/company.php — sumber yang sama dengan
+        // seksi Nilai Perusahaan di halaman Tentang. Ditulis ulang di sini,
+        // keduanya akan menyimpang begitu salah satu disunting.
+        $reasons = \App\Support\Company::values();
     @endphp
     {{-- Pita berfoto gelap, dikembalikan atas permintaan setelah sempat
          dinetralkan. Setelah seksi Kategori Layanan dan Portofolio kini terang,
@@ -389,7 +371,10 @@
                     :accent="$isId ? 'Kami?' : 'Us?'"
                     accent-class="text-gradient-white-navy"
                     class="text-display-lg font-semibold text-white text-balance" />
-                <p class="mt-6 max-w-md text-lg leading-relaxed text-navy-100 text-pretty">{{ $isId ? 'Keahlian praktisi, pendekatan yang dipersonalisasi, dan komitmen pada hasil nyata bagi organisasi Anda.' : 'Practitioner expertise, a personalized approach, and a commitment to real results for your organization.' }}</p>
+                {{-- Kalimat pengantarnya menyebut akronimnya. Tanpa itu, lima huruf
+                     emas di sebelah kanan hanya terbaca sebagai hiasan; dengan itu,
+                     ia jadi keterangan. --}}
+                <p class="mt-6 max-w-md text-lg leading-relaxed text-navy-100 text-pretty">{{ $isId ? 'Lima nilai yang kami pegang di setiap program. Huruf depannya mengeja nama kami sendiri: DELTA.' : 'Five values we hold to in every programme. Their initials spell our own name: DELTA.' }}</p>
             </div>
 
             {{-- Satu daftar, bukan dua salinan. Dulu ada pita berjalan untuk layar
@@ -415,16 +400,17 @@
                  gelap di sana. --}}
             <ul class="lg:col-span-7">
                 @foreach ($reasons as $i => $r)
-                    <li class="group flex items-start gap-4 border-t border-white/10 py-5 md:py-6" data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
-                        {{-- Centang di dalam lingkaran tipis, bukan centang
-                             telanjang. Dengan keterangan di bawah tiap judul,
-                             centang tanpa bidang menggantung di ruang kosong dan
-                             tidak lagi terbaca sebagai penanda barisnya. --}}
-                        <span class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-sky-400/10 text-sky-400 ring-1 ring-sky-400/25 transition-colors duration-300 group-hover:bg-sky-400/20" aria-hidden="true">
-                            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none">
-                                <path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </span>
+                    <li class="group flex items-start gap-5 border-t border-white/10 py-5 md:py-6" data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
+                        {{-- Huruf depan nilainya, bukan centang. Kelimanya berderet
+                             ke bawah mengeja DELTA, jadi penanda barisnya sekaligus
+                             membawa nama perusahaannya — centang hanya menyatakan
+                             "ada", dan itu sudah jelas dari daftarnya sendiri.
+
+                             Lebarnya dipatok w-10 supaya kelima huruf berdiri di
+                             satu garis tegak lurus; tanpa itu, "L" yang sempit dan
+                             "A" yang lebar membuat judul di sebelahnya bergeser
+                             tidak rata. --}}
+                        <span class="mt-0.5 w-10 shrink-0 text-center font-display text-3xl font-bold leading-none text-gold-soft md:text-4xl" aria-hidden="true">{{ mb_substr($r['title'], 0, 1) }}</span>
                         <div class="min-w-0">
                             <p class="font-display text-lg font-semibold leading-snug text-white md:text-xl">{{ $r['title'] }}</p>
                             <p class="mt-1.5 max-w-prose text-pretty text-sm leading-relaxed text-navy-100">{{ $r['desc'] }}</p>

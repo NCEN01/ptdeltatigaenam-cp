@@ -53,6 +53,68 @@ return [
     |
     */
 
+    /*
+    |--------------------------------------------------------------------------
+    | Nilai perusahaan
+    |--------------------------------------------------------------------------
+    |
+    | Huruf depan kelimanya mengeja DELTA, nama perusahaan itu sendiri. Karena
+    | itu namanya tidak diterjemahkan: begitu jadi Dinamis/Keunggulan/Terdepan/
+    | Transenden/Aksi, susunannya berbunyi D-K-T-T-A dan akronimnya hilang.
+    | Urutannya pun tidak boleh diubah.
+    |
+    | Dibaca lewat App\Support\Company::values(), yang memilih keterangan sesuai
+    | bahasa aktif. Diletakkan di sini karena dipakai dua halaman — beranda dan
+    | Tentang Kami; ditulis di masing-masing controller, keduanya akan menyimpang
+    | begitu salah satu disunting.
+    |
+    | 'img' menunjuk ke public/images/values/<nama>.jpg.
+    |
+    */
+
+    'values' => [
+        [
+            'title' => 'Dynamic',
+            'img' => 'dynamic',
+            'desc' => [
+                'id' => 'Selalu adaptif terhadap perubahan dan inovasi dalam dunia kerja.',
+                'en' => 'Always adaptive to change and innovation in the world of work.',
+            ],
+        ],
+        [
+            'title' => 'Excellence',
+            'img' => 'excellence',
+            'desc' => [
+                'id' => 'Unggul dalam setiap layanan yang diberikan.',
+                'en' => 'Excelling in every service we deliver.',
+            ],
+        ],
+        [
+            'title' => 'Leading',
+            'img' => 'leading',
+            'desc' => [
+                'id' => 'Pionir dalam pengembangan solusi human capital yang inovatif.',
+                'en' => 'A pioneer in developing innovative human capital solutions.',
+            ],
+        ],
+        [
+            'title' => 'Transcendent',
+            'img' => 'transcendent',
+            'desc' => [
+                'id' => 'Melampaui ekspektasi klien dan memberikan nilai tambah yang berkelanjutan.',
+                'en' => 'Exceeding client expectations and delivering sustainable added value.',
+            ],
+        ],
+        [
+            'title' => 'Action',
+            'img' => 'action',
+            'desc' => [
+                'id' => 'Berorientasi pada hasil dan tindakan nyata untuk mencapai tujuan.',
+                'en' => 'Results-oriented, with real action to achieve goals.',
+            ],
+        ],
+    ],
+
     'offices' => [
         [
             'name' => ['id' => 'Lokasi Kantor', 'en' => 'Head Office'],
