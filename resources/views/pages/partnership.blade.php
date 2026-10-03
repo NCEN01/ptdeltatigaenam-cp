@@ -142,7 +142,7 @@
                 <div class="mt-12 grid gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-4">
                     @foreach ($partners as $partner)
                         <x-partner-plate :partner="$partner" tone="light"
-                                         data-aos="fade-up" data-aos-delay="{{ ($loop->index % 4) * 80 }}" />
+                                         data-aos="fade-up" data-aos-delay="{{ ($loop->index % 4) * 50 }}" />
                     @endforeach
                 </div>
             </div>
@@ -222,7 +222,7 @@
                                         {{ $package->is_highlighted
                                             ? 'border-gold shadow-lift lg:-translate-y-4'
                                             : 'border-navy-100 shadow-card' }}"
-                                 data-aos="fade-up" data-aos-delay="{{ $loop->index * 90 }}">
+                                 data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
 
                                 {{-- Gradient header --}}
                                 <div class="relative overflow-hidden bg-gradient-to-br {{ $tierStyle[$package->tier] ?? 'from-navy-700 to-navy-950' }} p-7 text-white">

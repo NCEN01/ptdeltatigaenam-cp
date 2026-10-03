@@ -26,7 +26,7 @@
             <div class="lg:col-span-4" data-aos="fade-up">
                 <h2 class="font-display text-3xl leading-tight text-navy md:text-4xl">{{ $isId ? 'Profil Perusahaan' : 'Company Profile' }}</h2>
             </div>
-            <div class="space-y-5 leading-relaxed text-slate-700 lg:col-span-8" data-aos="fade-up" data-aos-delay="80">
+            <div class="space-y-5 leading-relaxed text-slate-700 lg:col-span-8" data-aos="fade-up" data-aos-delay="100">
                 @foreach ($aboutParas as $para)
                     {{-- The opening paragraph carries the pitch, so it gets a lead size instead of
                          disappearing into an undifferentiated wall of body copy.
@@ -148,7 +148,7 @@
 
                 {{-- Mission: numbered so the count reads at a glance; the em-dash bullets gave
                      no sense of how many commitments there are. --}}
-                <div class="lg:col-span-3" data-aos="fade-up" data-aos-delay="80">
+                <div class="lg:col-span-3" data-aos="fade-up" data-aos-delay="100">
                     <p class="kicker-on-dark">{{ $isId ? 'Misi' : 'Mission' }}</p>
 
                     @if ($missions->isNotEmpty())
@@ -268,83 +268,54 @@
                 </p>
             </div>
 
-            {{-- Value strip — interactive carousel on mobile (swipe + tappable dots + arrows), 5-up grid on desktop --}}
-            <div class="mt-10 md:mt-14" data-aos="fade-up"
-                 x-data="{
-                    active: 0,
-                    n: {{ count($values) }},
-                    step() {
-                        const t = this.$refs.track, f = t.firstElementChild;
-                        if (! f) return t.clientWidth;
-                        const gap = parseFloat(getComputedStyle(t).columnGap || '0') || 0;
-                        return f.getBoundingClientRect().width + gap;
-                    },
-                    sync() {
-                        const t = this.$refs.track;
-                        this.active = Math.min(this.n - 1, Math.max(0, Math.round(t.scrollLeft / this.step())));
-                    },
-                    go(i) {
-                        i = Math.min(this.n - 1, Math.max(0, i));
-                        this.$refs.track.scrollTo({ left: this.step() * i, behavior: 'smooth' });
-                    },
-                 }">
-                <div x-ref="track" @scroll.passive="sync()"
-                     class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-5 lg:gap-0 lg:overflow-hidden lg:rounded-3xl lg:pb-0 lg:shadow-lift">
+            {{-- Daftar tegak. Susunannya yang membuat kelima huruf depan berderet
+                 ke bawah mengeja DELTA, dan yang memberi keterangan tiap nilai
+                 lebar penuh alih-alih kolom sempit.
+
+                 Dipisah garis, bukan dikotak-kotak: lima kotak berisi gambar,
+                 judul, dan teks adalah bentuk yang PRODUCT.md sebut sebagai hal
+                 yang dihindari.
+
+                 divide-navy-200, bukan navy-100: di atas bg-paper, navy-100
+                 hanya 1,16:1 — garisnya praktis tidak terlihat, padahal garis
+                 itulah satu-satunya yang mengelompokkan barisnya. --}}
+            <ol class="mx-auto mt-12 max-w-4xl divide-y divide-navy-200 border-y border-navy-200">
                 @foreach ($values as $i => $value)
-                    <div class="group flex w-[80%] min-w-[80%] max-w-[80%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl shadow-card sm:w-[46%] sm:min-w-[46%] sm:max-w-[46%] lg:w-auto lg:min-w-0 lg:max-w-none lg:rounded-none lg:shadow-none">
-                        <div class="relative aspect-[4/3] overflow-hidden bg-navy-100 sm:aspect-[4/5] lg:aspect-square">
-                            <img src="{{ asset('images/values/'.$value['img'].'.jpg') }}" alt="" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
-                            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/70 via-navy-950/10 to-transparent"></div>
-                        </div>
-                        {{-- One navy for all five: the previous odd/even navy-900 / navy-600 zebra
-                             carried no meaning, it just striped the strip. --}}
-                        {{-- Rata kiri, bukan rata tengah. Kolomnya hanya ~225px, jadi
-                             keterangannya pecah tiga sampai empat kata per baris;
-                             teks seperti itu yang diratakan tengah menghasilkan tepi
-                             bergerigi di kedua sisi dan justru terbaca berantakan.
-                             Rata kiri memberi satu tepi lurus untuk mata bertumpu.
+                    <li class="group grid grid-cols-[auto_1fr] items-start gap-5 py-7 md:gap-8 md:py-9"
+                        data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
 
-                             max-w-[34ch] dilepas: di lebar kolom ini batas itu tidak
-                             pernah tercapai, jadi ia hanya menahan teks tanpa guna. --}}
-                        <div class="flex flex-1 flex-col bg-navy-900 px-5 py-6 text-white transition-colors duration-300 group-hover:bg-navy-800 md:py-7">
-                            {{-- Huruf pertama berwarna emas: kelimanya berurutan
-                                 mengeja DELTA. Garis emas kecil yang dulu ada di bawah
-                                 tiap judul dilepas — lima garis emas di satu deret
-                                 adalah hiasan, sedangkan lima huruf emas ini membawa
-                                 nama perusahaannya. --}}
-                            <h3 class="text-lg font-bold leading-none md:text-xl">
-                                <span class="text-gold-soft">{{ mb_substr($value['title'], 0, 1) }}</span>{{ mb_substr($value['title'], 1) }}
-                            </h3>
-                            {{-- Naik dari 13px ke 14px, dan dari white/85 ke putih
-                                 penuh: ini teks terkecil di halaman, di atas navy. --}}
-                            <p class="mt-3 text-sm leading-relaxed text-white">{{ $value['desc'] }}</p>
+                        {{-- Fotonya jadi alas huruf. Ukuran dan opasitasnya dinaikkan
+                             (80/112px, 60%) supaya ia benar-benar terbaca sebagai
+                             foto: di 64px dengan opasitas 45% ia hanya menyumbang
+                             seperempat warna akhir piksel, jadi kelimanya tampil
+                             sebagai bidang navy yang sama dan 371 KB gambar terkirim
+                             tanpa ada yang melihatnya.
+
+                             Tirai navy-950/45 tetap dipasang. Ia yang menahan sisi
+                             terang foto, dan tanpanya huruf emas di atas foto
+                             bersorot putih jatuh di bawah 3:1 saat disentuh.
+
+                             width/height ditulis supaya ruangnya sudah dipesan
+                             sebelum gambarnya sampai. --}}
+                        <span class="relative grid h-20 w-20 place-items-center overflow-hidden rounded-2xl bg-navy-900 md:h-28 md:w-28" aria-hidden="true">
+                            <img src="{{ asset('images/values/'.$value['img'].'.jpg') }}" alt="" loading="lazy"
+                                 width="800" height="533" decoding="async"
+                                 class="absolute inset-0 h-full w-full object-cover opacity-60 transition-transform duration-500 group-hover:scale-105">
+                            <span class="absolute inset-0 bg-navy-950/45"></span>
+                            <span class="relative font-display text-3xl font-bold text-gold-soft md:text-4xl">{{ mb_substr($value['title'], 0, 1) }}</span>
+                        </span>
+
+                        <div class="min-w-0">
+                            <h3 class="text-xl font-bold leading-tight text-navy md:text-2xl">{{ $value['title'] }}</h3>
+                            {{-- max-w-prose: lebar kolomnya sendiri ~784px, dan baris
+                                 sepanjang itu di 16px melewati 75 karakter yang nyaman
+                                 dibaca. Dibatasi di sini, bukan dibiarkan selebar
+                                 kolomnya. --}}
+                            <p class="mt-2 max-w-prose text-pretty text-base leading-relaxed text-slate-600">{{ $value['desc'] }}</p>
                         </div>
-                    </div>
+                    </li>
                 @endforeach
-                </div>
-
-                {{-- Mobile controls: prev / dots / next — clear swipe affordance (hidden on desktop grid) --}}
-                <div class="mt-6 flex items-center justify-center gap-4 lg:hidden">
-                    <button type="button" @click="go(active - 1)" :disabled="active === 0"
-                            class="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-navy-200 text-navy transition-colors enabled:hover:border-navy enabled:hover:bg-navy enabled:hover:text-white disabled:opacity-30"
-                            aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
-                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </button>
-                    <div class="flex items-center gap-2">
-                        @foreach ($values as $i => $value)
-                            <button type="button" @click="go({{ $i }})"
-                                    :class="active === {{ $i }} ? 'w-6 bg-navy' : 'w-2.5 bg-navy-200'"
-                                    class="h-2.5 rounded-full transition-all duration-300"
-                                    aria-label="{{ ($isId ? 'Nilai' : 'Value').' '.($i + 1) }}"></button>
-                        @endforeach
-                    </div>
-                    <button type="button" @click="go(active + 1)" :disabled="active === n - 1"
-                            class="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-navy-200 text-navy transition-colors enabled:hover:border-navy enabled:hover:bg-navy enabled:hover:text-white disabled:opacity-30"
-                            aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
-                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </button>
-                </div>
-            </div>
+            </ol>
         </div>
     </section>
 

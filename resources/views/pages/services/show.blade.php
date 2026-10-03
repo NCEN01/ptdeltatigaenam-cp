@@ -86,7 +86,7 @@
 
                 <div class="grid grid-cols-3 gap-2 sm:gap-6 md:gap-10">
                     @foreach ($steps as $i => $step)
-                        <div class="group relative text-center" data-aos="fade-up" data-aos-delay="{{ $i * 90 }}">
+                        <div class="group relative text-center" data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
                             {{-- icon + number badge --}}
                             <div class="relative mx-auto grid h-14 w-14 place-items-center md:h-20 md:w-20">
                                 <span class="grid h-14 w-14 place-items-center rounded-full bg-white text-navy shadow-lift ring-1 ring-navy-100 transition-all duration-300 group-hover:-translate-y-1 group-hover:bg-gold group-hover:text-navy-950 md:h-20 md:w-20">

@@ -111,7 +111,7 @@
             <div class="mt-12 grid auto-rows-fr gap-6 md:grid-cols-2 lg:grid-cols-3">
                 @foreach ($modes as $i => $mode)
                     @php $dark = $mode['featured']; @endphp
-                    <div data-aos="fade-up" data-aos-delay="{{ $i * 90 }}"
+                    <div data-aos="fade-up" data-aos-delay="{{ $i * 50 }}"
                          class="relative flex flex-col overflow-hidden rounded-2xl p-7 transition-transform duration-500 ease-out-soft hover:-translate-y-1 md:p-8 {{ $dark
                              ? 'bg-navy-950 text-white'
                              : 'border border-navy-100 bg-white' }}">
@@ -186,7 +186,7 @@
                 @if ($cat->services->isNotEmpty())
                     <div class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3" data-stagger>
                         @foreach ($cat->services as $service)
-                            <a href="{{ route('services.show', $service->slug) }}" class="card card-hover group flex flex-col overflow-hidden" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
+                            <a href="{{ route('services.show', $service->slug) }}" class="card card-hover group flex flex-col overflow-hidden" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 50 }}">
                                 <div class="relative aspect-[3/2] overflow-hidden bg-navy-100">
                                     @if ($service->image)
                                         <img src="{{ Storage::url($service->image) }}" alt="{{ $service->title }}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">

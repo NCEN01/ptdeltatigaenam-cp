@@ -82,7 +82,7 @@
                     {{-- Plain card, not card-3d: there is no agenda detail route, so a pointer-tilt
                          would promise a click that leads nowhere. Radius matches every other card. --}}
                     <article class="card group flex h-full flex-col overflow-hidden transition-all duration-300 ease-out-soft hover:-translate-y-1 hover:shadow-lift {{ $isPast ? 'opacity-85' : '' }}"
-                             data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
+                             data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 50 }}">
 
                         <div class="relative aspect-[16/10] shrink-0 overflow-hidden bg-navy-100">
                             @if ($agenda->image)

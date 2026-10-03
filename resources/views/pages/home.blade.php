@@ -395,7 +395,7 @@
                     {{-- Garis rambut dan centang kembali ke nilai latar gelap
                          bersama fotonya: navy-100 hampir tak terlihat di atas
                          navy pekat, dan sky-600 terlalu gelap di sana. --}}
-                    <li class="flex items-start gap-3.5 border-t border-white/10 py-5 md:py-6" data-aos="fade-up" data-aos-delay="{{ ($i % 2) * 70 }}">
+                    <li class="flex items-start gap-3.5 border-t border-white/10 py-5 md:py-6" data-aos="fade-up" data-aos-delay="{{ ($i % 2) * 50 }}">
                         <svg class="mt-1 h-5 w-5 shrink-0 text-sky-400" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                             <path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -516,7 +516,7 @@
                          panel sementara deretan kartunya tetap setinggi isinya dan
                          menempel di atas, jadi kartunya duduk lebih tinggi dari titik
                          tengah panel dan panahnya pun ikut meleset. --}}
-                    <div class="relative z-10 min-w-0 lg:col-span-7 lg:self-center xl:col-span-8" data-hscroll data-hscroll-auto data-aos="fade-up" data-aos-delay="80">
+                    <div class="relative z-10 min-w-0 lg:col-span-7 lg:self-center xl:col-span-8" data-hscroll data-hscroll-auto data-aos="fade-up" data-aos-delay="100">
                         {{-- Panah di sisi kiri dan kanan deretan kartu, sama persis
                              dengan seksi Agenda Mendatang dan Pelatihan Terbaru.
 
@@ -656,7 +656,7 @@
                 <div class="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($portfolios as $p)
                         <a href="{{ route('portfolio.show', $p->slug) }}" class="group block"
-                           data-aos="fade-up" data-aos-delay="{{ $loop->index * 90 }}">
+                           data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
                             <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-navy-100 ring-1 ring-navy-100 transition-shadow duration-500 group-hover:shadow-lift">
                                 @if ($p->cover_image)
                                     <img src="{{ str_starts_with($p->cover_image, 'http') ? $p->cover_image : Storage::url($p->cover_image) }}" alt="{{ $p->title }}" loading="lazy"

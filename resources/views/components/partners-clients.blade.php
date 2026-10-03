@@ -66,7 +66,7 @@
                      menganga kosong sampai hampir separuh halaman. --}}
                 <div class="mitra-grid mt-12 gap-x-5 gap-y-8 md:mt-14 md:gap-x-6" style="--mitra-cols: {{ $partnerCols }};">
                     @foreach ($partners as $partner)
-                        <x-partner-plate :partner="$partner" data-aos="fade-up" data-aos-delay="{{ ($loop->index % $partnerCols) * 70 }}" />
+                        <x-partner-plate :partner="$partner" data-aos="fade-up" data-aos-delay="{{ ($loop->index % $partnerCols) * 50 }}" />
                     @endforeach
                 </div>
             </div>

@@ -197,7 +197,7 @@
                      satu kolom, sehingga di sana ia memakai rasio 4:3. Angka 380px
                      dulu ditulis dua kali — di pembungkus dan di iframe — dan dua
                      salinan seperti itu bisa berbeda tanpa ada yang menyadarinya. --}}
-                <div class="lg:col-span-7" data-aos="fade-up" data-aos-delay="80">
+                <div class="lg:col-span-7" data-aos="fade-up" data-aos-delay="100">
                     <div class="aspect-[4/3] overflow-hidden rounded-3xl border border-navy-100 shadow-lift lg:aspect-auto lg:h-full">
                         <iframe
                             x-bind:src="'https://www.google.com/maps?q=' + encodeURIComponent(offices[activeOffice].maps) + '&output=embed'"

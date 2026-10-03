@@ -78,9 +78,9 @@
              navy polos: pita ini bisa memakai foto, dan ujung biru #2b83df
              terlalu gelap di atas bagian foto yang terang. Ujung putihnya
              menjaga awal kata tetap terbaca di latar apa pun. --}}
-        <h1 class="mx-auto max-w-4xl text-display-xl" data-aos="fade-up" data-aos-delay="60">{{ $hwLead }}@if ($hwLead) @endif<span class="italic-accent text-gradient-white-navy">{{ $hwAccent }}</span></h1>
+        <h1 class="mx-auto max-w-4xl text-display-xl" data-aos="fade-up" data-aos-delay="50">{{ $hwLead }}@if ($hwLead) @endif<span class="italic-accent text-gradient-white-navy">{{ $hwAccent }}</span></h1>
         @if ($bannerSubtitle)
-            <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-navy-100 text-pretty" data-aos="fade-up" data-aos-delay="140">{{ $bannerSubtitle }}</p>
+            <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-navy-100 text-pretty" data-aos="fade-up" data-aos-delay="150">{{ $bannerSubtitle }}</p>
         @endif
         @if (trim($slot) !== '')
             <div class="mt-8 flex flex-wrap items-center justify-center gap-3" data-aos="fade-up" data-aos-delay="200">{{ $slot }}</div>

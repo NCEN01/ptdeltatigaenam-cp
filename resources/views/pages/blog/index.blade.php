@@ -34,7 +34,7 @@
             @if ($posts->count())
                 <div class="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($posts as $post)
-                        <x-blog-card :post="$post" :delay="($loop->index % 3) * 70" />
+                        <x-blog-card :post="$post" :delay="($loop->index % 3) * 50" />
                     @endforeach
                 </div>
             @else
