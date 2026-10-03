@@ -95,8 +95,8 @@ return [
                 'en' => 'Always adaptive to change and innovation in the world of work.',
             ],
             'detail' => [
-                'id' => 'Silabus kami ditinjau ulang setiap kali standar kompetensi atau aturan sektornya berubah, sehingga peserta mempelajari ketentuan yang berlaku hari ini.',
-                'en' => 'We revisit the syllabus whenever a competency standard or a sector regulation changes, so participants learn the rules that apply today.',
+                'id' => 'Materi yang Anda terima mengikuti standar kompetensi dan aturan sektor yang berlaku saat program berjalan, bukan versi tahun lalu.',
+                'en' => 'What you receive follows the competency standards and sector rules in force while the programme runs, not last year’s version.',
             ],
         ],
         [
@@ -107,8 +107,8 @@ return [
                 'en' => 'Excelling in every service we deliver.',
             ],
             'detail' => [
-                'id' => 'Setiap kelas ditutup dengan evaluasi peserta, dan hasilnya kami pakai menyusun ulang materi sebelum angkatan berikutnya dibuka.',
-                'en' => 'Every class closes with a participant evaluation, and we rebuild the material from those results before the next intake opens.',
+                'id' => 'Angkatan Anda memakai materi yang sudah diperbaiki dari masukan angkatan sebelumnya, bukan salinan yang sama berulang.',
+                'en' => 'Your intake works from material already corrected by the previous intake’s feedback, not the same copy run again.',
             ],
         ],
         [
@@ -119,8 +119,8 @@ return [
                 'en' => 'A pioneer in developing innovative human capital solutions.',
             ],
             'detail' => [
-                'id' => 'Kami menyusun skema pelatihan untuk bidang yang belum punya rujukan baku, bersama asesor dan praktisi yang menanganinya langsung di lapangan.',
-                'en' => 'We build training schemes for fields that have no settled reference yet, alongside the assessors and practitioners who handle them on the ground.',
+                'id' => 'Untuk bidang yang belum punya skema baku, kami susunkan bersama asesor yang menanganinya langsung di lapangan.',
+                'en' => 'For a field with no settled scheme yet, we build one with the assessors who work in it on the ground.',
             ],
         ],
         [
@@ -131,8 +131,8 @@ return [
                 'en' => 'Exceeding client expectations and delivering sustainable added value.',
             ],
             'detail' => [
-                'id' => 'Pendampingan tidak berhenti di hari terakhir kelas. Kami menemani penerapannya sampai kompetensi itu benar-benar terpakai di pekerjaan sehari-hari.',
-                'en' => 'Support does not stop on the last day of class. We stay with the rollout until the competency is genuinely being used in daily work.',
+                'id' => 'Anda tidak ditinggal begitu kelas selesai. Pendampingan berlanjut sampai kompetensinya terpakai di pekerjaan harian.',
+                'en' => 'You are not left once the class ends. Support continues until the competency is in daily use.',
             ],
         ],
         [
@@ -143,8 +143,8 @@ return [
                 'en' => 'Results-oriented, with real action to achieve goals.',
             ],
             'detail' => [
-                'id' => 'Setiap rekomendasi kami sertai langkah yang bisa langsung dijalankan, lengkap dengan penanggung jawab dan tenggat waktunya.',
-                'en' => 'Every recommendation comes with steps that can start immediately, each with an owner and a deadline.',
+                'id' => 'Setiap rekomendasi datang dengan langkah yang bisa Anda jalankan minggu itu juga, lengkap dengan penanggung jawabnya.',
+                'en' => 'Every recommendation arrives with steps you can start that week, each with a named owner.',
             ],
         ],
     ],

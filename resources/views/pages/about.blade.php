@@ -256,54 +256,53 @@
     {{-- ===================== VALUES ===================== --}}
     <section class="section border-t border-navy-50 bg-paper">
         <div class="container">
-            {{-- Judulnya menempati sel pertama grid, bukan berdiri sendiri rata
-                 tengah di atasnya.
+            <div class="max-w-2xl" data-aos="fade-up">
+                <h2 class="text-display-lg font-bold text-navy">{{ $isId ? 'Nilai Perusahaan' : 'Our Core Values' }}</h2>
+                {{-- Pengantarnya tidak lagi mengulang pengungkapan akronim. Hal itu
+                     sudah dikerjakan seksi "Alasan Memilih Kami" di beranda, dan
+                     menyebutnya dua kali membuat yang kedua terbaca sebagai salinan.
+                     Yang disebut di sini justru sudut pandangnya: beranda menyatakan
+                     sikap kami, halaman ini menjelaskan artinya bagi pembacanya. --}}
+                <p class="mt-4 text-pretty text-lg leading-relaxed text-slate-600">
+                    {{ $isId
+                        ? 'Apa arti kelima nilai ini bagi Anda yang bekerja bersama kami.'
+                        : 'What these five values mean for you, working with us.' }}
+                </p>
+            </div>
 
-                 Dengan lima nilai, grid dua kolom menyisakan satu sel kosong di
-                 baris terakhir. Dijadikan sel pertama, judulnya mengisi lubang
-                 itu dan grid-nya genap tiga baris. Susunannya jadi asimetris
-                 dengan sendirinya, tanpa sel kosong yang harus ditutup-tutupi.
+            {{-- Daftar istilah, bukan deretan kartu.
 
-                 Bentuknya pun berbeda dari seksi "Alasan Memilih Kami" di
-                 beranda, yang memakai daftar tegak satu kolom di atas pita
-                 gelap. Dua halaman yang menampilkan nilai yang sama tidak boleh
-                 tampil sebagai salinan. --}}
-            <div class="grid gap-x-10 md:grid-cols-2 lg:gap-x-16">
+                 <dl> memang bentuk yang tepat untuk pasangan istilah dan
+                 penjelasannya, dan ia sekaligus membedakan seksi ini dari <ul>
+                 berikon di beranda yang menampilkan kelima nilai yang sama.
 
-                <div class="border-t border-navy-200 pt-8 md:pb-10" data-aos="fade-up">
-                    <h2 class="text-display-lg font-bold text-navy">{{ $isId ? 'Nilai Perusahaan' : 'Our Core Values' }}</h2>
-                    {{-- Kalimat pengantarnya menyebut akronimnya. Tanpa itu, lima
-                         huruf emas di bawahnya hanya terbaca sebagai hiasan. --}}
-                    <p class="mt-4 max-w-sm text-pretty leading-relaxed text-slate-600">
-                        {{ $isId
-                            ? 'Lima prinsip yang memandu cara kami bekerja. Huruf depannya mengeja nama kami sendiri: DELTA.'
-                            : 'Five principles that guide how we work. Their initials spell our own name: DELTA.' }}
-                    </p>
-                </div>
-
+                 Nama nilainya berukuran judul di kolom kiri, penjelasannya di
+                 kanan. Kolom kirinya berlebar tetap, sehingga huruf pertama
+                 kelima nama berdiri di satu garis tegak lurus dan terbaca ke
+                 bawah sebagai DELTA. Tidak ada elemen huruf terpisah seperti di
+                 beranda: huruf itu memang huruf pertama namanya, hanya diberi
+                 warna. --}}
+            <dl class="mt-12 border-t border-navy-200">
                 @foreach ($values as $i => $value)
-                    <div class="border-t border-navy-200 py-8 md:py-10" data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
-                        <div class="flex items-center gap-4">
-                            {{-- Fotonya jadi alas huruf. Tirai navy-950/45 menahan
-                                 sisi terangnya supaya huruf emas di atas foto
-                                 bersorot putih pun tetap lolos 3:1. --}}
-                            <span class="relative grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-navy-900" aria-hidden="true">
-                                <img src="{{ asset('images/values/'.$value['img'].'.jpg') }}" alt="" loading="lazy"
-                                     width="800" height="533" decoding="async"
-                                     class="absolute inset-0 h-full w-full object-cover opacity-60">
-                                <span class="absolute inset-0 bg-navy-950/45"></span>
-                                <span class="relative font-display text-2xl font-bold text-gold-soft">{{ mb_substr($value['title'], 0, 1) }}</span>
-                            </span>
-                            <h3 class="text-xl font-bold leading-tight text-navy md:text-2xl">{{ $value['title'] }}</h3>
-                        </div>
-                        {{-- 'detail', bukan 'desc'. Kalimat 'desc' sudah tampil di
-                             beranda; mengulangnya di sini membuat halaman ini
-                             terbaca sebagai salinan dan tidak menambah keterangan
-                             apa pun bagi yang sudah membaca berandanya. --}}
-                        <p class="mt-4 max-w-prose text-pretty leading-relaxed text-slate-600">{{ $value['detail'] }}</p>
+                    <div class="grid gap-x-10 gap-y-2 border-b border-navy-200 py-7 md:grid-cols-12 md:py-9"
+                         data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
+                        <dt class="md:col-span-4 lg:col-span-3">
+                            {{-- gold-deep, bukan gold-soft: di atas bg-paper yang
+                                 terang, gold-soft hanya 1,7:1 sedangkan gold-deep
+                                 3,1:1 — lolos ambang 3:1 untuk teks sebesar ini. --}}
+                            <p class="font-display text-3xl font-bold leading-none text-navy md:text-4xl">
+                                <span class="text-gold-deep">{{ mb_substr($value['title'], 0, 1) }}</span>{{ mb_substr($value['title'], 1) }}
+                            </p>
+                        </dt>
+                        <dd class="md:col-span-8 lg:col-span-9">
+                            {{-- 'detail', bukan 'desc'. Kalimat 'desc' sudah tampil
+                                 di beranda, dan mengulangnya di sini tidak menambah
+                                 apa pun bagi yang sudah membacanya. --}}
+                            <p class="max-w-prose text-pretty leading-relaxed text-slate-600 md:text-lg">{{ $value['detail'] }}</p>
+                        </dd>
                     </div>
                 @endforeach
-            </div>
+            </dl>
         </div>
     </section>
 
