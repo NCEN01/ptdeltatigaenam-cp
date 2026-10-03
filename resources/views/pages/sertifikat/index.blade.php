@@ -99,9 +99,9 @@
                          Bayangan sengaja tidak dipasang saat diam: garis 1px plus
                          bayangan lebar adalah hiasan kartu hantu. Cincinnya hanya
                          muncul saat fokus, di situ ia menjadi penanda keadaan. --}}
-                    <div class="rounded-3xl border border-navy-200 bg-white p-2 transition duration-200 focus-within:border-sky-600 focus-within:ring-4 focus-within:ring-sky-500/15 sm:flex sm:items-center sm:gap-2">
+                    <div class="rounded-3xl border border-navy-200 bg-white p-2 transition duration-200 focus-within:border-sky-700 focus-within:ring-4 focus-within:ring-sky-700/20 sm:flex sm:items-center sm:gap-2">
                         <div class="relative flex-1">
-                            <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                            <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-600" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
                             {{-- Placeholder tidak diterjemahkan: isinya contoh nama dan nomor. --}}
                             <input id="cert-q" type="search" name="q" value="{{ $q }}" autocomplete="off"
                                    placeholder="Ahmad Fauzi · PT Baja Perkasa · DTE/BNSP/2026/1000"
@@ -135,7 +135,7 @@
                                @if ($active) aria-current="true" @endif
                                class="rounded-full border px-3.5 py-1.5 font-medium transition duration-200 active:scale-[0.97] {{ $active
                                    ? 'border-navy bg-navy text-white'
-                                   : 'border-navy-200 bg-white text-navy hover:border-sky-600 hover:text-sky-700' }}">
+                                   : 'border-navy-200 bg-white text-navy hover:border-sky-700 hover:text-sky-700' }}">
                                 {{ $suggestion }}
                             </a>
                         @endforeach
@@ -169,7 +169,7 @@
                 @endphp
                 <aside class="lg:col-span-5 lg:border-l lg:border-navy-200 lg:pl-10">
                     <div class="border-t border-navy-200 pt-8 lg:border-t-0 lg:pt-0">
-                        <h3 class="font-display text-base font-semibold text-navy">
+                        <h3 class="text-base text-navy">
                             {{ $id ? 'Isi daftar ini hari ini' : 'What is in the register today' }}
                         </h3>
                         <p class="mt-2 text-sm leading-relaxed text-slate-600">
@@ -185,7 +185,7 @@
                                         <span class="h-2 w-2 shrink-0 rounded-full {{ $dot }}" aria-hidden="true"></span>
                                         {{ $label }}
                                     </dt>
-                                    <dd class="font-display text-2xl font-semibold leading-none tabular-nums text-navy" data-counter="{{ $value }}">{{ $value }}</dd>
+                                    <dd class="text-2xl leading-none tabular-nums text-navy" data-counter="{{ $value }}">{{ $value }}</dd>
                                 </div>
                             @endforeach
                         </dl>
@@ -236,7 +236,7 @@
                 @endif
 
                 @if ($expiredCount > 0)
-                    <span class="text-slate-400" aria-hidden="true">·</span>
+                    <span class="text-slate-600" aria-hidden="true">·</span>
                     <span class="text-rose-700">
                         <span class="font-semibold tabular-nums">{{ $expiredCount }}</span>
                         {{ $id ? 'sudah kedaluwarsa' : 'expired' }}
@@ -244,7 +244,7 @@
                 @endif
 
                 @if ($q !== '')
-                    <span class="text-slate-400" aria-hidden="true">·</span>
+                    <span class="text-slate-600" aria-hidden="true">·</span>
                     <a href="{{ route('certificates.index') }}#{{ $anchor }}" class="font-medium text-sky-700 underline underline-offset-4 transition-colors hover:text-navy">{{ $id ? 'tampilkan semua' : 'show all' }}</a>
                 @endif
             </div>
@@ -255,7 +255,7 @@
                     <article class="rounded-2xl border border-navy-100 bg-white p-5 transition-colors duration-200 ease-out-soft active:bg-neutral-50">
                         <div class="flex items-start justify-between gap-3">
                             <div class="min-w-0">
-                                <h3 class="truncate font-display text-[15px] font-semibold text-navy">{{ $c->participant_name }}</h3>
+                                <h3 class="truncate text-[15px] text-navy">{{ $c->participant_name }}</h3>
                                 <p class="mt-0.5 truncate text-xs text-slate-600">{{ $c->company_name ?: '—' }}</p>
                             </div>
                             <x-certificate-status :expires-at="$c->expires_at" class="shrink-0" />
@@ -311,7 +311,7 @@
                                          kedaluwarsa tetap perlu ada: tanpanya halaman ini
                                          berhenti menjadi alat verifikasi. --}}
                                     <td class="px-6 py-5">
-                                        <span class="font-display text-[15px] font-semibold text-navy">{{ $c->participant_name }}</span>
+                                        <span class="text-[15px] text-navy">{{ $c->participant_name }}</span>
                                         <x-certificate-status :expires-at="$c->expires_at" class="ml-2 align-middle" />
                                     </td>
                                     <td class="px-6 py-5 text-slate-700">{{ $c->company_name ?: '—' }}</td>
@@ -319,7 +319,7 @@
                                     <td class="px-6 py-5">
                                         @if ($c->qualification)
                                             <span class="inline-flex rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-xs font-medium text-sky-700">{{ $c->qualification }}</span>
-                                        @else <span class="text-slate-400">—</span> @endif
+                                        @else <span class="text-slate-600">—</span> @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -358,9 +358,9 @@
                 <ol class="mt-10 divide-y divide-navy-200 border-t border-navy-200">
                     @foreach ($proof as $i => [$title, $body])
                         <li class="grid grid-cols-[2.25rem_1fr] gap-x-4 py-7 sm:grid-cols-[3.5rem_1fr] sm:gap-x-6">
-                            <span class="font-display text-2xl font-semibold leading-none tabular-nums text-navy-200 sm:text-3xl" aria-hidden="true">{{ sprintf('%02d', $i + 1) }}</span>
+                            <span class="text-2xl leading-none tabular-nums text-navy-200 sm:text-3xl" aria-hidden="true">{{ sprintf('%02d', $i + 1) }}</span>
                             <div>
-                                <h3 class="font-display text-xl font-semibold leading-snug text-navy md:text-2xl">{{ $title }}</h3>
+                                <h3 class="text-xl leading-snug text-navy md:text-2xl">{{ $title }}</h3>
                                 <p class="mt-2.5 max-w-[62ch] text-pretty leading-relaxed text-slate-600">{{ $body }}</p>
                             </div>
                         </li>
@@ -378,7 +378,7 @@
                 <div class="border-t border-navy-200 pt-8 lg:sticky lg:top-28 lg:border-t-0 lg:pt-0">
                     {{-- <h3>, bukan <p>: ini judul yang memperkenalkan blok ajakan,
                          sejajar dengan ketiga butir alasan di kolom sebelahnya. --}}
-                    <h3 class="font-display text-xl font-semibold leading-snug text-navy text-balance md:text-2xl">
+                    <h3 class="text-xl leading-snug text-navy text-balance md:text-2xl">
                         {{ $id ? 'Ingin nama Anda ada di daftar ini?' : 'Want your name on this list?' }}
                     </h3>
                     <p class="mt-3 text-sm leading-relaxed text-slate-600">

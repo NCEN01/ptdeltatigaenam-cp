@@ -6,7 +6,7 @@
 @endphp
 
 <x-layout :title="$portfolio->title" :description="$portfolio->short_description" :ogImage="$coverUrl">
-    <x-page-header :eyebrow="$portfolio->category?->name" :title="$portfolio->title" />
+    <x-page-header :title="$portfolio->title" />
 
     <section class="section bg-white">
         <div class="container">

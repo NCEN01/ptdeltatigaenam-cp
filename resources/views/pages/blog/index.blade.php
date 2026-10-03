@@ -6,7 +6,6 @@
 
 <x-layout :title="__('site.nav.blog')">
     <x-page-header
-        :eyebrow="__('site.home.blog_kicker')"
         :title="__('site.home.blog_title')"
         :subtitle="$id ? 'Perspektif, riset, dan praktik terbaik seputar human capital.' : 'Perspectives, research, and best practices on human capital.'"
         placement="blog"
@@ -14,33 +13,23 @@
 
     <section id="{{ \App\Http\Controllers\Controller::RESULTS_ANCHOR }}" class="section scroll-mt-28 bg-white">
         <div class="container">
-            {{-- Section heading + search --}}
-            <div class="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-                {{-- Baris .eyebrow "Artikel Terbaru" dihapus dari sini: .eyebrow
-                     berstatus display:none di seluruh situs, jadi label itu tidak
-                     pernah tampil sekali pun. --}}
-                <div class="max-w-2xl">
-                    <h2 class="font-display text-3xl text-navy text-balance md:text-4xl" data-aos="fade-up">{{ $id ? 'Wawasan & artikel kami' : 'Our insights & articles' }}</h2>
-                    <p class="mt-5 text-pretty leading-relaxed text-slate-600" data-aos="fade-up">
-                        {{ $id
-                            ? 'Catatan dari ruang pelatihan, lokasi uji kompetensi, dan meja konsultasi kami. Yang kami tulis di sini berangkat dari pekerjaan yang benar-benar kami kerjakan bersama klien.'
-                            : 'Notes from our training rooms, assessment sites, and consulting desks. What we write here comes from work we have actually done alongside our clients.' }}
-                    </p>
-                </div>
-                <div class="flex shrink-0 flex-col items-start gap-2.5 md:items-end" data-aos="fade-up">
-                    <x-search-form
-                        id="blog-q"
-                        :action="route('blog.index')"
-                        :value="$q ?? ''"
-                        :placeholder="$id ? 'Cari artikel…' : 'Search articles…'"
-                        :label="$id ? 'Cari artikel' : 'Search articles'" />
-                    @if (($q ?? '') !== '')
-                        <p class="font-mono text-xs text-slate-500">{{ $posts->total() }} {{ $id ? 'hasil untuk' : 'results for' }} “{{ $q }}” · <a href="{{ route('blog.index') }}" class="text-sky-600 hover:underline">{{ $id ? 'reset' : 'reset' }}</a></p>
-                    @elseif ($posts->total())
-                        <p class="font-mono text-xs text-slate-500">{{ str_pad($posts->total(), 2, '0', STR_PAD_LEFT) }} {{ $id ? 'artikel' : 'articles' }}</p>
-                    @endif
-                </div>
-            </div>
+            {{-- Kepala daftar — judul, pengantar, pencarian, jumlah hasil. Blok
+                 yang sama dipakai halaman Portofolio, jadi keduanya tidak bisa
+                 menyimpang lagi seperti sebelumnya. --}}
+            <x-list-header
+                :lead="$id ? 'Wawasan &' : 'Our insights &'"
+                :accent="$id ? 'artikel' : 'articles'"
+                :tail="$id ? 'kami' : ''"
+                :intro="$id
+                    ? 'Catatan dari ruang pelatihan, lokasi uji kompetensi, dan meja konsultasi kami. Yang kami tulis di sini berangkat dari pekerjaan yang benar-benar kami kerjakan bersama klien.'
+                    : 'Notes from our training rooms, assessment sites, and consulting desks. What we write here comes from work we have actually done alongside our clients.'"
+                search-id="blog-q"
+                :search-action="route('blog.index')"
+                :search-value="$q ?? ''"
+                :search-placeholder="$id ? 'Cari artikel…' : 'Search articles…'"
+                :search-label="$id ? 'Cari artikel' : 'Search articles'"
+                :total="$posts->total()"
+                :noun="$id ? 'artikel' : 'articles'" />
 
             {{-- Uniform grid — every card the same height (auto-rows-fr), 3 across then wraps down --}}
             @if ($posts->count())

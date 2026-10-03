@@ -6,7 +6,7 @@
 @endphp
 
 <x-layout :title="$id ? 'Pembayaran' : 'Payment'">
-    <x-page-header :eyebrow="$order->order_number" :title="$id ? 'Selesaikan pembayaran' : 'Complete your payment'" />
+    <x-page-header :title="$id ? 'Selesaikan pembayaran' : 'Complete your payment'" />
 
     <section class="section">
         <div class="container max-w-2xl">

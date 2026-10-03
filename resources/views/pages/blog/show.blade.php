@@ -10,7 +10,7 @@
 <x-layout :title="$post->title" :description="$post->excerpt" :ogImage="$cover">
     <article>
         {{-- The page header already wraps this slot in a centred flex row. --}}
-        <x-page-header :eyebrow="optional($post->category)->name" :title="$post->title">
+        <x-page-header :title="$post->title">
             <span class="text-sm text-navy-200">{{ optional($post->published_at)->translatedFormat('d M Y') }}</span>
 
             <x-meta-location :value="$post->location" tone="text-gold-soft" size="h-4 w-4" class="text-sm" />

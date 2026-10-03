@@ -17,7 +17,7 @@
          batas 3:1 milik WCAG 1.4.11, emas berbeda sendiri dari :focus-visible
          situs ini yang sudah memakai ring-sky-700. --}}
     <label for="{{ $name }}" class="mb-1.5 block text-sm font-medium text-navy">
-        {{ $label }}@if ($required)<span class="text-sky-600" aria-hidden="true"> *</span>@endif
+        {{ $label }}@if ($required)<span class="text-sky-700" aria-hidden="true"> *</span>@endif
     </label>
 
     @if ($type === 'textarea')
@@ -28,7 +28,7 @@
             {{ $attributes->class([
                 'w-full rounded-2xl border bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-700 focus:ring-offset-0',
                 'border-rose-300' => $invalid,
-                'border-navy-200 focus:border-navy' => ! $invalid,
+                'border-navy-400 focus:border-navy' => ! $invalid,
             ]) }}>{{ $val }}</textarea>
     @elseif ($type === 'password')
         <div class="relative" x-data="{ show: false }">
@@ -44,7 +44,7 @@
                 {{ $attributes->class([
                     'w-full rounded-2xl border bg-white px-4 py-3 pr-12 text-navy shadow-sm transition-colors placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-700',
                     'border-rose-300' => $invalid,
-                    'border-navy-200 focus:border-navy' => ! $invalid,
+                    'border-navy-400 focus:border-navy' => ! $invalid,
                 ]) }}>
             <button type="button"
                 x-on:click="show = !show"
@@ -77,7 +77,7 @@
             {{ $attributes->class([
                 'w-full rounded-2xl border bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-700',
                 'border-rose-300' => $invalid,
-                'border-navy-200 focus:border-navy' => ! $invalid,
+                'border-navy-400 focus:border-navy' => ! $invalid,
             ]) }}>
     @endif
 

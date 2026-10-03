@@ -1,5 +1,4 @@
 @props([
-    'eyebrow' => null,
     'title' => '',
     'subtitle' => null,
     'image' => null, // Unsplash photo id, fallback jika tidak ada banner
@@ -57,18 +56,29 @@
     @else
         <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-70"></div>
         <div class="pointer-events-none absolute inset-0 grain opacity-50"></div>
-        <div class="pointer-events-none absolute -left-20 top-10 h-64 w-64 rounded-full bg-sky-500/12 blur-3xl" data-parallax="0.15"></div>
+        {{-- /10, bukan /12: 12 tidak ada di tangga opasitas Tailwind, jadi
+             kelasnya tidak pernah dibentuk dan pendar ini tidak pernah tampil. --}}
+        <div class="pointer-events-none absolute -left-20 top-10 h-64 w-64 rounded-full bg-sky-500/10 blur-3xl" data-parallax="0.15"></div>
         <div class="pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-cyan/10 blur-3xl" data-parallax="0.1"></div>
     @endif
     <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-500/40 to-transparent"></div>
 
     <div class="container relative">
-        @if ($eyebrow)
-            <p class="eyebrow mb-5 inline-flex items-center justify-center text-gold-soft" data-aos="fade-up">
-                {{ $eyebrow }}
-            </p>
-        @endif
-        <h1 class="mx-auto max-w-4xl text-display-xl leading-[1.06] text-balance" data-aos="fade-up" data-aos-delay="60">{{ $hwLead }}@if ($hwLead) @endif<span class="italic-accent">{{ $hwAccent }}</span></h1>
+        {{-- Label eyebrow dilepas seluruhnya, bukan sekadar dari satu halaman.
+             .eyebrow bernilai display:none !important di seluruh situs, jadi
+             simpul ini tidak pernah tampil sekali pun — yang tersisa hanya satu
+             <p> kosong beserta pendaftaran pengamat AOS di tiap halaman, dan
+             tiga pemanggilnya masih membayar pencarian terjemahan untuk keluaran
+             yang tidak terlihat. --}}
+        {{-- Kata terakhir judul dimiringkan sekaligus diberi warna, sama seperti
+             judul seksi di seluruh situs — sebelumnya hanya miring putih polos,
+             satu-satunya aksen di situs ini yang tidak membawa warna.
+
+             Gradasinya putih → biru muda, bukan biru → cyan seperti di latar
+             navy polos: pita ini bisa memakai foto, dan ujung biru #2b83df
+             terlalu gelap di atas bagian foto yang terang. Ujung putihnya
+             menjaga awal kata tetap terbaca di latar apa pun. --}}
+        <h1 class="mx-auto max-w-4xl text-display-xl" data-aos="fade-up" data-aos-delay="60">{{ $hwLead }}@if ($hwLead) @endif<span class="italic-accent text-gradient-white-navy">{{ $hwAccent }}</span></h1>
         @if ($bannerSubtitle)
             <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-navy-100 text-pretty" data-aos="fade-up" data-aos-delay="140">{{ $bannerSubtitle }}</p>
         @endif

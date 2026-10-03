@@ -2,7 +2,6 @@
 
 <x-layout :title="__('site.nav.services')">
     <x-page-header
-        :eyebrow="__('site.home.services_kicker')"
         :title="__('site.home.services_title')"
         :subtitle="$id ? 'Dari konsultasi manajemen hingga sertifikasi kompetensi, dirancang untuk hasil yang terukur.' : 'From management consulting to competency certification, designed for measurable outcomes.'"
         placement="services"
@@ -94,9 +93,15 @@
     <section class="section-sm border-b border-navy-50 bg-white">
         <div class="container">
             <div class="max-w-2xl">
-                <h2 class="text-3xl leading-tight text-navy md:text-4xl" data-aos="fade-up">
-                    {{ $id ? 'Tiga cara mengikuti program' : 'Three ways to take a programme' }}
-                </h2>
+                {{-- Token text-display-lg dengan aksen miring berwarna, sama dengan
+                     judul seksi di seluruh situs. Pasangan text-3xl/md:text-4xl
+                     sebelumnya melompat sekali di satu titik putus lalu diam. --}}
+                <x-heading
+                    :lead="$id ? 'Tiga cara' : 'Three ways to'"
+                    :accent="$id ? 'mengikuti program' : 'take a programme'"
+                    accent-class="text-sky-700"
+                    class="text-display-lg text-navy"
+                    data-aos="fade-up" />
                 <p class="mt-5 text-pretty leading-relaxed text-slate-600" data-aos="fade-up">
                     {{ $id
                         ? 'Program yang sama dapat dijalankan dengan tiga cara. Yang berbeda hanya tempat dan bentuk praktiknya, bukan materi maupun sertifikat yang Anda terima.'
@@ -131,7 +136,7 @@
                                 @endif
                             </span>
 
-                            <h3 class="mt-6 font-display text-2xl font-semibold {{ $dark ? 'text-white' : 'text-navy' }}">{{ $mode['label'] }}</h3>
+                            <h3 class="mt-6 text-2xl {{ $dark ? 'text-white' : 'text-navy' }}">{{ $mode['label'] }}</h3>
                             <p class="mt-2.5 leading-relaxed {{ $dark ? 'text-navy-100' : 'text-slate-600' }}">{{ $mode['lead'] }}</p>
 
                             <ul class="mt-6 space-y-3 border-t pt-6 text-sm {{ $dark ? 'border-white/15' : 'border-navy-100' }}">
@@ -156,12 +161,12 @@
     </section>
 
     @forelse ($categories as $cat)
-        <section id="{{ $cat->slug }}" class="scroll-mt-28 py-14 md:py-20 {{ $loop->odd ? '' : 'bg-mist' }}">
+        <section id="{{ $cat->slug }}" class="scroll-mt-28 section-sm {{ $loop->odd ? '' : 'bg-mist' }}">
             <div class="container">
                 <div class="flex flex-col gap-4 border-b border-navy-100 pb-6 md:flex-row md:items-end md:justify-between">
                     <div class="max-w-2xl">
                         <p class="mb-3 font-mono text-[11px] uppercase tracking-normal text-gold-deep">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</p>
-                        <h2 class="text-3xl font-semibold text-navy md:text-4xl">{{ $cat->name }}</h2>
+                        <h2 class="text-display-lg text-navy">{{ $cat->name }}</h2>
                         @if ($cat->short_description)<p class="mt-3 text-pretty text-slate-600">{{ $cat->short_description }}</p>@endif
                     </div>
                 </div>
@@ -190,7 +195,7 @@
                                          Judul dijatah dua baris agar bagian atas kartu juga rata,
                                          bukan hanya harganya. --}}
                                     <div class="flex-1">
-                                        <h3 class="line-clamp-2 min-h-14 font-display text-xl font-semibold leading-snug text-navy">{{ $service->title }}</h3>
+                                        <h3 class="line-clamp-2 min-h-14 text-xl leading-snug text-navy">{{ $service->title }}</h3>
                                         @if ($service->short_description)<p class="mt-2 line-clamp-2 text-sm text-slate-600">{{ $service->short_description }}</p>@endif
                                     </div>
                                     <div class="mt-6 flex items-end justify-between border-t border-navy-100 pt-5">
@@ -198,21 +203,21 @@
                                             @if ($service->price > 0)
                                                 @if ($service->hasDiscount())
                                                     <p class="flex flex-wrap items-center gap-1.5">
-                                                        <span class="font-mono text-[11px] text-slate-400 line-through">Rp {{ number_format((float) $service->discount_original_price, 0, ',', '.') }}</span>
+                                                        <span class="font-mono text-[11px] text-slate-500 line-through">Rp {{ number_format((float) $service->discount_original_price, 0, ',', '.') }}</span>
                                                         <span class="rounded bg-rose-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-rose-600">-{{ $service->discountPercent() }}%</span>
                                                     </p>
-                                                    <p class="font-display text-lg font-semibold text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
+                                                    <p class="text-lg text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
                                                 @else
-                                                    <p class="font-mono text-[10px] uppercase tracking-wider text-slate-400">{{ __('site.common.from') }}</p>
-                                                    <p class="font-display text-lg font-semibold text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
+                                                    <p class="font-mono text-[10px] uppercase tracking-wider text-slate-500">{{ __('site.common.from') }}</p>
+                                                    <p class="text-lg text-navy">Rp {{ number_format((float) $service->price, 0, ',', '.') }}</p>
                                                 @endif
                                             @else
                                                 {{-- Diberi baris label juga, supaya ketiga bentuk harga
                                                      sama-sama dua baris. Kalau yang satu ini satu baris,
                                                      kartunya jadi lebih pendek dan harga tetangganya
                                                      tidak sejajar meski blok ini sudah didorong ke dasar. --}}
-                                                <p class="font-mono text-[10px] uppercase tracking-wider text-slate-400">{{ $id ? 'Investasi' : 'Investment' }}</p>
-                                                <p class="font-display text-lg font-semibold text-navy">{{ $id ? 'Hubungi kami' : 'Contact us' }}</p>
+                                                <p class="font-mono text-[10px] uppercase tracking-wider text-slate-500">{{ $id ? 'Investasi' : 'Investment' }}</p>
+                                                <p class="text-lg text-navy">{{ $id ? 'Hubungi kami' : 'Contact us' }}</p>
                                             @endif
                                         </div>
                                         <span class="grid h-10 w-10 place-items-center rounded-full border border-navy-200 transition-all group-hover:border-gold group-hover:bg-gold group-hover:text-ink">
@@ -225,7 +230,7 @@
                     </div>
                 @else
                     <div class="mt-10 rounded-3xl border border-dashed border-navy-200 bg-white p-12 text-center">
-                        <p class="font-display text-lg font-semibold text-navy">{{ $id ? 'Layanan akan segera hadir' : 'Services coming soon' }}</p>
+                        <p class="text-lg text-navy">{{ $id ? 'Layanan akan segera hadir' : 'Services coming soon' }}</p>
                         <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Kami sedang menyiapkan layanan untuk kategori ini.' : 'We are preparing services for this category.' }}</p>
                     </div>
                 @endif

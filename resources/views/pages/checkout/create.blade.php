@@ -6,7 +6,7 @@
 @endphp
 
 <x-layout :title="'Checkout'">
-    <x-page-header :eyebrow="$id ? 'Pemesanan' : 'Checkout'" :title="$service->title" />
+    <x-page-header :title="$service->title" />
 
     <section class="section">
         <div class="container">

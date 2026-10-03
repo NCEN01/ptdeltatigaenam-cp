@@ -2,7 +2,6 @@
 
 <x-layout :title="$id ? 'Agenda' : 'Agenda'">
     <x-page-header
-        :eyebrow="$id ? 'Agenda' : 'Agenda'"
         :title="$id ? 'Agenda & kegiatan terbaru' : 'Latest agenda & events'"
         :subtitle="$id ? 'Jadwal pelatihan, sertifikasi, seminar, dan kegiatan terbaru dari PT Delta Tiga Enam.' : 'Upcoming training, certification, seminars, and events from PT Delta Tiga Enam.'"
         placement="agenda"

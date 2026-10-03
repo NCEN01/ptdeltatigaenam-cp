@@ -701,7 +701,13 @@
            with a soft top-right glow for depth. Edges fall to near-black blue for contrast. */
         background:
             radial-gradient(120% 120% at 85% 6%, rgba(43,131,223, 0.30) 0%, transparent 55%),
-            linear-gradient(140deg, #071d38 0%, #0b2b52 27%, #205f9f 46%, #2b83df 53%, #164a7d 66%, #071d38 84%, #071d38 100%);
+            /* Pita paling terang diturunkan dari #2b83df ke #205f9f. Gradasi ini
+               berjalan menyapu tiap 22 detik, dan saat pita #2b83df lewat di bawah
+               teks, putih turun ke 3,9:1 dan navy-100 ke 3,1:1 — keduanya di bawah
+               ambang 4,5:1. Dengan #205f9f jadi 6,6:1 dan 5,3:1 di seluruh sapuan.
+               Pita ini membawa judul halaman dan keterangannya di tiap halaman,
+               jadi memperbaikinya di sini sekaligus memperbaiki semuanya. */
+            linear-gradient(140deg, #071d38 0%, #0b2b52 27%, #164a7d 46%, #205f9f 53%, #164a7d 66%, #071d38 84%, #071d38 100%);
         background-size: 180% 180%, 230% 230%;
     }
     @media (prefers-reduced-motion: no-preference) {
@@ -718,8 +724,13 @@
         color: transparent;
         -webkit-text-fill-color: transparent;
     }
-    .text-gradient-white-navy {  /* white → light-blue horizontal gradient, left→right (hero italic line) */
-        background: linear-gradient(90deg, #ffffff 0%, #ffffff 18%, #bcdcfa 55%, #6fb0ec 100%);
+    /* Putih → biru muda, kiri ke kanan (baris miring di pita hero).
+       Ujungnya dulu #6fb0ec; di atas pita terang bg-navy-anim itu hanya 1,7:1,
+       jadi justru bagian paling akhir judul yang paling sulit dibaca. Berhenti
+       di #bcdcfa: 4,7:1 di atas pita yang sudah diturunkan, dan warnanya masih
+       jelas terbaca biru. */
+    .text-gradient-white-navy {
+        background: linear-gradient(90deg, #ffffff 0%, #ffffff 25%, #dbe9fb 65%, #bcdcfa 100%);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;

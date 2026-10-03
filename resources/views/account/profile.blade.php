@@ -1,7 +1,7 @@
 @php $id = app()->getLocale() === 'id'; @endphp
 
 <x-layout :title="$id ? 'Akun Saya' : 'My Account'">
-    <x-page-header :eyebrow="__('site.nav.account')" :title="$id ? 'Halo, '.$customer->name : 'Hello, '.$customer->name" />
+    <x-page-header :title="$id ? 'Halo, '.$customer->name : 'Hello, '.$customer->name" />
 
     <section class="section">
         <div class="container grid gap-10 lg:grid-cols-12">

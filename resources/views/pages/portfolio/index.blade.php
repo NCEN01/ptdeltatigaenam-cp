@@ -2,7 +2,6 @@
 
 <x-layout :title="__('site.nav.portfolio')">
     <x-page-header
-        :eyebrow="__('site.home.portfolio_kicker')"
         :title="__('site.home.portfolio_title')"
         :subtitle="$id ? 'Kegiatan, klien, dan kisah dampak yang kami banggakan.' : 'Projects, clients, and the impact stories we are proud of.'"
         placement="portfolio"
@@ -14,42 +13,27 @@
          pagination and the next heading. One section break is enough. --}}
     <section id="{{ \App\Http\Controllers\Controller::RESULTS_ANCHOR }}" class="section scroll-mt-28 pb-0">
         <div class="container">
-            <div class="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                <div class="max-w-2xl">
-                    <h2 class="text-display-lg font-semibold text-navy text-balance" data-aos="fade-up">{{ $id ? 'Dampak nyata bersama klien kami' : 'Real impact alongside our clients' }}</h2>
-                    {{-- Menyebut pekerjaan yang benar-benar ada di daftarnya. Keempat
-                         frasa itu mencakup kelima kategori layanan yang masing-masing
-                         memang berisi proyek: pelatihan karyawan, sertifikasi
-                         kompetensi, konsultasi manajemen beserta human capital, dan
-                         headhunter. Kalimat penutupnya menggambarkan susunan halaman
-                         detailnya, yang ditutup bagian Hasil berikut angkanya. --}}
-                    <p class="mt-5 text-pretty leading-relaxed text-slate-600" data-aos="fade-up">
-                        {{ $id
-                            ? 'Pelatihan, sertifikasi kompetensi, penataan organisasi, dan pencarian posisi kunci yang kami kerjakan bersama klien, ditulis lengkap sampai angka yang berubah setelahnya.'
-                            : 'Training, competency certification, organisational restructuring, and executive search we have done alongside clients, written out in full down to the numbers that moved.' }}
-                    </p>
-                </div>
+            {{-- Kepala daftar yang sama dengan halaman Blog. Kalimat pengantarnya
+                 menyebut pekerjaan yang benar-benar ada di daftar: keempat frasa
+                 itu mencakup kelima kategori layanan yang masing-masing memang
+                 berisi proyek, dan penutupnya menggambarkan susunan halaman
+                 detailnya yang ditutup bagian Hasil berikut angkanya.
 
-                <div class="flex shrink-0 flex-col items-start gap-2 md:items-end" data-aos="fade-up">
-                    <x-search-form
-                        id="portfolio-q"
-                        :action="route('portfolio.index')"
-                        :value="$q"
-                        :placeholder="$id ? 'Cari proyek, klien, lokasi…' : 'Search project, client, location…'"
-                        :label="$id ? 'Cari portofolio' : 'Search portfolio'" />
-
-                    {{-- total(), not count(): count() would report only the projects on this page. --}}
-                    @if ($q !== '')
-                        <p class="font-mono text-xs text-slate-500">
-                            {{ $portfolios->total() }} {{ $id ? 'hasil untuk' : 'results for' }} &ldquo;{{ $q }}&rdquo;
-                            <span class="mx-1 text-navy-200" aria-hidden="true">·</span>
-                            <a href="{{ route('portfolio.index') }}" class="text-sky-700 hover:underline">{{ $id ? 'reset' : 'reset' }}</a>
-                        </p>
-                    @elseif ($portfolios->total())
-                        <p class="font-mono text-sm text-slate-500">{{ str_pad($portfolios->total(), 2, '0', STR_PAD_LEFT) }} {{ $id ? 'proyek' : 'projects' }}</p>
-                    @endif
-                </div>
-            </div>
+                 total(), bukan count(): count() hanya menghitung proyek di
+                 halaman ini, bukan seluruh hasilnya. --}}
+            <x-list-header
+                :lead="$id ? 'Dampak nyata bersama' : 'Real impact alongside'"
+                :accent="$id ? 'klien kami' : 'our clients'"
+                :intro="$id
+                    ? 'Pelatihan, sertifikasi kompetensi, penataan organisasi, dan pencarian posisi kunci yang kami kerjakan bersama klien, ditulis lengkap sampai angka yang berubah setelahnya.'
+                    : 'Training, competency certification, organisational restructuring, and executive search we have done alongside clients, written out in full down to the numbers that moved.'"
+                search-id="portfolio-q"
+                :search-action="route('portfolio.index')"
+                :search-value="$q"
+                :search-placeholder="$id ? 'Cari proyek, klien, lokasi…' : 'Search project, client, location…'"
+                :search-label="$id ? 'Cari portofolio' : 'Search portfolio'"
+                :total="$portfolios->total()"
+                :noun="$id ? 'proyek' : 'projects'" />
 
             @if ($portfolios->isNotEmpty())
                 <div class="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
@@ -82,7 +66,7 @@
                             {{-- Title + small caption below --}}
                             <div class="mt-4 flex items-start justify-between gap-3">
                                 <div class="min-w-0">
-                                    <h3 class="font-display text-lg font-semibold leading-snug text-navy transition-colors duration-300 group-hover:text-sky-600">{{ $p->title }}</h3>
+                                    <h3 class="text-lg leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">{{ $p->title }}</h3>
                                     <p class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-slate-500">
                                         @if ($p->client_name)<span>{{ $p->client_name }}</span>@endif
                                         @if ($p->client_name && $p->project_date)<span class="text-navy-200" aria-hidden="true">·</span>@endif

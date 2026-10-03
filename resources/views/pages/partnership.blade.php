@@ -47,7 +47,6 @@
 
 <x-layout :title="__('site.nav.partnership')" :description="$narrative">
     <x-page-header
-        :eyebrow="$id ? 'Kemitraan Corporate' : 'Corporate Partnership'"
         :title="$id ? 'Program Kemitraan Corporate Training' : 'Corporate Training Partnership Program'"
         :subtitle="$intro ?: ($id ? 'Solusi pelatihan SDM yang efektif, relevan, dan dapat disesuaikan dengan kebutuhan perusahaan Anda.' : 'Effective, relevant HR training solutions tailored to your company needs.')"
         placement="partnership"
@@ -57,7 +56,14 @@
     <section class="section bg-white">
         <div class="container grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div class="lg:col-span-7" data-aos="fade-up">
-                <h2 class="font-display text-3xl leading-tight text-navy text-balance md:text-4xl">{{ $id ? 'Kemitraan PT Delta Tiga Enam' : 'PT Delta Tiga Enam Partnership' }}</h2>
+                {{-- Token text-display-lg dengan aksen miring berwarna. font-display
+                     dan text-balance tidak ditulis: app.css sudah memberikannya ke
+                     setiap h1–h4. --}}
+                <x-heading
+                    :lead="$id ? 'Kemitraan' : 'Partnership with'"
+                    :accent="'PT Delta Tiga Enam'"
+                    accent-class="text-sky-700"
+                    class="text-display-lg text-navy" />
 
                 {{-- The opening sentence is lifted to lead size so the block has an entry
                      point. Split on the first sentence boundary — the wording is untouched,
@@ -126,7 +132,7 @@
             <div class="container">
                 <div class="max-w-2xl" data-aos="fade-up">
                     <x-heading :lead="$pLead" :accent="$pAccent" :tail="$pTail"
-                               class="font-display text-3xl text-navy text-balance md:text-4xl" />
+                               class="text-display-lg text-navy" />
                     <p class="mt-5 text-pretty leading-relaxed text-slate-600">{{ $pDesc }}</p>
                 </div>
 
@@ -147,7 +153,7 @@
     <section class="section-sm border-t border-navy-50 bg-neutral-50">
         <div class="container">
             <div class="max-w-2xl" data-aos="fade-up">
-                <h2 class="font-display text-3xl text-navy text-balance md:text-4xl">{{ $id ? 'Mengapa menjadi mitra kami' : 'Why partner with us' }}</h2>
+                <h2 class="text-display-lg text-navy">{{ $id ? 'Mengapa menjadi mitra kami' : 'Why partner with us' }}</h2>
             </div>
 
             {{-- Normalise DB rows and the hardcoded fallback into one shape, so the card
@@ -171,11 +177,11 @@
 
                             {{-- The numeral carries the rhythm now, so it is set large rather than
                                  shrunk into a chip. --}}
-                            <span class="shrink-0 font-display text-3xl font-bold leading-none tabular-nums text-navy-200 transition-colors duration-300 group-hover:text-sky-500 md:text-4xl"
+                            <span class="shrink-0 text-3xl font-bold leading-none tabular-nums text-navy-200 transition-colors duration-300 group-hover:text-sky-500 md:text-4xl"
                                   aria-hidden="true">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
 
                             <div class="min-w-0">
-                                <h3 class="font-display text-lg font-semibold leading-snug text-navy text-balance">{{ $card['title'] }}</h3>
+                                <h3 class="text-lg leading-snug text-navy ">{{ $card['title'] }}</h3>
                                 <span class="mt-3 block h-px w-8 bg-gold-soft/70 transition-all duration-500 ease-out-soft group-hover:w-14" aria-hidden="true"></span>
                                 <p class="mt-3 text-pretty text-sm leading-relaxed text-slate-600">{{ $card['desc'] }}</p>
                             </div>
@@ -194,7 +200,7 @@
             <section class="section border-t border-navy-50 bg-white">
                 <div class="container">
                     <div class="max-w-3xl" data-aos="fade-up">
-                        <h2 class="font-display text-3xl text-navy text-balance md:text-4xl">{{ $id ? 'Pilih paket kemitraan Anda' : 'Choose your partnership package' }}</h2>
+                        <h2 class="text-display-lg text-navy">{{ $id ? 'Pilih paket kemitraan Anda' : 'Choose your partnership package' }}</h2>
                         <p class="mt-4 font-mono text-xs uppercase tracking-normal text-slate-500">Blue · Silver · Gold · Platinum</p>
                     </div>
 
@@ -228,7 +234,7 @@
                                             <span class="shrink-0 rounded-full bg-white px-2.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-navy-950">{{ $id ? 'Populer' : 'Popular' }}</span>
                                         @endif
                                     </div>
-                                    <h3 class="relative mt-2 font-display text-3xl">{{ $package->name }}</h3>
+                                    <h3 class="relative mt-2 text-3xl">{{ $package->name }}</h3>
                                     {{-- min-height reserves 2 lines so every colored header box is the same size --}}
                                     <p class="relative mt-3 line-clamp-2 min-h-[2.85rem] text-sm leading-relaxed text-white/85">{{ $tagline }}</p>
 
@@ -271,7 +277,7 @@
             <div class="container">
                 {{-- Centered heading --}}
                 <div class="mx-auto max-w-2xl text-center">
-                    <h2 class="font-display text-3xl text-navy text-balance md:text-4xl">{{ $id ? 'Mulai kolaborasi' : 'Start a collaboration' }}</h2>
+                    <h2 class="text-display-lg text-navy">{{ $id ? 'Mulai kolaborasi' : 'Start a collaboration' }}</h2>
                     <p class="mx-auto mt-5 max-w-xl text-pretty leading-relaxed text-slate-600">
                         {{ $id
                             ? 'Isi formulir dan tim PT Delta Tiga Enam akan menghubungi Anda untuk menjadwalkan presentasi serta menyiapkan penawaran. Tanpa pembayaran online, penagihan melalui invoice.'
@@ -317,7 +323,7 @@
                         <div class="space-y-8 p-5 sm:p-7 md:space-y-10 md:p-10">
                             {{-- A. Company info --}}
                             <div>
-                                <p class="font-mono text-[11px] uppercase tracking-label text-sky-600">A · {{ $id ? 'Informasi Perusahaan' : 'Company Information' }}</p>
+                                <p class="font-mono text-[11px] uppercase tracking-label text-sky-700">A · {{ $id ? 'Informasi Perusahaan' : 'Company Information' }}</p>
                                 <div class="mt-5 grid gap-5 sm:grid-cols-2">
                                     <x-field name="company_name" :label="$id ? 'Nama Perusahaan' : 'Company Name'" required />
                                     <x-field name="pic_name" :label="$id ? 'Nama PIC' : 'PIC Name'" required />
@@ -332,7 +338,7 @@
 
                             {{-- B. Package --}}
                             <div class="border-t border-navy-100 pt-8 md:pt-10">
-                                <p class="font-mono text-[11px] uppercase tracking-label text-sky-600">B · {{ $id ? 'Pilihan Paket' : 'Package Choice' }}</p>
+                                <p class="font-mono text-[11px] uppercase tracking-label text-sky-700">B · {{ $id ? 'Pilihan Paket' : 'Package Choice' }}</p>
                                 <div class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                                     @foreach ($packages as $package)
                                         <label class="cursor-pointer">
@@ -346,7 +352,7 @@
 
                             {{-- C. Scheduling --}}
                             <div class="border-t border-navy-100 pt-8 md:pt-10">
-                                <p class="font-mono text-[11px] uppercase tracking-label text-sky-600">C · {{ $id ? 'Penjadwalan Presentasi/Meeting' : 'Presentation/Meeting Scheduling' }}</p>
+                                <p class="font-mono text-[11px] uppercase tracking-label text-sky-700">C · {{ $id ? 'Penjadwalan Presentasi/Meeting' : 'Presentation/Meeting Scheduling' }}</p>
                                 <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Pilih waktu yang Anda inginkan; tim kami akan mengonfirmasi.' : 'Choose your preferred time; our team will confirm.' }}</p>
                                 <div class="mt-5 grid gap-5 sm:grid-cols-2">
                                     <div class="min-w-0">
@@ -362,7 +368,7 @@
 
                             {{-- D. Notes --}}
                             <div class="border-t border-navy-100 pt-8 md:pt-10">
-                                <p class="font-mono text-[11px] uppercase tracking-label text-sky-600">D · {{ $id ? 'Catatan Tambahan' : 'Additional Notes' }}</p>
+                                <p class="font-mono text-[11px] uppercase tracking-label text-sky-700">D · {{ $id ? 'Catatan Tambahan' : 'Additional Notes' }}</p>
                                 <div class="mt-5">
                                     <x-field name="notes" type="textarea" :label="$id ? 'Catatan' : 'Notes'" />
                                 </div>

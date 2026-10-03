@@ -16,7 +16,6 @@
 
 <x-layout :title="$isId ? 'Tentang Kami' : 'About Us'" :description="$tagline">
     <x-page-header
-        :eyebrow="'PT Delta Tiga Enam'"
         :title="$isId ? 'Tentang Kami' : 'About Us'"
         placement="about"
         image="photo-1522071820081-009f0129c71c" />

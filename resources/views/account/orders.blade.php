@@ -11,7 +11,7 @@
 @endphp
 
 <x-layout :title="$id ? 'Riwayat Pesanan' : 'Order History'">
-    <x-page-header :eyebrow="__('site.nav.account')" :title="$id ? 'Riwayat Pesanan' : 'Order History'" />
+    <x-page-header :title="$id ? 'Riwayat Pesanan' : 'Order History'" />
 
     <section class="section">
         <div class="container grid gap-10 lg:grid-cols-12">
