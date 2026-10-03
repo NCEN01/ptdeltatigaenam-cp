@@ -164,7 +164,7 @@
                          menyebut hal yang benar-benar dicari orang. --}}
                     <x-heading
                         :lead="$isId ? 'Layanan' : 'Human Capital'"
-                        :accent="$isId ? 'Pengembangan SDM' : 'Service Categories'"
+                        :accent="$isId ? 'Pengembangan SDM' : 'Service Categories'"
                         class="text-display-lg font-bold text-navy" />
                     <p class="mt-5 max-w-sm leading-relaxed text-slate-600 text-pretty">
                         {{ $isId
@@ -329,12 +329,27 @@
 
     {{-- ===================== WHY CHOOSE US (image band + numbered row) ===================== --}}
     @php
+        // Tiap alasan kini berpasangan judul dan keterangan. Sebelumnya hanya
+        // tujuh frasa pendek berdiri sendiri: "Materi Aplikatif" dan
+        // "Pendampingan Menyeluruh" bisa berarti apa saja, dan pembaca harus
+        // menebak sendiri maksudnya. Keterangannya menyebut hal yang konkret
+        // dan bisa diperiksa, bukan janji yang berulang.
         $reasons = $isId ? [
-            'Dibimbing Praktisi Ahli', 'Program Dipersonalisasi', 'Sertifikasi Diakui Industri',
-            'Pendampingan Menyeluruh', 'Materi Aplikatif', 'Jaringan Profesional', 'Harga Kompetitif',
+            ['title' => 'Dibimbing Praktisi Ahli', 'desc' => 'Pengajar dan asesor kami bekerja di bidangnya, bukan hanya mengajarkannya.'],
+            ['title' => 'Program Dipersonalisasi', 'desc' => 'Materi disusun ulang mengikuti proses kerja dan peralatan yang dipakai tim Anda.'],
+            ['title' => 'Sertifikasi Diakui Industri', 'desc' => 'Sertifikat terbit lewat skema BNSP bersama LSP mitra, berlaku untuk audit dan tender.'],
+            ['title' => 'Pendampingan Menyeluruh', 'desc' => 'Dari pemetaan kebutuhan, pelaksanaan, sampai uji kompetensi dan laporan hasilnya.'],
+            ['title' => 'Materi Aplikatif', 'desc' => 'Studi kasus dan praktiknya diambil dari pekerjaan yang benar-benar ditangani peserta.'],
+            ['title' => 'Jaringan Profesional', 'desc' => 'Peserta bertemu praktisi dari industri lain di kelas yang sama.'],
+            ['title' => 'Harga Kompetitif', 'desc' => 'Biaya tertulis sejak awal, tanpa tambahan yang muncul di tengah jalan.'],
         ] : [
-            'Expert Practitioners', 'Personalized Programs', 'Recognized Certification',
-            'End-to-End Support', 'Applied Material', 'Professional Network', 'Competitive Pricing',
+            ['title' => 'Expert Practitioners', 'desc' => 'Our trainers and assessors work in the field, not only teach it.'],
+            ['title' => 'Personalized Programs', 'desc' => 'Material is rebuilt around the processes and equipment your team actually uses.'],
+            ['title' => 'Recognized Certification', 'desc' => 'Certificates are issued through BNSP schemes with partner LSPs, valid for audits and tenders.'],
+            ['title' => 'End-to-End Support', 'desc' => 'From needs mapping and delivery through to assessment and the written results.'],
+            ['title' => 'Applied Material', 'desc' => 'Case studies and practicals are drawn from work the participants actually handle.'],
+            ['title' => 'Professional Network', 'desc' => 'Participants meet practitioners from other industries in the same room.'],
+            ['title' => 'Competitive Pricing', 'desc' => 'Costs are stated up front, with nothing added partway through.'],
         ];
     @endphp
     {{-- Pita berfoto gelap, dikembalikan atas permintaan setelah sempat
@@ -390,16 +405,30 @@
                  pernah ada. Penggantinya centang, penanda yang tidak menjanjikan
                  urutan apa pun dan memakai bahasa yang sudah dipakai daftar
                  manfaat paket di halaman Kemitraan. --}}
-            <ul class="sm:grid sm:grid-cols-2 sm:gap-x-10 lg:col-span-7 lg:gap-x-14">
+            {{-- Satu kolom, bukan dua. Begitu tiap butir punya keterangan, dua
+                 kolom di dalam kolom 7/12 menyisakan ~290px per butir, dan
+                 kalimatnya pecah empat kata per baris. Satu kolom memberi
+                 keterangannya lebar penuh dan jatuh di satu sampai dua baris.
+
+                 Garis rambut dan centang memakai nilai latar gelap: navy-100
+                 hampir tak terlihat di atas navy pekat, dan sky-600 terlalu
+                 gelap di sana. --}}
+            <ul class="lg:col-span-7">
                 @foreach ($reasons as $i => $r)
-                    {{-- Garis rambut dan centang kembali ke nilai latar gelap
-                         bersama fotonya: navy-100 hampir tak terlihat di atas
-                         navy pekat, dan sky-600 terlalu gelap di sana. --}}
-                    <li class="flex items-start gap-3.5 border-t border-white/10 py-5 md:py-6" data-aos="fade-up" data-aos-delay="{{ ($i % 2) * 50 }}">
-                        <svg class="mt-1 h-5 w-5 shrink-0 text-sky-400" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                            <path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <p class="font-display text-lg font-medium leading-snug text-white text-balance md:text-xl">{{ $r }}</p>
+                    <li class="group flex items-start gap-4 border-t border-white/10 py-5 md:py-6" data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
+                        {{-- Centang di dalam lingkaran tipis, bukan centang
+                             telanjang. Dengan keterangan di bawah tiap judul,
+                             centang tanpa bidang menggantung di ruang kosong dan
+                             tidak lagi terbaca sebagai penanda barisnya. --}}
+                        <span class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-sky-400/10 text-sky-400 ring-1 ring-sky-400/25 transition-colors duration-300 group-hover:bg-sky-400/20" aria-hidden="true">
+                            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none">
+                                <path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <div class="min-w-0">
+                            <p class="font-display text-lg font-semibold leading-snug text-white md:text-xl">{{ $r['title'] }}</p>
+                            <p class="mt-1.5 max-w-prose text-pretty text-sm leading-relaxed text-navy-100">{{ $r['desc'] }}</p>
+                        </div>
                     </li>
                 @endforeach
             </ul>
