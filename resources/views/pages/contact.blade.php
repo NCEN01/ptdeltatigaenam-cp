@@ -46,7 +46,6 @@
                 <x-heading
                     :lead="$id ? 'Mari bicarakan' : 'Let\'s talk about'"
                     :accent="$id ? 'kebutuhan Anda' : 'your needs'"
-                    accent-class="text-sky-700"
                     class="text-display-lg font-bold text-navy" />
                 <p class="mt-5 max-w-md text-pretty leading-relaxed text-slate-600">
                     {{ $id
@@ -102,11 +101,7 @@
                 <div class="rounded-3xl border border-navy-100 bg-white p-8 shadow-lift md:p-10">
                     {{-- Label "Kirim Pesan" di atas judul dilepas dengan alasan yang
                          sama seperti di kolom kiri: .eyebrow tidak pernah tampil. --}}
-                    <x-heading
-                        :lead="$id ? 'Kirim' : 'Send'"
-                        :accent="$id ? 'pesan Anda' : 'your message'"
-                        accent-class="text-sky-700"
-                        class="mb-7 text-2xl font-bold text-navy md:text-3xl" />
+                    <h2 class="mb-7 text-2xl font-bold text-navy md:text-3xl">{{ $id ? 'Kirim pesan Anda' : 'Send your message' }}</h2>
 
                     @if (session('status'))
                         <div class="mb-6 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-800" role="status" aria-live="polite">
@@ -153,11 +148,7 @@
 
         <div class="container relative">
             <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
-                <x-heading
-                    :lead="$id ? 'Temui kami di' : 'Find us at'"
-                    :accent="$id ? 'lokasi berikut' : 'these locations'"
-                    accent-class="text-sky-700"
-                    class="text-display-lg text-navy" />
+                <h2 class="text-display-lg text-navy">{{ $id ? 'Alamat & Lokasi Kantor' : 'Office Addresses & Locations' }}</h2>
             </div>
 
             <div class="mt-12 grid items-stretch gap-6 lg:grid-cols-12">

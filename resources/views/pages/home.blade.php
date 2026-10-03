@@ -158,10 +158,13 @@
                          text-balance tidak ditulis: app.css sudah memberikannya ke
                          setiap h1–h4; font-bold ditulis karena memang menimpa
                          font-semibold bawaan itu. --}}
+                    {{-- Tanpa kata "Kami". Judul seksi di situs ini dulu hampir
+                         semuanya berakhir dengan kata itu, dan mesin pencari
+                         tidak mendapat apa pun darinya; "Pengembangan SDM"
+                         menyebut hal yang benar-benar dicari orang. --}}
                     <x-heading
-                        :lead="$isId ? 'Kategori' : 'Our'"
-                        :accent="$isId ? 'Layanan Kami' : 'Service Categories'"
-                        accent-class="text-sky-700"
+                        :lead="$isId ? 'Layanan' : 'Human Capital'"
+                        :accent="$isId ? 'Pengembangan SDM' : 'Service Categories'"
                         class="text-display-lg font-bold text-navy" />
                     <p class="mt-5 max-w-sm leading-relaxed text-slate-600 text-pretty">
                         {{ $isId
@@ -369,7 +372,7 @@
                 <x-heading
                     :lead="$isId ? 'Alasan Memilih' : 'Why Choose'"
                     :accent="$isId ? 'Kami?' : 'Us?'"
-                    accent-class="text-gradient-hero"
+                    accent-class="text-gradient-white-navy"
                     class="text-display-lg font-semibold text-white text-balance" />
                 <p class="mt-6 max-w-md text-lg leading-relaxed text-navy-100 text-pretty">{{ $isId ? 'Keahlian praktisi, pendekatan yang dipersonalisasi, dan komitmen pada hasil nyata bagi organisasi Anda.' : 'Practitioner expertise, a personalized approach, and a commitment to real results for your organization.' }}</p>
             </div>
@@ -419,15 +422,15 @@
             <div class="container relative">
                 {{-- Kepala terpusat --}}
                 <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
-                    <x-heading
-                        :lead="$isId ? 'Berita Terbaru' : 'Our Latest'"
-                        :accent="$isId ? 'Kami' : 'News'"
-                        accent-class="text-sky-700"
-                        class="text-display-lg text-navy" />
+                    {{-- Judul polos. Aksen miring berwarna disimpan untuk judul
+                         utama halaman dan satu seksi berlatar gelap; dipasang di
+                         tiap seksi, ia berhenti menjadi penekanan dan berubah
+                         jadi pola yang mengganggu bacaan. --}}
+                    <h2 class="text-display-lg text-navy">{{ $isId ? 'Berita & Informasi Terbaru' : 'Latest News & Updates' }}</h2>
                     <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-600 text-pretty">
                         {{ $isId
-                            ? 'Kabar pelatihan, uji kompetensi BNSP, dan kegiatan kami — diperbarui setiap ada yang baru.'
-                            : 'News on our training, BNSP competence assessments, and events — updated as it happens.' }}
+                            ? 'Kabar pelatihan, uji kompetensi BNSP, dan kegiatan terbaru, diperbarui setiap ada yang baru.'
+                            : 'News on training, BNSP competence assessments, and recent activity, updated as it happens.' }}
                     </p>
                 </div>
 
@@ -708,11 +711,7 @@
         <div class="container relative">
             {{-- Centered header --}}
             <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
-                <x-heading
-                    :lead="$isId ? 'Agenda Mendatang' : 'Our Upcoming'"
-                    :accent="$isId ? 'Kami' : 'Agenda'"
-                    accent-class="text-sky-700"
-                    class="text-display-lg text-navy" />
+                <h2 class="text-display-lg text-navy">{{ $isId ? 'Jadwal Pelatihan & Sertifikasi' : 'Training & Certification Schedule' }}</h2>
                 <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-600">
                     {{ $isId
                         ? 'Ikuti kelas pelatihan, sertifikasi, dan kegiatan terbaru dari kami. Geser untuk melihat jadwal lengkapnya.'
@@ -854,15 +853,11 @@
                  yang tidak mengikuti token text-display-lg. Keterangannya pun
                  memakai slate-500 sementara seksi lain slate-600. --}}
             <div class="mx-auto max-w-2xl text-center mb-12" data-aos="fade-up">
-                <x-heading
-                    :lead="$isId ? 'Update Terbaru' : 'Our Latest'"
-                    :accent="$isId ? 'Kami' : 'Updates'"
-                    accent-class="text-sky-700"
-                    class="text-display-lg text-navy" />
+                <h2 class="text-display-lg text-navy">{{ $isId ? 'Kegiatan Terbaru di Instagram' : 'Recent Activity on Instagram' }}</h2>
                 <p class="mx-auto mt-4 max-w-xl text-pretty text-sm leading-relaxed text-slate-600">
                     {{ $isId
-                        ? 'Ikuti kegiatan terbaru dan informasi menarik dari kami di Instagram @deltatigaenam.'
-                        : 'Follow our latest activities and interesting information on Instagram @deltatigaenam.' }}
+                        ? 'Dokumentasi kelas pelatihan dan uji kompetensi yang baru berjalan, di @deltatigaenam.'
+                        : 'Photos from the training classes and competence assessments we have just run, at @deltatigaenam.' }}
                 </p>
             </div>
 
@@ -964,12 +959,7 @@
                          jadi ia masih terbaca sebagai label yang disengaja, bukan
                          perancah yang diulang di tiap seksi. --}}
                     <p class="kicker">FAQ</p>
-                    {{-- Aksen miring berwarna, sama dengan judul seksi lain di beranda. --}}
-                    <x-heading
-                        :lead="$isId ? 'Pertanyaan yang' : 'Frequently Asked'"
-                        :accent="$isId ? 'Sering Diajukan' : 'Questions'"
-                        accent-class="text-sky-700"
-                        class="text-display-lg text-navy" />
+                    <h2 class="text-display-lg text-navy">{{ $isId ? 'Pertanyaan yang Sering Diajukan' : 'Frequently Asked Questions' }}</h2>
                     <p class="max-w-md text-[15px] leading-relaxed text-slate-600 text-pretty">
                         {{ $isId
                             ? 'Temukan jawaban cepat untuk pertanyaan umum mengenai sertifikasi, pelatihan, rekrutmen, dan kemitraan di PT Delta Tiga Enam.'

@@ -30,7 +30,7 @@
             </div>
 
             <div class="mt-8 flex flex-wrap justify-center gap-3">
-                <a href="{{ route('account.orders') }}" class="btn-primary">{{ $id ? 'Lihat Pesanan Saya' : 'View My Orders' }}</a>
+                <a href="{{ route('account.orders') }}" class="btn-blue">{{ $id ? 'Lihat Pesanan Saya' : 'View My Orders' }}</a>
                 @if ($order->status === 'pending')
                     <a href="{{ route('checkout.pay', $order->order_number) }}" class="btn-ghost">{{ $id ? 'Bayar Lagi' : 'Pay Again' }}</a>
                 @elseif ($order->status !== 'paid')

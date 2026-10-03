@@ -2,7 +2,7 @@
     @php
         $iconL = '<svg class="h-5 w-5" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
         $iconR = '<svg class="h-5 w-5" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-        $btn = 'grid h-11 w-11 shrink-0 place-items-center rounded-full border border-navy-200 bg-white text-navy shadow-card transition hover:-translate-y-0.5 hover:border-gold hover:bg-gold hover:text-navy-950 active:scale-95';
+        $btn = 'grid h-11 w-11 shrink-0 place-items-center rounded-full border border-navy-200 bg-white text-navy shadow-card transition hover:-translate-y-0.5 hover:border-navy hover:bg-navy hover:text-white active:scale-95';
         $btnOff = 'grid h-11 w-11 shrink-0 place-items-center rounded-full border border-navy-100 bg-white text-slate-300 cursor-default';
     @endphp
     <nav role="navigation" aria-label="{{ __('Pagination Navigation') }}" class="flex items-center justify-between gap-3">
@@ -34,7 +34,7 @@
                 @if ($paginator->onFirstPage())
                     <span aria-disabled="true" aria-label="{{ __('pagination.previous') }}" class="grid h-9 w-9 place-items-center rounded-full border border-navy-100 text-slate-300">{!! $iconL !!}</span>
                 @else
-                    <a href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="{{ __('pagination.previous') }}" class="grid h-9 w-9 place-items-center rounded-full border border-navy-200 text-navy transition hover:border-gold hover:bg-gold hover:text-navy-950">{!! $iconL !!}</a>
+                    <a href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="{{ __('pagination.previous') }}" class="grid h-9 w-9 place-items-center rounded-full border border-navy-200 text-navy transition hover:border-navy hover:bg-navy hover:text-white">{!! $iconL !!}</a>
                 @endif
 
                 @foreach ($elements as $element)
@@ -53,7 +53,7 @@
                 @endforeach
 
                 @if ($paginator->hasMorePages())
-                    <a href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="{{ __('pagination.next') }}" class="grid h-9 w-9 place-items-center rounded-full border border-navy-200 text-navy transition hover:border-gold hover:bg-gold hover:text-navy-950">{!! $iconR !!}</a>
+                    <a href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="{{ __('pagination.next') }}" class="grid h-9 w-9 place-items-center rounded-full border border-navy-200 text-navy transition hover:border-navy hover:bg-navy hover:text-white">{!! $iconR !!}</a>
                 @else
                     <span aria-disabled="true" aria-label="{{ __('pagination.next') }}" class="grid h-9 w-9 place-items-center rounded-full border border-navy-100 text-slate-300">{!! $iconR !!}</span>
                 @endif

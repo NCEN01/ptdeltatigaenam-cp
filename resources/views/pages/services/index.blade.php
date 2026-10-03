@@ -96,12 +96,7 @@
                 {{-- Token text-display-lg dengan aksen miring berwarna, sama dengan
                      judul seksi di seluruh situs. Pasangan text-3xl/md:text-4xl
                      sebelumnya melompat sekali di satu titik putus lalu diam. --}}
-                <x-heading
-                    :lead="$id ? 'Tiga cara' : 'Three ways to'"
-                    :accent="$id ? 'mengikuti program' : 'take a programme'"
-                    accent-class="text-sky-700"
-                    class="text-display-lg text-navy"
-                    data-aos="fade-up" />
+                <h2 class="text-display-lg text-navy" data-aos="fade-up">{{ $id ? 'Tiga cara mengikuti program' : 'Three ways to take a programme' }}</h2>
                 <p class="mt-5 text-pretty leading-relaxed text-slate-600" data-aos="fade-up">
                     {{ $id
                         ? 'Program yang sama dapat dijalankan dengan tiga cara. Yang berbeda hanya tempat dan bentuk praktiknya, bukan materi maupun sertifikat yang Anda terima.'

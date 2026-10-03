@@ -115,7 +115,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn-gold w-full">
+                    <button type="submit" class="btn-blue w-full">
                         {{ $id ? 'Lanjut ke Pembayaran' : 'Continue to Payment' }}
                         <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>

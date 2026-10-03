@@ -42,7 +42,6 @@
             :lead="$lead"
             :accent="$accent"
             :tail="$tail"
-            accent-class="text-sky-700"
             class="text-display-lg text-navy"
             data-aos="fade-up" />
         @if ($intro)

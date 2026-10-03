@@ -42,7 +42,7 @@ return [
         'hero_sub' => 'Kami membantu perusahaan dan individu meningkatkan kompetensi melalui konsultasi, pelatihan, pengelolaan human capital, dan sertifikasi profesi yang terintegrasi.',
         'services_kicker' => 'Lini Layanan',
         'services_title' => 'Keahlian yang membentuk organisasi unggul',
-        'portfolio_kicker' => 'Portofolio Kami',
+        'portfolio_kicker' => 'Portofolio Proyek',
         'portfolio_title' => 'Dampak nyata bersama mitra dan klien',
         'testimonials_kicker' => 'Suara Klien',
         'testimonials_title' => 'Dipercaya para pemimpin',

@@ -228,7 +228,7 @@
     <section class="section border-t border-navy-50 bg-paper">
         <div class="container">
             <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
-                <h2 class="font-display text-4xl font-bold text-navy text-balance md:text-5xl">{{ $isId ? 'Nilai Kami' : 'Our Values' }}</h2>
+                <h2 class="font-display text-4xl font-bold text-navy text-balance md:text-5xl">{{ $isId ? 'Nilai Perusahaan' : 'Our Core Values' }}</h2>
                 <p class="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-slate-600">
                     {{ $isId ? 'Prinsip yang memandu cara kami bekerja dan melayani setiap klien.' : 'The principles that guide how we work and serve every client.' }}
                 </p>

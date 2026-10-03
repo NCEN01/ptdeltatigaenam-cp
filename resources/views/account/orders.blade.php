@@ -55,7 +55,7 @@
                     <div class="rounded-3xl border border-dashed border-navy-200 p-12 text-center">
                         <p class="font-display text-xl font-semibold text-navy">{{ $id ? 'Belum ada pesanan' : 'No orders yet' }}</p>
                         <p class="mt-2 text-slate-600">{{ $id ? 'Mulai jelajahi layanan kami.' : 'Start exploring our services.' }}</p>
-                        <a href="{{ route('services.index') }}" class="btn-primary mt-6">{{ __('site.cta.explore') }}</a>
+                        <a href="{{ route('services.index') }}" class="btn-blue mt-6">{{ __('site.cta.explore') }}</a>
                     </div>
                 @endforelse
 

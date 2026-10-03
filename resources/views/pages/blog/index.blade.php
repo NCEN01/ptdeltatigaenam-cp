@@ -17,9 +17,8 @@
                  yang sama dipakai halaman Portofolio, jadi keduanya tidak bisa
                  menyimpang lagi seperti sebelumnya. --}}
             <x-list-header
-                :lead="$id ? 'Wawasan &' : 'Our insights &'"
-                :accent="$id ? 'artikel' : 'articles'"
-                :tail="$id ? 'kami' : ''"
+                :lead="$id ? 'Wawasan &' : 'Insights &'"
+                :accent="$id ? 'Artikel' : 'Articles'"
                 :intro="$id
                     ? 'Catatan dari ruang pelatihan, lokasi uji kompetensi, dan meja konsultasi kami. Yang kami tulis di sini berangkat dari pekerjaan yang benar-benar kami kerjakan bersama klien.'
                     : 'Notes from our training rooms, assessment sites, and consulting desks. What we write here comes from work we have actually done alongside our clients.'"

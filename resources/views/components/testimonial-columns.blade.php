@@ -29,11 +29,7 @@
                  judul seksi lain. Sebelumnya font-bold — satu-satunya judul seksi
                  yang lebih tebal dari yang lain tanpa alasan. --}}
             <div class="mx-auto max-w-xl text-center" data-aos="fade-up">
-                <x-heading
-                    :lead="$isId ? 'Testimoni' : 'Client'"
-                    :accent="$isId ? 'Klien Kami' : 'Testimonials'"
-                    accent-class="text-sky-700"
-                    class="text-display-lg text-navy" />
+                <h2 class="text-display-lg text-navy">{{ $isId ? 'Testimoni Klien' : 'Client Testimonials' }}</h2>
                 <p class="mt-4 text-pretty text-slate-600">{{ $isId ? 'Cerita dampak dari mereka yang telah bekerja sama dengan kami.' : 'Impact stories from those who have worked with us.' }}</p>
             </div>
 
@@ -47,7 +43,13 @@
                 @foreach ($groups as $ci => $col)
                     @if ($col->isNotEmpty())
                         <div class="min-w-0 {{ $ci === 1 ? 'hidden md:block' : ($ci === 2 ? 'hidden lg:block' : '') }}">
-                            <div class="marquee-col flex flex-col gap-6 {{ $ci === 1 ? '[animation-direction:reverse]' : '' }}" style="--dur: {{ 22 + $ci * 4 }}s">
+                            {{-- 36/44/52 detik, dari 22/26/30 sebelumnya. Kolomnya
+                                 memuat kutipan beberapa baris, dan pada kecepatan
+                                 lama baris paling bawah sudah lewat sebelum orang
+                                 selesai membacanya. Selisih antar-kolom dilebarkan
+                                 jadi 8 detik supaya ketiganya tetap terlihat tidak
+                                 serempak meski semuanya melambat. --}}
+                            <div class="marquee-col flex flex-col gap-6 {{ $ci === 1 ? '[animation-direction:reverse]' : '' }}" style="--dur: {{ 36 + $ci * 8 }}s">
                                 @foreach ($col->concat($col) as $t)
                                     {{-- w-[17rem] di lg: tiga kartu 19rem + dua jarak 1,5rem
                                          berjumlah tepat 960px, yaitu lebar isi container di

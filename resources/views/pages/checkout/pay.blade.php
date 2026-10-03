@@ -19,7 +19,7 @@
                 <p class="font-display text-4xl font-semibold text-navy">Rp {{ number_format((float) $order->total_amount, 0, ',', '.') }}</p>
                 <p class="mt-2 text-slate-600">{{ $order->service?->title }} · {{ $order->quantity }} {{ $id ? 'peserta' : 'participant(s)' }}</p>
 
-                <button id="pay-button" class="btn-gold mt-8 w-full sm:w-auto">
+                <button id="pay-button" class="btn-blue mt-8 w-full sm:w-auto">
                     {{ $id ? 'Bayar Sekarang' : 'Pay Now' }}
                 </button>
 

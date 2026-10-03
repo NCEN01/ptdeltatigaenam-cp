@@ -36,8 +36,13 @@
                 {{-- Label kecil "Program Baru Dibuka" dihapus: judulnya sudah
                      menyebut hal yang sama, dan label huruf kapital kecil di atas
                      judul memang sudah lama ditiadakan di seluruh situs ini. --}}
+                {{-- Tanpa kata miring. Aksen itu kini disimpan untuk judul utama
+                     halaman dan satu seksi berlatar gelap saja; dipasang di tiap
+                     seksi, ia berhenti menekankan apa pun. Kata "Kami" juga
+                     dilepas: ia dulu muncul di hampir semua judul seksi tanpa
+                     menambah apa-apa bagi pembaca maupun mesin pencari. --}}
                 <h2 id="pt-title" class="pt-title">
-                    {{ $isId ? 'Pelatihan Terbaru' : 'Our Latest' }} <em>{{ $isId ? 'Kami' : 'Training' }}</em>
+                    {{ $isId ? 'Program Pelatihan Terbaru' : 'Latest Training Programmes' }}
                 </h2>
                 <p class="pt-lead">
                     {{ $isId

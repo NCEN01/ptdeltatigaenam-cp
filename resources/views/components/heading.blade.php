@@ -2,7 +2,12 @@
     'lead' => '',       // upright words before the accent
     'accent' => '',     // the italic, gradient keyword
     'tail' => '',       // optional upright words after the accent
-    'accentClass' => 'text-gradient', // use text-gradient-hero on dark backgrounds
+    // Dua nilai saja, dipilih menurut latarnya — bukan satu per pemanggil:
+    //   latar terang → text-sky-700            (bawaan)
+    //   latar gelap  → text-gradient-white-navy
+    // Sebelumnya ada empat nilai berbeda di situs ini, termasuk text-gradient
+    // yang berwarna arang dan membuat aksennya tidak terlihat sama sekali.
+    'accentClass' => 'text-sky-700',
 ])
 
 {{--

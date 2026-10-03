@@ -47,7 +47,7 @@
                      halaman lain. Judul di tengah membuat seksi ini terasa
                      berdiri sendiri, padahal ia bagian dari satu situs. --}}
                 <div class="max-w-2xl" data-aos="fade-up">
-                    <h2 class="text-display-lg font-semibold text-white text-balance">{{ $isId ? 'Mitra Kami' : 'Our Partners' }}</h2>
+                    <h2 class="text-display-lg font-semibold text-white text-balance">{{ $isId ? 'Mitra Kerja Sama' : 'Collaborating Partners' }}</h2>
                     <p class="mt-5 text-lg leading-relaxed text-navy-100 text-pretty">
                         {{ $isId
                             ? 'Saatnya naik level bersama sertifikasi kompetensi resmi BNSP.'
@@ -81,7 +81,7 @@
                     <div class="shrink-0 md:w-60 lg:w-72">
                         {{-- h2, bukan h3: klien dan mitra adalah dua kelompok yang setara.
                              Sebagai h3 ia terbaca seolah bagian dari "Mitra Kami". --}}
-                        <h2 class="font-display text-2xl font-bold text-navy text-balance md:text-3xl">{{ $isId ? 'Klien Kami' : 'Our Clients' }}</h2>
+                        <h2 class="font-display text-2xl font-bold text-navy text-balance md:text-3xl">{{ $isId ? 'Klien & Perusahaan' : 'Clients & Companies' }}</h2>
                         <p class="mt-3 text-sm leading-relaxed text-slate-600">
                             {{ $isId ? 'Klien yang telah menggunakan layanan kami.' : 'Clients who have used our services.' }}
                         </p>

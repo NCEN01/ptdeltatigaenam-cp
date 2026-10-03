@@ -342,7 +342,7 @@
         <div class="container grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div class="lg:col-span-7">
                 <h2 class="text-2xl text-navy md:text-4xl">
-                    {{ $id ? 'Kenapa daftar ini kami buka' : 'Why we publish this list' }}
+                    {{ $id ? 'Kenapa daftar ini dibuka' : 'Why we publish this list' }}
                 </h2>
 
                 {{-- Angka besar yang diredupkan di margin kiri. Murni tipografi:

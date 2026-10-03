@@ -59,11 +59,7 @@
                 {{-- Token text-display-lg dengan aksen miring berwarna. font-display
                      dan text-balance tidak ditulis: app.css sudah memberikannya ke
                      setiap h1–h4. --}}
-                <x-heading
-                    :lead="$id ? 'Kemitraan' : 'Partnership with'"
-                    :accent="'PT Delta Tiga Enam'"
-                    accent-class="text-sky-700"
-                    class="text-display-lg text-navy" />
+                <h2 class="text-display-lg text-navy">{{ $id ? 'Kemitraan PT Delta Tiga Enam' : 'Partnership with PT Delta Tiga Enam' }}</h2>
 
                 {{-- The opening sentence is lifted to lead size so the block has an entry
                      point. Split on the first sentence boundary — the wording is untouched,
@@ -131,6 +127,10 @@
         <section class="section-sm border-t border-navy-50 bg-white">
             <div class="container">
                 <div class="max-w-2xl" data-aos="fade-up">
+                    {{-- Judul ini datang dari CMS, dan admin sendiri yang memilih
+                         kata mana yang dimiringkan lewat tanda *…*. Karena itulah
+                         aksennya di sini berwarna: ia dipasang karena diminta,
+                         bukan karena tiap seksi otomatis mendapatkannya. --}}
                     <x-heading :lead="$pLead" :accent="$pAccent" :tail="$pTail"
                                class="text-display-lg text-navy" />
                     <p class="mt-5 text-pretty leading-relaxed text-slate-600">{{ $pDesc }}</p>

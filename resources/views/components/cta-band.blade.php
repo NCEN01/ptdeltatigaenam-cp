@@ -6,7 +6,7 @@
     <div class="container relative">
         <p class="eyebrow mb-5">{{ $id ? 'Mulai langkah berikutnya' : 'Take the next step' }}</p>
         <h2 class="mx-auto max-w-3xl text-display-lg font-semibold text-balance" data-aos="fade-up">
-            {{ $id ? 'Siap meningkatkan ' : 'Ready to elevate your ' }}<span class="italic-accent text-gradient-hero">{{ $id ? 'kompetensi' : 'competencies' }}</span>{{ $id ? ' tim Anda?' : '?' }}
+            {{ $id ? 'Siap meningkatkan ' : 'Ready to elevate your ' }}<span class="italic-accent text-gradient-white-navy">{{ $id ? 'kompetensi' : 'competencies' }}</span>{{ $id ? ' tim Anda?' : '?' }}
         </h2>
         <p class="mx-auto mt-5 max-w-xl text-pretty leading-relaxed text-navy-100" data-aos="fade-up" data-aos-delay="60">
             {{ $id ? 'Diskusikan kebutuhan pelatihan dan pengembangan SDM perusahaan Anda bersama tim kami.' : 'Discuss your company training and people development needs with our team.' }}
