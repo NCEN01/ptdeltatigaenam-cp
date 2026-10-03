@@ -22,8 +22,13 @@ class Company
      * @return array<int, array<string, string>>
      */
     /**
-     * Nilai perusahaan dari config/company.php, dengan keterangan yang sudah
-     * dipilih menurut bahasa yang sedang aktif.
+     * Nilai perusahaan dari config/company.php, dengan kedua keterangannya
+     * sudah dipilih menurut bahasa yang sedang aktif.
+     *
+     * 'desc' adalah kalimat pernyataan untuk beranda; 'detail' penjelasan yang
+     * lebih dalam untuk halaman Tentang Kami. Keduanya dikembalikan bersama,
+     * dan tiap halaman memilih yang dipakainya — pemisahan itu urusan tampilan,
+     * bukan urusan data.
      *
      * Namanya sengaja tidak ikut diterjemahkan: huruf depan kelimanya mengeja
      * DELTA, dan terjemahan apa pun menghapus akronim itu.
@@ -35,8 +40,10 @@ class Company
         $locale = app()->getLocale();
 
         return array_map(static function (array $value) use ($locale): array {
-            if (is_array($value['desc'] ?? null)) {
-                $value['desc'] = $value['desc'][$locale] ?? reset($value['desc']);
+            foreach (['desc', 'detail'] as $key) {
+                if (\is_array($value[$key] ?? null)) {
+                    $value[$key] = $value[$key][$locale] ?? reset($value[$key]);
+                }
             }
 
             return $value;

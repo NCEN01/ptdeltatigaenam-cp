@@ -70,6 +70,20 @@ return [
     |
     | 'img' menunjuk ke public/images/values/<nama>.jpg.
     |
+    | Tiap nilai punya dua keterangan, dan keduanya tidak boleh sama:
+    |
+    |   'desc'   satu kalimat pernyataan, dipakai seksi "Alasan Memilih Kami"
+    |            di beranda. Tugasnya menyatakan sikapnya.
+    |
+    |   'detail' penjelasan yang lebih dalam, dipakai seksi "Nilai Perusahaan"
+    |            di halaman Tentang Kami. Tugasnya menyebut apa yang
+    |            benar-benar dikerjakan, sehingga nilai itu bisa diperiksa dan
+    |            bukan sekadar diklaim.
+    |
+    | Dua halaman yang menampilkan kalimat yang sama persis membuat yang kedua
+    | terasa sebagai salinan, dan tidak satu pun dari keduanya menambah
+    | keterangan baru bagi pembaca yang sudah membaca yang pertama.
+    |
     */
 
     'values' => [
@@ -80,6 +94,10 @@ return [
                 'id' => 'Selalu adaptif terhadap perubahan dan inovasi dalam dunia kerja.',
                 'en' => 'Always adaptive to change and innovation in the world of work.',
             ],
+            'detail' => [
+                'id' => 'Silabus kami ditinjau ulang setiap kali standar kompetensi atau aturan sektornya berubah, sehingga peserta mempelajari ketentuan yang berlaku hari ini.',
+                'en' => 'We revisit the syllabus whenever a competency standard or a sector regulation changes, so participants learn the rules that apply today.',
+            ],
         ],
         [
             'title' => 'Excellence',
@@ -87,6 +105,10 @@ return [
             'desc' => [
                 'id' => 'Unggul dalam setiap layanan yang diberikan.',
                 'en' => 'Excelling in every service we deliver.',
+            ],
+            'detail' => [
+                'id' => 'Setiap kelas ditutup dengan evaluasi peserta, dan hasilnya kami pakai menyusun ulang materi sebelum angkatan berikutnya dibuka.',
+                'en' => 'Every class closes with a participant evaluation, and we rebuild the material from those results before the next intake opens.',
             ],
         ],
         [
@@ -96,6 +118,10 @@ return [
                 'id' => 'Pionir dalam pengembangan solusi human capital yang inovatif.',
                 'en' => 'A pioneer in developing innovative human capital solutions.',
             ],
+            'detail' => [
+                'id' => 'Kami menyusun skema pelatihan untuk bidang yang belum punya rujukan baku, bersama asesor dan praktisi yang menanganinya langsung di lapangan.',
+                'en' => 'We build training schemes for fields that have no settled reference yet, alongside the assessors and practitioners who handle them on the ground.',
+            ],
         ],
         [
             'title' => 'Transcendent',
@@ -104,6 +130,10 @@ return [
                 'id' => 'Melampaui ekspektasi klien dan memberikan nilai tambah yang berkelanjutan.',
                 'en' => 'Exceeding client expectations and delivering sustainable added value.',
             ],
+            'detail' => [
+                'id' => 'Pendampingan tidak berhenti di hari terakhir kelas. Kami menemani penerapannya sampai kompetensi itu benar-benar terpakai di pekerjaan sehari-hari.',
+                'en' => 'Support does not stop on the last day of class. We stay with the rollout until the competency is genuinely being used in daily work.',
+            ],
         ],
         [
             'title' => 'Action',
@@ -111,6 +141,10 @@ return [
             'desc' => [
                 'id' => 'Berorientasi pada hasil dan tindakan nyata untuk mencapai tujuan.',
                 'en' => 'Results-oriented, with real action to achieve goals.',
+            ],
+            'detail' => [
+                'id' => 'Setiap rekomendasi kami sertai langkah yang bisa langsung dijalankan, lengkap dengan penanggung jawab dan tenggat waktunya.',
+                'en' => 'Every recommendation comes with steps that can start immediately, each with an owner and a deadline.',
             ],
         ],
     ],

@@ -256,66 +256,54 @@
     {{-- ===================== VALUES ===================== --}}
     <section class="section border-t border-navy-50 bg-paper">
         <div class="container">
-            <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
-                <h2 class="text-display-lg font-bold text-navy">{{ $isId ? 'Nilai Perusahaan' : 'Our Core Values' }}</h2>
-                {{-- Kalimat pengantarnya menyebut akronimnya. Tanpa itu, huruf emas
-                     di tiap nama hanya terbaca sebagai hiasan; dengan itu, ia jadi
-                     keterangan. --}}
-                <p class="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-slate-600">
-                    {{ $isId
-                        ? 'Lima prinsip yang memandu cara kami bekerja. Huruf depannya mengeja nama kami sendiri: DELTA.'
-                        : 'Five principles that guide how we work. Their initials spell our own name: DELTA.' }}
-                </p>
-            </div>
+            {{-- Judulnya menempati sel pertama grid, bukan berdiri sendiri rata
+                 tengah di atasnya.
 
-            {{-- Daftar tegak. Susunannya yang membuat kelima huruf depan berderet
-                 ke bawah mengeja DELTA, dan yang memberi keterangan tiap nilai
-                 lebar penuh alih-alih kolom sempit.
+                 Dengan lima nilai, grid dua kolom menyisakan satu sel kosong di
+                 baris terakhir. Dijadikan sel pertama, judulnya mengisi lubang
+                 itu dan grid-nya genap tiga baris. Susunannya jadi asimetris
+                 dengan sendirinya, tanpa sel kosong yang harus ditutup-tutupi.
 
-                 Dipisah garis, bukan dikotak-kotak: lima kotak berisi gambar,
-                 judul, dan teks adalah bentuk yang PRODUCT.md sebut sebagai hal
-                 yang dihindari.
+                 Bentuknya pun berbeda dari seksi "Alasan Memilih Kami" di
+                 beranda, yang memakai daftar tegak satu kolom di atas pita
+                 gelap. Dua halaman yang menampilkan nilai yang sama tidak boleh
+                 tampil sebagai salinan. --}}
+            <div class="grid gap-x-10 md:grid-cols-2 lg:gap-x-16">
 
-                 divide-navy-200, bukan navy-100: di atas bg-paper, navy-100
-                 hanya 1,16:1 — garisnya praktis tidak terlihat, padahal garis
-                 itulah satu-satunya yang mengelompokkan barisnya. --}}
-            <ol class="mx-auto mt-12 max-w-4xl divide-y divide-navy-200 border-y border-navy-200">
+                <div class="border-t border-navy-200 pt-8 md:pb-10" data-aos="fade-up">
+                    <h2 class="text-display-lg font-bold text-navy">{{ $isId ? 'Nilai Perusahaan' : 'Our Core Values' }}</h2>
+                    {{-- Kalimat pengantarnya menyebut akronimnya. Tanpa itu, lima
+                         huruf emas di bawahnya hanya terbaca sebagai hiasan. --}}
+                    <p class="mt-4 max-w-sm text-pretty leading-relaxed text-slate-600">
+                        {{ $isId
+                            ? 'Lima prinsip yang memandu cara kami bekerja. Huruf depannya mengeja nama kami sendiri: DELTA.'
+                            : 'Five principles that guide how we work. Their initials spell our own name: DELTA.' }}
+                    </p>
+                </div>
+
                 @foreach ($values as $i => $value)
-                    <li class="group grid grid-cols-[auto_1fr] items-start gap-5 py-7 md:gap-8 md:py-9"
-                        data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
-
-                        {{-- Fotonya jadi alas huruf. Ukuran dan opasitasnya dinaikkan
-                             (80/112px, 60%) supaya ia benar-benar terbaca sebagai
-                             foto: di 64px dengan opasitas 45% ia hanya menyumbang
-                             seperempat warna akhir piksel, jadi kelimanya tampil
-                             sebagai bidang navy yang sama dan 371 KB gambar terkirim
-                             tanpa ada yang melihatnya.
-
-                             Tirai navy-950/45 tetap dipasang. Ia yang menahan sisi
-                             terang foto, dan tanpanya huruf emas di atas foto
-                             bersorot putih jatuh di bawah 3:1 saat disentuh.
-
-                             width/height ditulis supaya ruangnya sudah dipesan
-                             sebelum gambarnya sampai. --}}
-                        <span class="relative grid h-20 w-20 place-items-center overflow-hidden rounded-2xl bg-navy-900 md:h-28 md:w-28" aria-hidden="true">
-                            <img src="{{ asset('images/values/'.$value['img'].'.jpg') }}" alt="" loading="lazy"
-                                 width="800" height="533" decoding="async"
-                                 class="absolute inset-0 h-full w-full object-cover opacity-60 transition-transform duration-500 group-hover:scale-105">
-                            <span class="absolute inset-0 bg-navy-950/45"></span>
-                            <span class="relative font-display text-3xl font-bold text-gold-soft md:text-4xl">{{ mb_substr($value['title'], 0, 1) }}</span>
-                        </span>
-
-                        <div class="min-w-0">
+                    <div class="border-t border-navy-200 py-8 md:py-10" data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
+                        <div class="flex items-center gap-4">
+                            {{-- Fotonya jadi alas huruf. Tirai navy-950/45 menahan
+                                 sisi terangnya supaya huruf emas di atas foto
+                                 bersorot putih pun tetap lolos 3:1. --}}
+                            <span class="relative grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-navy-900" aria-hidden="true">
+                                <img src="{{ asset('images/values/'.$value['img'].'.jpg') }}" alt="" loading="lazy"
+                                     width="800" height="533" decoding="async"
+                                     class="absolute inset-0 h-full w-full object-cover opacity-60">
+                                <span class="absolute inset-0 bg-navy-950/45"></span>
+                                <span class="relative font-display text-2xl font-bold text-gold-soft">{{ mb_substr($value['title'], 0, 1) }}</span>
+                            </span>
                             <h3 class="text-xl font-bold leading-tight text-navy md:text-2xl">{{ $value['title'] }}</h3>
-                            {{-- max-w-prose: lebar kolomnya sendiri ~784px, dan baris
-                                 sepanjang itu di 16px melewati 75 karakter yang nyaman
-                                 dibaca. Dibatasi di sini, bukan dibiarkan selebar
-                                 kolomnya. --}}
-                            <p class="mt-2 max-w-prose text-pretty text-base leading-relaxed text-slate-600">{{ $value['desc'] }}</p>
                         </div>
-                    </li>
+                        {{-- 'detail', bukan 'desc'. Kalimat 'desc' sudah tampil di
+                             beranda; mengulangnya di sini membuat halaman ini
+                             terbaca sebagai salinan dan tidak menambah keterangan
+                             apa pun bagi yang sudah membaca berandanya. --}}
+                        <p class="mt-4 max-w-prose text-pretty leading-relaxed text-slate-600">{{ $value['detail'] }}</p>
+                    </div>
                 @endforeach
-            </ol>
+            </div>
         </div>
     </section>
 
