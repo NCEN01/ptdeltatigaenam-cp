@@ -116,6 +116,14 @@
         @apply font-mono text-[11px] uppercase tracking-label text-slate-500;
     }
 
+    /* Varian .kicker untuk latar gelap: ukuran, jenis huruf, dan spasi hurufnya
+       sama persis, hanya warnanya yang berganti ke gold-soft supaya terbaca di
+       atas navy. Ditulis di sini, bukan di halamannya, agar ia ikut berubah
+       bersama .kicker — label yang satu tidak boleh menyimpang dari yang lain. */
+    .kicker-on-dark {
+        @apply font-mono text-[11px] uppercase tracking-label text-gold-soft;
+    }
+
     /* Section rhythm — generous, editorial whitespace */
     .section {
         @apply py-20 md:py-28 lg:py-36;

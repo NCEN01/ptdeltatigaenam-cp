@@ -110,7 +110,7 @@
     </section>
 
     {{-- ===================== VISION & MISSION ===================== --}}
-    <section class="relative overflow-hidden py-14 text-white md:py-20">
+    <section class="section-sm relative overflow-hidden text-white">
         {{-- Background image + overlay --}}
         <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1920&q=80" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover">
         {{-- Same gradient treatment as the "Keunggulan" band — image visible through the middle --}}
@@ -121,7 +121,9 @@
 
         <div class="container relative">
             <div class="mb-10 max-w-2xl" data-aos="fade-up">
-                <h2 class="font-display text-3xl md:text-4xl">{{ $isId ? 'Visi & Misi' : 'Vision & Mission' }}</h2>
+                {{-- Token text-display-lg, sama dengan judul seksi lain. font-display
+                     tidak ditulis: app.css sudah memberikannya ke setiap h1–h4. --}}
+                <h2 class="text-display-lg">{{ $isId ? 'Visi & Misi' : 'Vision & Mission' }}</h2>
             </div>
 
             {{-- Asymmetric 2fr/3fr rather than two matching glass boxes: the vision is one
@@ -131,11 +133,15 @@
 
                 {{-- Vision: set as the statement it is, not as body copy in a card. --}}
                 <div class="lg:col-span-2" data-aos="fade-up">
-                    <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-gold-soft">{{ $isId ? 'Visi' : 'Vision' }}</p>
-                    <span class="mt-4 block h-px w-12 bg-gold-soft/60" aria-hidden="true"></span>
-                    <blockquote class="mt-6">
+                    {{-- .kicker-on-dark menggantikan gaya yang ditulis sendiri.
+                         Yang lama memakai tracking 0,22em, padahal token
+                         tracking-label situs ini sengaja bernilai 0. Garis emas
+                         kecil di bawah tiap label juga dilepas: dengan garis emas
+                         di tepi atas seksi, ada tiga benda emas di satu layar. --}}
+                    <p class="kicker-on-dark">{{ $isId ? 'Visi' : 'Vision' }}</p>
+                    <blockquote class="mt-5">
                         <p class="font-display text-xl font-semibold leading-[1.45] text-white text-pretty md:text-2xl">
-                            &ldquo;{{ $vision }}&rdquo;
+                            “{{ $vision }}”
                         </p>
                     </blockquote>
                 </div>
@@ -143,19 +149,30 @@
                 {{-- Mission: numbered so the count reads at a glance; the em-dash bullets gave
                      no sense of how many commitments there are. --}}
                 <div class="lg:col-span-3" data-aos="fade-up" data-aos-delay="80">
-                    <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-gold-soft">{{ $isId ? 'Misi' : 'Mission' }}</p>
-                    <span class="mt-4 block h-px w-12 bg-gold-soft/60" aria-hidden="true"></span>
+                    <p class="kicker-on-dark">{{ $isId ? 'Misi' : 'Mission' }}</p>
 
                     @if ($missions->isNotEmpty())
-                        <ol class="mt-6 divide-y divide-white/10 border-y border-white/10">
+                        <ol class="mt-5 divide-y divide-white/10 border-y border-white/10">
                             @foreach ($missions as $mission)
-                                <li class="group flex items-start gap-4 py-4 transition-colors duration-300 md:gap-5">
-                                    <span class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-white/[0.07] font-mono text-[11px] font-bold tabular-nums text-gold-soft ring-1 ring-white/10 transition-colors duration-300 group-hover:bg-white/[0.14]">
+                                <li class="group flex items-start gap-4 py-5 md:gap-5">
+                                    {{-- Nomornya dibuat tenang: ia hanya penghitung, dan
+                                         isi misinyalah yang harus terbaca lebih dulu.
+                                         Karena itu tinggal angka tanpa ubin kaca, dan
+                                         ikut turun ke putih redup. --}}
+                                    <span class="mt-1 w-6 shrink-0 font-mono text-[11px] font-bold tabular-nums text-gold-soft" aria-hidden="true">
                                         {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
                                     </span>
-                                    {{-- Left-aligned on phones: justified text in a narrow column opens
-                                         rivers of white space between words. --}}
-                                    <p class="text-[15px] leading-relaxed text-white/90 text-left sm:text-justify [hyphens:auto]">{{ $mission->content }}</p>
+                                    {{-- Naik dari 15px ke 16/17px dan dari white/90 ke putih
+                                         penuh. Ini kalimat inti halaman, tapi sebelumnya ia
+                                         jadi teks terkecil di seksinya sendiri, di atas
+                                         gradasi yang bagian tengahnya hanya 45% gelap.
+
+                                         Rata kiri di semua ukuran, tidak lagi rata kanan-kiri
+                                         mulai sm: perataan penuh di kolom 3/5 membuka sungai
+                                         putih di antara kata, dan pemenggalan otomatis yang
+                                         dipasang untuk menutupinya justru memotong istilah
+                                         seperti "human capital" di tempat yang salah. --}}
+                                    <p class="text-base leading-relaxed text-white md:text-[17px]">{{ $mission->content }}</p>
                                 </li>
                             @endforeach
                         </ol>
@@ -166,7 +183,11 @@
     </section>
 
     {{-- ===================== FOUNDER ===================== --}}
-    <section class="relative overflow-hidden bg-navy-anim py-20 text-white md:py-24 lg:flex lg:min-h-[88vh] lg:items-center">
+    {{-- Tanpa lg:min-h-[88vh]. Tinggi yang dipatok ke tinggi layar membuat seksi
+         ini jadi bidang navy hampir sepenuh layar; di monitor tinggi, isinya
+         mengambang di tengah dengan ruang kosong besar di atas dan bawahnya.
+         Jarak seksi biasa sudah memberi napas yang cukup. --}}
+    <section class="relative overflow-hidden bg-navy-anim py-20 text-white md:py-28">
         <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-35"></div>
         <div class="pointer-events-none absolute inset-0 grain opacity-30"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
@@ -202,22 +223,30 @@
 
                 {{-- Bio --}}
                 <div class="lg:col-span-7" data-aos="fade-left" data-aos-delay="100">
-                    {{-- .kicker is styled for light backgrounds and .eyebrow is display:none
-                         site-wide, so this label is set inline to read on the dark band. --}}
-                    <p class="inline-flex items-center text-[11px] font-bold uppercase tracking-[0.22em] text-gold-soft">
-                        <span class="mr-3 inline-block h-px w-10 bg-gold-soft/70 align-middle" aria-hidden="true"></span>
-                        {{ $isId ? 'Pendiri' : 'Founder' }}
-                    </p>
+                    {{-- .kicker-on-dark, bukan gaya yang ditulis sendiri di sini.
+                         Yang lama memakai tracking 0,22em, padahal token
+                         tracking-label situs ini sengaja bernilai 0 — label
+                         berhuruf renggang justru tampilan yang dihindari. Garis
+                         kecil di sampingnya ikut dilepas: di blok ini sudah ada
+                         tiga benda emas, dan jabatan di bawah nama sudah cukup
+                         menandai. --}}
+                    <p class="kicker-on-dark">{{ $isId ? 'Pendiri' : 'Founder' }}</p>
 
-                    <h2 class="mt-5 font-display text-2xl font-bold leading-tight text-white text-balance md:text-3xl">{{ $founderName }}</h2>
-                    <p class="mt-2.5 font-mono text-[11px] uppercase tracking-wider text-gold-soft">{{ $founderRole }}</p>
+                    {{-- Nama jadi jelas yang terbesar. Sebelumnya nama 2xl/3xl dan
+                         kutipan xl/2xl hampir sama besar, jadi keduanya berebut
+                         jadi yang pertama dibaca. Sekarang tangganya menurun
+                         rapi: nama, jabatan, kutipan, riwayat. --}}
+                    <h2 class="mt-4 text-3xl font-bold leading-tight text-white md:text-4xl">{{ $founderName }}</h2>
+                    <p class="mt-3 font-mono text-[11px] uppercase tracking-label text-gold-soft">{{ $founderRole }}</p>
 
-                    {{-- Quote. Not font-light: light weight on a dark background reads thinner
-                         still, and this is the line the section is built around. --}}
-                    <blockquote class="mt-9 max-w-2xl">
-                        <p class="text-pretty text-xl italic leading-[1.6] text-white md:text-2xl">&ldquo;{{ $founderQuote }}&rdquo;</p>
+                    {{-- Kutipan ditandai garis tepi, bukan dibesarkan sampai
+                         menyaingi nama. Garisnya putih tipis, bukan emas:
+                         emas di seksi ini sudah dipakai bingkai potret dan
+                         baris jabatan. --}}
+                    <blockquote class="mt-8 max-w-2xl border-l-2 border-white/20 pl-6">
+                        <p class="text-pretty text-lg italic leading-[1.65] text-white md:text-xl">“{{ $founderQuote }}”</p>
                     </blockquote>
-                    {{-- Full navy-100, not navy-100/80: the extra transparency only cost contrast. --}}
+
                     <p class="mt-7 max-w-xl text-pretty text-[15px] leading-[1.8] text-navy-100">{{ $founderBio }}</p>
                 </div>
             </div>
