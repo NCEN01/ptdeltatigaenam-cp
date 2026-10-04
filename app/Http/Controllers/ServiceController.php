@@ -2,18 +2,77 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agenda;
 use App\Models\Service;
 use App\Models\ServiceCategory;
+use App\Models\Setting;
+use Illuminate\Support\Facades\Storage;
 
 class ServiceController extends Controller
 {
     public function index()
     {
+        // Seksi Agenda di halaman ini dinyalakan dan diatur lewat panel admin
+        // (Konten > Agenda di Halaman Layanan). Saat dimatikan, query agendanya
+        // pun tidak dijalankan: seksinya tidak dirender, jadi menjalankannya
+        // hanya membebani tiap kunjungan tanpa hasil.
+        $agendaActive = (bool) Setting::get('service_agenda_active', true);
+
         return view('pages.services.index', [
             'categories' => ServiceCategory::where('is_active', true)
                 ->with(['services' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order')])
                 ->orderBy('sort_order')->get(),
+
+            'agendaActive' => $agendaActive,
+            'agendaTitle' => Setting::getLocalized('service_agenda_title'),
+            'agendaIntro' => Setting::getLocalized('service_agenda_intro'),
+
+            // Yang akan datang didahulukan, dan yang paling dekat tanggalnya
+            // berdiri paling depan. Agenda yang sudah lewat tidak ikut: seksi
+            // ini bernama "Agenda Mendatang", dan menampilkan tanggal yang
+            // sudah berlalu di situ membuat daftarnya menyesatkan.
+            'agendas' => $agendaActive
+                ? Agenda::published()
+                    ->where(fn ($q) => $q->whereNull('starts_at')->orWhere('starts_at', '>=', now()->startOfDay()))
+                    ->orderByRaw('starts_at IS NULL')
+                    ->orderBy('starts_at')
+                    ->take(max(1, (int) Setting::get('service_agenda_limit', 3)))
+                    ->get()
+                : collect(),
+
+            'agendaFile' => $agendaActive ? $this->agendaFile() : null,
         ]);
+    }
+
+    /**
+     * Berkas jadwal yang diunggah admin, beserta keterangan yang dibutuhkan
+     * tampilannya: jenis dan ukurannya.
+     *
+     * Keduanya dibaca dari berkasnya sendiri, bukan diketik admin. Angka
+     * ukuran yang diketik tangan akan salah begitu berkasnya diganti, dan
+     * tidak ada yang mengingatkan. Null bila belum ada berkas atau berkasnya
+     * sudah tidak ada di penyimpanan, sehingga tampilannya cukup memeriksa
+     * satu nilai.
+     */
+    private function agendaFile(): ?array
+    {
+        $path = Setting::get('service_agenda_file');
+
+        if (! $path || ! Storage::disk('public')->exists($path)) {
+            return null;
+        }
+
+        $bytes = Storage::disk('public')->size($path);
+
+        return [
+            'url' => Storage::url($path),
+            'ext' => strtoupper(pathinfo($path, PATHINFO_EXTENSION)),
+            'size' => $bytes >= 1048576
+                ? round($bytes / 1048576, 1).' MB'
+                : max(1, (int) round($bytes / 1024)).' KB',
+            'label' => Setting::getLocalized('service_agenda_file_label'),
+            'note' => Setting::getLocalized('service_agenda_file_note'),
+        ];
     }
 
     public function show(string $locale, string $slug)

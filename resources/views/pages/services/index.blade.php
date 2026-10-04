@@ -155,6 +155,138 @@
         </div>
     </section>
 
+    {{-- ===================== AGENDA MENDATANG =====================
+         Isinya datang dari dua tempat yang berbeda peran:
+
+         Kartunya dibaca dari menu Agenda yang sudah ada, bukan dari daftar
+         baru. Satu agenda cukup dimasukkan sekali lalu muncul di mana pun ia
+         ditampilkan; daftar terpisah akan menuntut admin mengisi hal yang sama
+         dua kali dan menyimpang begitu salah satunya disunting.
+
+         Berkas jadwalnya (PDF atau Excel) diunggah lewat Konten > Agenda di
+         Halaman Layanan. Kartunya menampilkan yang terdekat, berkasnya memuat
+         seluruh periode — keduanya menjawab pertanyaan yang berbeda, jadi
+         keduanya ada.
+
+         Seluruh seksi ini bisa dimatikan dari panel admin. --}}
+    @if ($agendaActive && ($agendas->isNotEmpty() || $agendaFile))
+        <section class="section-sm relative overflow-hidden border-t border-navy-50 bg-paper">
+            <div class="pointer-events-none absolute inset-0 aurora-light opacity-50"></div>
+
+            <div class="container relative">
+                <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-10">
+                    <div class="max-w-2xl" data-aos="fade-up">
+                        <h2 class="text-display-lg text-navy">{{ $agendaTitle ?: ($id ? 'Agenda Mendatang' : 'Upcoming Agenda') }}</h2>
+                        @if ($agendaIntro)
+                            <p class="mt-4 text-pretty leading-relaxed text-slate-600">{{ $agendaIntro }}</p>
+                        @endif
+                    </div>
+
+                    @if ($agendas->isNotEmpty())
+                        <p class="shrink-0 font-mono text-xs text-slate-600" data-aos="fade-up">
+                            <span class="text-sm font-semibold text-navy">{{ str_pad($agendas->count(), 2, '0', STR_PAD_LEFT) }}</span>
+                            {{ $id ? 'jadwal terdekat' : 'nearest dates' }}
+                        </p>
+                    @endif
+                </div>
+
+                @if ($agendas->isNotEmpty())
+                    <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+                        @foreach ($agendas as $i => $agenda)
+                            @php
+                                $agendaImg = $agenda->image
+                                    ? (str_starts_with($agenda->image, 'http') ? $agenda->image : Storage::url($agenda->image))
+                                    : null;
+                            @endphp
+                            <article class="card card-hover group flex flex-col overflow-hidden" data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
+                                <div class="relative aspect-[3/2] overflow-hidden bg-navy-900">
+                                    @if ($agendaImg)
+                                        <img src="{{ $agendaImg }}" alt="{{ $agenda->title }}" loading="lazy"
+                                             class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                                    @else
+                                        <div class="absolute inset-0 aurora opacity-50"></div>
+                                    @endif
+                                    <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/60 via-transparent to-transparent"></div>
+
+                                    {{-- Lencana tanggal. Tanggal adalah hal pertama yang
+                                         dicari orang di kartu agenda, jadi ia duduk di
+                                         gambar alih-alih menunggu giliran di badan kartu. --}}
+                                    @if ($agenda->starts_at)
+                                        <div class="absolute left-4 top-4 flex w-12 flex-col items-center rounded-xl bg-white/95 py-1.5 text-center shadow-lift ring-1 ring-white/60 backdrop-blur">
+                                            <span class="font-display text-lg font-semibold leading-none text-navy">{{ $agenda->starts_at->format('d') }}</span>
+                                            <span class="font-mono text-[9px] font-bold uppercase tracking-normal text-navy-600">{{ $agenda->starts_at->translatedFormat('M') }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <div class="flex flex-1 flex-col p-6">
+                                    <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[11px] uppercase tracking-normal text-slate-600">
+                                        @if ($agenda->starts_at)
+                                            <span>{{ $agenda->starts_at->translatedFormat('H.i') }} WIB</span>
+                                        @endif
+                                        <x-meta-location :value="$agenda->location" />
+                                    </div>
+
+                                    <h3 class="mt-2.5 line-clamp-2 text-lg leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">{{ $agenda->title }}</h3>
+
+                                    @if ($agenda->excerpt)
+                                        <p class="mt-2 line-clamp-3 text-pretty text-sm leading-relaxed text-slate-600">{{ $agenda->excerpt }}</p>
+                                    @endif
+
+                                    {{-- Tautannya ke WhatsApp, bukan ke halaman Agenda:
+                                         halaman itu sedang disembunyikan lewat
+                                         config/company.php, dan menautkan ke halaman yang
+                                         menjawab 404 lebih buruk daripada tidak menautkan
+                                         sama sekali. Begitu halamannya dinyalakan lagi,
+                                         baris ini bisa diarahkan ke sana. --}}
+                                    <a href="https://wa.me/62818834766?text={{ rawurlencode(($id ? 'Halo Delta Tiga Enam, saya ingin bertanya soal agenda: ' : 'Hello Delta Tiga Enam, I would like to ask about this agenda: ').$agenda->title) }}"
+                                       target="_blank" rel="noopener"
+                                       class="mt-auto flex items-center gap-2 border-t border-navy-100 pt-4 text-sm font-medium text-navy transition-colors hover:text-sky-700">
+                                        {{ $id ? 'Tanyakan jadwal ini' : 'Ask about this date' }}
+                                        <svg class="h-4 w-4 text-gold-deep transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </a>
+                                </div>
+                            </article>
+                        @endforeach
+                    </div>
+                @endif
+
+                {{-- Berkas jadwal lengkap. Satu panel melebar, bukan kartu keempat
+                     yang berbaris bersama agendanya: isinya bukan satu agenda,
+                     melainkan seluruhnya, jadi bentuknya pun harus berbeda. --}}
+                @if ($agendaFile)
+                    <div class="mt-6 overflow-hidden rounded-2xl border border-navy-200 bg-white p-6 shadow-card sm:flex sm:items-center sm:justify-between sm:gap-8 md:p-7" data-aos="fade-up">
+                        <div class="flex items-start gap-4">
+                            <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-navy text-white" aria-hidden="true">
+                                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
+                                    <path d="M19 8.5V19a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6.5Z"/>
+                                    <path d="M9 13h6M9 17h4"/>
+                                </svg>
+                            </span>
+                            <div class="min-w-0">
+                                <p class="font-display text-lg font-semibold text-navy">{{ $agendaFile['label'] ?: ($id ? 'Jadwal lengkap' : 'Full schedule') }}</p>
+                                @if ($agendaFile['note'])
+                                    <p class="mt-1 max-w-md text-pretty text-sm leading-relaxed text-slate-600">{{ $agendaFile['note'] }}</p>
+                                @endif
+                                {{-- Jenis dan ukuran berkasnya disebut lebih dulu. Tautan
+                                     unduhan yang tidak menyebutkan keduanya membuat orang
+                                     menekan tanpa tahu apa yang akan terbuka. --}}
+                                <p class="mt-2 font-mono text-[11px] uppercase tracking-normal text-slate-600">{{ $agendaFile['ext'] }} · {{ $agendaFile['size'] }}</p>
+                            </div>
+                        </div>
+
+                        <a href="{{ $agendaFile['url'] }}" target="_blank" rel="noopener"
+                           class="btn-blue mt-5 w-full justify-center sm:mt-0 sm:w-auto sm:shrink-0">
+                            {{ $id ? 'Buka jadwal' : 'Open schedule' }}
+                            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </a>
+                    </div>
+                @endif
+            </div>
+        </section>
+    @endif
+
     @forelse ($categories as $cat)
         {{-- bg-paper, bukan bg-mist. Keduanya off-white kebiruan yang nyaris sama
              (#f2f8fd dan #eaf3fb), dan seluruh situs memakai bg-paper untuk irama
