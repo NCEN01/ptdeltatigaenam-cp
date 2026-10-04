@@ -254,15 +254,12 @@
     </section>
 
     {{-- ===================== VALUES ===================== --}}
-    <section class="section border-t border-navy-50 bg-paper">
-        <div class="container">
+    <section class="section relative overflow-hidden border-t border-navy-50 bg-paper">
+        <div class="pointer-events-none absolute inset-0 aurora-light opacity-50"></div>
+
+        <div class="container relative">
             <div class="max-w-2xl" data-aos="fade-up">
                 <h2 class="text-display-lg font-bold text-navy">{{ $isId ? 'Nilai Perusahaan' : 'Our Core Values' }}</h2>
-                {{-- Pengantarnya tidak lagi mengulang pengungkapan akronim. Hal itu
-                     sudah dikerjakan seksi "Alasan Memilih Kami" di beranda, dan
-                     menyebutnya dua kali membuat yang kedua terbaca sebagai salinan.
-                     Yang disebut di sini justru sudut pandangnya: beranda menyatakan
-                     sikap kami, halaman ini menjelaskan artinya bagi pembacanya. --}}
                 <p class="mt-4 text-pretty text-lg leading-relaxed text-slate-600">
                     {{ $isId
                         ? 'Apa arti kelima nilai ini bagi Anda yang bekerja bersama kami.'
@@ -270,39 +267,45 @@
                 </p>
             </div>
 
-            {{-- Daftar istilah, bukan deretan kartu.
+            {{-- Akronimnya jadi tulang punggung tegak.
 
-                 <dl> memang bentuk yang tepat untuk pasangan istilah dan
-                 penjelasannya, dan ia sekaligus membedakan seksi ini dari <ul>
-                 berikon di beranda yang menampilkan kelima nilai yang sama.
+                 Kelima huruf berdiri di satu garis vertikal yang menghubungkannya
+                 dari atas ke bawah, sehingga D-E-L-T-A terbaca sebagai satu kata
+                 yang menurun, bukan lima huruf yang kebetulan berdekatan.
 
-                 Nama nilainya berukuran judul di kolom kiri, penjelasannya di
-                 kanan. Kolom kirinya berlebar tetap, sehingga huruf pertama
-                 kelima nama berdiri di satu garis tegak lurus dan terbaca ke
-                 bawah sebagai DELTA. Tidak ada elemen huruf terpisah seperti di
-                 beranda: huruf itu memang huruf pertama namanya, hanya diberi
-                 warna. --}}
-            <dl class="mt-12 border-t border-navy-200">
-                @foreach ($values as $i => $value)
-                    <div class="grid gap-x-10 gap-y-2 border-b border-navy-200 py-7 md:grid-cols-12 md:py-9"
-                         data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
-                        <dt class="md:col-span-4 lg:col-span-3">
-                            {{-- gold-deep, bukan gold-soft: di atas bg-paper yang
-                                 terang, gold-soft hanya 1,7:1 sedangkan gold-deep
-                                 3,1:1 — lolos ambang 3:1 untuk teks sebesar ini. --}}
-                            <p class="font-display text-3xl font-bold leading-none text-navy md:text-4xl">
-                                <span class="text-gold-deep">{{ mb_substr($value['title'], 0, 1) }}</span>{{ mb_substr($value['title'], 1) }}
-                            </p>
-                        </dt>
-                        <dd class="md:col-span-8 lg:col-span-9">
-                            {{-- 'detail', bukan 'desc'. Kalimat 'desc' sudah tampil
-                                 di beranda, dan mengulangnya di sini tidak menambah
-                                 apa pun bagi yang sudah membacanya. --}}
-                            <p class="max-w-prose text-pretty leading-relaxed text-slate-600 md:text-lg">{{ $value['detail'] }}</p>
-                        </dd>
-                    </div>
-                @endforeach
-            </dl>
+                 Garis penghubung biasanya menjanjikan urutan — langkah pertama,
+                 kedua, dan seterusnya — dan di daftar yang butirnya setara itu
+                 janji palsu. Di sini urutannya memang mengikat: menukar dua baris
+                 saja membuat namanya tidak lagi terbaca. Garis itu justru yang
+                 menyatakannya.
+
+                 Ubinnya persegi membulat, bukan lingkaran, supaya tidak terbaca
+                 sebagai garis waktu; bentuk itu sama dengan ubin ikon di seksi
+                 lain situs ini. ring-4 ring-paper membuat garisnya terputus rapi
+                 di belakang tiap ubin tanpa elemen penutup tambahan. --}}
+            <div class="relative mt-14 pl-20 md:mt-16 md:pl-28">
+                {{-- Garisnya meluruh di ujung bawah, bukan berhenti mendadak di
+                     bawah huruf terakhir. --}}
+                <span class="pointer-events-none absolute bottom-6 left-7 top-7 w-px bg-gradient-to-b from-navy-200 via-navy-200 to-transparent md:left-9" aria-hidden="true"></span>
+
+                <dl>
+                    @foreach ($values as $i => $value)
+                        <div class="relative pb-10 last:pb-0 md:pb-12" data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
+                            <dt>
+                                {{-- Huruf emas di atas navy pekat: 14,5:1, jauh di
+                                     atas ambang. --}}
+                                <span class="absolute -left-20 top-0 grid h-14 w-14 place-items-center rounded-2xl bg-navy font-display text-2xl font-bold text-gold-soft shadow-card ring-4 ring-paper md:-left-28 md:h-[4.5rem] md:w-[4.5rem] md:text-3xl" aria-hidden="true">{{ mb_substr($value['title'], 0, 1) }}</span>
+                                <p class="text-2xl font-bold leading-none text-navy md:text-3xl">{{ $value['title'] }}</p>
+                            </dt>
+                            <dd class="mt-3">
+                                {{-- 'detail', bukan 'desc'. Kalimat 'desc' sudah
+                                     tampil di beranda. --}}
+                                <p class="max-w-prose text-pretty leading-relaxed text-slate-600 md:text-lg">{{ $value['detail'] }}</p>
+                            </dd>
+                        </div>
+                    @endforeach
+                </dl>
+            </div>
         </div>
     </section>
 
