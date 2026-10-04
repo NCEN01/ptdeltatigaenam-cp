@@ -27,16 +27,25 @@ class ServiceController extends Controller
             'agendaTitle' => Setting::getLocalized('service_agenda_title'),
             'agendaIntro' => Setting::getLocalized('service_agenda_intro'),
 
-            // Yang akan datang didahulukan, dan yang paling dekat tanggalnya
-            // berdiri paling depan. Agenda yang sudah lewat tidak ikut: seksi
-            // ini bernama "Agenda Mendatang", dan menampilkan tanggal yang
-            // sudah berlalu di situ membuat daftarnya menyesatkan.
+            // Yang akan datang berdiri di depan, paling dekat tanggalnya lebih
+            // dulu; yang sudah berakhir menyusul di belakang, paling baru lebih
+            // dulu. Keduanya ditandai berbeda di tampilannya, jadi yang lewat
+            // tidak menyamar sebagai jadwal yang masih bisa diikuti.
+            //
+            // Agenda yang sudah berakhir bisa dimatikan dari panel admin. Ia
+            // berguna sebagai bukti bahwa kelasnya memang berjalan, tapi di
+            // periode yang sepi ia bisa mendominasi dan membuat daftarnya
+            // terbaca seolah tidak ada yang akan datang.
             'agendas' => $agendaActive
                 ? Agenda::published()
-                    ->where(fn ($q) => $q->whereNull('starts_at')->orWhere('starts_at', '>=', now()->startOfDay()))
-                    ->orderByRaw('starts_at IS NULL')
-                    ->orderBy('starts_at')
-                    ->take(max(1, (int) Setting::get('service_agenda_limit', 3)))
+                    ->when(
+                        ! (bool) Setting::get('service_agenda_show_past', true),
+                        fn ($q) => $q->where(fn ($w) => $w->whereNull('starts_at')->orWhere('starts_at', '>=', now()->startOfDay())),
+                    )
+                    ->orderByRaw('(starts_at IS NULL OR starts_at >= ?) DESC', [now()->startOfDay()])
+                    ->orderByRaw('CASE WHEN starts_at >= ? THEN starts_at END ASC', [now()->startOfDay()])
+                    ->orderByDesc('starts_at')
+                    ->take(max(1, (int) Setting::get('service_agenda_limit', 6)))
                     ->get()
                 : collect(),
 

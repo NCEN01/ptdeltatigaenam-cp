@@ -55,7 +55,8 @@ class ManageServiceAgenda extends Page implements HasForms
                 'id' => 'Jadwal kelas dan uji kompetensi yang sudah terbuka pendaftarannya.',
                 'en' => 'Classes and competence assessments already open for registration.',
             ],
-            'service_agenda_limit' => (string) Setting::get('service_agenda_limit', '3'),
+            'service_agenda_limit' => (string) Setting::get('service_agenda_limit', '6'),
+            'service_agenda_show_past' => (bool) Setting::get('service_agenda_show_past', true),
             'service_agenda_file' => Setting::get('service_agenda_file'),
             'service_agenda_file_label' => Setting::get('service_agenda_file_label') ?: [
                 'id' => 'Jadwal lengkap',
@@ -89,13 +90,17 @@ class ManageServiceAgenda extends Page implements HasForms
                 ])->columns(2),
 
             Section::make('Kartu agenda')
-                ->description('Isi kartunya diambil dari menu Agenda. Tambah atau sunting agendanya di sana; yang diatur di sini hanya berapa banyak yang tampil. Hanya agenda berstatus "published" yang muncul, dan yang paling dekat tanggalnya didahulukan.')
+                ->description('Isi kartunya diambil dari menu Agenda. Tambah atau sunting agendanya di sana; yang diatur di sini hanya berapa banyak yang tampil. Hanya agenda berstatus "published" yang muncul. Kartunya bisa digeser ke samping, jadi jumlah yang banyak tetap muat tanpa memanjangkan halaman.')
                 ->schema([
                     TextInput::make('service_agenda_limit')
                         ->label('Jumlah kartu yang ditampilkan')
-                        ->numeric()->minValue(1)->maxValue(12)->required()
-                        ->helperText('3 atau 6 paling rapi, karena kartunya tersusun tiga per baris.'),
-                ]),
+                        ->numeric()->minValue(1)->maxValue(24)->required()
+                        ->helperText('Urutannya: yang akan datang lebih dulu, paling dekat tanggalnya paling depan, lalu yang sudah berakhir. Tiga kartu terlihat sekaligus di layar lebar, sisanya digeser.'),
+                    Toggle::make('service_agenda_show_past')
+                        ->label('Tampilkan juga agenda yang sudah berakhir')
+                        ->helperText('Ditandai abu-abu dengan gambar meredup dan tanpa tombol pendaftaran. Berguna sebagai bukti kelasnya memang berjalan, tapi di periode sepi ia bisa mendominasi daftarnya.')
+                        ->columnSpanFull(),
+                ])->columns(1),
 
             Section::make('Berkas jadwal (PDF atau Excel)')
                 ->description('Pengunjung dapat membuka atau mengunduh berkas ini untuk melihat jadwal lengkapnya. Kosongkan bila belum ada; tombolnya otomatis tidak ditampilkan.')
@@ -134,7 +139,8 @@ class ManageServiceAgenda extends Page implements HasForms
         };
 
         $put('service_agenda_active', ! empty($data['service_agenda_active']) ? '1' : '0', 'text');
-        $put('service_agenda_limit', (string) ($data['service_agenda_limit'] ?? 3), 'text');
+        $put('service_agenda_limit', (string) ($data['service_agenda_limit'] ?? 6), 'text');
+        $put('service_agenda_show_past', ! empty($data['service_agenda_show_past']) ? '1' : '0', 'text');
 
         // FileUpload mengembalikan array saat berkasnya baru diunggah dan string
         // saat tidak diubah; keduanya diratakan jadi satu jalur berkas.
