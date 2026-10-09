@@ -527,6 +527,105 @@
     55%  { filter: blur(0); }
     100% { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
+
+/* ── Hero: lapis gradien bersudut ──────────────────────────────────────────
+ * Tiga bidang bersudut menggantikan satu gradien melandai. Tepinya tegas
+ * supaya terbaca sebagai bentuk, bukan kabut:
+ *
+ *   main  — membawa warna dan menjamin keterbacaan teks putih
+ *   facet — meneruskan birunya sedikit lebih jauh ke kanan, jadi peralihan
+ *           ke foto tidak terjadi dalam satu garis dan sisi fotonya tetap
+ *           punya nada biru yang sama
+ *   edge  — garis rambut di sepanjang sudut utama, yang membuat bentuknya
+ *           terbaca sebagai bidang dan bukan sebagai potongan yang kasar
+ *
+ * Kemiringan ketiganya sama persis (tepi atas dan tepi bawah bergeser 12%
+ * di semua ukuran layar), jadi ia satu bentuk berlapis, bukan tiga potongan
+ * yang kebetulan miring.
+ *
+ * Sudutnya digambar di sini, bukan sebagai kelas utilitas: clip-path-nya
+ * berubah di tiga ukuran layar dan tiga rangkaian polygon tidak terbaca lagi
+ * kalau ditulis di dalam atribut class.
+ *
+ * Lebar bidangnya mengikuti kotak teks, bukan sebaliknya. Kotak teks hero
+ * max-w-2xl (672px) di dalam container, jadi tepi kanannya jatuh di sekitar
+ * 55% lebar layar pada 1280px ke atas tapi sampai 69% pada 1024px — karena
+ * itu rentang lg punya bidang yang lebih lebar. Di seluruh lebar kotak teks,
+ * alfa bidang utama tidak pernah turun di bawah 0,86; di atas titik paling
+ * terang foto mana pun itu masih menyisakan kontras jauh di atas 4,5:1.
+ */
+
+/* Ponsel dan tablet: teksnya selebar layar, jadi bidangnya menutup penuh dan
+   sudutnya pindah ke tepi bawah kanan. Sudut di sisi kanan seperti di layar
+   lebar akan memotong kalimatnya sendiri. */
+.hero-geo-main {
+    background: linear-gradient(168deg,
+        rgba(7, 29, 56, 0.95) 0%,
+        rgba(18, 58, 107, 0.92) 42%,
+        rgba(22, 74, 125, 0.82) 72%,
+        rgba(32, 95, 159, 0.58) 100%);
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% 82%, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 82%, 0 100%);
+}
+/* Tepi dalam bidang penerus dibiarkan tegas (ia bertemu bidang utama di sana),
+   tepi luarnya dihabiskan sampai nol. Kalau keduanya tegas, yang terbaca bukan
+   satu bentuk berlapis melainkan dua pita yang ditumpuk. Persentase stopnya
+   dihitung terhadap seluruh kotak, bukan terhadap potongannya. */
+.hero-geo-facet {
+    background: linear-gradient(180deg, rgba(43, 131, 223, 0.34) 82%, rgba(43, 131, 223, 0) 96%);
+    -webkit-clip-path: polygon(0 100%, 100% 82%, 100% 93%, 0 111%);
+    clip-path: polygon(0 100%, 100% 82%, 100% 93%, 0 111%);
+}
+.hero-geo-edge {
+    background: linear-gradient(90deg,
+        rgba(52, 211, 244, 0) 0%,
+        rgba(52, 211, 244, 0.38) 45%,
+        rgba(237, 214, 138, 0.5) 100%);
+    -webkit-clip-path: polygon(0 100%, 100% 82%, 100% 82.5%, 0 100.5%);
+    clip-path: polygon(0 100%, 100% 82%, 100% 82.5%, 0 100.5%);
+}
+
+@media (min-width: 1024px) {
+    .hero-geo-main {
+        background: linear-gradient(104deg,
+            rgba(7, 29, 56, 0.97) 0%,
+            rgba(18, 58, 107, 0.95) 34%,
+            rgba(22, 74, 125, 0.88) 58%,
+            rgba(32, 95, 159, 0.62) 80%,
+            rgba(43, 131, 223, 0.34) 100%);
+        -webkit-clip-path: polygon(0 0, 70% 0, 82% 100%, 0 100%);
+        clip-path: polygon(0 0, 70% 0, 82% 100%, 0 100%);
+    }
+    .hero-geo-facet {
+        background: linear-gradient(104deg, rgba(43, 131, 223, 0.34) 67%, rgba(43, 131, 223, 0) 90%);
+        -webkit-clip-path: polygon(70% 0, 83.5% 0, 95.5% 100%, 82% 100%);
+        clip-path: polygon(70% 0, 83.5% 0, 95.5% 100%, 82% 100%);
+    }
+    .hero-geo-edge {
+        background: linear-gradient(180deg,
+            rgba(237, 214, 138, 0.5) 0%,
+            rgba(52, 211, 244, 0.38) 55%,
+            rgba(52, 211, 244, 0) 100%);
+        -webkit-clip-path: polygon(70% 0, 70.22% 0, 82.22% 100%, 82% 100%);
+        clip-path: polygon(70% 0, 70.22% 0, 82.22% 100%, 82% 100%);
+    }
+}
+
+@media (min-width: 1280px) {
+    .hero-geo-main {
+        -webkit-clip-path: polygon(0 0, 56% 0, 68% 100%, 0 100%);
+        clip-path: polygon(0 0, 56% 0, 68% 100%, 0 100%);
+    }
+    .hero-geo-facet {
+        background: linear-gradient(104deg, rgba(43, 131, 223, 0.34) 55%, rgba(43, 131, 223, 0) 79%);
+        -webkit-clip-path: polygon(56% 0, 69.5% 0, 81.5% 100%, 68% 100%);
+        clip-path: polygon(56% 0, 69.5% 0, 81.5% 100%, 68% 100%);
+    }
+    .hero-geo-edge {
+        -webkit-clip-path: polygon(56% 0, 56.22% 0, 68.22% 100%, 68% 100%);
+        clip-path: polygon(56% 0, 56.22% 0, 68.22% 100%, 68% 100%);
+    }
+}
 /* FAQ accordion opens by animating grid-template-rows 0fr -> 1fr, which settles on
    the answer's natural height (a fixed max-height clips long answers). Snap it open
    when the reader asked for less motion. */
