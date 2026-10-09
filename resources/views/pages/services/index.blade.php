@@ -521,7 +521,16 @@
                     {{ $id ? 'Belum yakin program mana yang pas?' : 'Not sure which programme fits?' }}
                 </h2>
 
-                <div class="mt-10 flex justify-center">
+                {{-- Satu kalimat, bukan paragraf. Isinya apa yang perlu disiapkan
+                     pembaca sebelum menekan tombol, supaya langkahnya terasa kecil
+                     dan jelas, bukan janji umum yang menambah panjang bacaan. --}}
+                <p class="mx-auto mt-5 max-w-xl text-pretty text-lg leading-relaxed text-navy-100">
+                    {{ $id
+                        ? 'Ceritakan pekerjaan dan jumlah tim Anda, lalu kami bantu pilihkan skema beserta jadwalnya. Tanpa biaya.'
+                        : 'Tell us about the work and the size of your team, and we will help pick a scheme and a schedule. No charge.' }}
+                </p>
+
+                <div class="mt-9 flex justify-center">
                     <a href="{{ route('contact.index') }}" class="btn-blue">
                         {{ $id ? 'Konsultasikan Kebutuhan Anda' : 'Discuss Your Needs' }}
                         <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
