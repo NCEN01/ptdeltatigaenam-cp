@@ -48,11 +48,17 @@
             }
         }
     @endphp
-    <section class="section bg-white">
+    {{-- Jarak bawahnya dipendekkan dari .section: kartu PDF di seksi berikutnya
+         masih tentang Profil Perusahaan juga, jadi keduanya dibaca sebagai satu
+         blok, bukan dua seksi yang kebetulan bersebelahan. --}}
+    <section class="bg-white pb-14 pt-20 md:pb-16 md:pt-28 lg:pt-36">
         <div class="container">
             <h2 class="text-display-lg font-bold text-navy" data-aos="fade-up">{{ $isId ? 'Profil Perusahaan' : 'Company Profile' }}</h2>
 
-            <div class="mt-10 grid items-center gap-10 lg:mt-12 lg:grid-cols-12 lg:gap-14">
+            {{-- Rata atas, bukan rata tengah. Teks profilnya satu paragraf pendek
+                 sementara fotonya tinggi; kalau dipusatkan, paragraf itu melayang
+                 jauh di bawah judulnya dan judulnya kehilangan isi. --}}
+            <div class="mt-8 grid items-start gap-8 lg:mt-10 lg:grid-cols-12 lg:gap-12">
                 {{-- Rata kiri, tidak rata kanan-kiri: di kolom selebar ini perataan
                      penuh membuka celah putih memanjang di tengah paragraf. --}}
                 <div class="space-y-4 text-base leading-relaxed text-slate-700 lg:col-span-5" data-aos="fade-up">
@@ -63,14 +69,16 @@
                 </div>
 
                 <div class="relative lg:col-span-7" data-aos="fade-up" data-aos-delay="100">
-                    {{-- Perbandingan 2:1 di layar lebar, bukan tinggi kolom teks: teksnya
+                    {{-- Perbandingan 5:2 di layar lebar, bukan tinggi kolom teks: teksnya
                          pendek, jadi foto yang mengikutinya akan jadi kotak dan kehilangan
-                         bentuk memanjang yang diminta. Di layar sempit perbandingannya
-                         dilonggarkan supaya orang di dalam foto tidak jadi sepita tipis. --}}
-                    <div class="aspect-[16/10] overflow-hidden rounded-2xl bg-mist shadow-card lg:aspect-[2/1]">
+                         bentuk memanjang yang diminta. Lima banding dua juga menahan tinggi
+                         fotonya supaya tidak menjulang jauh melewati paragraf di sebelahnya.
+                         Di layar sempit perbandingannya dilonggarkan supaya orang di dalam
+                         foto tidak jadi sepita tipis. --}}
+                    <div class="aspect-[16/10] overflow-hidden rounded-2xl bg-mist shadow-card lg:aspect-[5/2]">
                         <img src="{{ asset('images/profil-perusahaan.webp') }}"
                              alt="{{ $isId ? 'Sesi pelatihan PT Delta Tiga Enam' : 'A PT Delta Tiga Enam training session' }}"
-                             width="1600" height="800" loading="lazy" decoding="async"
+                             width="1600" height="640" loading="lazy" decoding="async"
                              class="h-full w-full object-cover">
                     </div>
 
@@ -110,14 +118,18 @@
             {{-- shadow-card at rest, not shadow-lift: a 1px border paired with a 48px-blur
                  shadow is the "ghost card" look. One or the other, and hover-shadow-2xl was
                  a Tailwind default that sits outside this site's shadow scale.
-                 Radius 2xl to match every other card. --}}
-            <div class="group relative mx-auto max-w-4xl overflow-hidden rounded-2xl border border-navy-100 bg-gradient-to-br from-white via-white to-mist p-7 shadow-card transition-shadow duration-300 hover:shadow-lift md:p-10" data-aos="fade-up">
+                 Radius 2xl to match every other card.
+
+                 Selebar container, tanpa max-w-4xl: panel berkas di halaman Layanan
+                 selebar itu, dan dua kartu dokumen yang sama bentuknya tapi beda
+                 lebarnya terbaca sebagai dua komponen berbeda padahal bukan. --}}
+            <div class="group relative overflow-hidden rounded-2xl border border-navy-100 bg-gradient-to-br from-white via-white to-mist p-7 shadow-card transition-shadow duration-300 hover:shadow-lift md:p-9" data-aos="fade-up">
                 {{-- soft ambient glows --}}
                 <div class="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-gold/10 blur-3xl"></div>
                 <div class="pointer-events-none absolute -left-16 -bottom-16 h-44 w-44 rounded-full bg-sky-400/10 blur-3xl"></div>
 
                 <div class="relative flex flex-col items-start gap-7 md:flex-row md:items-center md:justify-between md:gap-10">
-                    <div class="flex items-center gap-5">
+                    <div class="flex items-start gap-6">
                         {{-- Stylised PDF page (tilts + lifts on hover) --}}
                         <div class="relative shrink-0">
                             <div class="grid h-24 w-[4.5rem] place-items-center rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 shadow-lift ring-1 ring-white/10 transition-transform duration-300 ease-out-soft group-hover:-translate-y-1 group-hover:-rotate-3">
