@@ -55,30 +55,31 @@
         <div class="container">
             <h2 class="text-display-lg font-bold text-navy" data-aos="fade-up">{{ $isId ? 'Profil Perusahaan' : 'Company Profile' }}</h2>
 
-            {{-- Rata atas, bukan rata tengah. Teks profilnya satu paragraf pendek
-                 sementara fotonya tinggi; kalau dipusatkan, paragraf itu melayang
-                 jauh di bawah judulnya dan judulnya kehilangan isi. --}}
-            <div class="mt-8 grid items-start gap-8 lg:mt-10 lg:grid-cols-12 lg:gap-12">
-                {{-- Rata kiri, tidak rata kanan-kiri: di kolom selebar ini perataan
-                     penuh membuka celah putih memanjang di tengah paragraf. --}}
-                <div class="space-y-4 text-base leading-relaxed text-slate-700 lg:col-span-5" data-aos="fade-up">
-                    <p class="text-pretty">{!! $leadHtml !!}</p>
+            {{-- Rata regang: foto di kanan mengikuti tinggi kolom teks, jadi kedua
+                 kolom berakhir di garis yang sama berapa pun panjang profil yang
+                 diisikan admin. Tanpa itu, teks yang panjang meninggalkan ruang
+                 kosong menganga di bawah fotonya. --}}
+            <div class="mt-8 grid items-stretch gap-8 lg:mt-10 lg:grid-cols-12 lg:gap-12">
+                {{-- Rata kanan-kiri mulai dari sm. Di lebar ponsel barisnya hanya
+                     memuat sekitar 45 huruf dan perataan penuh di situ membuka
+                     celah putih memanjang di tengah paragraf, jadi di sana teksnya
+                     tetap rata kiri. [hyphens:auto] memperhalus sisanya. --}}
+                <div class="space-y-4 text-[15px] leading-[1.75] text-slate-700 lg:col-span-5" data-aos="fade-up">
+                    <p class="text-left [hyphens:auto] sm:text-justify">{!! $leadHtml !!}</p>
                     @foreach (array_slice($aboutParas, 1) as $para)
-                        <p class="text-pretty">{{ $para }}</p>
+                        <p class="text-left [hyphens:auto] sm:text-justify">{{ $para }}</p>
                     @endforeach
                 </div>
 
                 <div class="relative lg:col-span-7" data-aos="fade-up" data-aos-delay="100">
-                    {{-- Perbandingan 5:2 di layar lebar, bukan tinggi kolom teks: teksnya
-                         pendek, jadi foto yang mengikutinya akan jadi kotak dan kehilangan
-                         bentuk memanjang yang diminta. Lima banding dua juga menahan tinggi
-                         fotonya supaya tidak menjulang jauh melewati paragraf di sebelahnya.
-                         Di layar sempit perbandingannya dilonggarkan supaya orang di dalam
-                         foto tidak jadi sepita tipis. --}}
-                    <div class="aspect-[16/10] overflow-hidden rounded-2xl bg-mist shadow-card lg:aspect-[5/2]">
+                    {{-- Di layar lebar tingginya ditentukan kolom teks, bukan
+                         perbandingan tetap. Di layar sempit ia kembali ke 16:10 supaya
+                         orang di dalam foto tidak jadi sepita tipis. Batas bawah 20rem
+                         menjaga fotonya tetap terbaca kalau profilnya dipersingkat. --}}
+                    <div class="aspect-[16/10] overflow-hidden rounded-2xl bg-mist shadow-card lg:aspect-auto lg:h-full lg:min-h-[20rem]">
                         <img src="{{ asset('images/profil-perusahaan.webp') }}"
                              alt="{{ $isId ? 'Sesi pelatihan PT Delta Tiga Enam' : 'A PT Delta Tiga Enam training session' }}"
-                             width="1600" height="640" loading="lazy" decoding="async"
+                             width="1600" height="900" loading="lazy" decoding="async"
                              class="h-full w-full object-cover">
                     </div>
 
