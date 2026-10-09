@@ -529,15 +529,18 @@
 }
 
 /* ── Hero: lapis gradien bersudut ──────────────────────────────────────────
- * Tiga bidang bersudut menggantikan satu gradien melandai. Tepinya tegas
+ * Empat bidang bersudut menggantikan satu gradien melandai. Tepinya tegas
  * supaya terbaca sebagai bentuk, bukan kabut:
  *
- *   main  — membawa warna dan menjamin keterbacaan teks putih
- *   facet — meneruskan birunya sedikit lebih jauh ke kanan, jadi peralihan
- *           ke foto tidak terjadi dalam satu garis dan sisi fotonya tetap
- *           punya nada biru yang sama
- *   edge  — garis rambut di sepanjang sudut utama, yang membuat bentuknya
- *           terbaca sebagai bidang dan bukan sebagai potongan yang kasar
+ *   main   — membawa warna dan menjamin keterbacaan teks putih
+ *   shards — pias dan garis bersudut di atas bidang utama: dua berkas pias
+ *            yang memancar dari sudut kiri atas dan sudut kiri bawah, plus
+ *            tiga garis rambut sejajar sudut utama
+ *   facet  — meneruskan birunya sedikit lebih jauh ke kanan, jadi peralihan
+ *            ke foto tidak terjadi dalam satu garis dan sisi fotonya tetap
+ *            punya nada biru yang sama
+ *   edge   — garis rambut di sepanjang sudut utama, yang membuat bentuknya
+ *            terbaca sebagai bidang dan bukan sebagai potongan yang kasar
  *
  * Kemiringan ketiganya sama persis (tepi atas dan tepi bawah bergeser 12%
  * di semua ukuran layar), jadi ia satu bentuk berlapis, bukan tiga potongan
@@ -567,6 +570,54 @@
     -webkit-clip-path: polygon(0 0, 100% 0, 100% 82%, 0 100%);
     clip-path: polygon(0 0, 100% 0, 100% 82%, 0 100%);
 }
+
+/* Pias bersudut di atas bidang utama: dua berkas yang memancar dari sudut kiri
+   atas dan sudut kiri bawah. Berkas dari sudut, bukan pita sejajar, karena yang
+   diminta adalah bidang yang "menyapu" turun dari pojok — pita sejajar hanya
+   akan terbaca sebagai garis-garis.
+
+   Alfanya ditahan di bawah 0,20 supaya terbaca sebagai tekstur, bukan motif.
+   Di seluruh lebar kotak teks, titik paling terang yang mungkin terjadi (pias
+   biru royal bertumpuk garis rambut sky) masih menyisakan kontras 5,1:1 untuk
+   teks putih; titik paling gelapnya justru menambah kontras.
+
+   Topengnya meluruhkan seluruh lapis ini sebelum sampai ke foto, jadi berkas
+   yang memancar dari sudut tidak melintasi wajah orang di sebelah kanan. Sisa
+   yang paling samar sengaja dibiarkan jatuh di tepi foto: itu yang menyatukan
+   polanya dengan fotonya alih-alih menempelkannya. */
+.hero-geo-shards {
+    background-image:
+        conic-gradient(at 0% 0%,
+            transparent 0deg 100deg,
+            rgba(43, 131, 223, 0.16) 100deg 112deg,
+            transparent 112deg 126deg,
+            rgba(7, 29, 56, 0.32) 126deg 138deg,
+            transparent 138deg 151deg,
+            rgba(43, 131, 223, 0.10) 151deg 156deg,
+            transparent 156deg 360deg),
+        conic-gradient(at 0% 100%,
+            transparent 0deg 22deg,
+            rgba(43, 131, 223, 0.14) 22deg 32deg,
+            transparent 32deg 44deg,
+            rgba(7, 29, 56, 0.28) 44deg 53deg,
+            transparent 53deg 68deg,
+            rgba(199, 226, 250, 0.08) 68deg 71deg,
+            transparent 71deg 360deg);
+    -webkit-mask-image: linear-gradient(168deg, #000 0%, #000 52%, transparent 86%);
+    mask-image: linear-gradient(168deg, #000 0%, #000 52%, transparent 86%);
+}
+
+/* Garis rambut sejajar sudut utama — lapis terpisah supaya letaknya bisa
+   digeser per ukuran layar tanpa menulis ulang berkas piasnya. Di ponsel
+   dimatikan: sudut utamanya di sana nyaris mendatar, dan garis mendatar yang
+   melintasi kalimat terbaca sebagai cacat cetak, bukan sebagai hiasan. */
+.hero-geo-shards::before {
+    content: '';
+    display: none;
+    position: absolute;
+    inset: 0;
+}
+
 /* Tepi dalam bidang penerus dibiarkan tegas (ia bertemu bidang utama di sana),
    tepi luarnya dihabiskan sampai nol. Kalau keduanya tegas, yang terbaca bukan
    satu bentuk berlapis melainkan dua pita yang ditumpuk. Persentase stopnya
@@ -609,6 +660,22 @@
         -webkit-clip-path: polygon(70% 0, 70.22% 0, 82.22% 100%, 82% 100%);
         clip-path: polygon(70% 0, 70.22% 0, 82.22% 100%, 82% 100%);
     }
+
+    /* Topengnya ikut berputar mengikuti arah sudut utama di layar lebar. */
+    .hero-geo-shards {
+        -webkit-mask-image: linear-gradient(104deg, #000 0%, #000 52%, transparent 80%);
+        mask-image: linear-gradient(104deg, #000 0%, #000 52%, transparent 80%);
+    }
+    /* 78deg adalah tegak lurus sudut utama pada perbandingan layar hero yang
+       lazim (1,6–1,85), jadi garis-garis ini sejajar dengan tepi bidangnya,
+       bukan memotongnya. */
+    .hero-geo-shards::before {
+        display: block;
+        background-image:
+            linear-gradient(78deg, transparent 23.6%, rgba(199, 226, 250, 0.12) 23.6%, rgba(199, 226, 250, 0.12) 24%, transparent 24%),
+            linear-gradient(78deg, transparent 45.6%, rgba(52, 211, 244, 0.15) 45.6%, rgba(52, 211, 244, 0.15) 46%, transparent 46%),
+            linear-gradient(78deg, transparent 61.7%, rgba(199, 226, 250, 0.08) 61.7%, rgba(199, 226, 250, 0.08) 62%, transparent 62%);
+    }
 }
 
 @media (min-width: 1280px) {
@@ -624,6 +691,19 @@
     .hero-geo-edge {
         -webkit-clip-path: polygon(56% 0, 56.22% 0, 68.22% 100%, 68% 100%);
         clip-path: polygon(56% 0, 56.22% 0, 68.22% 100%, 68% 100%);
+    }
+
+    /* Bidangnya menyempit di sini, jadi topeng dan garisnya ikut merapat.
+       Kalau tidak, garis terakhir jatuh di atas foto, bukan di atas bidang. */
+    .hero-geo-shards {
+        -webkit-mask-image: linear-gradient(104deg, #000 0%, #000 44%, transparent 72%);
+        mask-image: linear-gradient(104deg, #000 0%, #000 44%, transparent 72%);
+    }
+    .hero-geo-shards::before {
+        background-image:
+            linear-gradient(78deg, transparent 18.6%, rgba(199, 226, 250, 0.12) 18.6%, rgba(199, 226, 250, 0.12) 19%, transparent 19%),
+            linear-gradient(78deg, transparent 35.6%, rgba(52, 211, 244, 0.15) 35.6%, rgba(52, 211, 244, 0.15) 36%, transparent 36%),
+            linear-gradient(78deg, transparent 48.7%, rgba(199, 226, 250, 0.08) 48.7%, rgba(199, 226, 250, 0.08) 49%, transparent 49%);
     }
 }
 /* FAQ accordion opens by animating grid-template-rows 0fr -> 1fr, which settles on

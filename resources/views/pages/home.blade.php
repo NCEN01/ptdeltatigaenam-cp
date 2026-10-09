@@ -52,11 +52,13 @@
                              alt="{{ $slide['title'] }}" {{ $loop->first ? 'loading=eager fetchpriority=high' : 'loading=lazy' }}
                              class="hero-slide-img absolute inset-0 h-full w-full object-cover">
                         {{-- Lapis gradien bersudut menggantikan satu gradien melandai:
-                             bidang biru bertepi miring, satu bidang penerus di
+                             bidang biru bertepi miring, berkas pias yang memancar dari
+                             sudut kiri atas dan kiri bawah, satu bidang penerus di
                              sebelahnya, dan garis rambut di sepanjang sudutnya. Bentuk
                              dan alasan ukurannya ada di app.css (.hero-geo-*); sudutnya
                              berubah di tiga ukuran layar, jadi tidak ditulis di sini. --}}
                         <div class="hero-geo-main pointer-events-none absolute inset-0" aria-hidden="true"></div>
+                        <div class="hero-geo-shards pointer-events-none absolute inset-0" aria-hidden="true"></div>
                         <div class="hero-geo-facet pointer-events-none absolute inset-0" aria-hidden="true"></div>
                         <div class="hero-geo-edge pointer-events-none absolute inset-0" aria-hidden="true"></div>
                         {{-- Peredup atas-bawah, tetap: kepala halaman dan titik paginasi
