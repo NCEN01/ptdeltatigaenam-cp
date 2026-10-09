@@ -23,3 +23,6 @@ yarn-error.log
 /.zed
 /.agents
 /.codex
+# Cadangan tablespace rusak (9 Okt 2026) — berkas biner 2 MB, hanya untuk
+# pemulihan setempat. Keterangannya ada di folder itu.
+/storage/backup-certificate-holders
