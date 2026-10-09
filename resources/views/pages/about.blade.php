@@ -20,39 +20,81 @@
         placement="about"
         image="photo-1522071820081-009f0129c71c" />
 
-    {{-- ===================== COMPANY PROFILE ===================== --}}
-    <section class="section bg-white">
-        <div class="container grid gap-10 lg:grid-cols-12 lg:gap-16">
-            <div class="lg:col-span-4" data-aos="fade-up">
-                <h2 class="font-display text-3xl leading-tight text-navy md:text-4xl">{{ $isId ? 'Profil Perusahaan' : 'Company Profile' }}</h2>
-            </div>
-            <div class="space-y-5 leading-relaxed text-slate-700 lg:col-span-8" data-aos="fade-up" data-aos-delay="100">
-                @foreach ($aboutParas as $para)
-                    {{-- The opening paragraph carries the pitch, so it gets a lead size instead of
-                         disappearing into an undifferentiated wall of body copy.
-                         Justified only from sm up: in a narrow column it opens rivers of space. --}}
-                    <p class="text-left [hyphens:auto] sm:text-justify {{ $loop->first ? 'text-lg leading-relaxed text-navy md:text-xl' : '' }}">{{ $para }}</p>
-                @endforeach
-            </div>
-        </div>
+    {{-- ===================== PROFIL PERUSAHAAN =====================
+         Judul di atas, lalu teks di kolom kiri yang sempit dengan foto
+         memanjang di kanan. Dua angka menumpang di tepi atas foto.
 
-        {{-- Stats --}}
-        <div class="container mt-16">
-            {{-- Hairline dividers, matching the hero stats ledger. Every figure is navy: the
-                 first one used to be gold for no reason other than being first. --}}
-            <div class="grid grid-cols-2 gap-y-10 sm:grid-cols-4 sm:gap-y-0 sm:divide-x sm:divide-navy-100" data-aos="fade-up">
-                @foreach ($stats as $stat)
-                    {{-- Pemisahan angka dan satuannya dikerjakan Company::stats(),
-                         bukan diulang di sini: beranda memakai pemisahan yang sama
-                         dan dua salinan aturan itu akan menyimpang. --}}
-                    @php $num = $stat['number']; $suffix = $stat['suffix']; @endphp
-                    <div class="group px-2 text-center sm:px-5">
-                        <p class="font-display text-4xl text-navy transition-colors duration-300 group-hover:text-sky-600 md:text-5xl"
-                           data-counter="{{ $num }}" data-counter-suffix="{{ $suffix }}">0{{ $suffix }}</p>
-                        <span class="mx-auto mt-3 block h-px w-8 bg-gold-soft/70 transition-all duration-300 group-hover:w-12" aria-hidden="true"></span>
-                        <p class="mt-3 font-mono text-[10px] uppercase tracking-normal text-slate-500 md:text-[11px]">{{ $stat['label'] }}</p>
+         Angkanya dua, bukan empat. Di tata letak ini angka bukan lagi papan
+         statistik tersendiri melainkan keterangan atas fotonya, dan empat
+         kartu di sudut yang sama akan menutupi foto yang jadi alasan
+         kolom itu ada. Dua yang dipakai adalah dua teratas dari sumber yang
+         sama dengan papan angka di beranda, jadi tidak ada angka kedua
+         tentang perusahaan yang sama yang bisa menyimpang. --}}
+    @php
+        $profileStats = array_slice($stats, 0, 2);
+
+        // Nama perusahaan di kalimat pembuka ditebalkan. Teksnya datang dari
+        // CMS, jadi di-escape lebih dulu baru disisipi penandanya — bukan
+        // sebaliknya, supaya isian admin tidak pernah jadi markup.
+        $leadHtml = e($aboutParas[0] ?? '');
+        foreach (['PT. Delta Tiga Enam', 'PT Delta Tiga Enam', 'Delta Tiga Enam'] as $brandName) {
+            if (str_contains($leadHtml, $brandName)) {
+                $leadHtml = \Illuminate\Support\Str::replaceFirst(
+                    $brandName,
+                    '<strong class="font-semibold italic text-navy">'.$brandName.'</strong>',
+                    $leadHtml
+                );
+                break;
+            }
+        }
+    @endphp
+    <section class="section bg-white">
+        <div class="container">
+            <h2 class="text-display-lg font-bold text-navy" data-aos="fade-up">{{ $isId ? 'Profil Perusahaan' : 'Company Profile' }}</h2>
+
+            <div class="mt-10 grid items-center gap-10 lg:mt-12 lg:grid-cols-12 lg:gap-14">
+                {{-- Rata kiri, tidak rata kanan-kiri: di kolom selebar ini perataan
+                     penuh membuka celah putih memanjang di tengah paragraf. --}}
+                <div class="space-y-4 text-base leading-relaxed text-slate-700 lg:col-span-5" data-aos="fade-up">
+                    <p class="text-pretty">{!! $leadHtml !!}</p>
+                    @foreach (array_slice($aboutParas, 1) as $para)
+                        <p class="text-pretty">{{ $para }}</p>
+                    @endforeach
+                </div>
+
+                <div class="relative lg:col-span-7" data-aos="fade-up" data-aos-delay="100">
+                    {{-- Perbandingan 2:1 di layar lebar, bukan tinggi kolom teks: teksnya
+                         pendek, jadi foto yang mengikutinya akan jadi kotak dan kehilangan
+                         bentuk memanjang yang diminta. Di layar sempit perbandingannya
+                         dilonggarkan supaya orang di dalam foto tidak jadi sepita tipis. --}}
+                    <div class="aspect-[16/10] overflow-hidden rounded-2xl bg-mist shadow-card lg:aspect-[2/1]">
+                        <img src="{{ asset('images/profil-perusahaan.webp') }}"
+                             alt="{{ $isId ? 'Sesi pelatihan PT Delta Tiga Enam' : 'A PT Delta Tiga Enam training session' }}"
+                             width="1600" height="800" loading="lazy" decoding="async"
+                             class="h-full w-full object-cover">
                     </div>
-                @endforeach
+
+                    {{-- Di layar sempit kartunya turun ke bawah foto: menumpuk di sudut
+                         kanan atas foto selebar layar ponsel akan menutupi wajah orang
+                         di dalamnya. --}}
+                    <div class="mt-4 grid grid-cols-2 gap-3 sm:absolute sm:-top-6 sm:right-5 sm:mt-0 sm:flex sm:gap-3">
+                        @foreach ($profileStats as $i => $stat)
+                            <div class="rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 p-4 shadow-lift ring-1 ring-white/10 sm:w-36 sm:p-5">
+                                <span class="block text-sky-400" aria-hidden="true">
+                                    @if ($i === 0)
+                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                                    @else
+                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 17.5V19"/><circle cx="10" cy="8" r="3"/><path d="M20 19v-1.5a3.5 3.5 0 0 0-2.6-3.4M15.4 5.2a3 3 0 0 1 0 5.6"/></svg>
+                                    @endif
+                                </span>
+                                <p class="mt-2.5 text-[11px] leading-tight text-navy-100">{{ $stat['label'] }}</p>
+                                <p class="mt-1.5 font-display text-2xl font-bold leading-none text-white sm:text-[1.75rem]">
+                                    <span class="tabular-nums" data-counter="{{ $stat['number'] }}">{{ $stat['number'] }}</span><span class="text-sky-400">{{ $stat['suffix'] }}</span>
+                                </p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
     </section>
