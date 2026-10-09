@@ -51,19 +51,9 @@
                         <img src="{{ $slide['img_url'] }}"
                              alt="{{ $slide['title'] }}" {{ $loop->first ? 'loading=eager fetchpriority=high' : 'loading=lazy' }}
                              class="hero-slide-img absolute inset-0 h-full w-full object-cover">
-                        {{-- Lapis gradien bersudut menggantikan satu gradien melandai:
-                             bidang biru bertepi miring, berkas pias yang memancar dari
-                             sudut kiri atas dan kiri bawah, satu bidang penerus di
-                             sebelahnya, dan garis rambut di sepanjang sudutnya. Bentuk
-                             dan alasan ukurannya ada di app.css (.hero-geo-*); sudutnya
-                             berubah di tiga ukuran layar, jadi tidak ditulis di sini. --}}
-                        <div class="hero-geo-main pointer-events-none absolute inset-0" aria-hidden="true"></div>
-                        <div class="hero-geo-shards pointer-events-none absolute inset-0" aria-hidden="true"></div>
-                        <div class="hero-geo-facet pointer-events-none absolute inset-0" aria-hidden="true"></div>
-                        <div class="hero-geo-edge pointer-events-none absolute inset-0" aria-hidden="true"></div>
-                        {{-- Peredup atas-bawah, tetap: kepala halaman dan titik paginasi
-                             duduk di luar bidang bersudut itu. --}}
-                        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/80 via-transparent to-navy-950/30"></div>
+                        {{-- Blue gradient wash: dark navy on the left, fading out before the right so the photo stays clear on that side --}}
+                        <div class="absolute inset-0" style="background: linear-gradient(100deg, #123a6b 0%, rgba(22,74,125,0.92) 22%, rgba(43,131,223,0.42) 44%, rgba(43,131,223,0) 66%);"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-transparent to-navy-950/30"></div>
 
                         <div class="container relative flex min-h-[100svh] items-center">
                             {{-- Asymmetric padding instead of py-28: the box keeps roughly the same
