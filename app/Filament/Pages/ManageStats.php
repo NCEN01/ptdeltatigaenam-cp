@@ -19,9 +19,9 @@ class ManageStats extends Page implements HasForms
 
     protected static ?string $navigationGroup = 'Konten';
 
-    protected static ?string $navigationLabel = 'Label Angka';
+    protected static ?string $navigationLabel = 'Statistik Perusahaan';
 
-    protected static ?string $title = 'Label Angka';
+    protected static ?string $title = 'Statistik Perusahaan';
 
     protected static ?int $navigationSort = 95;
 
@@ -37,13 +37,12 @@ class ManageStats extends Page implements HasForms
     public function mount(): void
     {
         $this->form->fill([
-            'hero_stat_1_value' => Setting::get('hero_stat_1_value', '500+'),
-            'hero_stat_1_label' => Setting::get('hero_stat_1_label') ?: ['id' => 'Profesional Terlatih', 'en' => 'Professionals Trained'],
-            'hero_stat_2_value' => Setting::get('hero_stat_2_value', '98%'),
-            'hero_stat_2_label' => Setting::get('hero_stat_2_label') ?: ['id' => 'Kepuasan Klien', 'en' => 'Client Satisfaction'],
-            'hero_stat_3_value' => Setting::get('hero_stat_3_value', '10+'),
-            'hero_stat_3_label' => Setting::get('hero_stat_3_label') ?: ['id' => 'Tahun Pengalaman', 'en' => 'Years Experience'],
 
+            // hero_stat_* dilepas: beranda dan Tentang kini membaca empat angka
+            // yang sama lewat Company::stats(), jadi set kedua itu tidak punya
+            // pembaca. Barisnya ditinggal di basis data apa adanya, tidak
+            // dihapus — menghapus baris pengaturan tidak menambah apa pun dan
+            // menutup jalan kalau suatu saat beranda perlu angkanya sendiri.
             'about_stat_1_value' => Setting::get('about_stat_1_value', '10+'),
             'about_stat_1_label' => Setting::get('about_stat_1_label') ?: ['id' => 'Tahun pengalaman', 'en' => 'Years of experience'],
             'about_stat_2_value' => Setting::get('about_stat_2_value', '500+'),
@@ -58,22 +57,8 @@ class ManageStats extends Page implements HasForms
     public function form(Form $form): Form
     {
         return $form->schema([
-            Section::make('Statistik — Hero (Beranda)')
-                ->description('Angka statistik yang muncul di bagian bawah hero slider.')
-                ->schema([
-                    TextInput::make('hero_stat_1_value')->label('Stat #1 — Angka (cth: 500+)')->required()->maxLength(20),
-                    TextInput::make('hero_stat_1_label.id')->label('Stat #1 — Label (ID)')->required()->maxLength(100),
-                    TextInput::make('hero_stat_1_label.en')->label('Stat #1 — Label (EN)')->maxLength(100),
-                    TextInput::make('hero_stat_2_value')->label('Stat #2 — Angka (cth: 98%)')->required()->maxLength(20),
-                    TextInput::make('hero_stat_2_label.id')->label('Stat #2 — Label (ID)')->required()->maxLength(100),
-                    TextInput::make('hero_stat_2_label.en')->label('Stat #2 — Label (EN)')->maxLength(100),
-                    TextInput::make('hero_stat_3_value')->label('Stat #3 — Angka (cth: 10+)')->required()->maxLength(20),
-                    TextInput::make('hero_stat_3_label.id')->label('Stat #3 — Label (ID)')->required()->maxLength(100),
-                    TextInput::make('hero_stat_3_label.en')->label('Stat #3 — Label (EN)')->maxLength(100),
-                ])->columns(3),
-
-            Section::make('Statistik — Tentang')
-                ->description('Angka statistik yang muncul di halaman Tentang Kami.')
+            Section::make('Statistik Perusahaan')
+                ->description('Empat angka ini muncul di dua tempat sekaligus: di bawah bagian Kategori Layanan pada halaman Beranda, dan di halaman Tentang Kami. Mengubahnya di sini mengubah keduanya. Kolom yang dikosongkan tidak ditampilkan.')
                 ->schema([
                     TextInput::make('about_stat_1_value')->label('Stat #1 — Angka')->required()->maxLength(20),
                     TextInput::make('about_stat_1_label.id')->label('Stat #1 — Label (ID)')->required()->maxLength(100),
@@ -95,7 +80,7 @@ class ManageStats extends Page implements HasForms
     {
         $data = $this->form->getState();
 
-        foreach (['hero_stat_1', 'hero_stat_2', 'hero_stat_3', 'about_stat_1', 'about_stat_2', 'about_stat_3', 'about_stat_4'] as $prefix) {
+        foreach (['about_stat_1', 'about_stat_2', 'about_stat_3', 'about_stat_4'] as $prefix) {
             $valKey = "{$prefix}_value";
             $labelKey = "{$prefix}_label";
             if (array_key_exists($valKey, $data)) {
@@ -106,6 +91,6 @@ class ManageStats extends Page implements HasForms
             }
         }
 
-        Notification::make()->title('Label Angka disimpan')->success()->send();
+        Notification::make()->title('Statistik Perusahaan disimpan')->success()->send();
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Support;
 
+use App\Models\Setting;
+
 class Company
 {
     /**
@@ -21,6 +23,52 @@ class Company
      *
      * @return array<int, array<string, string>>
      */
+    /**
+     * Empat angka statistik perusahaan, dari Pengaturan Situs.
+     *
+     * Satu sumber untuk dua halaman: papan angka di bawah Kategori Layanan di
+     * beranda, dan papan angka di halaman Tentang Kami. Sebelumnya beranda
+     * membaca hero_stat_1..3 dan Tentang membaca about_stat_1..4 — dua set
+     * terpisah berisi angka yang sama tentang perusahaan yang sama, yang akan
+     * saling bertentangan begitu salah satunya diperbarui sendirian.
+     *
+     * Kuncinya tetap bernama about_stat_* karena itu yang sudah tersimpan di
+     * basis data berikut isinya yang benar; menggantinya menuntut penulisan
+     * ulang baris pengaturan tanpa menambah apa pun bagi pembacanya.
+     *
+     * Angka yang kosong dilewati, jadi admin yang mengosongkan satu kolom
+     * mendapat tiga angka rapi, bukan satu lubang.
+     *
+     * @return array<int, array{value: string, label: string, number: int, suffix: string}>
+     */
+    public static function stats(): array
+    {
+        $out = [];
+
+        for ($i = 1; $i <= 4; $i++) {
+            $value = trim((string) Setting::get("about_stat_{$i}_value", ''));
+            $label = Setting::getLocalized("about_stat_{$i}_label");
+
+            if ($value === '' || ! $label) {
+                continue;
+            }
+
+            // Satuannya dipisah dari angkanya supaya tampilan bisa mewarnai
+            // keduanya berbeda, dan supaya penghitung animasinya hanya dipasang
+            // pada angkanya — JS-nya menimpa seluruh isi elemen yang dipasangi.
+            $number = (int) filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+
+            $out[] = [
+                'value' => $value,
+                'label' => $label,
+                'number' => $number,
+                'suffix' => str_replace((string) $number, '', $value),
+            ];
+        }
+
+        return $out;
+    }
+
     /**
      * Nilai perusahaan dari config/company.php, dengan kedua keterangannya
      * sudah dipilih menurut bahasa yang sedang aktif.

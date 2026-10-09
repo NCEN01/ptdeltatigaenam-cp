@@ -40,27 +40,10 @@ class PageController extends Controller
             ? 'Mitra strategis dalam transformasi human capital yang berkelanjutan.'
             : 'A strategic partner in sustainable human capital transformation.');
 
-        $stats = [];
-        for ($i = 1; $i <= 4; $i++) {
-            $val = Setting::get("about_stat_{$i}_value", '');
-            $label = Setting::getLocalized("about_stat_{$i}_label");
-            if ($val !== '' && $label !== null) {
-                $stats[] = ['value' => $val, 'label' => $label];
-            }
-        }
-        if (empty($stats)) {
-            $stats = $id ? [
-                ['value' => '10+', 'label' => 'Tahun pengalaman'],
-                ['value' => '500+', 'label' => 'Profesional terlatih'],
-                ['value' => '50+', 'label' => 'Klien korporat'],
-                ['value' => '20+', 'label' => 'Program sertifikasi'],
-            ] : [
-                ['value' => '10+', 'label' => 'Years of experience'],
-                ['value' => '500+', 'label' => 'Professionals trained'],
-                ['value' => '50+', 'label' => 'Corporate clients'],
-                ['value' => '20+', 'label' => 'Certification programs'],
-            ];
-        }
+        // Sumber yang sama dengan papan angka di bawah Kategori Layanan di
+        // beranda. Pembacaannya dipusatkan supaya kedua halaman tidak bisa
+        // menampilkan angka yang berbeda tentang perusahaan yang sama.
+        $stats = \App\Support\Company::stats();
 
         return view('pages.about', [
             'about' => $about,

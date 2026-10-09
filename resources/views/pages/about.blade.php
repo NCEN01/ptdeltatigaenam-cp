@@ -42,10 +42,10 @@
                  first one used to be gold for no reason other than being first. --}}
             <div class="grid grid-cols-2 gap-y-10 sm:grid-cols-4 sm:gap-y-0 sm:divide-x sm:divide-navy-100" data-aos="fade-up">
                 @foreach ($stats as $stat)
-                    @php
-                        $num = (int) filter_var($stat['value'], FILTER_SANITIZE_NUMBER_INT);
-                        $suffix = str_replace((string) $num, '', (string) $stat['value']);
-                    @endphp
+                    {{-- Pemisahan angka dan satuannya dikerjakan Company::stats(),
+                         bukan diulang di sini: beranda memakai pemisahan yang sama
+                         dan dua salinan aturan itu akan menyimpang. --}}
+                    @php $num = $stat['number']; $suffix = $stat['suffix']; @endphp
                     <div class="group px-2 text-center sm:px-5">
                         <p class="font-display text-4xl text-navy transition-colors duration-300 group-hover:text-sky-600 md:text-5xl"
                            data-counter="{{ $num }}" data-counter-suffix="{{ $suffix }}">0{{ $suffix }}</p>

@@ -482,4 +482,76 @@
         </section>
     @endforelse
 
+    {{-- ===================== PENUTUP: KONSULTASI =====================
+         Penutup halaman Layanan. Setelah menggulir seluruh kategori, pembaca
+         berada di titik keputusan tapi tidak punya jalan ke mana pun kecuali
+         footer — seksi ini memberi jalan itu.
+
+         Pita navy, bukan kartu di latar terang. Seksi terakhir sebelum footer
+         yang juga navy: keduanya menyatu jadi satu kaki halaman yang tenang,
+         alih-alih satu kotak melayang yang berdiri sendiri di antara keduanya.
+
+         Dua tombol dengan bobot berbeda, bukan dua yang setara. Yang mengerti
+         kebutuhannya menekan "Konsultasi"; yang masih menimbang menekan "Lihat
+         portofolio". Dua tombol sama kuat memaksa memilih tanpa memberi alasan
+         memilih. --}}
+    <section class="relative overflow-hidden bg-navy-anim text-white">
+        <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
+        <div class="pointer-events-none absolute inset-0 bg-navy-950/35"></div>
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
+
+        <div class="container relative py-20 md:py-24">
+            <div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
+                <div class="lg:col-span-7" data-aos="fade-up">
+                    <p class="kicker-on-dark">{{ $id ? 'Langkah Berikutnya' : 'Next Step' }}</p>
+                    <h2 class="mt-4 text-display-lg text-white">
+                        {{ $id ? 'Belum yakin program mana yang pas?' : 'Not sure which programme fits?' }}
+                    </h2>
+                    {{-- Menyebut apa yang benar-benar terjadi saat seseorang menghubungi,
+                         bukan janji umum. Orang menunda menghubungi karena tidak tahu apa
+                         yang menantinya di seberang. --}}
+                    <p class="mt-5 max-w-xl text-pretty text-lg leading-relaxed text-navy-100">
+                        {{ $id
+                            ? 'Ceritakan pekerjaan dan jumlah tim Anda. Kami bantu memilihkan skema yang sesuai, menghitung biayanya, dan menyusun jadwal yang tidak mengganggu operasional. Tanpa biaya, tanpa keharusan melanjutkan.'
+                            : 'Tell us about the work and the size of your team. We will help pick a suitable scheme, cost it out, and plan a schedule that does not disrupt operations. No charge, no obligation to continue.' }}
+                    </p>
+
+                    <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+                        <a href="{{ route('contact.index') }}" class="btn-blue justify-center sm:w-auto">
+                            {{ $id ? 'Konsultasikan Kebutuhan Anda' : 'Discuss Your Needs' }}
+                            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </a>
+                        <a href="{{ route('portfolio.index') }}" class="btn-ghost-light justify-center sm:w-auto">
+                            {{ $id ? 'Lihat Portofolio' : 'View Portfolio' }}
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Tiga keberatan yang paling sering muncul, dijawab singkat. Menaruhnya
+                     di sebelah tombol, bukan di bawahnya, membuat jawabannya terbaca
+                     sebelum orang memutuskan — bukan sesudah. --}}
+                <ul class="lg:col-span-5" data-aos="fade-up" data-aos-delay="100">
+                    @foreach ([
+                        $id ? ['Gratis dan tanpa ikatan', 'Konsultasi awal tidak dipungut biaya dan tidak mengharuskan Anda melanjutkan.']
+                            : ['Free, no strings attached', 'The first consultation costs nothing and does not oblige you to continue.'],
+                        $id ? ['Dijawab orang yang menangani', 'Anda berbicara dengan tim yang nanti menjalankan programnya, bukan bagian penjualan.']
+                            : ['Answered by the people who deliver', 'You speak with the team that will run the programme, not a sales desk.'],
+                        $id ? ['Dibalas pada hari kerja yang sama', 'Pertanyaan yang masuk sebelum pukul 16.00 kami jawab hari itu juga.']
+                            : ['Answered the same working day', 'Enquiries received before 4pm get a reply that day.'],
+                    ] as $i => $point)
+                        <li class="flex items-start gap-4 border-t border-white/10 py-5">
+                            <span class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-sky-400/10 text-sky-400 ring-1 ring-sky-400/25" aria-hidden="true">
+                                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </span>
+                            <div class="min-w-0">
+                                <p class="font-display font-semibold leading-snug text-white">{{ $point[0] }}</p>
+                                <p class="mt-1 text-pretty text-sm leading-relaxed text-navy-100">{{ $point[1] }}</p>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </section>
+
 </x-layout>

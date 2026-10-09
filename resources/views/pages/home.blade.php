@@ -4,20 +4,11 @@
 
     {{-- ===================== HERO CAROUSEL ===================== --}}
     @php
-        $heroStats = [];
-        for ($i = 1; $i <= 3; $i++) {
-            $val = \App\Models\Setting::get("hero_stat_{$i}_value", '');
-            $label = \App\Models\Setting::getLocalized("hero_stat_{$i}_label");
-            if ($val !== '' && $label !== null) {
-                $heroStats[] = [$val, $label];
-            }
-        }
-        if (empty($heroStats)) {
-            $heroStats = $isId
-                ? [['500+', 'Profesional Terlatih'], ['98%', 'Kepuasan Klien'], ['10+', 'Tahun Pengalaman']]
-                : [['500+', 'Professionals Trained'], ['98%', 'Client Satisfaction'], ['10+', 'Years Experience']];
-        }
-        
+        // Angka statistik dibaca lewat satu sumber bersama dengan halaman
+        // Tentang Kami. Pemisahan angka dan satuannya ("500" dan "+") dikerjakan
+        // di sana, bukan diulang di tiap tampilan yang memakainya.
+        $companyStats = \App\Support\Company::stats();
+
         $slides = [];
         if (isset($heroBanners) && $heroBanners->isNotEmpty()) {
             foreach ($heroBanners as $banner) {
@@ -289,26 +280,37 @@
                  sendiri, angkanya bisa sebesar yang pantas, dan letaknya masuk akal:
                  tepat setelah pengunjung melihat apa saja yang ditawarkan.
 
-                 Angkanya tetap dibaca dari Pengaturan Situs, jadi admin mengubahnya
-                 di tempat yang sama seperti sebelumnya. --}}
-            @if (! empty($heroStats))
-                <div class="mt-16 grid grid-cols-1 gap-y-9 border-t border-navy-100 pt-12 sm:grid-cols-3 sm:gap-x-8 md:mt-20" data-aos="fade-up">
-                    @foreach ($heroStats as $i => $stat)
-                        @php
-                            $numVal = (int) filter_var($stat[0], FILTER_SANITIZE_NUMBER_INT);
-                            $suffix = str_replace((string) $numVal, '', $stat[0]);
-                        @endphp
-                        <div class="{{ $i > 0 ? 'sm:border-l sm:border-navy-100 sm:pl-8' : '' }}">
+                 Angkanya dibaca lewat Company::stats(), sumber yang sama dengan
+                 papan angka di halaman Tentang Kami. Sebelumnya beranda membaca
+                 tiga angka sendiri dan Tentang membaca empat angka lain — dua set
+                 tentang perusahaan yang sama, yang akan saling bertentangan begitu
+                 salah satunya diperbarui sendirian. --}}
+            @if (! empty($companyStats))
+                {{-- Dua kolom di ponsel, empat di layar lebar. Empat angka berjajar
+                     di layar 375px menyisakan 80px per kolom; "Profesional terlatih"
+                     di lebar itu pecah satu kata per baris. Dua kolom memberinya
+                     ~160px, cukup untuk angka sebesar text-4xl dan label dua baris. --}}
+                <div class="mt-16 grid grid-cols-2 gap-x-5 gap-y-10 border-t border-navy-100 pt-12 sm:gap-x-8 md:mt-20 lg:grid-cols-4" data-aos="fade-up">
+                    @foreach ($companyStats as $i => $stat)
+                        {{-- Garis pemisah mengikuti jumlah kolomnya. Di dua kolom,
+                             angka ketiga memulai baris baru sehingga tidak boleh
+                             bergaris kiri; di empat kolom ia berada di tengah baris
+                             sehingga harus. Dihitung per indeks, bukan dengan varian
+                             nth-child, supaya aturannya terbaca di satu tempat. --}}
+                        <div @class([
+                                'border-l border-navy-100 pl-5 sm:pl-8' => $i % 2 === 1,
+                                'lg:border-l lg:border-navy-100 lg:pl-8' => $i % 2 === 0 && $i > 0,
+                            ])>
                             {{-- Satuannya ("+", "%") dipisah ke span sendiri agar bisa
                                  diberi warna: angkanya terbaca sebagai besaran, satuannya
                                  sebagai keterangan. Penghitungnya dipasang pada span angka
                                  saja — JS-nya menimpa seluruh isi elemen yang dipasangi,
                                  jadi kalau satu span memuat keduanya, warnanya ikut hilang
                                  begitu animasinya mulai. --}}
-                            <p class="flex items-baseline font-display text-5xl font-bold leading-none tracking-tight text-navy md:text-6xl">
-                                <span class="tabular-nums" data-counter="{{ $numVal }}">{{ $numVal }}</span><span class="text-sky-600">{{ $suffix }}</span>
+                            <p class="flex items-baseline font-display text-4xl font-bold leading-none tracking-tight text-navy sm:text-5xl md:text-6xl">
+                                <span class="tabular-nums" data-counter="{{ $stat['number'] }}">{{ $stat['number'] }}</span><span class="text-sky-600">{{ $stat['suffix'] }}</span>
                             </p>
-                            <p class="mt-4 text-sm leading-snug text-slate-600">{{ $stat[1] }}</p>
+                            <p class="mt-3 text-sm leading-snug text-slate-600 sm:mt-4">{{ $stat['label'] }}</p>
                         </div>
                     @endforeach
                 </div>
