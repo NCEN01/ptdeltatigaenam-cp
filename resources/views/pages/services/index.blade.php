@@ -498,10 +498,10 @@
          sudut layar yang kalimatnya hilang. Biru karena hitam akan memutus
          halaman ini dari warna seluruh situs.
 
-         Dua tombol dengan bobot berbeda, bukan dua yang setara. Yang mengerti
-         kebutuhannya menekan "Konsultasi"; yang masih menimbang menekan "Lihat
-         portofolio". Dua tombol sama kuat memaksa memilih tanpa memberi alasan
-         memilih. --}}
+         Satu pertanyaan dan satu tombol, tidak ada yang lain. Pembaca sudah
+         melewati seluruh katalog sebelum sampai ke sini; yang dibutuhkannya
+         tinggal satu jalan keluar, bukan paragraf meyakinkan atau pilihan
+         kedua yang menunda keputusan. --}}
     <section class="relative isolate overflow-hidden bg-navy-950 text-white">
         <img src="{{ asset('images/konsultasi-layanan.webp') }}" alt="" aria-hidden="true"
              width="1600" height="900" loading="lazy" decoding="async"
@@ -515,52 +515,18 @@
         <div class="pointer-events-none absolute inset-0 -z-10 grain opacity-20"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 
-        <div class="container relative py-24 text-center md:py-32 lg:py-36">
-            <div class="mx-auto max-w-3xl" data-aos="fade-up">
-                <p class="inline-flex items-center gap-2.5 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white ring-1 ring-white/20 backdrop-blur-sm">
-                    <span class="h-1.5 w-1.5 rounded-full bg-sky-400" aria-hidden="true"></span>
-                    {{ $id ? 'Konsultasi Gratis' : 'Free Consultation' }}
-                </p>
-
-                <h2 class="mt-7 text-display-xl text-white">
+        <div class="container relative py-20 text-center md:py-28 lg:py-32">
+            <div class="mx-auto max-w-2xl" data-aos="fade-up">
+                <h2 class="text-display-xl text-white">
                     {{ $id ? 'Belum yakin program mana yang pas?' : 'Not sure which programme fits?' }}
                 </h2>
 
-                {{-- Menyebut apa yang benar-benar terjadi saat seseorang menghubungi,
-                     bukan janji umum. Orang menunda menghubungi karena tidak tahu apa
-                     yang menantinya di seberang. --}}
-                <p class="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-navy-100">
-                    {{ $id
-                        ? 'Ceritakan pekerjaan dan jumlah tim Anda. Kami bantu memilihkan skema yang sesuai, menghitung biayanya, dan menyusun jadwal yang tidak mengganggu operasional.'
-                        : 'Tell us about the work and the size of your team. We will help pick a suitable scheme, cost it out, and plan a schedule that does not disrupt operations.' }}
-                </p>
-            </div>
-
-            {{-- Tiga keberatan yang paling sering menahan orang, dijawab sebelum
-                 tombolnya — bukan sesudah. Di komposisi tengah ini judulnya saja
-                 sudah menjawab, jadi kalimat penjelasnya dilepas agar barisnya
-                 tetap terbaca sekali lihat. --}}
-            <ul class="mx-auto mt-10 flex max-w-3xl flex-col items-center gap-x-8 gap-y-3 text-sm text-navy-100 sm:flex-row sm:flex-wrap sm:justify-center" data-aos="fade-up" data-aos-delay="50">
-                @foreach ([
-                    $id ? 'Gratis dan tanpa ikatan' : 'Free, no strings attached',
-                    $id ? 'Dijawab orang yang menangani' : 'Answered by the people who deliver',
-                    $id ? 'Dibalas pada hari kerja yang sama' : 'Answered the same working day',
-                ] as $point)
-                    <li class="flex items-center gap-2.5">
-                        <svg class="h-4 w-4 shrink-0 text-sky-400" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        {{ $point }}
-                    </li>
-                @endforeach
-            </ul>
-
-            <div class="mt-11 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center" data-aos="fade-up" data-aos-delay="100">
-                <a href="{{ route('contact.index') }}" class="btn-blue justify-center sm:w-auto">
-                    {{ $id ? 'Konsultasikan Kebutuhan Anda' : 'Discuss Your Needs' }}
-                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
-                <a href="{{ route('portfolio.index') }}" class="btn-ghost-light justify-center sm:w-auto">
-                    {{ $id ? 'Lihat Portofolio' : 'View Portfolio' }}
-                </a>
+                <div class="mt-10 flex justify-center">
+                    <a href="{{ route('contact.index') }}" class="btn-blue">
+                        {{ $id ? 'Konsultasikan Kebutuhan Anda' : 'Discuss Your Needs' }}
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
