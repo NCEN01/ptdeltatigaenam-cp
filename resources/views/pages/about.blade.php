@@ -304,55 +304,73 @@
         </div>
     </section>
 
-    {{-- ===================== VALUES ===================== --}}
-    <section class="section relative overflow-hidden border-t border-navy-50 bg-paper">
-        <div class="pointer-events-none absolute inset-0 aurora-light opacity-50"></div>
+    {{-- ===================== VALUES =====================
+         Foto di kiri, daftar nilai di kanan. Kelima nilai ini dulu berdiri di
+         satu tulang punggung tegak yang memanjang ke bawah dan membuat seksinya
+         jadi kolom sempit sepanjang layar; disandingkan dengan foto, tingginya
+         terpakai dan halamannya berhenti menyempit di bagian akhir.
 
-        <div class="container relative">
-            <div class="max-w-2xl" data-aos="fade-up">
-                <h2 class="text-display-lg font-bold text-navy">{{ $isId ? 'Nilai Perusahaan' : 'Our Core Values' }}</h2>
-                <p class="mt-4 text-pretty text-lg leading-relaxed text-slate-600">
-                    {{ $isId
-                        ? 'Apa arti kelima nilai ini bagi Anda yang bekerja bersama kami.'
-                        : 'What these five values mean for you, working with us.' }}
-                </p>
+         Tiap baris: huruf akronim dalam lingkaran, judulnya, lalu keterangannya
+         di kolom sebelah — bukan di bawahnya. Keterangan yang duduk sebaris
+         judulnya membuat kelima judul itu bisa dipindai tanpa melewati
+         paragraf, dan D-E-L-T-A tetap terbaca menurun di tepi kiri.
+
+         Hurufnya dilingkari tipis, tidak diisi pekat. Huruf itu bukan nomor
+         langkah, dan bidang gelap di tiap baris akan menyainginya dengan judul
+         yang justru hendak dibaca. --}}
+    @php
+        $valuesPhoto = 'images/nilai-perusahaan.webp';
+        $hasValuesPhoto = is_file(public_path($valuesPhoto));
+    @endphp
+    <section class="section border-t border-navy-50 bg-white">
+        <div class="container">
+            <div class="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10" data-aos="fade-up">
+                <div class="lg:col-span-8">
+                    <h2 class="text-display-lg font-bold text-navy">
+                        {{ $isId ? 'Nilai yang menuntun cara kami bekerja' : 'The values that guide how we work' }}
+                    </h2>
+                    {{-- Menyebut sejak kapan dan lewat apa, bukan menyebut betapa
+                         pentingnya nilai. Kalimat kedua baru menyambungkannya ke
+                         kelima nilai di bawah. --}}
+                    <p class="mt-5 max-w-2xl text-pretty leading-relaxed text-slate-600 md:text-lg">
+                        {{ $isId
+                            ? 'Sejak berdiri pada 2024, Delta Tiga Enam mengembangkan kompetensi SDM lewat pelatihan, sertifikasi profesi, konsultasi, dan headhunter. Lima nilai berikut yang menentukan cara setiap programnya dijalankan.'
+                            : 'Since it began in 2024, Delta Tiga Enam has developed workforce competency through training, professional certification, consulting, and headhunting. These five values decide how every programme is run.' }}
+                    </p>
+                </div>
+                <div class="lg:col-span-4 lg:flex lg:justify-end">
+                    <a href="{{ route('services.index') }}" class="btn-blue">
+                        {{ $isId ? 'Lihat Semua Layanan' : 'View All Services' }}
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                </div>
             </div>
 
-            {{-- Akronimnya jadi tulang punggung tegak.
+            <div class="mt-12 grid gap-10 lg:mt-14 lg:grid-cols-12 lg:items-start lg:gap-14">
+                @if ($hasValuesPhoto)
+                    <div class="lg:col-span-5" data-aos="fade-up">
+                        <div class="aspect-square overflow-hidden rounded-2xl bg-mist ring-1 ring-navy-100">
+                            <img src="{{ asset($valuesPhoto) }}"
+                                 alt="{{ $isId ? 'Tim dan peserta program Delta Tiga Enam' : 'The Delta Tiga Enam team and programme participants' }}"
+                                 width="1000" height="1000" loading="lazy" decoding="async"
+                                 class="h-full w-full object-cover">
+                        </div>
+                    </div>
+                @endif
 
-                 Kelima huruf berdiri di satu garis vertikal yang menghubungkannya
-                 dari atas ke bawah, sehingga D-E-L-T-A terbaca sebagai satu kata
-                 yang menurun, bukan lima huruf yang kebetulan berdekatan.
-
-                 Garis penghubung biasanya menjanjikan urutan — langkah pertama,
-                 kedua, dan seterusnya — dan di daftar yang butirnya setara itu
-                 janji palsu. Di sini urutannya memang mengikat: menukar dua baris
-                 saja membuat namanya tidak lagi terbaca. Garis itu justru yang
-                 menyatakannya.
-
-                 Ubinnya persegi membulat, bukan lingkaran, supaya tidak terbaca
-                 sebagai garis waktu; bentuk itu sama dengan ubin ikon di seksi
-                 lain situs ini. ring-4 ring-paper membuat garisnya terputus rapi
-                 di belakang tiap ubin tanpa elemen penutup tambahan. --}}
-            <div class="relative mt-14 pl-20 md:mt-16 md:pl-28">
-                {{-- Garisnya meluruh di ujung bawah, bukan berhenti mendadak di
-                     bawah huruf terakhir. --}}
-                <span class="pointer-events-none absolute bottom-6 left-7 top-7 w-px bg-gradient-to-b from-navy-200 via-navy-200 to-transparent md:left-9" aria-hidden="true"></span>
-
-                <dl>
+                <dl class="{{ $hasValuesPhoto ? 'lg:col-span-7' : 'lg:col-span-12' }} border-b border-navy-100">
                     @foreach ($values as $i => $value)
-                        <div class="relative pb-10 last:pb-0 md:pb-12" data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
-                            <dt>
-                                {{-- Huruf emas di atas navy pekat: 14,5:1, jauh di
-                                     atas ambang. --}}
-                                <span class="absolute -left-20 top-0 grid h-14 w-14 place-items-center rounded-2xl bg-navy font-display text-2xl font-bold text-gold-soft shadow-card ring-4 ring-paper md:-left-28 md:h-[4.5rem] md:w-[4.5rem] md:text-3xl" aria-hidden="true">{{ mb_substr($value['title'], 0, 1) }}</span>
-                                <p class="text-2xl font-bold leading-none text-navy md:text-3xl">{{ $value['title'] }}</p>
+                        <div class="flex flex-col gap-3 border-t border-navy-100 py-6 md:flex-row md:items-center md:gap-8 md:py-7"
+                             data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
+                            <dt class="flex items-center gap-4 md:w-60 md:shrink-0">
+                                {{-- Huruf navy di dalam lingkaran bergaris: 12,6:1
+                                     terhadap latar putih. --}}
+                                <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full font-display text-sm font-bold text-navy ring-1 ring-navy-200" aria-hidden="true">{{ mb_substr($value['title'], 0, 1) }}</span>
+                                <span class="text-xl font-bold leading-snug text-navy md:text-2xl">{{ $value['title'] }}</span>
                             </dt>
-                            <dd class="mt-3">
-                                {{-- 'detail', bukan 'desc'. Kalimat 'desc' sudah
-                                     tampil di beranda. --}}
-                                <p class="max-w-prose text-pretty leading-relaxed text-slate-600 md:text-lg">{{ $value['detail'] }}</p>
-                            </dd>
+                            {{-- 'detail', bukan 'desc'. Kalimat 'desc' sudah tampil
+                                 di beranda. --}}
+                            <dd class="text-pretty text-sm leading-relaxed text-slate-600 md:text-[15px]">{{ $value['detail'] }}</dd>
                         </div>
                     @endforeach
                 </dl>
