@@ -36,16 +36,27 @@
         ['Improved Company Performance', 'With a better-trained, more competent workforce, the company reaches its targets more efficiently, making people a strategic asset.'],
     ];
 
+    /* Dipendekkan dari lima kalimat surat penawaran jadi dua. Yang dibuang kalimat
+       yang menyebut maksud baik ("komitmen kami", "kami percaya") tanpa menyebut
+       satu pun hal yang benar-benar terjadi; yang disimpan hanya yang bisa
+       diperiksa pembaca di halaman ini juga. */
     $narrative = $id
-        ? 'Kami dari PT Delta Tiga Enam, sebagai mitra terpercaya dalam pengembangan sumber daya manusia, mengajukan Penawaran Program Kemitraan Pelatihan SDM yang dirancang untuk mendukung pengembangan kompetensi karyawan di perusahaan Bapak/Ibu. Program kemitraan ini merupakan bentuk komitmen kami untuk memberikan solusi pelatihan yang efektif, relevan, dan dapat disesuaikan dengan kebutuhan perusahaan Anda. Dengan menjalin kemitraan ini, kami percaya perusahaan Bapak/Ibu dapat meningkatkan produktivitas, efisiensi, dan kualitas kinerja tim secara signifikan.'
-        : 'PT Delta Tiga Enam, as a trusted partner in human capital development, presents an HR Training Partnership Program designed to support employee competency development at your company. This program reflects our commitment to delivering training solutions that are effective, relevant, and tailored to your needs. Through this partnership, we believe your company can significantly improve productivity, efficiency, and team performance.';
+        ? "PT Delta Tiga Enam menyusun program pelatihan dan sertifikasi untuk perusahaan yang ingin menaikkan kompetensi timnya tanpa menghentikan operasional.\n\nLewat kemitraan, kebutuhan pelatihan satu tahun diurus dalam satu kesepakatan: materi disusun mengikuti pekerjaan tim Anda, jadwalnya menyesuaikan, dan biayanya memakai harga mitra."
+        : "PT Delta Tiga Enam builds training and certification programmes for companies that want to raise their team's competency without stopping operations.\n\nA partnership settles a year of training needs in one agreement: material shaped around the work your team actually does, scheduling that fits around it, and partner pricing.";
+
+    /* Keterangan mesin pencari dipisah dari naskah yang tampil. Naskahnya ditulis
+       untuk dibaca di halaman; keterangan ini dipotong pada sekitar 160 huruf di
+       hasil pencarian, jadi keduanya memang pekerjaan yang berbeda. */
+    $metaDesc = $id
+        ? 'Program Kemitraan Pelatihan SDM PT Delta Tiga Enam: pelatihan dan sertifikasi berskema BNSP yang disusun mengikuti kebutuhan perusahaan Anda, dengan harga mitra.'
+        : 'PT Delta Tiga Enam HR Training Partnership: BNSP-scheme training and certification shaped around your company needs, at partner pricing.';
 
     $steps = $id
         ? ['Isi & kirim formulir pendaftaran', 'Tim kami menghubungi & menjadwalkan presentasi', 'Terima penawaran resmi melalui invoice']
         : ['Fill in & submit the registration form', 'Our team contacts you & schedules a presentation', 'Receive a formal offer via invoice'];
 @endphp
 
-<x-layout :title="__('site.nav.partnership')" :description="$narrative">
+<x-layout :title="__('site.nav.partnership')" :description="$metaDesc">
     <x-page-header
         :title="$id ? 'Program Kemitraan Corporate Training' : 'Corporate Training Partnership Program'"
         :subtitle="$intro ?: ($id ? 'Solusi pelatihan SDM yang efektif, relevan, dan dapat disesuaikan dengan kebutuhan perusahaan Anda.' : 'Effective, relevant HR training solutions tailored to your company needs.')"
@@ -61,15 +72,54 @@
                      setiap h1–h4. --}}
                 <h2 class="text-display-lg text-navy">{{ $id ? 'Kemitraan PT Delta Tiga Enam' : 'Partnership with PT Delta Tiga Enam' }}</h2>
 
-                {{-- The opening sentence is lifted to lead size so the block has an entry
-                     point. Split on the first sentence boundary — the wording is untouched,
-                     only its weight changes. --}}
+                {{-- Kalimat pembuka naik satu ukuran supaya blok ini punya titik
+                     masuk. Pemisahnya baris kosong, bukan titik: naskahnya kini
+                     dua paragraf pendek dan memecah pada titik pertama akan
+                     memotong kalimat kedua di tengah paragraf yang sama. --}}
                 @php
-                    [$narrativeLead, $narrativeRest] = array_pad(preg_split('/(?<=\.)\s+/', $narrative, 2), 2, '');
+                    [$narrativeLead, $narrativeRest] = array_pad(preg_split('/\n\s*\n/', trim($narrative), 2), 2, '');
                 @endphp
-                <p class="mt-7 max-w-2xl text-lg leading-relaxed text-navy [hyphens:auto] sm:text-justify md:text-xl">{{ $narrativeLead }}</p>
+                <p class="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-navy md:text-xl">{{ $narrativeLead }}</p>
                 @if ($narrativeRest !== '')
-                    <p class="mt-5 max-w-2xl leading-relaxed text-slate-600 [hyphens:auto] sm:text-justify">{{ $narrativeRest }}</p>
+                    <p class="mt-5 max-w-2xl text-pretty leading-relaxed text-slate-600">{{ $narrativeRest }}</p>
+                @endif
+
+                {{-- Tiga angka, bukan tiga kalimat lagi. Pembaca di titik ini sedang
+                     menakar besarnya, dan angka menjawabnya dengan kata paling
+                     sedikit. Ketiganya dibaca dari data halaman ini sendiri —
+                     jumlah paket, jumlah lembaga mitra, dan papan angka perusahaan —
+                     jadi tidak ada angka yang perlu dijaga manual.
+
+                     Susunannya sama dengan papan angka di beranda dan halaman
+                     Sertifikat: angka besar di atas, keterangan di bawah, dipisah
+                     garis rambut tegak. --}}
+                @php
+                    $trainedStat = collect(\App\Support\Company::stats())
+                        ->first(fn ($s) => str_contains(mb_strtolower((string) $s['label']), $id ? 'profesional' : 'professional'));
+
+                    $narrativeFigures = array_values(array_filter([
+                        $packages->isNotEmpty()
+                            ? [(string) $packages->count(), '', $id ? 'Tingkat kemitraan' : 'Partnership tiers']
+                            : null,
+                        $partners->isNotEmpty()
+                            ? [(string) $partners->count(), '', $id ? 'Lembaga sertifikasi mitra' : 'Partner certification bodies']
+                            : null,
+                        $trainedStat
+                            ? [$trainedStat['number'], $trainedStat['suffix'], $trainedStat['label']]
+                            : null,
+                    ]));
+                @endphp
+                @if (count($narrativeFigures) > 1)
+                    <dl class="mt-10 grid max-w-2xl grid-cols-3 gap-x-4 border-t border-navy-100 pt-7 sm:gap-x-8">
+                        @foreach ($narrativeFigures as $i => [$number, $suffix, $label])
+                            <div @class(['border-l border-navy-100 pl-4 sm:pl-8' => $i > 0])>
+                                <dd class="font-display text-3xl font-bold leading-none tracking-tight text-navy sm:text-4xl">
+                                    <span class="tabular-nums" data-counter="{{ $number }}">{{ $number }}</span><span class="text-sky-600">{{ $suffix }}</span>
+                                </dd>
+                                <dt class="mt-2.5 text-sm leading-snug text-slate-600">{{ $label }}</dt>
+                            </div>
+                        @endforeach
+                    </dl>
                 @endif
             </div>
             <div class="lg:col-span-5" data-aos="fade-left" data-aos-delay="100">
@@ -82,8 +132,8 @@
                             <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none"><path d="M4 7h16v13H4zM4 7l3-3h10l3 3M9 12h6" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
                         </span>
                         <p class="mt-6 font-mono text-[11px] uppercase tracking-normal text-gold-soft">{{ $id ? 'Penagihan' : 'Billing' }}</p>
-                        <p class="mt-3 font-display text-2xl leading-snug text-balance">{{ $id ? 'Tanpa pembayaran online. Seluruh kerja sama difinalisasi melalui invoice.' : 'No online payment. Every partnership is finalized via invoice.' }}</p>
-                        <p class="mt-auto border-t border-white/10 pt-6 text-sm leading-relaxed text-navy-200">{{ $id ? 'Tim kami menyiapkan penawaran resmi setelah presentasi.' : 'Our team prepares a formal offer after the presentation.' }}</p>
+                        <p class="mt-3 font-display text-2xl leading-snug text-balance">{{ $id ? 'Tanpa pembayaran online. Semuanya lewat invoice.' : 'No online payment. Everything goes through an invoice.' }}</p>
+                        <p class="mt-auto border-t border-white/10 pt-6 text-sm leading-relaxed text-navy-100">{{ $id ? 'Penawaran resmi disiapkan tim kami setelah presentasi.' : 'Our team prepares the formal offer after the presentation.' }}</p>
                     </div>
                 </div>
             </div>
