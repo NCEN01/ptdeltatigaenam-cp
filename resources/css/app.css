@@ -581,21 +581,28 @@
     box-shadow: 0 0 0 6px rgba(218, 180, 94, 0.18);
 }
 
-/* "Kenapa daftar ini dibuka" di halaman Sertifikat. Latarnya gradien yang
-   menyapu, dan pada puncak terangnya teks navy-100 di atas kartu bg-white/5
-   tinggal 4,69:1 — persis di atas ambang AA tanpa sisa. Jadi yang berubah saat
-   kartu ditunjuk hanya hal yang tidak membawa teks: cincinnya, ubin ikonnya,
-   dan ketinggiannya. Kepekatan dan warna tulisannya tidak disentuh. */
-.proof-card {
-    --tw-ring-color: rgb(255 255 255 / 0.1);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-.proof-card[data-on="1"] {
+/* Kartu yang menyala saat ditunjuk. Dipakai di dua tempat yang latarnya
+   berbeda-beda: "Kenapa daftar ini dibuka" di halaman Sertifikat (kartu tembus
+   pandang di atas gradien yang menyapu) dan "Mengapa menjadi mitra" di halaman
+   Kemitraan (kartu putih, navy, dan navy bergradasi dalam satu baris).
+
+   Karena itu yang berubah hanya hal yang tidak membawa teks: warna cincinnya,
+   pendar pada ubin ikonnya, dan ketinggiannya. Meredupkan kartu lain tidak
+   bisa dipakai di sini — di halaman Sertifikat teks navy-100 di atas kartu
+   bg-white/5 sudah 4,69:1 pada puncak terang gradiennya, persis di ambang AA
+   tanpa sisa, dan di halaman Kemitraan teks slate-600 di atas kartu putih
+   jatuh ke 2,88:1 begitu diredupkan.
+
+   Warna cincin dasarnya ditinggal di kelas Tailwind masing-masing kartu: ia
+   berbeda di tiap latar, dan memusatkannya di sini justru memaksa ketiganya
+   seragam. Yang dipusatkan hanya keadaan aktifnya, yang memang sama. */
+.hover-card { transition: box-shadow 0.3s ease, transform 0.3s ease; }
+.hover-card[data-on="1"] {
     --tw-ring-color: rgb(218 180 94 / 0.55);
     transform: translateY(-4px);
 }
-.proof-icon { transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; }
-.proof-icon[data-on="1"] { box-shadow: 0 0 0 5px rgba(218, 180, 94, 0.14); }
+.hover-card-icon { transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; }
+.hover-card-icon[data-on="1"] { box-shadow: 0 0 0 5px rgba(218, 180, 94, 0.14); }
 
 @media (prefers-reduced-motion: reduce) {
     .misi-line-fill,
@@ -603,9 +610,9 @@
     .misi-body,
     .nilai-row,
     .nilai-node,
-    .proof-card,
-    .proof-icon { transition: none; }
-    .proof-card[data-on="1"] { transform: none; }
+    .hover-card,
+    .hover-card-icon { transition: none; }
+    .hover-card[data-on="1"] { transform: none; }
 }
 
 /* ── Hero carousel ── */

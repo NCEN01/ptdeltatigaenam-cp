@@ -245,7 +245,16 @@
                  menentukan mana yang jadi kartu besar. Kartu keenam dan seterusnya
                  mengalir sebagai kartu sepertiga, jadi menambah butir di panel tidak
                  merusak susunannya. --}}
-            <div class="mt-12 grid gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-12">
+            {{-- Kartu yang ditunjuk menyala, dan keadaannya bertahan setelah
+                 tunjukan ditarik — pola yang sama dengan kartu "Kenapa daftar ini
+                 dibuka" di halaman Sertifikat, dan memakai kelas yang sama.
+
+                 Tidak ada yang diredupkan. Tiga latar bercampur di satu baris
+                 (putih, navy, navy bergradasi), dan teks slate-600 di atas kartu
+                 putih jatuh ke 2,88:1 begitu diredupkan ke 0,6 — jauh di bawah
+                 ambang AA. Yang aktif justru ditambahi: cincin emas, pendar pada
+                 ubin ikonnya, dan naik 4px. --}}
+            <div class="mt-12 grid gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-12" x-data="{ active: 0 }">
                 @foreach ($benefitCards as $i => $card)
                     @php
                         $wide = $i < 2;                 // dua kartu pertama: setengah baris
@@ -253,7 +262,12 @@
                         $icon = $benefitIcons[$card['icon'] ?? ''] ?? $benefitIconFallback;
                     @endphp
                     <div data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}"
-                         class="relative flex flex-col overflow-hidden rounded-2xl p-7 md:p-8 {{ $wide ? 'lg:col-span-6' : 'lg:col-span-4' }} {{ $i === 0
+                         tabindex="0"
+                         x-on:mouseenter="active = {{ $i }}"
+                         x-on:focus="active = {{ $i }}"
+                         x-on:click="active = {{ $i }}"
+                         :data-on="active === {{ $i }} ? '1' : '0'"
+                         class="hover-card relative flex flex-col overflow-hidden rounded-2xl p-7 outline-none md:p-8 {{ $wide ? 'lg:col-span-6' : 'lg:col-span-4' }} {{ $i === 0
                              ? 'bg-gradient-to-br from-navy-700 via-navy-800 to-navy-950 text-white ring-1 ring-white/10'
                              : ($dark ? 'bg-navy-950 text-white ring-1 ring-white/10' : 'bg-white ring-1 ring-navy-100') }}">
 
@@ -262,7 +276,9 @@
                         @endif
 
                         <div class="relative flex flex-1 flex-col">
-                            <span class="grid h-12 w-12 place-items-center rounded-xl {{ $dark ? 'bg-white/10 text-sky-400 ring-1 ring-white/10' : 'bg-sky-50 text-sky-700' }}" aria-hidden="true">
+                            <span class="hover-card-icon grid h-12 w-12 place-items-center rounded-xl {{ $dark ? 'bg-white/10 text-sky-400 ring-1 ring-white/10' : 'bg-sky-50 text-sky-700' }}"
+                                  aria-hidden="true"
+                                  :data-on="active === {{ $i }} ? '1' : '0'">
                                 <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">{!! $icon !!}</svg>
                             </span>
 

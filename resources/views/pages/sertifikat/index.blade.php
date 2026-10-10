@@ -471,14 +471,14 @@
                                  keempat kartu berbagi satu keadaan, jadi kartu kedua
                                  di kolom kanan harus bernomor 3, bukan 1 lagi. --}}
                             @php $n = $colIdx * 2 + $i; @endphp
-                            <li class="proof-card flex flex-1 flex-col rounded-2xl bg-white/5 p-6 outline-none ring-1 md:p-7"
+                            <li class="hover-card flex flex-1 flex-col rounded-2xl bg-white/5 p-6 outline-none ring-1 ring-white/10 md:p-7"
                                 tabindex="0"
                                 x-on:mouseenter="active = {{ $n }}"
                                 x-on:focus="active = {{ $n }}"
                                 x-on:click="active = {{ $n }}"
                                 :data-on="active === {{ $n }} ? '1' : '0'"
                                 data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
-                                <span class="proof-icon grid h-11 w-11 place-items-center rounded-xl ring-1 ring-white/10 transition-colors duration-300"
+                                <span class="hover-card-icon grid h-11 w-11 place-items-center rounded-xl ring-1 ring-white/10 transition-colors duration-300"
                                       aria-hidden="true"
                                       :data-on="active === {{ $n }} ? '1' : '0'"
                                       :class="active === {{ $n }} ? 'bg-gold/20 text-gold-soft' : 'bg-white/10 text-sky-400'">
