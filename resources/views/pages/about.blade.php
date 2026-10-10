@@ -87,19 +87,15 @@
                          kanan atas foto selebar layar ponsel akan menutupi wajah orang
                          di dalamnya. --}}
                     <div class="mt-4 grid grid-cols-2 gap-3 sm:absolute sm:-top-6 sm:right-5 sm:mt-0 sm:flex sm:gap-3">
-                        @foreach ($profileStats as $i => $stat)
+                        @foreach ($profileStats as $stat)
+                            {{-- Angka dulu, keterangannya di bawah: di kartu sekecil ini
+                                 angkanyalah yang dicari mata, dan keterangan di atasnya
+                                 membuat mata membaca dua kali. --}}
                             <div class="rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 p-4 shadow-lift ring-1 ring-white/10 sm:w-36 sm:p-5">
-                                <span class="block text-sky-400" aria-hidden="true">
-                                    @if ($i === 0)
-                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-                                    @else
-                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 17.5V19"/><circle cx="10" cy="8" r="3"/><path d="M20 19v-1.5a3.5 3.5 0 0 0-2.6-3.4M15.4 5.2a3 3 0 0 1 0 5.6"/></svg>
-                                    @endif
-                                </span>
-                                <p class="mt-2.5 text-[11px] leading-tight text-navy-100">{{ $stat['label'] }}</p>
-                                <p class="mt-1.5 font-display text-2xl font-bold leading-none text-white sm:text-[1.75rem]">
+                                <p class="font-display text-2xl font-bold leading-none text-white sm:text-[1.75rem]">
                                     <span class="tabular-nums" data-counter="{{ $stat['number'] }}">{{ $stat['number'] }}</span><span class="text-sky-400">{{ $stat['suffix'] }}</span>
                                 </p>
+                                <p class="mt-2 text-[11px] leading-tight text-navy-100">{{ $stat['label'] }}</p>
                             </div>
                         @endforeach
                     </div>

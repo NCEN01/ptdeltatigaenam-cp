@@ -213,8 +213,8 @@
             @if ($hasRegistryPhoto)
                 @php
                     $registryFigures = $registry?->total ? [
-                        ['doc', $id ? 'Sertifikat terbit' : 'Certificates issued', $registry->total],
-                        ['building', $id ? 'Perusahaan' : 'Companies', $registry->companies],
+                        [$id ? 'Sertifikat terbit' : 'Certificates issued', $registry->total],
+                        [$id ? 'Perusahaan' : 'Companies', $registry->companies],
                     ] : [];
                 @endphp
                 <aside class="lg:col-span-5 lg:mt-16" aria-label="{{ $id ? 'Cakupan daftar sertifikat' : 'Coverage of the register' }}">
@@ -231,18 +231,14 @@
                              wajah orang di dalamnya. --}}
                         @if ($registryFigures)
                             <div class="mt-4 grid grid-cols-2 gap-3 sm:absolute sm:-top-6 sm:right-5 sm:mt-0 sm:flex sm:gap-3">
-                                @foreach ($registryFigures as [$icon, $label, $value])
+                                @foreach ($registryFigures as [$label, $value])
+                                    {{-- Angka dulu, keterangannya di bawah: di kartu sekecil
+                                         ini angkanyalah yang dicari mata, dan keterangan di
+                                         atasnya membuat mata membaca dua kali. --}}
                                     <div class="rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 p-4 shadow-lift ring-1 ring-white/10 sm:w-36 sm:p-5">
-                                        <span class="block text-sky-400" aria-hidden="true">
-                                            @if ($icon === 'doc')
-                                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
-                                            @else
-                                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v16"/><path d="M15 9h3a2 2 0 0 1 2 2v10"/><path d="M2 21h20M8 7h2M8 11h2M8 15h2"/></svg>
-                                            @endif
-                                        </span>
-                                        <p class="mt-2.5 text-[11px] leading-tight text-navy-100">{{ $label }}</p>
-                                        <p class="mt-1.5 font-display text-2xl font-bold leading-none tabular-nums text-white sm:text-[1.75rem]"
+                                        <p class="font-display text-2xl font-bold leading-none tabular-nums text-white sm:text-[1.75rem]"
                                            data-counter="{{ $value }}">{{ $value }}</p>
+                                        <p class="mt-2 text-[11px] leading-tight text-navy-100">{{ $label }}</p>
                                     </div>
                                 @endforeach
                             </div>
