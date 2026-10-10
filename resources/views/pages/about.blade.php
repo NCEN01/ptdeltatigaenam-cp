@@ -167,62 +167,76 @@
         </div>
     </section>
 
-    {{-- ===================== VISION & MISSION =====================
-         Visi diangkat jadi pernyataan sebesar judul, melintang penuh di atas,
-         dan misinya menyusul di bawah garis. Dulu keduanya berdampingan dalam
-         dua kolom 2/5 dan 3/5; di situ visi terbaca sebagai keterangan tepi
-         halaman, padahal ia satu-satunya kalimat yang mewakili seluruh
-         perusahaan. Ketegasan datang dari ukuran huruf dan ruang kosong di
-         sekelilingnya, bukan dari kotak atau warna.
+    {{-- ===================== VISION & MISSION ===================== --}}
+    <section class="section-sm relative overflow-hidden text-white">
+        {{-- Background image + overlay --}}
+        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1920&q=80" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover">
+        {{-- Same gradient treatment as the "Keunggulan" band — image visible through the middle --}}
+        <div class="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/88"></div>
+        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-20"></div>
+        <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
 
-         Tanda kutipnya dilepas. Visi bukan ucapan seseorang yang dikutip; ia
-         pernyataan perusahaan sendiri, dan tanda kutip justru menjauhkannya.
-
-         Latarnya terang, tanpa foto. Dua hal yang diperbaiki sekaligus: seksi
-         Pendiri tepat di bawahnya kini bergambar gelap, dan dua pita gelap
-         berurutan membuat keduanya saling meredam; dan foto latarnya dulu
-         diambil langsung dari Unsplash setiap kunjungan — satu permintaan ke
-         peladen pihak ketiga untuk gambar yang tidak menggambarkan apa pun. --}}
-    <section class="section bg-paper">
-        <div class="container">
-            <div class="max-w-4xl" data-aos="fade-up">
-                <h2 class="kicker">{{ $isId ? 'Visi' : 'Vision' }}</h2>
-                {{-- font-display dan font-semibold ditulis di sini karena ini <p>,
-                     bukan <h1>-<h4> yang sudah mendapatkannya dari app.css. --}}
-                <p class="mt-6 text-balance font-display text-display-lg font-semibold leading-[1.25] text-navy">{{ $vision }}</p>
+        <div class="container relative">
+            <div class="mb-10 max-w-2xl" data-aos="fade-up">
+                {{-- Token text-display-lg, sama dengan judul seksi lain. font-display
+                     tidak ditulis: app.css sudah memberikannya ke setiap h1–h4. --}}
+                <h2 class="text-display-lg">{{ $isId ? 'Visi & Misi' : 'Vision & Mission' }}</h2>
             </div>
 
-            @if ($missions->isNotEmpty())
-                <div class="mt-14 border-t border-navy-100 pt-12 md:mt-16 md:pt-14" data-aos="fade-up">
-                    <h2 class="kicker">{{ $isId ? 'Misi' : 'Mission' }}</h2>
+            {{-- Asymmetric 2fr/3fr rather than two matching glass boxes: the vision is one
+                 statement and the mission is a list, so giving them identical containers
+                 flattened the difference and buried the vision at body size. --}}
+            <div class="grid items-start gap-10 lg:grid-cols-5 lg:gap-14">
 
-                    {{-- Dua kolom, bukan satu lajur panjang. Lima kalimat yang
-                         berderet ke bawah di lebar penuh membuat barisnya terlalu
-                         panjang untuk dibaca nyaman dan seksinya memanjang tanpa
-                         alasan.
-
-                         Garis di atas tiap butir, bukan pemisah di antaranya:
-                         dengan dua kolom, pemisah antar-butir tidak pernah
-                         bertemu di ketinggian yang sama dan justru terbaca patah. --}}
-                    <ol class="mt-8 grid gap-x-12 gap-y-6 md:grid-cols-2 lg:gap-x-16">
-                        @foreach ($missions as $mission)
-                            <li class="flex items-start gap-4 border-t border-navy-100 pt-5 md:gap-5">
-                                {{-- Nomornya tenang: ia hanya penghitung, dan isi
-                                     misinyalah yang harus terbaca lebih dulu. --}}
-                                <span class="w-5 shrink-0 pt-0.5 font-mono text-[11px] font-bold tabular-nums text-gold-deep" aria-hidden="true">
-                                    {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
-                                </span>
-                                {{-- Rata kiri, tidak rata kanan-kiri: perataan penuh di
-                                     kolom selebar ini membuka sungai putih di antara
-                                     kata, dan pemenggalan otomatis yang dipasang untuk
-                                     menutupinya justru memotong istilah seperti
-                                     "human capital" di tempat yang salah. --}}
-                                <p class="text-pretty leading-relaxed text-slate-700">{{ $mission->content }}</p>
-                            </li>
-                        @endforeach
-                    </ol>
+                {{-- Vision: set as the statement it is, not as body copy in a card. --}}
+                <div class="lg:col-span-2" data-aos="fade-up">
+                    {{-- .kicker-on-dark menggantikan gaya yang ditulis sendiri.
+                         Yang lama memakai tracking 0,22em, padahal token
+                         tracking-label situs ini sengaja bernilai 0. Garis emas
+                         kecil di bawah tiap label juga dilepas: dengan garis emas
+                         di tepi atas seksi, ada tiga benda emas di satu layar. --}}
+                    <p class="kicker-on-dark">{{ $isId ? 'Visi' : 'Vision' }}</p>
+                    <blockquote class="mt-5">
+                        <p class="font-display text-xl font-semibold leading-[1.45] text-white text-pretty md:text-2xl">
+                            “{{ $vision }}”
+                        </p>
+                    </blockquote>
                 </div>
-            @endif
+
+                {{-- Mission: numbered so the count reads at a glance; the em-dash bullets gave
+                     no sense of how many commitments there are. --}}
+                <div class="lg:col-span-3" data-aos="fade-up" data-aos-delay="100">
+                    <p class="kicker-on-dark">{{ $isId ? 'Misi' : 'Mission' }}</p>
+
+                    @if ($missions->isNotEmpty())
+                        <ol class="mt-5 divide-y divide-white/10 border-y border-white/10">
+                            @foreach ($missions as $mission)
+                                <li class="group flex items-start gap-4 py-5 md:gap-5">
+                                    {{-- Nomornya dibuat tenang: ia hanya penghitung, dan
+                                         isi misinyalah yang harus terbaca lebih dulu.
+                                         Karena itu tinggal angka tanpa ubin kaca, dan
+                                         ikut turun ke putih redup. --}}
+                                    <span class="mt-1 w-6 shrink-0 font-mono text-[11px] font-bold tabular-nums text-gold-soft" aria-hidden="true">
+                                        {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
+                                    </span>
+                                    {{-- Naik dari 15px ke 16/17px dan dari white/90 ke putih
+                                         penuh. Ini kalimat inti halaman, tapi sebelumnya ia
+                                         jadi teks terkecil di seksinya sendiri, di atas
+                                         gradasi yang bagian tengahnya hanya 45% gelap.
+
+                                         Rata kiri di semua ukuran, tidak lagi rata kanan-kiri
+                                         mulai sm: perataan penuh di kolom 3/5 membuka sungai
+                                         putih di antara kata, dan pemenggalan otomatis yang
+                                         dipasang untuk menutupinya justru memotong istilah
+                                         seperti "human capital" di tempat yang salah. --}}
+                                    <p class="text-base leading-relaxed text-white md:text-[17px]">{{ $mission->content }}</p>
+                                </li>
+                            @endforeach
+                        </ol>
+                    @endif
+                </div>
+            </div>
         </div>
     </section>
 
