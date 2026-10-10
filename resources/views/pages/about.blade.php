@@ -4,14 +4,21 @@
 
 
     // Founder (structural content — editable here in the view).
-    $founderRole = $isId ? 'CEO Delta Tiga Enam' : 'CEO of Delta Tiga Enam';
+    // Satu baris jabatan, bukan dua. Dulu "Pendiri" berdiri sebagai label di
+    // atas nama dan "CEO Delta Tiga Enam" sebagai baris terpisah di bawahnya;
+    // keduanya menyebut orang yang sama dan memisahkannya hanya menambah baris.
+    $founderRole = $isId ? 'Pendiri & CEO' : 'Founder & CEO';
+    // Angka pengalaman dipisah dari kalimat riwayatnya supaya bisa dicetak
+    // besar di sampingnya. Kalimatnya sendiri tidak lagi mengulang angkanya.
+    $founderYears = '20+';
+    $founderYearsLabel = $isId ? 'tahun pengalaman' : 'years of experience';
     $founderName = 'Dani Taupan Ramdani, S.T., M.M., Ph.D (Cand.)';
     $founderQuote = $isId
         ? 'Membangun bangsa dimulai dari membangun manusianya. Di Delta Tiga Enam, kami berkomitmen menjadi jembatan bagi talenta Indonesia menuju standar dunia.'
         : 'Building a nation begins with building its people. At Delta Tiga Enam, we are committed to bridging Indonesian talent toward world-class standards.';
     $founderBio = $isId
-        ? 'Dengan pengalaman lebih dari 20 tahun di bidang Human Resources dan Manajemen Strategis, Dani telah membantu berbagai perusahaan BUMN dan swasta dalam melakukan restrukturisasi organisasi.'
-        : 'With over 20 years of experience in Human Resources and Strategic Management, Dani has helped state-owned and private companies restructure their organizations.';
+        ? 'Di bidang Human Resources dan Manajemen Strategis, membantu perusahaan BUMN maupun swasta melakukan restrukturisasi organisasi.'
+        : 'In Human Resources and Strategic Management, helping state-owned and private companies restructure their organisations.';
 @endphp
 
 <x-layout :title="$isId ? 'Tentang Kami' : 'About Us'" :description="$tagline">
@@ -238,9 +245,20 @@
          ini jadi bidang navy hampir sepenuh layar; di monitor tinggi, isinya
          mengambang di tengah dengan ruang kosong besar di atas dan bawahnya.
          Jarak seksi biasa sudah memberi napas yang cukup. --}}
-    <section class="relative overflow-hidden bg-navy-anim py-20 text-white md:py-28">
-        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-35"></div>
-        <div class="pointer-events-none absolute inset-0 grain opacity-30"></div>
+    {{-- Latarnya siluet kota, bukan gradien beranimasi. Aurora yang bergerak
+         pelan di belakang satu potret membuat matanya terbelah antara wajah dan
+         latar; siluet yang diam menahan diri, dan garis-garis gedungnya yang
+         samar justru menegakkan potret di depannya.
+
+         Bidang navy di atasnya tetap ada supaya gelapnya seragam berapa pun
+         tinggi seksinya: gambarnya 16:9, dan di layar sempit ia tidak menutup
+         seluruh bidang. --}}
+    <section class="relative overflow-hidden bg-navy-950 py-20 text-white md:py-28">
+        <img src="{{ asset('images/bg-skyline.webp') }}" alt="" aria-hidden="true"
+             width="1920" height="1080" loading="lazy" decoding="async"
+             class="pointer-events-none absolute inset-0 h-full w-full object-cover object-bottom">
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-navy-950/70 via-navy-950/40 to-navy-950/80"></div>
+        <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 
         <div class="container relative">
@@ -274,31 +292,40 @@
 
                 {{-- Bio --}}
                 <div class="lg:col-span-7" data-aos="fade-left" data-aos-delay="100">
-                    {{-- .kicker-on-dark, bukan gaya yang ditulis sendiri di sini.
-                         Yang lama memakai tracking 0,22em, padahal token
-                         tracking-label situs ini sengaja bernilai 0 — label
-                         berhuruf renggang justru tampilan yang dihindari. Garis
-                         kecil di sampingnya ikut dilepas: di blok ini sudah ada
-                         tiga benda emas, dan jabatan di bawah nama sudah cukup
-                         menandai. --}}
-                    <p class="kicker-on-dark">{{ $isId ? 'Pendiri' : 'Founder' }}</p>
+                    {{-- Jabatannya satu baris di atas nama, bukan dua baris yang
+                         mengapitnya. "Pendiri" dan "CEO" menyebut orang yang sama,
+                         dan memisahkannya hanya menambah baris tanpa menambah arti.
+                         Ukurannya kecil tapi tidak renggang: token tracking situs
+                         ini sengaja bernilai 0, huruf berjarak lebar justru
+                         tampilan yang dihindari. --}}
+                    <p class="font-mono text-xs text-gold-soft">{{ $founderRole }}</p>
 
-                    {{-- Nama jadi jelas yang terbesar. Sebelumnya nama 2xl/3xl dan
-                         kutipan xl/2xl hampir sama besar, jadi keduanya berebut
-                         jadi yang pertama dibaca. Sekarang tangganya menurun
-                         rapi: nama, jabatan, kutipan, riwayat. --}}
-                    <h2 class="mt-4 text-3xl font-bold leading-tight text-white md:text-4xl">{{ $founderName }}</h2>
-                    <p class="mt-3 font-mono text-[11px] uppercase tracking-label text-gold-soft">{{ $founderRole }}</p>
+                    {{-- Nama jadi jelas yang terbesar. Sebelumnya nama dan kutipan
+                         hampir sama besar, jadi keduanya berebut jadi yang pertama
+                         dibaca. Sekarang tangganya menurun rapi: nama, kutipan,
+                         riwayat. --}}
+                    <h2 class="mt-3 text-2xl font-bold leading-tight text-white md:text-3xl lg:text-[2rem]">{{ $founderName }}</h2>
 
-                    {{-- Kutipan ditandai garis tepi, bukan dibesarkan sampai
-                         menyaingi nama. Garisnya putih tipis, bukan emas:
-                         emas di seksi ini sudah dipakai bingkai potret dan
-                         baris jabatan. --}}
-                    <blockquote class="mt-8 max-w-2xl border-l-2 border-white/20 pl-6">
-                        <p class="text-pretty text-lg italic leading-[1.65] text-white md:text-xl">“{{ $founderQuote }}”</p>
+                    {{-- Kutipan tanpa garis tepi dan tanpa tanda kutip besar: di
+                         atas latar kota yang sudah bergaris-garis, penanda tambahan
+                         jadi benda keempat yang bersaing. Miring dan warna putih
+                         yang sedikit diredupkan sudah cukup memisahkannya dari
+                         kalimat riwayat di bawahnya. --}}
+                    <blockquote class="mt-6 max-w-xl">
+                        <p class="text-pretty italic leading-[1.7] text-navy-100 md:text-[17px]">“{{ $founderQuote }}”</p>
                     </blockquote>
 
-                    <p class="mt-7 max-w-xl text-pretty text-[15px] leading-[1.8] text-navy-100">{{ $founderBio }}</p>
+                    {{-- Riwayatnya jadi satu kartu dengan angka pengalaman di
+                         sampingnya. Angka itu dulu terkubur di tengah kalimat
+                         ("lebih dari 20 tahun"), tempat yang paling tidak mungkin
+                         terbaca orang yang sedang memindai. --}}
+                    <div class="mt-8 flex max-w-xl flex-col gap-4 rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 sm:flex-row sm:items-center sm:gap-6 sm:p-6">
+                        <p class="shrink-0 sm:w-28">
+                            <span class="block font-display text-3xl font-bold leading-none text-gold-soft md:text-4xl">{{ $founderYears }}</span>
+                            <span class="mt-1.5 block font-mono text-[10px] uppercase text-navy-100">{{ $founderYearsLabel }}</span>
+                        </p>
+                        <p class="text-pretty text-sm leading-relaxed text-navy-100 sm:border-l sm:border-white/10 sm:pl-6">{{ $founderBio }}</p>
+                    </div>
                 </div>
             </div>
         </div>
