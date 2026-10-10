@@ -54,9 +54,11 @@ class PageController extends Controller
             'tagline' => $tagline,
             'missions' => $missions,
             'stats' => $stats,
-            // Nilainya dari config/company.php, sumber yang sama dengan seksi
-            // "Alasan Memilih Kami" di beranda.
-            'values' => \App\Support\Company::values(),
+            // Daftar tersendiri, bukan Company::values(). values() adalah
+            // akronim DELTA dan sudah dipakai seksi "Alasan Memilih Kami" di
+            // beranda; menampilkannya lagi di sini membuat lima judul yang
+            // sama terbaca dua kali dalam satu kunjungan.
+            'values' => \App\Support\Company::aboutValues(),
             // 'offices' dan 'partners' dilepas: keduanya tidak pernah dipakai
             // about.blade.php, dan 'partners' menjalankan satu query beserta
             // hidrasi modelnya di tiap kunjungan halaman ini lalu membuangnya.

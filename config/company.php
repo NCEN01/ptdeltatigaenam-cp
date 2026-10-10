@@ -166,4 +166,79 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Nilai Perusahaan (halaman Tentang)
+    |--------------------------------------------------------------------------
+    |
+    | Daftar terpisah dari 'values' di atas, dan memang harus terpisah.
+    |
+    | 'values' adalah akronim DELTA dan sudah dipakai seksi "Alasan Memilih
+    | Kami" di beranda. Menampilkan daftar yang sama di halaman Tentang membuat
+    | pengunjung membaca lima judul yang persis sama dua kali dalam satu
+    | kunjungan, dan yang kedua tidak menambah apa pun.
+    |
+    | Isinya pun menjawab pertanyaan yang berbeda. Yang di beranda menjawab
+    | "apa untungnya bagi saya"; yang di sini menjawab "lembaga ini bekerja
+    | dengan cara seperti apa" — sikap, bukan manfaat. Karena itu judulnya
+    | berbahasa Indonesia di versi Indonesia, bukan satu kata Inggris yang
+    | harus membentuk akronim.
+    |
+    | Dibaca lewat App\Support\Company::aboutValues().
+    |
+    */
+
+    'about_values' => [
+        [
+            'title' => [
+                'id' => 'Kompetensi dulu, sertifikat kemudian',
+                'en' => 'Competency first, certificate after',
+            ],
+            'detail' => [
+                'id' => 'Sertifikat hanya catatan atas sesuatu yang sudah terbukti. Yang dikejar lebih dulu kemampuan pesertanya, baru kertasnya.',
+                'en' => 'A certificate only records something already proven. The ability comes first, the paper second.',
+            ],
+        ],
+        [
+            'title' => [
+                'id' => 'Terbuka untuk diperiksa',
+                'en' => 'Open to inspection',
+            ],
+            'detail' => [
+                'id' => 'Nomor sertifikat, skema yang dipakai, dan lembaga penerbitnya dibuka di situs ini. Yang bisa diperiksa orang lain adalah yang pantas dijanjikan.',
+                'en' => 'Certificate numbers, the scheme used, and the issuing body are published on this site. What others can verify is what deserves to be promised.',
+            ],
+        ],
+        [
+            'title' => [
+                'id' => 'Satu standar untuk semua ukuran',
+                'en' => 'One standard at every size',
+            ],
+            'detail' => [
+                'id' => 'Perusahaan yang mengirim sepuluh peserta mendapat asesor, materi, dan laporan yang sama dengan yang mengirim ratusan.',
+                'en' => 'A company sending ten participants gets the same assessors, material, and reporting as one sending hundreds.',
+            ],
+        ],
+        [
+            'title' => [
+                'id' => 'Berani mengatakan belum bisa',
+                'en' => 'Willing to say not yet',
+            ],
+            'detail' => [
+                'id' => 'Kebutuhan yang berada di luar jangkauan kami disampaikan apa adanya, lengkap dengan saran ke mana sebaiknya dibawa.',
+                'en' => 'A need beyond what we can do is said plainly, together with where it is better taken.',
+            ],
+        ],
+        [
+            'title' => [
+                'id' => 'Yang mengajar ikut diuji',
+                'en' => 'Those who teach are assessed too',
+            ],
+            'detail' => [
+                'id' => 'Pengajar dan asesor menjalani pemutakhiran kompetensi secara berkala. Lembaga yang berhenti belajar tidak pantas mengajarkan kompetensi.',
+                'en' => 'Instructors and assessors renew their own competency on a schedule. An institution that stops learning has no business teaching competency.',
+            ],
+        ],
+    ],
+
 ];

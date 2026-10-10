@@ -310,14 +310,14 @@
          jadi kolom sempit sepanjang layar; disandingkan dengan foto, tingginya
          terpakai dan halamannya berhenti menyempit di bagian akhir.
 
-         Tiap baris: huruf akronim dalam lingkaran, judulnya, lalu keterangannya
-         di kolom sebelah — bukan di bawahnya. Keterangan yang duduk sebaris
+         Tiap baris: nomor dalam lingkaran, judulnya, lalu keterangannya di
+         kolom sebelah — bukan di bawahnya. Keterangan yang duduk sebaris
          judulnya membuat kelima judul itu bisa dipindai tanpa melewati
-         paragraf, dan D-E-L-T-A tetap terbaca menurun di tepi kiri.
+         paragraf.
 
-         Hurufnya dilingkari tipis, tidak diisi pekat. Huruf itu bukan nomor
-         langkah, dan bidang gelap di tiap baris akan menyainginya dengan judul
-         yang justru hendak dibaca. --}}
+         Nomornya dilingkari tipis, tidak diisi pekat: ia penanda tempat, bukan
+         isi, dan lima bidang gelap akan menyaingi judul yang justru hendak
+         dibaca. --}}
     @php
         $valuesPhoto = 'images/nilai-perusahaan.webp';
         $hasValuesPhoto = is_file(public_path($valuesPhoto));
@@ -362,11 +362,12 @@
                     @foreach ($values as $i => $value)
                         <div class="flex flex-col gap-3 border-t border-navy-100 py-6 md:flex-row md:items-center md:gap-8 md:py-7"
                              data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
-                            <dt class="flex items-center gap-4 md:w-60 md:shrink-0">
-                                {{-- Huruf navy di dalam lingkaran bergaris: 12,6:1
-                                     terhadap latar putih. --}}
-                                <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full font-display text-sm font-bold text-navy ring-1 ring-navy-200" aria-hidden="true">{{ mb_substr($value['title'], 0, 1) }}</span>
-                                <span class="text-xl font-bold leading-snug text-navy md:text-2xl">{{ $value['title'] }}</span>
+                            <dt class="flex items-start gap-4 md:w-72 md:shrink-0">
+                                {{-- Nomor navy di dalam lingkaran bergaris: 12,6:1
+                                     terhadap latar putih. aria-hidden karena urutannya
+                                     tidak menyimpan arti apa pun di luar tampilan. --}}
+                                <span class="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-full font-display text-sm font-bold tabular-nums text-navy ring-1 ring-navy-200" aria-hidden="true">{{ sprintf('%02d', $i + 1) }}</span>
+                                <span class="text-lg font-bold leading-snug text-navy md:text-xl">{{ $value['title'] }}</span>
                             </dt>
                             {{-- 'detail', bukan 'desc'. Kalimat 'desc' sudah tampil
                                  di beranda. --}}

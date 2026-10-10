@@ -98,6 +98,30 @@ class Company
         }, config('company.values', []));
     }
 
+    /**
+     * Nilai perusahaan untuk halaman Tentang.
+     *
+     * Daftar tersendiri, bukan values() yang sama: values() adalah akronim
+     * DELTA yang sudah dipakai beranda, dan menampilkannya lagi di halaman
+     * Tentang membuat lima judul yang sama terbaca dua kali dalam satu
+     * kunjungan. Judulnya di sini ikut bahasa, karena ia kalimat Indonesia,
+     * bukan satu kata Inggris yang harus membentuk akronim.
+     */
+    public static function aboutValues(): array
+    {
+        $locale = app()->getLocale();
+
+        return array_map(static function (array $value) use ($locale): array {
+            foreach (['title', 'detail'] as $key) {
+                if (\is_array($value[$key] ?? null)) {
+                    $value[$key] = $value[$key][$locale] ?? reset($value[$key]);
+                }
+            }
+
+            return $value;
+        }, config('company.about_values', []));
+    }
+
     public static function offices(): array
     {
         $locale = app()->getLocale();
