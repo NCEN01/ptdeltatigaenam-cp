@@ -21,15 +21,25 @@
         ['bg-rose-500', 'Expired', $registry->expired],
     ]) : [];
 
+    /* Empat butir, bukan tiga. Butir keempat bukan tambahan pengisi ruang: dua
+       kolom berisi dua kartu yang mengapit satu foto memang menuntut jumlah
+       genap, dan masa berlaku adalah hal yang memang ditanyakan orang setelah
+       memastikan sertifikatnya ada — halaman ini menjawabnya di tiap baris
+       tetapi tidak pernah menyebutkannya. */
     $proof = $id ? [
-        ['Diakui secara nasional', 'Sertifikat diterbitkan melalui skema BNSP bersama LSP mitra, sehingga berlaku untuk audit pelanggan, tender, dan persyaratan regulasi.'],
-        ['Diuji, bukan sekadar dilatih', 'Setiap nama di daftar ini melewati uji kompetensi bersama asesor, pada pekerjaan dan peralatan yang benar-benar mereka tangani.'],
-        ['Dapat ditelusuri siapa pun', 'Nomor sertifikat dan nomor uji kompetensi terbuka di halaman ini, jadi pemberi kerja bisa memverifikasinya sendiri.'],
+        ['seal', 'Diakui secara nasional', 'Diterbitkan lewat skema BNSP bersama LSP mitra, jadi berlaku untuk audit pelanggan, tender, dan persyaratan regulasi.'],
+        ['check', 'Diuji, bukan sekadar dilatih', 'Setiap nama di sini melewati uji kompetensi bersama asesor, pada pekerjaan dan peralatan yang benar-benar mereka tangani.'],
+        ['search', 'Dapat ditelusuri siapa pun', 'Nomor sertifikat dan nomor uji kompetensi terbuka di halaman ini. Pemberi kerja memeriksanya sendiri, tanpa menghubungi kami.'],
+        ['clock', 'Masa berlakunya ikut terbuka', 'Tiap baris menyebut status berlakunya, jadi yang terlihat bukan hanya sertifikatnya ada, tetapi juga masih berlaku hari ini.'],
     ] : [
-        ['Nationally recognised', 'Certificates are issued under the BNSP scheme with our partner assessment bodies, so they hold up for customer audits, tenders, and regulatory requirements.'],
-        ['Assessed, not just trained', 'Every name here passed an assessment with a certified assessor, on the work and equipment they actually handle.'],
-        ['Open to verification', 'Certificate and assessment numbers are published on this page, so any employer can check them directly.'],
+        ['seal', 'Nationally recognised', 'Issued under the BNSP scheme with our partner assessment bodies, so it holds up for customer audits, tenders, and regulatory requirements.'],
+        ['check', 'Assessed, not just trained', 'Every name here passed an assessment with a certified assessor, on the work and equipment they actually handle.'],
+        ['search', 'Open to anyone', 'Certificate and assessment numbers are published on this page. Employers check them directly, without contacting us.'],
+        ['clock', 'Validity is published too', 'Every row states its status, so what you see is not only that a certificate exists, but that it still holds today.'],
     ];
+
+    $proofPhoto = 'images/sertifikat-alasan.webp';
+    $hasProofPhoto = is_file(public_path($proofPhoto));
 @endphp
 
 {{-- Judul dan deskripsi mengikuti maksud pencarian orang yang mendarat di sini.
@@ -381,61 +391,103 @@
         </div>
     </section>
 
-    {{-- ===================== MENGAPA INI BERARTI + AJAKAN =====================
-         Dulu tiga kartu ikon-judul-teks yang seragam. Diganti daftar bergaris:
-         isinya argumen, dan argumen tidak perlu dikotakkan satu per satu. --}}
-    <section class="section-sm border-t border-navy-50 bg-neutral-50">
-        <div class="container grid gap-12 lg:grid-cols-12 lg:gap-16">
-            <div class="lg:col-span-7">
-                <h2 class="text-2xl text-navy md:text-4xl">
-                    {{ $id ? 'Kenapa daftar ini dibuka' : 'Why we publish this list' }}
+    {{-- ===================== KENAPA DAFTAR INI DIBUKA + AJAKAN =====================
+         Pita navy, bukan latar terang. Ini seksi terakhir sebelum footer yang juga
+         navy: keduanya menyatu jadi satu kaki halaman, dan daftar sertifikat di
+         atasnya tetap jadi bagian paling terang di layar — yang memang isi halaman.
+
+         Empat kartu mengapit satu foto di tengah: dua di kiri, dua di kanan. Isinya
+         argumen tentang orang sungguhan, dan foto di tengahnya menahan seksi ini
+         supaya tidak jadi empat kotak teks berderet.
+
+         Penomoran 01/02/03 dilepas. Keempat butir ini tidak berurutan — tidak ada
+         yang harus dibaca lebih dulu — dan angka yang tidak menandai urutan apa pun
+         hanya hiasan yang menyamar jadi struktur. <ul> tetap dipakai supaya
+         pembaca layar tahu ini satu daftar.
+
+         Ajakannya turun ke bawah seksi, bukan berdiri di kolom sebelahnya. Di
+         kolom, ia bersaing dengan keempat alasan itu; di bawah, ia dibaca sesudah
+         alasannya selesai, yaitu saat orang memang sudah bisa memutuskan. --}}
+    <section class="relative overflow-hidden bg-navy-950 text-white">
+        <div class="pointer-events-none absolute inset-0 grain opacity-20"></div>
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/35 to-transparent"></div>
+
+        <div class="container relative section-sm">
+            {{-- Judul di kiri, kalimat pengantar di kanan. Keduanya sebaris: judulnya
+                 pertanyaan, dan jawabannya tidak perlu menunggu baris berikutnya. --}}
+            <div class="grid gap-6 lg:grid-cols-12 lg:items-end lg:gap-14">
+                <h2 class="text-display-lg text-white lg:col-span-6" data-aos="fade-up">
+                    {{ $id ? 'Kenapa daftar ini dibuka' : 'Why this register is public' }}
                 </h2>
-
-                {{-- Angka besar yang diredupkan di margin kiri. Murni tipografi:
-                     tanpa kotak, tanpa lencana, tanpa blok warna. Yang dipandu
-                     bukan sekadar hiasan, sebab tiga butir ini memang terhitung,
-                     dan <ol> membuat urutannya ikut terbaca pembaca layar.
-                     Angkanya sendiri diberi aria-hidden supaya tidak dibacakan
-                     dua kali.
-
-                     Butirnya memakai <h3>, bukan <dt>: ini judul yang
-                     memperkenalkan paragraf, bukan istilah dengan definisinya,
-                     dan sebagai heading ia ikut terbaca mesin pencari. --}}
-                <ol class="mt-10 divide-y divide-navy-200 border-t border-navy-200">
-                    @foreach ($proof as $i => [$title, $body])
-                        <li class="grid grid-cols-[2.25rem_1fr] gap-x-4 py-7 sm:grid-cols-[3.5rem_1fr] sm:gap-x-6">
-                            <span class="text-2xl leading-none tabular-nums text-navy-200 sm:text-3xl" aria-hidden="true">{{ sprintf('%02d', $i + 1) }}</span>
-                            <div>
-                                <h3 class="text-xl leading-snug text-navy md:text-2xl">{{ $title }}</h3>
-                                <p class="mt-2.5 max-w-[62ch] text-pretty leading-relaxed text-slate-600">{{ $body }}</p>
-                            </div>
-                        </li>
-                    @endforeach
-                </ol>
+                <p class="text-pretty leading-relaxed text-navy-100 lg:col-span-6" data-aos="fade-up">
+                    {{ $id
+                        ? 'Daftar ini bukan etalase. Ia ada supaya pemberi kerja, auditor, atau panitia tender bisa memastikan sendiri sebuah sertifikat benar ada dan masih berlaku.'
+                        : 'This register is not a showcase. It exists so an employer, an auditor, or a tender committee can confirm for themselves that a certificate is real and still valid.' }}
+                </p>
             </div>
 
-            {{-- Bukan panel berwarna: hanya blok teks yang menempel di kolomnya,
-                 dipisahkan garis rambut. Isian gelap di sini akan menyaingi
-                 daftar sertifikatnya sendiri, padahal daftar itulah isi halaman. --}}
-            {{-- Garis kolom ada di pembungkus yang meregang setinggi baris, bukan
-                 di elemen sticky — kalau ditempel di yang sticky, garisnya ikut
-                 melorot bersama bloknya alih-alih membatasi kolom. --}}
-            <div class="lg:col-span-5 lg:border-l lg:border-navy-200 lg:pl-10">
-                <div class="border-t border-navy-200 pt-8 lg:sticky lg:top-28 lg:border-t-0 lg:pt-0">
-                    {{-- <h3>, bukan <p>: ini judul yang memperkenalkan blok ajakan,
-                         sejajar dengan ketiga butir alasan di kolom sebelahnya. --}}
-                    <h3 class="text-xl leading-snug text-navy text-balance md:text-2xl">
+            @php
+                /* Dibelah dua supaya kolom kiri dan kanan bisa mengapit fotonya.
+                   Di layar sempit urutan bacanya tetap benar: dua kartu, foto, dua
+                   kartu berikutnya. */
+                $proofLeft = array_slice($proof, 0, 2);
+                $proofRight = array_slice($proof, 2);
+
+                $proofIcons = [
+                    'seal' => '<path d="M12 3l2.1 1.5 2.5-.3 1 2.3 2.2 1.3-.7 2.5.7 2.5-2.2 1.3-1 2.3-2.5-.3L12 18l-2.1-1.4-2.5.3-1-2.3L4.2 13l.7-2.5-.7-2.5 2.2-1.3 1-2.3 2.5.3z"/><path d="m9.4 10.8 1.9 1.9 3.3-3.6"/>',
+                    'check' => '<path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1z"/><path d="M8 6H6.5A1.5 1.5 0 0 0 5 7.5v11A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5v-11A1.5 1.5 0 0 0 17.5 6H16"/><path d="m9 13 2 2 4-4.5"/>',
+                    'search' => '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-3.6-3.6"/>',
+                    'clock' => '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 1.8"/>',
+                ];
+            @endphp
+
+            <div class="mt-12 grid items-stretch gap-6 md:mt-14 lg:grid-cols-12 lg:gap-8">
+                @foreach ([$proofLeft, $proofRight] as $column)
+                    {{-- Foto disisipkan di antara kedua kolom. Ditulis sekali di dalam
+                         perulangan, bukan dua blok kolom yang disalin. --}}
+                    @if ($loop->index === 1 && $hasProofPhoto)
+                        <div class="lg:col-span-4" data-aos="fade-up" data-aos-delay="50">
+                            <div class="aspect-[3/4] overflow-hidden rounded-2xl ring-1 ring-white/10 lg:aspect-auto lg:h-full">
+                                <img src="{{ asset($proofPhoto) }}"
+                                     alt="{{ $id ? 'Asesor memandu sesi uji kompetensi' : 'An assessor leading a competency assessment session' }}"
+                                     width="900" height="1200" loading="lazy" decoding="async"
+                                     class="h-full w-full object-cover">
+                            </div>
+                        </div>
+                    @endif
+
+                    <ul class="flex flex-col gap-6 {{ $hasProofPhoto ? 'lg:col-span-4' : 'lg:col-span-6' }}">
+                        @foreach ($column as $i => [$icon, $title, $body])
+                            <li class="flex flex-1 flex-col rounded-2xl bg-white/5 p-6 ring-1 ring-white/10 md:p-7"
+                                data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
+                                <span class="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-sky-400 ring-1 ring-white/10" aria-hidden="true">
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">{!! $proofIcons[$icon] !!}</svg>
+                                </span>
+                                <h3 class="mt-5 text-lg leading-snug text-white md:text-xl">{{ $title }}</h3>
+                                <p class="mt-2.5 text-pretty text-sm leading-relaxed text-navy-100">{{ $body }}</p>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endforeach
+            </div>
+
+            {{-- Ajakannya satu baris penuh di bawah, dipisah garis rambut: ajakan
+                 bukan alasan kelima, jadi ia tidak boleh terbaca sebagai kartu
+                 kelima. --}}
+            <div class="mt-14 grid gap-6 border-t border-white/10 pt-10 lg:grid-cols-12 lg:items-center lg:gap-10" data-aos="fade-up">
+                <div class="lg:col-span-7">
+                    <h3 class="text-2xl leading-snug text-white text-balance md:text-3xl">
                         {{ $id ? 'Ingin nama Anda ada di daftar ini?' : 'Want your name on this list?' }}
                     </h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-600">
+                    <p class="mt-3 max-w-xl text-pretty leading-relaxed text-navy-100">
                         {{ $id
                             ? 'Uji kompetensi dapat digelar di tempat kerja Anda, mengikuti pola sif, tanpa menghentikan produksi.'
                             : 'Assessment can run at your workplace, around your shift pattern, without stopping production.' }}
                     </p>
-                    <div class="mt-6 flex flex-col gap-3 sm:flex-row lg:flex-col">
-                        <a href="{{ route('services.index') }}" class="btn-blue justify-center">{{ $id ? 'Lihat Program Sertifikasi' : 'View Certification Programs' }}</a>
-                        <a href="{{ route('contact.index') }}" class="btn-ghost justify-center">{{ $id ? 'Konsultasi Gratis' : 'Free Consultation' }}</a>
-                    </div>
+                </div>
+                <div class="flex flex-col gap-3 sm:flex-row lg:col-span-5 lg:justify-end">
+                    <a href="{{ route('services.index') }}" class="btn-blue justify-center">{{ $id ? 'Lihat Program Sertifikasi' : 'View Certification Programs' }}</a>
+                    <a href="{{ route('contact.index') }}" class="btn-ghost-light justify-center">{{ $id ? 'Konsultasi Gratis' : 'Free Consultation' }}</a>
                 </div>
             </div>
         </div>
