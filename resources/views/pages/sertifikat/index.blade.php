@@ -435,8 +435,23 @@
                 ];
             @endphp
 
-            <div class="mt-12 grid items-stretch gap-6 md:mt-14 lg:grid-cols-12 lg:gap-8">
+            {{-- Kartu yang ditunjuk menyala, dan keadaannya bertahan setelah
+                 tunjukan ditarik — pola yang sama dengan lini masa Misi dan daftar
+                 Nilai di halaman Tentang.
+
+                 Yang aktif ditambahi, bukan yang lain diredupkan. Latar pita ini
+                 gradien yang menyapu tiap 22 detik, dan pada puncak terangnya teks
+                 navy-100 di atas kartu bg-white/5 tinggal 4,69:1 — persis di atas
+                 ambang AA, tanpa sisa sama sekali. Meredupkan kartu lain akan
+                 menjatuhkannya ke bawah ambang, dan menerangkan kartu aktif ke
+                 bg-white/10 juga: 4,23:1.
+
+                 Jadi yang berubah hanya hal yang tidak membawa teks: cincin kartu
+                 jadi emas, ubin ikonnya ikut emas dan berpendar, dan kartunya naik
+                 sedikit. Warna dan kepekatan tulisannya tidak disentuh. --}}
+            <div class="mt-12 grid items-stretch gap-6 md:mt-14 lg:grid-cols-12 lg:gap-8" x-data="{ active: 0 }">
                 @foreach ([$proofLeft, $proofRight] as $column)
+                    @php $colIdx = $loop->index; @endphp
                     {{-- Foto disisipkan di antara kedua kolom. Ditulis sekali di dalam
                          perulangan, bukan dua blok kolom yang disalin. --}}
                     @if ($loop->index === 1 && $hasProofPhoto)
@@ -452,9 +467,21 @@
 
                     <ul class="flex flex-col gap-6 {{ $hasProofPhoto ? 'lg:col-span-4' : 'lg:col-span-6' }}">
                         @foreach ($column as $i => [$icon, $title, $body])
-                            <li class="flex flex-1 flex-col rounded-2xl bg-white/5 p-6 ring-1 ring-white/10 md:p-7"
+                            {{-- Nomor urut menyeluruh, bukan nomor di dalam kolomnya:
+                                 keempat kartu berbagi satu keadaan, jadi kartu kedua
+                                 di kolom kanan harus bernomor 3, bukan 1 lagi. --}}
+                            @php $n = $colIdx * 2 + $i; @endphp
+                            <li class="proof-card flex flex-1 flex-col rounded-2xl bg-white/5 p-6 outline-none ring-1 md:p-7"
+                                tabindex="0"
+                                x-on:mouseenter="active = {{ $n }}"
+                                x-on:focus="active = {{ $n }}"
+                                x-on:click="active = {{ $n }}"
+                                :data-on="active === {{ $n }} ? '1' : '0'"
                                 data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
-                                <span class="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-sky-400 ring-1 ring-white/10" aria-hidden="true">
+                                <span class="proof-icon grid h-11 w-11 place-items-center rounded-xl ring-1 ring-white/10 transition-colors duration-300"
+                                      aria-hidden="true"
+                                      :data-on="active === {{ $n }} ? '1' : '0'"
+                                      :class="active === {{ $n }} ? 'bg-gold/20 text-gold-soft' : 'bg-white/10 text-sky-400'">
                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">{!! $proofIcons[$icon] !!}</svg>
                                 </span>
                                 <h3 class="mt-5 text-lg leading-snug text-white md:text-xl">{{ $title }}</h3>

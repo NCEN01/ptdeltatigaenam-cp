@@ -581,12 +581,31 @@
     box-shadow: 0 0 0 6px rgba(218, 180, 94, 0.18);
 }
 
+/* "Kenapa daftar ini dibuka" di halaman Sertifikat. Latarnya gradien yang
+   menyapu, dan pada puncak terangnya teks navy-100 di atas kartu bg-white/5
+   tinggal 4,69:1 — persis di atas ambang AA tanpa sisa. Jadi yang berubah saat
+   kartu ditunjuk hanya hal yang tidak membawa teks: cincinnya, ubin ikonnya,
+   dan ketinggiannya. Kepekatan dan warna tulisannya tidak disentuh. */
+.proof-card {
+    --tw-ring-color: rgb(255 255 255 / 0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.proof-card[data-on="1"] {
+    --tw-ring-color: rgb(218 180 94 / 0.55);
+    transform: translateY(-4px);
+}
+.proof-icon { transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; }
+.proof-icon[data-on="1"] { box-shadow: 0 0 0 5px rgba(218, 180, 94, 0.14); }
+
 @media (prefers-reduced-motion: reduce) {
     .misi-line-fill,
     .misi-node,
     .misi-body,
     .nilai-row,
-    .nilai-node { transition: none; }
+    .nilai-node,
+    .proof-card,
+    .proof-icon { transition: none; }
+    .proof-card[data-on="1"] { transform: none; }
 }
 
 /* ── Hero carousel ── */
