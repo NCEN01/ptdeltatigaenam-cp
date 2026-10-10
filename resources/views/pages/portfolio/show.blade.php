@@ -201,11 +201,27 @@
                      "Dokumentasi Kegiatan", not "Galeri": these are records of what happened
                      on the ground, and the sidebar fact row already says "Dokumentasi". --}}
                 <h2 class="font-display text-2xl font-semibold text-navy md:text-3xl" data-aos="fade-up">{{ $id ? 'Dokumentasi Kegiatan' : 'Activity Documentation' }}</h2>
-                <div class="mt-8 columns-1 gap-4 sm:columns-2 lg:columns-3">
+                {{-- Kisi berbaris rata, bukan masonry.
+
+                     Dengan columns-*, tinggi tiap kartu mengikuti perbandingan
+                     foto aslinya: satu foto tegak di kolom pertama mendorong
+                     seluruh kolom itu turun, dan ujung bawah ketiga kolomnya
+                     tidak pernah bertemu. Yang diunggah admin berasal dari
+                     ponsel dan kamera yang berbeda-beda, jadi perbandingan yang
+                     seragam tidak mungkin datang dari berkasnya sendiri.
+
+                     Kotak fotonya dipatok 4:3 dan isinya object-cover, dan
+                     auto-rows-fr membuat kartu sebaris sama tinggi berapa pun
+                     panjang keterangannya. Keterangan itu yang meregang, bukan
+                     fotonya, jadi tidak ada foto yang jadi lebih besar hanya
+                     karena keterangannya lebih pendek. --}}
+                <div class="mt-8 grid auto-rows-fr gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($portfolio->images as $img)
-                        <figure class="group mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-navy-100 bg-navy-900 shadow-card" data-aos="fade-up">
-                            <img src="{{ $imgUrl($img->image) }}" alt="{{ $img->caption ?: $portfolio->title }}" loading="lazy" decoding="async" class="w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">
-                            @if ($img->caption)<figcaption class="bg-white px-4 py-3 text-xs text-slate-600">{{ $img->caption }}</figcaption>@endif
+                        <figure class="group flex flex-col overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card" data-aos="fade-up">
+                            <div class="aspect-[4/3] shrink-0 overflow-hidden bg-navy-900">
+                                <img src="{{ $imgUrl($img->image) }}" alt="{{ $img->caption ?: $portfolio->title }}" loading="lazy" decoding="async" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">
+                            </div>
+                            @if ($img->caption)<figcaption class="flex-1 px-4 py-3 text-xs leading-relaxed text-slate-600">{{ $img->caption }}</figcaption>@endif
                         </figure>
                     @endforeach
                 </div>
