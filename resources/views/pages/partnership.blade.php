@@ -150,44 +150,94 @@
     @endif
 
     {{-- ===================== BENEFITS ===================== --}}
-    <section class="section-sm border-t border-navy-50 bg-neutral-50">
+    {{-- Normalise DB rows and the hardcoded fallback into one shape, so the card
+         markup exists once instead of being copy-pasted per data source. --}}
+    @php
+        $benefitCards = (isset($benefits) && $benefits->isNotEmpty())
+            ? $benefits->map(fn ($b) => ['title' => $b->title, 'desc' => $b->description, 'icon' => $b->icon])
+            : collect($manfaat)->map(fn ($m) => ['title' => $m[0], 'desc' => $m[1], 'icon' => null]);
+
+        /* Angka mitra diambil dari sumber yang sama dengan papan angka di beranda
+           dan halaman Tentang. Ia hanya dipakai kalau memang ada — kartu pertama
+           tetap utuh tanpanya. */
+        $partnerStat = collect(\App\Support\Company::stats())
+            ->first(fn ($s) => str_contains(mb_strtolower((string) $s['label']), $id ? 'klien' : 'client'));
+
+        /* Ikonnya datang dari kolom 'icon' tiap baris (nama bergaya heroicon yang
+           diketik admin). Yang tidak dikenali jatuh ke tanda centang, jadi salah
+           ketik di panel tidak pernah menghasilkan kartu tanpa ikon. */
+        $benefitIcons = [
+            'academic-cap' => '<path d="M12 4.5 2.8 9 12 13.5 21.2 9 12 4.5Z"/><path d="M5.5 10.8v4.4c0 .6.3 1.1.8 1.4 1.5.9 3.6 1.4 5.7 1.4s4.2-.5 5.7-1.4c.5-.3.8-.8.8-1.4v-4.4"/>',
+            'badge-check' => '<path d="M12 3.2 14 5l2.6-.3.9 2.4 2.3 1.3-.7 2.6.7 2.6-2.3 1.3-.9 2.4-2.6-.3-2 1.8-2-1.8-2.6.3-.9-2.4-2.3-1.3.7-2.6-.7-2.6L4.5 7.1l.9-2.4L8 5l2-1.8Z"/><path d="m9.3 11.9 1.9 1.9 3.5-3.8"/>',
+            'users' => '<path d="M16 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 17.5V19"/><circle cx="10" cy="8" r="3.2"/><path d="M20 19v-1.4a3.3 3.3 0 0 0-2.5-3.2M15.5 5.3a3.2 3.2 0 0 1 0 5.9"/>',
+            'chart-bar' => '<path d="M4 20h16"/><path d="M7 20v-6M12 20V8M17 20v-9"/>',
+            'calendar' => '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3.5v3M16 3.5v3"/>',
+            'shield-check' => '<path d="M12 3.5 5 6v5.5c0 4 2.9 7.4 7 8.5 4.1-1.1 7-4.5 7-8.5V6l-7-2.5Z"/><path d="m9.3 11.9 1.9 1.9 3.5-3.8"/>',
+        ];
+        $benefitIconFallback = '<circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.2 2.4 2.4 4.6-5"/>';
+    @endphp
+    <section class="section-sm border-t border-navy-50 bg-white">
         <div class="container">
             <div class="max-w-2xl" data-aos="fade-up">
                 <h2 class="text-display-lg text-navy">{{ $id ? 'Mengapa menjadi mitra kami' : 'Why partner with us' }}</h2>
             </div>
 
-            {{-- Normalise DB rows and the hardcoded fallback into one shape, so the card
-                 markup exists once instead of being copy-pasted per data source. --}}
-            @php
-                $benefitCards = (isset($benefits) && $benefits->isNotEmpty())
-                    ? $benefits->map(fn ($b) => ['title' => $b->title, 'desc' => $b->description])
-                    : collect($manfaat)->map(fn ($m) => ['title' => $m[0], 'desc' => $m[1]]);
-            @endphp
+            {{-- Susunan bento, bukan satu bidang berpetak. Enam petak seukuran membuat
+                 keenam alasan terbaca sama bobotnya, padahal yang pertama memikul
+                 janji utamanya dan sisanya menopang.
 
-            {{-- One surface split by hairlines instead of six floating cards. Six identical
-                 boxes read as a stock card grid — the exact pattern PRODUCT.md lists as an
-                 anti-reference — and the boxes added nothing: nothing here is elevated above
-                 anything else. The dividers come from a 1px grid gap over a tinted background,
-                 which stays correct at any column count without nth-child juggling. --}}
-            <div class="mt-12 overflow-hidden rounded-2xl border border-navy-100" data-aos="fade-up">
-                <div class="grid gap-px bg-navy-100 sm:grid-cols-2">
-                    @foreach ($benefitCards as $card)
-                        <div class="group relative flex gap-5 bg-white p-7 transition-colors duration-300 hover:bg-navy-50/70 md:gap-6 md:p-9
-                                    {{ $loop->last && $benefitCards->count() % 2 !== 0 ? 'sm:col-span-2' : '' }}">
+                 Dua kartu lebar di baris pertama, tiga kartu di baris kedua. Yang
+                 pertama gelap bergradasi karena memang hendak dibaca lebih dulu; yang
+                 kelima navy pekat supaya barisnya punya tumpuan di ujung dan tidak
+                 melayang sebagai tiga kotak putih berderet.
 
-                            {{-- The numeral carries the rhythm now, so it is set large rather than
-                                 shrunk into a chip. --}}
-                            <span class="shrink-0 text-3xl font-bold leading-none tabular-nums text-navy-200 transition-colors duration-300 group-hover:text-sky-500 md:text-4xl"
-                                  aria-hidden="true">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                 Lebar kartunya ditentukan posisi, jadi urutan di panel admin ikut
+                 menentukan mana yang jadi kartu besar. Kartu keenam dan seterusnya
+                 mengalir sebagai kartu sepertiga, jadi menambah butir di panel tidak
+                 merusak susunannya. --}}
+            <div class="mt-12 grid gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-12">
+                @foreach ($benefitCards as $i => $card)
+                    @php
+                        $wide = $i < 2;                 // dua kartu pertama: setengah baris
+                        $dark = $i === 0 || $i === 4;   // kartu pembuka dan penutup barisnya
+                        $icon = $benefitIcons[$card['icon'] ?? ''] ?? $benefitIconFallback;
+                    @endphp
+                    <div data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}"
+                         class="relative flex flex-col overflow-hidden rounded-2xl p-7 md:p-8 {{ $wide ? 'lg:col-span-6' : 'lg:col-span-4' }} {{ $i === 0
+                             ? 'bg-gradient-to-br from-navy-700 via-navy-800 to-navy-950 text-white ring-1 ring-white/10'
+                             : ($dark ? 'bg-navy-950 text-white ring-1 ring-white/10' : 'bg-white ring-1 ring-navy-100') }}">
 
-                            <div class="min-w-0">
-                                <h3 class="text-lg leading-snug text-navy ">{{ $card['title'] }}</h3>
-                                <span class="mt-3 block h-px w-8 bg-gold-soft/70 transition-all duration-500 ease-out-soft group-hover:w-14" aria-hidden="true"></span>
-                                <p class="mt-3 text-pretty text-sm leading-relaxed text-slate-600">{{ $card['desc'] }}</p>
-                            </div>
+                        @if ($i === 0)
+                            <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-30"></div>
+                        @endif
+
+                        <div class="relative flex flex-1 flex-col">
+                            <span class="grid h-12 w-12 place-items-center rounded-xl {{ $dark ? 'bg-white/10 text-sky-400 ring-1 ring-white/10' : 'bg-sky-50 text-sky-700' }}" aria-hidden="true">
+                                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">{!! $icon !!}</svg>
+                            </span>
+
+                            {{-- Angka mitra hanya menempel di kartu pembuka, sebagai
+                                 keterangan kecil di atas judulnya. Ia bukti, bukan
+                                 pokok kalimat, jadi ia tidak menggantikan judulnya. --}}
+                            @if ($i === 0 && $partnerStat)
+                                <p class="mt-6 font-mono text-[11px] uppercase tracking-wider text-gold-soft">
+                                    {{ $partnerStat['number'] }}{{ $partnerStat['suffix'] }} {{ mb_strtolower($partnerStat['label']) }}
+                                </p>
+                            @endif
+
+                            <h3 @class([
+                                'leading-snug',
+                                'mt-2.5 text-2xl md:text-3xl' => $i === 0 && $partnerStat,
+                                'mt-6 text-2xl md:text-3xl' => $i === 0 && ! $partnerStat,
+                                'mt-6 text-lg md:text-xl' => $i !== 0,
+                                'text-white' => $dark,
+                                'text-navy' => ! $dark,
+                            ])>{{ $card['title'] }}</h3>
+
+                            <p class="mt-3 text-pretty text-sm leading-relaxed {{ $dark ? 'text-navy-100' : 'text-slate-600' }} {{ $i === 0 ? 'md:text-base' : '' }}">{{ $card['desc'] }}</p>
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>
