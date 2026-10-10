@@ -197,8 +197,15 @@
                          kecil di bawah tiap label juga dilepas: dengan garis emas
                          di tepi atas seksi, ada tiga benda emas di satu layar. --}}
                     <p class="kicker-on-dark">{{ $isId ? 'Visi' : 'Vision' }}</p>
+                    {{-- Rata kanan-kiri mulai sm. Di bawah sm kolomnya selebar
+                         ponsel dan hanya memuat sekitar 35 huruf per baris;
+                         perataan penuh di situ melebarkan jarak antarkata sampai
+                         terbaca sebagai celah, jadi di sana teksnya tetap rata
+                         kiri. text-pretty dilepas: ia mengatur ulang pemenggalan
+                         baris demi menghindari baris terakhir yang sebatang kara,
+                         dan itu melawan perataan penuh alih-alih membantunya. --}}
                     <blockquote class="mt-5">
-                        <p class="font-display text-xl font-semibold leading-[1.45] text-white text-pretty md:text-2xl">
+                        <p class="text-left font-display text-xl font-semibold leading-[1.45] text-white sm:text-justify md:text-2xl">
                             “{{ $vision }}”
                         </p>
                     </blockquote>
@@ -225,12 +232,18 @@
                                          jadi teks terkecil di seksinya sendiri, di atas
                                          gradasi yang bagian tengahnya hanya 45% gelap.
 
-                                         Rata kiri di semua ukuran, tidak lagi rata kanan-kiri
-                                         mulai sm: perataan penuh di kolom 3/5 membuka sungai
-                                         putih di antara kata, dan pemenggalan otomatis yang
-                                         dipasang untuk menutupinya justru memotong istilah
-                                         seperti "human capital" di tempat yang salah. --}}
-                                    <p class="text-base leading-relaxed text-white md:text-[17px]">{{ $mission->content }}</p>
+                                         Rata kanan-kiri mulai sm, rata kiri di bawahnya:
+                                         di lebar ponsel satu baris hanya memuat sekitar
+                                         40 huruf, dan perataan penuh di situ membuka
+                                         sungai putih di antara kata.
+
+                                         Tanpa [hyphens:auto]. Pemenggalan otomatis memang
+                                         merapatkan jarak antarkata, tetapi pada teks
+                                         Indonesia yang memuat istilah Inggris ia memotong
+                                         "human capital" di tempat yang salah — dan satu
+                                         kata yang terpenggal keliru lebih mengganggu
+                                         daripada jarak kata yang sedikit melebar. --}}
+                                    <p class="text-base leading-relaxed text-white sm:text-justify md:text-[17px]">{{ $mission->content }}</p>
                                 </li>
                             @endforeach
                         </ol>
