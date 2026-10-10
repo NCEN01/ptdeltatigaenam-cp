@@ -312,12 +312,15 @@
 
          Tiap baris: nomor dalam lingkaran, judulnya, lalu keterangannya di
          kolom sebelah — bukan di bawahnya. Keterangan yang duduk sebaris
-         judulnya membuat kelima judul itu bisa dipindai tanpa melewati
-         paragraf.
+         judulnya membuat judul-judulnya bisa dipindai tanpa melewati paragraf.
 
          Nomornya dilingkari tipis, tidak diisi pekat: ia penanda tempat, bukan
-         isi, dan lima bidang gelap akan menyaingi judul yang justru hendak
-         dibaca. --}}
+         isi, dan sebaris bidang gelap akan menyaingi judul yang justru hendak
+         dibaca.
+
+         Jumlah barisnya mengikuti config/company.php, jadi tidak ada angka
+         yang ditulis di sini dan tidak ada yang perlu disesuaikan kalau
+         daftarnya bertambah atau berkurang. --}}
     @php
         $valuesPhoto = 'images/nilai-perusahaan.webp';
         $hasValuesPhoto = is_file(public_path($valuesPhoto));
@@ -334,8 +337,8 @@
                          kelima nilai di bawah. --}}
                     <p class="mt-5 max-w-2xl text-pretty leading-relaxed text-slate-600 md:text-lg">
                         {{ $isId
-                            ? 'Sejak berdiri pada 2024, Delta Tiga Enam mengembangkan kompetensi SDM lewat pelatihan, sertifikasi profesi, konsultasi, dan headhunter. Lima nilai berikut yang menentukan cara setiap programnya dijalankan.'
-                            : 'Since it began in 2024, Delta Tiga Enam has developed workforce competency through training, professional certification, consulting, and headhunting. These five values decide how every programme is run.' }}
+                            ? 'Sejak berdiri pada 2024, Delta Tiga Enam mengembangkan kompetensi SDM lewat pelatihan, sertifikasi profesi, konsultasi, dan headhunter. Nilai berikut yang menentukan cara setiap programnya dijalankan.'
+                            : 'Since it began in 2024, Delta Tiga Enam has developed workforce competency through training, professional certification, consulting, and headhunting. The values below decide how every programme is run.' }}
                     </p>
                 </div>
                 <div class="lg:col-span-4 lg:flex lg:justify-end">

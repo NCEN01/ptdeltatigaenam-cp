@@ -221,16 +221,6 @@ return [
         ],
         [
             'title' => [
-                'id' => 'Berani mengatakan belum bisa',
-                'en' => 'Willing to say not yet',
-            ],
-            'detail' => [
-                'id' => 'Kebutuhan yang berada di luar jangkauan kami disampaikan apa adanya, lengkap dengan saran ke mana sebaiknya dibawa.',
-                'en' => 'A need beyond what we can do is said plainly, together with where it is better taken.',
-            ],
-        ],
-        [
-            'title' => [
                 'id' => 'Yang mengajar ikut diuji',
                 'en' => 'Those who teach are assessed too',
             ],
