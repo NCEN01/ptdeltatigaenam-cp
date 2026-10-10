@@ -392,9 +392,11 @@
     </section>
 
     {{-- ===================== KENAPA DAFTAR INI DIBUKA + AJAKAN =====================
-         Pita navy, bukan latar terang. Ini seksi terakhir sebelum footer yang juga
-         navy: keduanya menyatu jadi satu kaki halaman, dan daftar sertifikat di
-         atasnya tetap jadi bagian paling terang di layar — yang memang isi halaman.
+         Pita navy bergradasi, bukan latar terang. Lapisnya sama persis dengan seksi
+         Pendiri di halaman Tentang: bg-navy-anim, aurora, butiran, dan garis emas
+         di tepi atas. Ini seksi terakhir sebelum footer yang juga navy; keduanya
+         menyatu jadi satu kaki halaman, dan daftar sertifikat di atasnya tetap jadi
+         bagian paling terang di layar, yang memang isi halaman.
 
          Empat kartu mengapit satu foto di tengah: dua di kiri, dua di kanan. Isinya
          argumen tentang orang sungguhan, dan foto di tengahnya menahan seksi ini
@@ -408,23 +410,15 @@
          Ajakannya turun ke bawah seksi, bukan berdiri di kolom sebelahnya. Di
          kolom, ia bersaing dengan keempat alasan itu; di bawah, ia dibaca sesudah
          alasannya selesai, yaitu saat orang memang sudah bisa memutuskan. --}}
-    <section class="relative overflow-hidden bg-navy-950 text-white">
-        <div class="pointer-events-none absolute inset-0 grain opacity-20"></div>
-        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/35 to-transparent"></div>
+    <section class="relative overflow-hidden bg-navy-anim text-white">
+        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-35"></div>
+        <div class="pointer-events-none absolute inset-0 grain opacity-30"></div>
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 
         <div class="container relative section-sm">
-            {{-- Judul di kiri, kalimat pengantar di kanan. Keduanya sebaris: judulnya
-                 pertanyaan, dan jawabannya tidak perlu menunggu baris berikutnya. --}}
-            <div class="grid gap-6 lg:grid-cols-12 lg:items-end lg:gap-14">
-                <h2 class="text-display-lg text-white lg:col-span-6" data-aos="fade-up">
-                    {{ $id ? 'Kenapa daftar ini dibuka' : 'Why this register is public' }}
-                </h2>
-                <p class="text-pretty leading-relaxed text-navy-100 lg:col-span-6" data-aos="fade-up">
-                    {{ $id
-                        ? 'Daftar ini bukan etalase. Ia ada supaya pemberi kerja, auditor, atau panitia tender bisa memastikan sendiri sebuah sertifikat benar ada dan masih berlaku.'
-                        : 'This register is not a showcase. It exists so an employer, an auditor, or a tender committee can confirm for themselves that a certificate is real and still valid.' }}
-                </p>
-            </div>
+            <h2 class="max-w-2xl text-display-lg text-white" data-aos="fade-up">
+                {{ $id ? 'Kenapa daftar ini dibuka' : 'Why this register is public' }}
+            </h2>
 
             @php
                 /* Dibelah dua supaya kolom kiri dan kanan bisa mengapit fotonya.
