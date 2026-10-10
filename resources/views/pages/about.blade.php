@@ -285,33 +285,45 @@
                         </p>
                     </div>
 
-                    {{-- Tanpa sela antar-kolom: satu piksel jarak saja membuat
-                         relnya putus-putus. Jarak antar-isi dikerjakan padding
-                         kanan, bukan gap. --}}
-                    <ol class="mt-10 grid grid-cols-1 md:mt-12 md:grid-cols-5">
+                    <ol class="mt-10 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
                         @foreach ($missions as $i => $mission)
                             {{-- tabindex supaya rel ini bisa dijelajahi papan tik,
                                  dan klik supaya di layar sentuh yang tidak punya
                                  tunjukan tetap ada cara memindahkannya. --}}
-                            <li class="relative flex gap-5 outline-none md:block md:gap-0"
+                            <li class="relative outline-none"
                                 tabindex="0"
                                 x-on:mouseenter="active = {{ $i }}"
                                 x-on:focus="active = {{ $i }}"
                                 x-on:click="active = {{ $i }}"
                                 data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
 
-                                <div class="relative w-0.5 shrink-0 self-stretch bg-white/10 md:h-0.5 md:w-full md:self-auto">
-                                    <span class="misi-fill" aria-hidden="true" :data-on="{{ $i }} < active ? '1' : '0'"></span>
-                                    <span class="misi-dot" aria-hidden="true"
-                                          :data-state="{{ $i }} < active ? 'done' : ({{ $i }} === active ? 'active' : 'off')"></span>
-                                </div>
+                                {{-- Garis penyambung ke lingkaran berikutnya, memanjang
+                                     sampai -1.5rem agar menyeberangi gap-x-6. Hanya dari
+                                     lg ke atas: di bawah itu kolomnya dua lalu satu, dan
+                                     garis mendatar akan menyambungkan butir yang tidak
+                                     bersebelahan. --}}
+                                @if (! $loop->last)
+                                    <span class="pointer-events-none absolute -right-6 left-11 top-5 hidden h-px overflow-hidden bg-white/10 lg:block" aria-hidden="true">
+                                        <span class="misi-line-fill" :data-on="{{ $i }} < active ? '1' : '0'"></span>
+                                    </span>
+                                @endif
 
-                                <div class="misi-body pb-9 md:pb-0 md:pr-10 md:pt-7" :data-on="active === {{ $i }} ? '1' : '0'">
-                                    <p class="font-display text-[30px] font-light italic leading-none text-gold" aria-hidden="true">
-                                        {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}
-                                    </p>
-                                    <h4 class="mt-4 text-pretty text-xl font-bold leading-snug text-white">{{ $mission->title }}</h4>
-                                    <p class="mt-2.5 text-pretty text-sm leading-[1.7] text-navy-200">{{ $mission->content }}</p>
+                                {{-- Lingkaran berlatar navy-950 supaya garisnya lewat di
+                                     belakang, bukan menembusnya. Warnanya menyatakan
+                                     keadaan: putih redup untuk yang belum dilewati, emas
+                                     untuk yang sudah, dan yang sedang ditunjuk ditambah
+                                     pendar. --}}
+                                <span class="misi-node relative grid h-10 w-10 place-items-center rounded-full bg-navy-950 font-mono text-[11px] font-bold tabular-nums ring-1 transition-colors duration-300"
+                                      aria-hidden="true"
+                                      :data-state="{{ $i }} === active ? 'active' : 'off'"
+                                      :class="{{ $i }} <= active ? 'text-gold-soft ring-gold' : 'text-white ring-white/25'">
+                                    {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
+                                </span>
+
+                                <div class="misi-body" :data-on="active === {{ $i }} ? '1' : '0'">
+                                    <p class="mt-5 font-mono text-[9px] uppercase tracking-[0.18em] text-navy-200">{{ $mission->label }}</p>
+                                    <h4 class="mt-2 text-pretty font-display text-[17px] font-bold leading-snug text-white">{{ $mission->title }}</h4>
+                                    <p class="mt-2.5 text-pretty text-[13px] leading-relaxed text-navy-200">{{ $mission->content }}</p>
                                 </div>
                             </li>
                         @endforeach
