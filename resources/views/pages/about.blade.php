@@ -481,15 +481,39 @@
                     </div>
                 @endif
 
-                <dl class="{{ $hasValuesPhoto ? 'lg:col-span-7' : 'lg:col-span-12' }} border-b border-navy-100">
+                {{-- Baris yang ditunjuk menyala, dan keadaannya bertahan setelah
+                     tunjukan ditarik — sama dengan lini masa Misi di atas.
+
+                     Yang berbeda cara menandainya. Di pita Misi yang gelap, butir
+                     tidak aktif cukup diredupkan; di sini latarnya putih, dan
+                     meredupkan teks slate-600 ke 0,6 menjatuhkannya ke 2,88:1,
+                     jauh di bawah ambang AA. Jadi tidak ada yang diredupkan:
+                     yang aktif justru ditambahi — bidang navy-50 tipis, lingkaran
+                     yang terisi, dan pendar emas yang sama dengan Misi.
+
+                     Tidak ada isian yang merambat seperti di Misi. Keempat nilai
+                     ini tidak berurutan; garis yang terisi sampai titik tertentu
+                     akan menjanjikan urutan yang tidak ada. --}}
+                <dl class="{{ $hasValuesPhoto ? 'lg:col-span-7' : 'lg:col-span-12' }} border-b border-navy-100"
+                    x-data="{ active: 0 }">
                     @foreach ($values as $i => $value)
-                        <div class="flex flex-col gap-3 border-t border-navy-100 py-6 md:flex-row md:items-center md:gap-8 md:py-7"
+                        <div class="nilai-row -mx-4 flex flex-col gap-3 rounded-xl border-t border-navy-100 px-4 py-6 outline-none md:flex-row md:items-center md:gap-8 md:py-7"
+                             tabindex="0"
+                             x-on:mouseenter="active = {{ $i }}"
+                             x-on:focus="active = {{ $i }}"
+                             x-on:click="active = {{ $i }}"
+                             :data-on="active === {{ $i }} ? '1' : '0'"
                              data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
                             <dt class="flex items-start gap-4 md:w-72 md:shrink-0">
                                 {{-- Nomor navy di dalam lingkaran bergaris: 12,6:1
-                                     terhadap latar putih. aria-hidden karena urutannya
-                                     tidak menyimpan arti apa pun di luar tampilan. --}}
-                                <span class="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-full font-display text-sm font-bold tabular-nums text-navy ring-1 ring-navy-200" aria-hidden="true">{{ sprintf('%02d', $i + 1) }}</span>
+                                     terhadap latar putih; saat aktif ia berbalik jadi
+                                     putih di atas navy, 16,1:1. aria-hidden karena
+                                     urutannya tidak menyimpan arti apa pun di luar
+                                     tampilan. --}}
+                                <span class="nilai-node mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-full font-display text-sm font-bold tabular-nums ring-1 transition-colors duration-300"
+                                      aria-hidden="true"
+                                      :data-on="active === {{ $i }} ? '1' : '0'"
+                                      :class="active === {{ $i }} ? 'bg-navy text-white ring-navy' : 'text-navy ring-navy-200'">{{ sprintf('%02d', $i + 1) }}</span>
                                 <span class="text-lg font-bold leading-snug text-navy md:text-xl">{{ $value['title'] }}</span>
                             </dt>
                             {{-- 'detail', bukan 'desc'. Kalimat 'desc' sudah tampil

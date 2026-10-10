@@ -570,10 +570,23 @@
 .misi-body { opacity: 0.6; transition: opacity 0.3s ease; }
 .misi-body[data-on="1"] { opacity: 1; }
 
+/* Nilai Perusahaan — latar terang, jadi penandanya menambah, bukan meredupkan.
+   Teks slate-600 yang diredupkan ke 0,6 di atas putih jatuh ke 2,88:1, jauh di
+   bawah ambang AA; pada latar gelap peredupan yang sama aman, di sini tidak. */
+.nilai-row { transition: background-color 0.3s ease; }
+.nilai-row[data-on="1"] { background-color: #eef5fd; }
+
+.nilai-node { transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; }
+.nilai-node[data-on="1"] {
+    box-shadow: 0 0 0 6px rgba(218, 180, 94, 0.18);
+}
+
 @media (prefers-reduced-motion: reduce) {
     .misi-line-fill,
     .misi-node,
-    .misi-body { transition: none; }
+    .misi-body,
+    .nilai-row,
+    .nilai-node { transition: none; }
 }
 
 /* ── Hero carousel ── */
