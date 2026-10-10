@@ -5,6 +5,22 @@
 
     $id = app()->getLocale() === 'id';
 
+    /* Ketiga keadaan dan fotonya dihitung di sini, bukan di dalam seksinya:
+       keadaannya kini dipakai di kolom kiri sementara fotonya di kolom kanan,
+       jadi tidak ada satu seksi pun yang bisa memilikinya sendiri. */
+    $registryPhoto = 'images/sertifikat-verifikasi.webp';
+    $hasRegistryPhoto = is_file(public_path($registryPhoto));
+
+    $states = $registry?->total ? ($id ? [
+        ['bg-sky-500', 'Berlaku', $registry->valid],
+        ['bg-amber-500', 'Segera berakhir', $registry->soon],
+        ['bg-rose-500', 'Kedaluwarsa', $registry->expired],
+    ] : [
+        ['bg-sky-500', 'Valid', $registry->valid],
+        ['bg-amber-500', 'Expiring soon', $registry->soon],
+        ['bg-rose-500', 'Expired', $registry->expired],
+    ]) : [];
+
     $proof = $id ? [
         ['Diakui secara nasional', 'Sertifikat diterbitkan melalui skema BNSP bersama LSP mitra, sehingga berlaku untuk audit pelanggan, tender, dan persyaratan regulasi.'],
         ['Diuji, bukan sekadar dilatih', 'Setiap nama di daftar ini melewati uji kompetensi bersama asesor, pada pekerjaan dan peralatan yang benar-benar mereka tangani.'],
@@ -71,15 +87,25 @@
              Pembatas kolom tegaknya dilepas. Sejak kolom kanan dibuka sebuah foto,
              garis itu jadi dinding di antara dua benda yang sudah jelas terpisah
              batasnya sendiri. --}}
-        <div class="container relative grid items-start gap-10 lg:grid-cols-12 lg:gap-14">
+        {{-- Rata tengah di layar lebar supaya foto di kanan jatuh sejajar bilah
+             pencarian, bukan sejajar judul. Kartu angka yang menumpang di tepi
+             atas foto butuh ruang kosong di atasnya; rata atas membuatnya naik
+             sampai sebaris judul. --}}
+        <div class="container relative grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-14">
             <div class="lg:col-span-7">
-                {{-- Judul seksi turun ukuran dan berganti peran: bukan lagi
-                     mengulang judul halaman, melainkan mengajak orang mulai.
-                     font-display dan text-balance tidak ditulis: app.css sudah
-                     memberikannya ke seluruh h1–h4. --}}
-                <h2 class="text-2xl leading-snug text-navy md:text-3xl">
-                    {{ $id ? 'Satu nama. Satu nomor. Langsung terbukti.' : 'One name. One number. Proof on the spot.' }}
-                </h2>
+                {{-- Judul seksi berganti peran: bukan lagi mengulang judul halaman,
+                     melainkan mengajak orang mulai. Tiga kalimat dipadatkan jadi dua
+                     kata — di atas sebuah bilah pencarian, kalimat panjang hanya
+                     menunda orang sampai ke kolom isiannya.
+
+                     Aksen miringnya navy, bukan biru. Pasangan miring-biru sudah
+                     dipakai di judul seksi lain halaman ini; di sini yang dibutuhkan
+                     hanya penegasan bentuk, bukan warna kedua. --}}
+                <x-heading
+                    :lead="$id ? 'Satu nama' : 'One name'"
+                    :accent="$id ? 'terbukti' : 'proven'"
+                    accent-class="text-navy"
+                    class="text-display-lg font-bold text-navy" />
 
                 {{-- busy dipasang di form, bukan di tombol, supaya keadaan
                      "sedang memeriksa" terlihat sekalipun pengunjung menekan
@@ -88,29 +114,31 @@
                      sebagian browser membatalkan pengirimannya. --}}
                 <form method="GET" action="{{ route('certificates.index') }}#{{ $anchor }}" class="mt-7"
                       x-data="{ busy: false }" x-on:submit="busy = true" x-bind:aria-busy="busy">
-                    <label for="cert-q" class="mb-2.5 block text-sm font-medium text-navy">
-                        {{ $id ? 'Nama peserta, perusahaan, atau nomor sertifikat' : 'Participant name, company, or certificate number' }}
+                    <label for="cert-q" class="mb-3 block text-sm text-slate-600">
+                        {{ $id ? 'Cari nama peserta, perusahaan, atau nomor sertifikat' : 'Search by participant name, company, or certificate number' }}
                     </label>
 
                     {{-- Kolom isian dan tombol menjadi satu benda, bukan dua kotak
                          bersebelahan berjarak. Bilah pencarian adalah pekerjaan
                          halaman ini, jadi ia pantas terbaca sebagai satu alat.
 
-                         Jari-jari luar 24px membungkus jari-jari dalam 16px dengan
-                         sela 8px, jadi lengkungannya benar-benar sepusat.
+                         Bentuknya kapsul penuh mulai dari sm, mengikuti acuan yang
+                         dikirim. Di bawah sm tombolnya turun ke baris sendiri dan
+                         pembungkusnya jadi kotak tinggi — kapsul pada bentuk itu
+                         melengkung berlebihan, jadi di sana jari-jarinya 24px.
 
                          Bayangan sengaja tidak dipasang saat diam: garis 1px plus
                          bayangan lebar adalah hiasan kartu hantu. Cincinnya hanya
                          muncul saat fokus, di situ ia menjadi penanda keadaan. --}}
-                    <div class="rounded-3xl border border-navy-200 bg-white p-2 transition duration-200 focus-within:border-sky-700 focus-within:ring-4 focus-within:ring-sky-700/20 sm:flex sm:items-center sm:gap-2">
+                    <div class="rounded-3xl border border-navy-200 bg-white p-1.5 transition duration-200 focus-within:border-sky-700 focus-within:ring-4 focus-within:ring-sky-700/20 sm:flex sm:items-center sm:gap-2 sm:rounded-full">
                         <div class="relative flex-1">
                             <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-600" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
                             {{-- Placeholder tidak diterjemahkan: isinya contoh nama dan nomor. --}}
                             <input id="cert-q" type="search" name="q" value="{{ $q }}" autocomplete="off"
                                    placeholder="Ahmad Fauzi · PT Baja Perkasa · DTE/BNSP/2026/1000"
-                                   class="w-full rounded-2xl border-0 bg-transparent py-4 pl-12 pr-4 text-base text-navy placeholder:text-slate-500 focus:outline-none focus:ring-0">
+                                   class="w-full rounded-full border-0 bg-transparent py-3.5 pl-12 pr-4 text-[15px] text-navy placeholder:text-slate-500 focus:outline-none focus:ring-0">
                         </div>
-                        <button type="submit" class="btn-blue mt-2 w-full justify-center !rounded-2xl !py-4 active:scale-[0.98] sm:mt-0 sm:w-auto sm:!px-9">
+                        <button type="submit" class="btn-blue mt-2 w-full justify-center !rounded-full !py-3.5 active:scale-[0.98] sm:mt-0 sm:w-auto sm:!px-8">
                             <svg x-show="busy" x-cloak class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                 <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity="0.3" stroke-width="3"/>
                                 <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
@@ -144,102 +172,92 @@
                         @endforeach
                     </div>
                 @endif
+
+                {{-- Ketiga keadaan pindah ke kolom ini dan memakai susunan papan
+                     angka yang sama dengan seksi Kategori Layanan di beranda:
+                     angka besar di atas, keterangan di bawahnya, dipisah garis
+                     rambut tegak. Satu susunan angka untuk seluruh situs, bukan
+                     satu per halaman.
+
+                     Titik warnanya tetap ada di samping keterangan — itu yang
+                     mengikat papan ini dengan lencana di kolom hasil, dan tanpanya
+                     kalimat di bawahnya kehilangan rujukan.
+
+                     Nilainya tercetak apa adanya di dalam elemennya, jadi tetap
+                     terbaca bila animasi penghitungnya tidak berjalan. --}}
+                @if ($states)
+                    <div class="mt-9 grid grid-cols-3 gap-x-4 border-t border-navy-100 pt-7 sm:gap-x-8">
+                        @foreach ($states as $i => [$dot, $label, $value])
+                            <div @class(['border-l border-navy-100 pl-4 sm:pl-8' => $i > 0])>
+                                <p class="font-display text-3xl font-bold leading-none tracking-tight tabular-nums text-navy sm:text-4xl"
+                                   data-counter="{{ $value }}">{{ $value }}</p>
+                                <p class="mt-2.5 flex items-center gap-2 text-sm leading-snug text-slate-600">
+                                    <span class="h-2 w-2 shrink-0 rounded-full {{ $dot }}" aria-hidden="true"></span>
+                                    {{ $label }}
+                                </p>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <p class="mt-4 text-sm leading-relaxed text-slate-600">
+                        {{ $id
+                            ? 'Tanda yang sama muncul di samping setiap nama pada hasil pencarian.'
+                            : 'The same markers appear beside every name in the results.' }}
+                    </p>
+                @endif
             </div>
 
-            {{-- Susunan daftar menurut ketiga keadaan yang sama persis dengan
-                 lencana di kolom hasil, berikut titik warnanya. Jadi kolom ini
-                 bukan sekadar memamerkan angka: ia mengajarkan cara membaca
-                 hasilnya sebelum hasilnya muncul, sekaligus menjawab "seberapa
-                 besar daftar ini" dalam satu tempat.
-
-                 Bukan pula tiga kartu statistik bersebelahan — di halaman yang
-                 pekerjaannya memverifikasi, angka yang dikotakkan dan diperbesar
-                 terdengar seperti pemasaran, bukan bukti.
-
-                 Nilainya tercetak apa adanya di dalam elemennya, jadi tetap
-                 terbaca bila animasi penghitungnya tidak berjalan. --}}
             {{-- Kolom kanan dibuka sebuah foto orang yang baru memegang sertifikatnya.
                  Halaman ini seluruhnya berisi nomor, tabel, dan lencana status; satu
                  foto mengingatkan bahwa di balik tiap baris itu ada orang, dan itu
                  yang membuat daftarnya layak dipercaya, bukan rapinya tabel.
 
-                 Ringkasan cakupan pindah ke pita buram di tepi bawah foto. Di situ ia
-                 jadi keterangan atas fotonya dan dibaca lebih dulu, bukan kalimat
-                 penutup yang tenggelam di bawah daftar keadaan.
+                 Dua angka cakupan menumpang di tepi atas foto sebagai kartu, susunan
+                 yang sama dengan papan angka di halaman Tentang. Keduanya menjawab
+                 "seberapa besar daftar ini" tanpa menyita baris sendiri di bawah foto.
 
-                 Susunan keadaannya sama persis dengan lencana di kolom hasil, berikut
-                 titik warnanya. Jadi kolom ini bukan sekadar memamerkan angka: ia
-                 mengajarkan cara membaca hasilnya sebelum hasilnya muncul.
-
-                 Bukan pula tiga kartu statistik bersebelahan — di halaman yang
-                 pekerjaannya memverifikasi, angka yang dikotakkan dan diperbesar
-                 terdengar seperti pemasaran, bukan bukti.
-
-                 Nilainya tercetak apa adanya di dalam elemennya, jadi tetap terbaca
-                 bila animasi penghitungnya tidak berjalan. --}}
-            @php
-                $registryPhoto = 'images/sertifikat-verifikasi.webp';
-                $hasRegistryPhoto = is_file(public_path($registryPhoto));
-
-                $states = $registry?->total ? ($id ? [
-                    ['bg-sky-500', 'Berlaku', $registry->valid],
-                    ['bg-amber-500', 'Segera berakhir', $registry->soon],
-                    ['bg-rose-500', 'Kedaluwarsa', $registry->expired],
-                ] : [
-                    ['bg-sky-500', 'Valid', $registry->valid],
-                    ['bg-amber-500', 'Expiring soon', $registry->soon],
-                    ['bg-rose-500', 'Expired', $registry->expired],
-                ]) : [];
-            @endphp
-            @if ($hasRegistryPhoto || $states)
-                <aside class="lg:col-span-5" aria-label="{{ $id ? 'Isi daftar sertifikat' : 'What is in the register' }}">
-                    @if ($hasRegistryPhoto)
-                        <div class="relative">
-                            <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-mist ring-1 ring-navy-100">
-                                <img src="{{ asset($registryPhoto) }}"
-                                     alt="{{ $id ? 'Peserta memegang sertifikat kompetensi seusai uji kompetensi' : 'A participant holding a competency certificate after assessment' }}"
-                                     width="1200" height="900" loading="lazy" decoding="async"
-                                     class="h-full w-full object-cover">
-                            </div>
-
-                            @if ($registry?->total)
-                                {{-- Alfa 0,80 bukan angka selera: di atas titik paling
-                                     terang foto mana pun, pita ini masih menyisakan
-                                     kontras 8,5:1 untuk teks putih. --}}
-                                <div class="absolute inset-x-3 bottom-3 rounded-xl bg-navy-950/80 px-4 py-3 backdrop-blur-sm">
-                                    <p class="text-sm leading-snug text-white">
-                                        <span class="font-display text-xl font-bold tabular-nums">{{ $registry->total }}</span>
-                                        {{ $id ? 'sertifikat dari' : 'certificates from' }}
-                                        <span class="font-semibold tabular-nums">{{ $registry->companies }}</span>
-                                        {{ $id ? 'perusahaan' : 'companies' }}
-                                    </p>
-                                    <p class="mt-0.5 text-xs leading-snug text-navy-100">
-                                        {{ $id ? 'Terbuka untuk diperiksa siapa pun, tanpa perlu akun.' : 'Open for anyone to check, no account needed.' }}
-                                    </p>
-                                </div>
-                            @endif
+                 Kalimat "terbuka untuk diperiksa siapa pun" dilepas dari sini: subjudul
+                 halaman di atas sudah mengatakan hal yang sama dengan kalimat yang
+                 lebih panjang, dan mengulanginya di layar yang sama tidak menambah
+                 apa pun. --}}
+            @if ($hasRegistryPhoto)
+                @php
+                    $registryFigures = $registry?->total ? [
+                        ['doc', $id ? 'Sertifikat terbit' : 'Certificates issued', $registry->total],
+                        ['building', $id ? 'Perusahaan' : 'Companies', $registry->companies],
+                    ] : [];
+                @endphp
+                <aside class="lg:col-span-5" aria-label="{{ $id ? 'Cakupan daftar sertifikat' : 'Coverage of the register' }}">
+                    <div class="relative">
+                        <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-mist ring-1 ring-navy-100">
+                            <img src="{{ asset($registryPhoto) }}"
+                                 alt="{{ $id ? 'Peserta memegang sertifikat kompetensi seusai uji kompetensi' : 'A participant holding a competency certificate after assessment' }}"
+                                 width="1200" height="900" loading="lazy" decoding="async"
+                                 class="h-full w-full object-cover">
                         </div>
-                    @endif
 
-                    @if ($states)
-                        <dl class="{{ $hasRegistryPhoto ? 'mt-7' : 'border-t border-navy-200 pt-8 lg:border-t-0 lg:pt-0' }} divide-y divide-navy-100 border-y border-navy-100">
-                            @foreach ($states as [$dot, $label, $value])
-                                <div class="flex items-center justify-between gap-4 py-3.5">
-                                    <dt class="flex items-center gap-2.5 text-sm text-navy">
-                                        <span class="h-2 w-2 shrink-0 rounded-full {{ $dot }}" aria-hidden="true"></span>
-                                        {{ $label }}
-                                    </dt>
-                                    <dd class="text-xl leading-none tabular-nums text-navy" data-counter="{{ $value }}">{{ $value }}</dd>
-                                </div>
-                            @endforeach
-                        </dl>
-
-                        <p class="mt-4 text-sm leading-relaxed text-slate-600">
-                            {{ $id
-                                ? 'Tanda yang sama muncul di samping setiap nama pada hasil pencarian.'
-                                : 'The same markers appear beside every name in the results.' }}
-                        </p>
-                    @endif
+                        {{-- Di layar sempit kartunya turun ke bawah foto: menumpuk di
+                             sudut kanan atas foto selebar layar ponsel akan menutupi
+                             wajah orang di dalamnya. --}}
+                        @if ($registryFigures)
+                            <div class="mt-4 grid grid-cols-2 gap-3 sm:absolute sm:-top-6 sm:right-5 sm:mt-0 sm:flex sm:gap-3">
+                                @foreach ($registryFigures as [$icon, $label, $value])
+                                    <div class="rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 p-4 shadow-lift ring-1 ring-white/10 sm:w-36 sm:p-5">
+                                        <span class="block text-sky-400" aria-hidden="true">
+                                            @if ($icon === 'doc')
+                                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
+                                            @else
+                                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v16"/><path d="M15 9h3a2 2 0 0 1 2 2v10"/><path d="M2 21h20M8 7h2M8 11h2M8 15h2"/></svg>
+                                            @endif
+                                        </span>
+                                        <p class="mt-2.5 text-[11px] leading-tight text-navy-100">{{ $label }}</p>
+                                        <p class="mt-1.5 font-display text-2xl font-bold leading-none tabular-nums text-white sm:text-[1.75rem]"
+                                           data-counter="{{ $value }}">{{ $value }}</p>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
                 </aside>
             @endif
         </div>
