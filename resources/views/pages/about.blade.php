@@ -207,16 +207,23 @@
 
         <div class="container relative">
             <div class="grid gap-10 lg:grid-cols-12 lg:gap-14">
-                {{-- Judul raksasa. Dua baris, dan "&" berwarna emas: tanda itu
-                     satu-satunya yang menyambung kedua kata, jadi ia yang pantas
-                     diberi warna, bukan salah satu katanya. --}}
+                {{-- Judul raksasa. Dua baris, dan "&" emas yang dimiringkan: tanda
+                     itu satu-satunya yang menyambung kedua kata, jadi ia yang
+                     pantas diberi warna, bukan salah satu katanya. Ampersan miring
+                     adalah kebiasaan lama penata huruf — bentuk miringnya memang
+                     lebih indah daripada bentuk tegaknya — dan di sini ia memberi
+                     satu titik lembut pada judul yang seluruhnya tegak dan tebal.
+
+                     Miringnya hanya dua di seluruh pita ini: ampersan ini dan
+                     penggalan emas di dalam visi. Keduanya emas, jadi yang terbaca
+                     satu sistem, bukan huruf miring yang bertaburan. --}}
                 <div class="lg:col-span-4" data-aos="fade-up">
                     <p class="inline-flex items-center rounded-full border border-gold/40 px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-gold-soft">
                         {{ $isId ? 'Arah Kami' : 'Our Direction' }}
                     </p>
                     <h2 class="mt-7 font-display text-6xl font-bold leading-[0.95] tracking-tight text-white md:text-7xl">
                         {{ $isId ? 'Visi' : 'Vision' }}<br>
-                        <span class="text-gold-soft">&amp;</span> {{ $isId ? 'Misi' : 'Mission' }}
+                        <span class="pr-1 italic text-gold-soft">&amp;</span>{{ $isId ? 'Misi' : 'Mission' }}
                     </h2>
                 </div>
 
@@ -226,9 +233,16 @@
                     {{-- Kalimat pertama sebesar judul seksi, sisanya turun ke
                          ukuran teks isi. Tanpa jenjang itu, visi tiga kalimat
                          terbaca sebagai paragraf biasa dan kalimat intinya
-                         hilang di tengahnya. --}}
+                         hilang di tengahnya.
+
+                         Penggalan emasnya dimiringkan dan bobotnya diturunkan ke
+                         normal. Miring saja di atas huruf tebal nyaris tidak
+                         terlihat; yang membuatnya terbaca sebagai penggalan
+                         tersendiri adalah perbedaan bobotnya, dan miringnya yang
+                         melembutkan peralihan itu agar tidak terbaca seperti
+                         kalimat yang terputus. --}}
                     <p class="mt-4 max-w-3xl text-pretty font-display text-2xl font-bold leading-[1.3] text-white md:text-[1.75rem]">
-                        {{ $vLead }}@if ($vAccent !== '') <span class="text-gold-soft">{{ $vAccent }}</span>@endif{{ $vTail }}
+                        {{ $vLead }}@if ($vAccent !== '') <span class="font-normal italic text-gold-soft">{{ $vAccent }}</span>@endif{{ $vTail }}
                     </p>
 
                     @if ($visionRest !== '')
@@ -252,8 +266,21 @@
                      Di layar sempit ia turun jadi dua kolom lalu satu. --}}
                 <ol class="mt-10 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
                     @foreach ($missions as $mission)
-                        <li data-aos="fade-up" data-aos-delay="{{ min($loop->index, 3) * 50 }}">
-                            <span class="grid h-10 w-10 place-items-center rounded-full font-mono text-[11px] font-bold tabular-nums text-white ring-1 ring-white/25" aria-hidden="true">
+                        <li class="relative" data-aos="fade-up" data-aos-delay="{{ min($loop->index, 3) * 50 }}">
+                            {{-- Garis penyambung antar-lingkaran. Dipasang per butir
+                                 dan memanjang sampai -1.5rem (selebar gap-x-6), bukan
+                                 satu garis panjang di atas seluruh daftar: lebar tiap
+                                 kolom berubah mengikuti lebar layar, dan garis yang
+                                 letaknya dihitung dalam persen akan meleset dari pusat
+                                 lingkaran di tiap ukuran yang berbeda.
+
+                                 Hanya dari lg ke atas. Di bawah itu kolomnya dua lalu
+                                 satu, dan garis mendatar di antara butir yang tersusun
+                                 ke bawah menyambungkan dua hal yang tidak bersebelahan. --}}
+                            @if (! $loop->last)
+                                <span class="pointer-events-none absolute -right-6 left-11 top-5 hidden h-px bg-gradient-to-r from-white/25 to-white/10 lg:block" aria-hidden="true"></span>
+                            @endif
+                            <span class="relative grid h-10 w-10 place-items-center rounded-full bg-navy-950 font-mono text-[11px] font-bold tabular-nums text-white ring-1 ring-white/25" aria-hidden="true">
                                 {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
                             </span>
                             <p class="mt-5 font-mono text-[9px] uppercase tracking-[0.18em] text-navy-200">{{ $mission->label }}</p>
