@@ -23,8 +23,8 @@ class PageController extends Controller
         // di basis data. Kalau keduanya menyimpang, halaman berganti isi begitu
         // barisnya dikosongkan di CMS.
         $vision = Setting::getLocalized('company_vision') ?: ($id
-            ? 'Menjadi lembaga pelatihan dan sertifikasi profesi yang paling dipercaya di Indonesia. Tempat perusahaan menitipkan pengembangan timnya tanpa ragu, dan tempat setiap pekerja membuktikan kemampuannya dengan sertifikat yang diakui di tempat kerja maupun di hadapan auditor. Dari situ lahir tenaga kerja Indonesia yang berani bersaing dengan standar dunia.'
-            : 'To become the most trusted training and professional certification institution in Indonesia. The place a company entrusts its people to without hesitation, and the place a worker proves their ability with a certificate that holds up on the job and in front of auditors. From there comes an Indonesian workforce ready to stand against world standards.');
+            ? 'Menjadi lembaga pelatihan dan sertifikasi profesi yang paling dipercaya di Indonesia. Dipercaya bukan karena mengaku, melainkan karena setiap nama yang diluluskan terbuka untuk diperiksa siapa pun, dan kemampuannya terbukti pada pekerjaan yang ia tangani sehari-hari. Dari situ lahir tenaga kerja Indonesia yang berani berdiri di hadapan standar dunia.'
+            : 'To become the most trusted training and professional certification institution in Indonesia. Trusted not because we say so, but because every name we pass is open for anyone to check, and their ability shows in the work they handle every day. From there comes an Indonesian workforce ready to stand against world standards.');
 
         // Lima misi, satu per lini layanan yang benar-benar dijalankan
         // (pelatihan, sertifikasi, headhunter, konsultasi) ditutup satu janji
@@ -32,18 +32,24 @@ class PageController extends Controller
         // selesainya, bukan sifat baik yang tidak bisa ditagih: "inovatif",
         // "berkelanjutan", dan "menjunjung tinggi profesionalisme" tidak
         // memberi pembaca satu pun hal yang bisa diperiksa.
+        //
+        // Tiap butir juga menunjuk sesuatu yang benar-benar ada di situs ini —
+        // tiga cara mengikuti program di halaman Layanan, daftar nomor
+        // sertifikat yang terbuka di halaman Sertifikat, dan nilai perusahaan
+        // di halaman ini — supaya janjinya bisa ditelusuri pembaca pada
+        // kunjungan yang sama, bukan sekadar dipercaya.
         $missionItems = $id ? [
-            'Menyusun program pelatihan dari kebutuhan nyata di tempat kerja klien, bukan dari katalog yang sudah jadi.',
-            'Menjalankan uji kompetensi berskema BNSP bersama asesor berlisensi, agar sertifikatnya berlaku untuk audit pelanggan, tender, dan persyaratan regulasi.',
-            'Mempertemukan talenta yang tepat dengan organisasi yang tepat lewat seleksi dan rekrutmen eksekutif yang terukur.',
-            'Mendampingi organisasi menata manajemen dan pengelolaan human capital-nya sampai perubahannya terasa di pekerjaan harian.',
-            'Menjaga satu standar mutu untuk semua klien, apa pun ukuran perusahaannya, dan membuka hasilnya untuk diperiksa siapa pun.',
+            'Menyusun program dari pekerjaan yang benar-benar dijalankan peserta, lalu menggelarnya di tempat kerja, daring, atau gabungan keduanya, mengikuti jam kerja Anda.',
+            'Menjalankan uji kompetensi berskema BNSP bersama asesor berlisensi, lalu membuka nomor sertifikatnya di situs ini agar siapa pun dapat memverifikasinya sendiri.',
+            'Mempertemukan talenta yang tepat dengan organisasi yang tepat, dan menilai calonnya dari kompetensi yang teruji, bukan dari berkas lamaran.',
+            'Mendampingi organisasi menata manajemen dan human capital-nya sampai perubahannya terbaca di pekerjaan harian, bukan berhenti di laporan akhir.',
+            'Memberi satu standar yang sama kepada perusahaan sepuluh peserta maupun seribu, dan menguji ulang kompetensi pengajar serta asesornya secara berkala.',
         ] : [
-            "Build training programmes from the real needs of a client's workplace, not from a ready-made catalogue.",
-            'Run BNSP-scheme assessments with licensed assessors, so the certificate holds up for customer audits, tenders, and regulatory requirements.',
-            'Match the right talent with the right organisation through measured executive selection and recruitment.',
-            'Work alongside organisations to shape their management and human capital until the change shows in daily work.',
-            'Hold one standard of quality for every client, whatever their size, and leave the results open for anyone to check.',
+            'Build each programme around the work participants actually do, then run it on site, online, or as a mix of both, around your working hours.',
+            'Run BNSP-scheme assessments with licensed assessors, then publish the certificate numbers on this site so anyone can verify them.',
+            'Match the right talent with the right organisation, judging candidates on assessed competency rather than on a CV.',
+            'Work alongside organisations on their management and human capital until the change shows in daily work, not only in a closing report.',
+            'Give the same standard to a company sending ten participants and one sending a thousand, and reassess our own instructors and assessors on a schedule.',
         ];
         $missions = Collection::make($missionItems)->map(fn ($content) => (object) ['content' => $content]);
 

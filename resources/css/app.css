@@ -107,8 +107,12 @@
     /* Warnanya diperdalam dari gold-deep #b0872f. Pada 11px ambangnya 4,5:1,
        sedangkan gold-deep hanya 3,3:1 di atas putih dan 3,1:1 di atas bg-paper.
        #7d5f1f mencapai 5,6:1 di keduanya dan masih terbaca sebagai emas. */
+    /* font-normal ditulis tegas: label ini kadang dipasang pada <h2>/<h3>
+       supaya "Visi" dan "Misi" berdiri di kerangka judul halaman, dan lapis
+       base memberi setiap h1-h4 font-semibold. Tanpa ini, label yang sama
+       tampil dua bobot berbeda hanya karena elemennya berbeda. */
     .kicker {
-        @apply font-mono text-[11px] uppercase tracking-label;
+        @apply font-mono text-[11px] font-normal uppercase tracking-label;
         color: #7d5f1f;
     }
 
@@ -121,7 +125,7 @@
        atas navy. Ditulis di sini, bukan di halamannya, agar ia ikut berubah
        bersama .kicker — label yang satu tidak boleh menyimpang dari yang lain. */
     .kicker-on-dark {
-        @apply font-mono text-[11px] uppercase tracking-label text-gold-soft;
+        @apply font-mono text-[11px] font-normal uppercase tracking-label text-gold-soft;
     }
 
     /* Section rhythm — generous, editorial whitespace */

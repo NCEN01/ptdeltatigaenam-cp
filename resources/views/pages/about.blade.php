@@ -179,9 +179,16 @@
 
         <div class="container relative">
             <div class="mb-10 max-w-2xl" data-aos="fade-up">
-                {{-- Token text-display-lg, sama dengan judul seksi lain. font-display
-                     tidak ditulis: app.css sudah memberikannya ke setiap h1–h4. --}}
-                <h2 class="text-display-lg">{{ $isId ? 'Visi & Misi' : 'Vision & Mission' }}</h2>
+                {{-- Judulnya menyebut isi seksinya, bukan nama bagiannya. "Visi &
+                     Misi" hanya mengumumkan dua label yang toh sudah tertulis di
+                     atas masing-masing kolom; kata kuncinya sendiri tidak hilang
+                     karena kedua label itu kini <h3>, jadi "Visi" dan "Misi" tetap
+                     berdiri di kerangka judul halaman.
+
+                     Token text-display-lg, sama dengan judul seksi lain.
+                     font-display tidak ditulis: app.css sudah memberikannya ke
+                     setiap h1–h4. --}}
+                <h2 class="text-display-lg">{{ $isId ? 'Arah yang dituju, dan cara menujunya' : 'The direction, and how we get there' }}</h2>
             </div>
 
             {{-- Asymmetric 2fr/3fr rather than two matching glass boxes: the vision is one
@@ -196,7 +203,7 @@
                          tracking-label situs ini sengaja bernilai 0. Garis emas
                          kecil di bawah tiap label juga dilepas: dengan garis emas
                          di tepi atas seksi, ada tiga benda emas di satu layar. --}}
-                    <p class="kicker-on-dark">{{ $isId ? 'Visi' : 'Vision' }}</p>
+                    <h3 class="kicker-on-dark">{{ $isId ? 'Visi' : 'Vision' }}</h3>
                     {{-- Rata kanan-kiri mulai sm. Di bawah sm kolomnya selebar
                          ponsel dan hanya memuat sekitar 35 huruf per baris;
                          perataan penuh di situ melebarkan jarak antarkata sampai
@@ -214,7 +221,7 @@
                 {{-- Mission: numbered so the count reads at a glance; the em-dash bullets gave
                      no sense of how many commitments there are. --}}
                 <div class="lg:col-span-3" data-aos="fade-up" data-aos-delay="100">
-                    <p class="kicker-on-dark">{{ $isId ? 'Misi' : 'Mission' }}</p>
+                    <h3 class="kicker-on-dark">{{ $isId ? 'Misi' : 'Mission' }}</h3>
 
                     @if ($missions->isNotEmpty())
                         <ol class="mt-5 divide-y divide-white/10 border-y border-white/10">
