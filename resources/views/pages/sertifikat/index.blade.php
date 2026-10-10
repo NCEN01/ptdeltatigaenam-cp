@@ -87,11 +87,13 @@
              Pembatas kolom tegaknya dilepas. Sejak kolom kanan dibuka sebuah foto,
              garis itu jadi dinding di antara dua benda yang sudah jelas terpisah
              batasnya sendiri. --}}
-        {{-- Rata tengah di layar lebar supaya foto di kanan jatuh sejajar bilah
-             pencarian, bukan sejajar judul. Kartu angka yang menumpang di tepi
-             atas foto butuh ruang kosong di atasnya; rata atas membuatnya naik
-             sampai sebaris judul. --}}
-        <div class="container relative grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-14">
+        {{-- Rata atas dengan jarak tetap, bukan rata tengah. Tinggi kolom kiri
+             berubah mengikuti ada-tidaknya pintasan dan papan angka, dan rata
+             tengah membuat letak fotonya ikut berpindah-pindah bersamanya.
+             Jarak 4rem menurunkan foto sampai kira-kira sebaris bilah pencarian,
+             sekaligus menyisakan ruang kosong di atas kartu angka yang
+             menumpang di tepi atasnya. --}}
+        <div class="container relative grid gap-10 lg:grid-cols-12 lg:items-start lg:gap-14">
             <div class="lg:col-span-7">
                 {{-- Judul seksi berganti peran: bukan lagi mengulang judul halaman,
                      melainkan mengajak orang mulai. Tiga kalimat dipadatkan jadi dua
@@ -146,12 +148,6 @@
                             <span x-text="busy ? @js($id ? 'Memeriksa…' : 'Checking…') : @js($id ? 'Periksa' : 'Check')">{{ $id ? 'Periksa' : 'Check' }}</span>
                         </button>
                     </div>
-
-                    <p class="mt-3.5 text-sm leading-relaxed text-slate-600">
-                        {{ $id
-                            ? 'Sebagian nama atau sebagian nomor sudah cukup.'
-                            : 'Part of a name or part of a number is enough.' }}
-                    </p>
                 </form>
 
                 {{-- Pintasan dari kualifikasi yang paling banyak dipegang. Bukan hiasan:
@@ -179,9 +175,9 @@
                      rambut tegak. Satu susunan angka untuk seluruh situs, bukan
                      satu per halaman.
 
-                     Titik warnanya tetap ada di samping keterangan — itu yang
-                     mengikat papan ini dengan lencana di kolom hasil, dan tanpanya
-                     kalimat di bawahnya kehilangan rujukan.
+                     Titik warnanya tetap ada di samping keterangan: warna yang sama
+                     dipakai lencana status di kolom hasil, jadi papan ini sekaligus
+                     mengajarkan cara membaca hasilnya sebelum hasilnya muncul.
 
                      Nilainya tercetak apa adanya di dalam elemennya, jadi tetap
                      terbaca bila animasi penghitungnya tidak berjalan. --}}
@@ -198,12 +194,6 @@
                             </div>
                         @endforeach
                     </div>
-
-                    <p class="mt-4 text-sm leading-relaxed text-slate-600">
-                        {{ $id
-                            ? 'Tanda yang sama muncul di samping setiap nama pada hasil pencarian.'
-                            : 'The same markers appear beside every name in the results.' }}
-                    </p>
                 @endif
             </div>
 
@@ -227,7 +217,7 @@
                         ['building', $id ? 'Perusahaan' : 'Companies', $registry->companies],
                     ] : [];
                 @endphp
-                <aside class="lg:col-span-5" aria-label="{{ $id ? 'Cakupan daftar sertifikat' : 'Coverage of the register' }}">
+                <aside class="lg:col-span-5 lg:mt-16" aria-label="{{ $id ? 'Cakupan daftar sertifikat' : 'Coverage of the register' }}">
                     <div class="relative">
                         <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-mist ring-1 ring-navy-100">
                             <img src="{{ asset($registryPhoto) }}"
