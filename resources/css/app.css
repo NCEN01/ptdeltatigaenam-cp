@@ -528,6 +528,67 @@
         radial-gradient(ellipse 60% 50% at 85% 85%, rgba(32, 95, 159, 0.22), transparent 70%);
 }
 
+/* ── Lini masa Misi (halaman Tentang) ─────────────────────────────────────
+ * Lima kolom tanpa sela, masing-masing membawa sepotong rel. Tanpa sela itu
+ * syarat, bukan selera: satu piksel jarak saja membuat garisnya putus-putus.
+ *
+ * Isian emasnya digerakkan transform, bukan lebar. Menganimasikan lebar
+ * memaksa peramban menghitung ulang tata letak di tiap bingkai; transform
+ * dikerjakan kartu grafis dan tidak menyentuh tata letak sama sekali. Sumbunya
+ * berganti mengikuti arah relnya: tegak di ponsel, mendatar dari md ke atas.
+ *
+ * Keadaannya dibaca dari atribut data yang diisi Alpine, bukan dari daftar
+ * kelas yang disambung di Blade. Rangkaian kelas Tailwind yang dirakit di
+ * dalam :class tidak pernah ikut terbangun oleh JIT.
+ */
+.misi-fill {
+    position: absolute;
+    inset: 0;
+    transform-origin: top left;
+    background-image: linear-gradient(to bottom, #dab45e, #edd68a);
+    transform: scaleY(0);
+    transition: transform 0.45s ease;
+}
+.misi-fill[data-on="1"] { transform: scaleY(1); }
+
+.misi-dot {
+    position: absolute;
+    left: -5px;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 9999px;
+    background: #2a3a58;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.misi-dot[data-state="done"],
+.misi-dot[data-state="active"] { background: #edd68a; }
+.misi-dot[data-state="active"] {
+    box-shadow: 0 0 0 6px rgba(218, 180, 94, 0.18), 0 0 24px rgba(237, 214, 138, 0.6);
+}
+
+/* 0,6 — bukan 0,55 seperti pada rancangannya. Keterangan 14px berwarna
+   navy-200 pada 0,55 jatuh ke 4,27:1 di atas navy-950, di bawah ambang AA;
+   pada 0,6 ia 4,81:1. Selisih tampaknya tidak terlihat, bedanya hanya pada
+   bisa atau tidaknya kalimat itu dibaca orang. */
+.misi-body { opacity: 0.6; transition: opacity 0.3s ease; }
+.misi-body[data-on="1"] { opacity: 1; }
+
+@media (min-width: 768px) {
+    .misi-fill {
+        background-image: linear-gradient(to right, #dab45e, #edd68a);
+        transform: scaleX(0);
+    }
+    .misi-fill[data-on="1"] { transform: scaleX(1); }
+    .misi-dot { left: 0; top: -5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .misi-fill,
+    .misi-dot,
+    .misi-body { transition: none; }
+}
+
 /* ── Hero carousel ── */
 @keyframes kenburns {
     from { transform: scale(1.05); }

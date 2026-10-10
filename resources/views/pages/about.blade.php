@@ -252,43 +252,71 @@
             </div>
 
             @if ($missions->isNotEmpty())
-                {{-- Label "Misi" dengan garis rambut yang memanjang ke kanan:
-                     ia memisahkan dua bagian pita ini tanpa menambah judul kedua
-                     yang seukuran judul raksasa di atas. --}}
-                <div class="mt-16 flex items-center gap-5 md:mt-20">
-                    <h3 class="shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-navy-200">{{ $isId ? 'Misi' : 'Mission' }}</h3>
-                    <span class="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent" aria-hidden="true"></span>
+                {{-- Lini masa mendatar yang menanggapi tunjukan.
+
+                     Kelima misi ini satu alur, dari menyusun program sampai
+                     menjaga standarnya, dan rel yang terisi sampai titik yang
+                     sedang ditunjuk memperlihatkan alur itu bergerak, bukan
+                     sekadar berderet.
+
+                     Keadaan aktifnya tidak pulih saat tunjukan ditarik. Rel yang
+                     surut kembali ke nol tiap kali kursor lewat terbaca sebagai
+                     kedipan, bukan sebagai posisi.
+
+                     Isinya tetap utuh di dalam DOM dalam keadaan apa pun; yang
+                     berubah hanya kepekatannya. Jadi pembaca layar dan mesin
+                     pencari membaca kelima misi itu seluruhnya, dan halaman ini
+                     tetap lengkap sekalipun JavaScript-nya gagal dimuat. --}}
+                <div x-data="{ active: 0, labels: @js($missions->pluck('label')->all()) }">
+                    <div class="mt-16 flex items-center gap-5 md:mt-20">
+                        <h3 class="shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-navy-200">{{ $isId ? 'Misi' : 'Mission' }}</h3>
+                        <span class="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent" aria-hidden="true"></span>
+
+                        {{-- Penanda butir aktif. Isinya dicetak dari peladen juga,
+                             bukan dikosongkan menunggu Alpine: kolom yang kosong
+                             sepersekian detik lalu terisi terbaca sebagai halaman
+                             yang belum selesai dimuat.
+
+                             aria-hidden: ia mengulang butir yang sudah ada di
+                             bawahnya, dan pembaca layar tidak mengikuti kursor. --}}
+                        <p class="hidden shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-navy-200 sm:block" aria-hidden="true"
+                           x-text="String(active + 1).padStart(2, '0') + ' / ' + String(labels.length).padStart(2, '0') + ' — ' + labels[active].toUpperCase()">
+                            01 / {{ str_pad($missions->count(), 2, '0', STR_PAD_LEFT) }} &mdash; {{ mb_strtoupper($missions->first()->label) }}
+                        </p>
+                    </div>
+
+                    {{-- Tanpa sela antar-kolom: satu piksel jarak saja membuat
+                         relnya putus-putus. Jarak antar-isi dikerjakan padding
+                         kanan, bukan gap. --}}
+                    <ol class="mt-10 grid grid-cols-1 md:mt-12 md:grid-cols-5">
+                        @foreach ($missions as $i => $mission)
+                            {{-- tabindex supaya rel ini bisa dijelajahi papan tik,
+                                 dan klik supaya di layar sentuh yang tidak punya
+                                 tunjukan tetap ada cara memindahkannya. --}}
+                            <li class="relative flex gap-5 outline-none md:block md:gap-0"
+                                tabindex="0"
+                                x-on:mouseenter="active = {{ $i }}"
+                                x-on:focus="active = {{ $i }}"
+                                x-on:click="active = {{ $i }}"
+                                data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
+
+                                <div class="relative w-0.5 shrink-0 self-stretch bg-white/10 md:h-0.5 md:w-full md:self-auto">
+                                    <span class="misi-fill" aria-hidden="true" :data-on="{{ $i }} < active ? '1' : '0'"></span>
+                                    <span class="misi-dot" aria-hidden="true"
+                                          :data-state="{{ $i }} < active ? 'done' : ({{ $i }} === active ? 'active' : 'off')"></span>
+                                </div>
+
+                                <div class="misi-body pb-9 md:pb-0 md:pr-10 md:pt-7" :data-on="active === {{ $i }} ? '1' : '0'">
+                                    <p class="font-display text-[30px] font-light italic leading-none text-gold" aria-hidden="true">
+                                        {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}
+                                    </p>
+                                    <h4 class="mt-4 text-pretty text-xl font-bold leading-snug text-white">{{ $mission->title }}</h4>
+                                    <p class="mt-2.5 text-pretty text-sm leading-[1.7] text-navy-200">{{ $mission->content }}</p>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ol>
                 </div>
-
-                {{-- Lima kolom mendatar, bukan daftar menurun. Kelima misi ini
-                     satu alur: dari menyusun program sampai menjaga standarnya,
-                     dan deretan mendatar memperlihatkan alur itu sekali pandang.
-                     Di layar sempit ia turun jadi dua kolom lalu satu. --}}
-                <ol class="mt-10 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
-                    @foreach ($missions as $mission)
-                        <li class="relative" data-aos="fade-up" data-aos-delay="{{ min($loop->index, 3) * 50 }}">
-                            {{-- Garis penyambung antar-lingkaran. Dipasang per butir
-                                 dan memanjang sampai -1.5rem (selebar gap-x-6), bukan
-                                 satu garis panjang di atas seluruh daftar: lebar tiap
-                                 kolom berubah mengikuti lebar layar, dan garis yang
-                                 letaknya dihitung dalam persen akan meleset dari pusat
-                                 lingkaran di tiap ukuran yang berbeda.
-
-                                 Hanya dari lg ke atas. Di bawah itu kolomnya dua lalu
-                                 satu, dan garis mendatar di antara butir yang tersusun
-                                 ke bawah menyambungkan dua hal yang tidak bersebelahan. --}}
-                            @if (! $loop->last)
-                                <span class="pointer-events-none absolute -right-6 left-11 top-5 hidden h-px bg-gradient-to-r from-white/25 to-white/10 lg:block" aria-hidden="true"></span>
-                            @endif
-                            <span class="relative grid h-10 w-10 place-items-center rounded-full bg-navy-950 font-mono text-[11px] font-bold tabular-nums text-white ring-1 ring-white/25" aria-hidden="true">
-                                {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
-                            </span>
-                            <p class="mt-5 font-mono text-[9px] uppercase tracking-[0.18em] text-navy-200">{{ $mission->label }}</p>
-                            <h4 class="mt-2 text-pretty font-display text-[17px] font-bold leading-snug text-white">{{ $mission->title }}</h4>
-                            <p class="mt-2.5 text-pretty text-[13px] leading-relaxed text-navy-200">{{ $mission->content }}</p>
-                        </li>
-                    @endforeach
-                </ol>
             @endif
         </div>
     </section>
