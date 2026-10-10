@@ -149,13 +149,12 @@
                          text-balance tidak ditulis: app.css sudah memberikannya ke
                          setiap h1–h4; font-bold ditulis karena memang menimpa
                          font-semibold bawaan itu. --}}
-                    {{-- Tanpa kata "Kami". Judul seksi di situs ini dulu hampir
-                         semuanya berakhir dengan kata itu, dan mesin pencari
-                         tidak mendapat apa pun darinya; "Pengembangan SDM"
-                         menyebut hal yang benar-benar dicari orang. --}}
+                    {{-- Kata "Kami" di judul ini diminta pemilik, jadi ia satu-satunya
+                         pengecualian dari aturan judul seksi di situs ini. Sisa judul
+                         beranda tetap tanpa kata itu. --}}
                     <x-heading
-                        :lead="$isId ? 'Layanan' : 'Human Capital'"
-                        :accent="$isId ? 'Pengembangan SDM' : 'Service Categories'"
+                        :lead="$isId ? 'Kategori' : 'Our'"
+                        :accent="$isId ? 'Layanan Kami' : 'Service Categories'"
                         class="text-display-lg font-bold text-navy" />
                     <p class="mt-5 max-w-sm leading-relaxed text-slate-600 text-pretty">
                         {{ $isId
