@@ -66,9 +66,12 @@
         {{-- Dua kolom, bukan satu tumpukan. Sebelumnya judul, formulir, pintasan,
              dan angka cakupan berderet ke bawah sepanjang satu kolom sempit,
              menyisakan separuh kanan layar kosong. Kini alat pencariannya di kiri
-             dan cakupan daftarnya di kanan, memakai pembatas kolom yang sama
-             dengan seksi "Kenapa daftar ini kami buka" di bawah. --}}
-        <div class="container relative grid gap-10 lg:grid-cols-12 lg:gap-16">
+             dan cakupan daftarnya di kanan.
+
+             Pembatas kolom tegaknya dilepas. Sejak kolom kanan dibuka sebuah foto,
+             garis itu jadi dinding di antara dua benda yang sudah jelas terpisah
+             batasnya sendiri. --}}
+        <div class="container relative grid items-start gap-10 lg:grid-cols-12 lg:gap-14">
             <div class="lg:col-span-7">
                 {{-- Judul seksi turun ukuran dan berganti peran: bukan lagi
                      mengulang judul halaman, melainkan mengajak orang mulai.
@@ -155,49 +158,88 @@
 
                  Nilainya tercetak apa adanya di dalam elemennya, jadi tetap
                  terbaca bila animasi penghitungnya tidak berjalan. --}}
-            @if ($registry?->total)
-                @php
-                    $states = $id ? [
-                        ['bg-sky-500', 'Berlaku', $registry->valid],
-                        ['bg-amber-500', 'Segera berakhir', $registry->soon],
-                        ['bg-rose-500', 'Kedaluwarsa', $registry->expired],
-                    ] : [
-                        ['bg-sky-500', 'Valid', $registry->valid],
-                        ['bg-amber-500', 'Expiring soon', $registry->soon],
-                        ['bg-rose-500', 'Expired', $registry->expired],
-                    ];
-                @endphp
-                <aside class="lg:col-span-5 lg:border-l lg:border-navy-200 lg:pl-10">
-                    <div class="border-t border-navy-200 pt-8 lg:border-t-0 lg:pt-0">
-                        <h3 class="text-base text-navy">
-                            {{ $id ? 'Isi daftar ini hari ini' : 'What is in the register today' }}
-                        </h3>
-                        <p class="mt-2 text-sm leading-relaxed text-slate-600">
-                            {{ $id
-                                ? 'Tanda yang sama muncul di samping setiap nama pada hasil pencarian.'
-                                : 'The same markers appear beside every name in the results.' }}
-                        </p>
+            {{-- Kolom kanan dibuka sebuah foto orang yang baru memegang sertifikatnya.
+                 Halaman ini seluruhnya berisi nomor, tabel, dan lencana status; satu
+                 foto mengingatkan bahwa di balik tiap baris itu ada orang, dan itu
+                 yang membuat daftarnya layak dipercaya, bukan rapinya tabel.
 
-                        <dl class="mt-6 divide-y divide-navy-100 border-y border-navy-100">
+                 Ringkasan cakupan pindah ke pita buram di tepi bawah foto. Di situ ia
+                 jadi keterangan atas fotonya dan dibaca lebih dulu, bukan kalimat
+                 penutup yang tenggelam di bawah daftar keadaan.
+
+                 Susunan keadaannya sama persis dengan lencana di kolom hasil, berikut
+                 titik warnanya. Jadi kolom ini bukan sekadar memamerkan angka: ia
+                 mengajarkan cara membaca hasilnya sebelum hasilnya muncul.
+
+                 Bukan pula tiga kartu statistik bersebelahan — di halaman yang
+                 pekerjaannya memverifikasi, angka yang dikotakkan dan diperbesar
+                 terdengar seperti pemasaran, bukan bukti.
+
+                 Nilainya tercetak apa adanya di dalam elemennya, jadi tetap terbaca
+                 bila animasi penghitungnya tidak berjalan. --}}
+            @php
+                $registryPhoto = 'images/sertifikat-verifikasi.webp';
+                $hasRegistryPhoto = is_file(public_path($registryPhoto));
+
+                $states = $registry?->total ? ($id ? [
+                    ['bg-sky-500', 'Berlaku', $registry->valid],
+                    ['bg-amber-500', 'Segera berakhir', $registry->soon],
+                    ['bg-rose-500', 'Kedaluwarsa', $registry->expired],
+                ] : [
+                    ['bg-sky-500', 'Valid', $registry->valid],
+                    ['bg-amber-500', 'Expiring soon', $registry->soon],
+                    ['bg-rose-500', 'Expired', $registry->expired],
+                ]) : [];
+            @endphp
+            @if ($hasRegistryPhoto || $states)
+                <aside class="lg:col-span-5" aria-label="{{ $id ? 'Isi daftar sertifikat' : 'What is in the register' }}">
+                    @if ($hasRegistryPhoto)
+                        <div class="relative">
+                            <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-mist ring-1 ring-navy-100">
+                                <img src="{{ asset($registryPhoto) }}"
+                                     alt="{{ $id ? 'Peserta memegang sertifikat kompetensi seusai uji kompetensi' : 'A participant holding a competency certificate after assessment' }}"
+                                     width="1200" height="900" loading="lazy" decoding="async"
+                                     class="h-full w-full object-cover">
+                            </div>
+
+                            @if ($registry?->total)
+                                {{-- Alfa 0,80 bukan angka selera: di atas titik paling
+                                     terang foto mana pun, pita ini masih menyisakan
+                                     kontras 8,5:1 untuk teks putih. --}}
+                                <div class="absolute inset-x-3 bottom-3 rounded-xl bg-navy-950/80 px-4 py-3 backdrop-blur-sm">
+                                    <p class="text-sm leading-snug text-white">
+                                        <span class="font-display text-xl font-bold tabular-nums">{{ $registry->total }}</span>
+                                        {{ $id ? 'sertifikat dari' : 'certificates from' }}
+                                        <span class="font-semibold tabular-nums">{{ $registry->companies }}</span>
+                                        {{ $id ? 'perusahaan' : 'companies' }}
+                                    </p>
+                                    <p class="mt-0.5 text-xs leading-snug text-navy-100">
+                                        {{ $id ? 'Terbuka untuk diperiksa siapa pun, tanpa perlu akun.' : 'Open for anyone to check, no account needed.' }}
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+
+                    @if ($states)
+                        <dl class="{{ $hasRegistryPhoto ? 'mt-7' : 'border-t border-navy-200 pt-8 lg:border-t-0 lg:pt-0' }} divide-y divide-navy-100 border-y border-navy-100">
                             @foreach ($states as [$dot, $label, $value])
-                                <div class="flex items-center justify-between gap-4 py-4">
+                                <div class="flex items-center justify-between gap-4 py-3.5">
                                     <dt class="flex items-center gap-2.5 text-sm text-navy">
                                         <span class="h-2 w-2 shrink-0 rounded-full {{ $dot }}" aria-hidden="true"></span>
                                         {{ $label }}
                                     </dt>
-                                    <dd class="text-2xl leading-none tabular-nums text-navy" data-counter="{{ $value }}">{{ $value }}</dd>
+                                    <dd class="text-xl leading-none tabular-nums text-navy" data-counter="{{ $value }}">{{ $value }}</dd>
                                 </div>
                             @endforeach
                         </dl>
 
-                        <p class="mt-5 text-sm leading-relaxed text-slate-600">
-                            {{ $id ? 'Seluruhnya' : 'All told' }}
-                            <span class="font-semibold tabular-nums text-navy">{{ $registry->total }}</span>
-                            {{ $id ? 'sertifikat dari' : 'certificates from' }}
-                            <span class="font-semibold tabular-nums text-navy">{{ $registry->companies }}</span>
-                            {{ $id ? 'perusahaan.' : 'companies.' }}
+                        <p class="mt-4 text-sm leading-relaxed text-slate-600">
+                            {{ $id
+                                ? 'Tanda yang sama muncul di samping setiap nama pada hasil pencarian.'
+                                : 'The same markers appear beside every name in the results.' }}
                         </p>
-                    </div>
+                    @endif
                 </aside>
             @endif
         </div>
