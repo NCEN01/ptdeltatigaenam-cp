@@ -240,12 +240,12 @@
 
          Panah, rel, dan titiknya harus bersaudara di dalam satu induk:
          penangan [data-carousel] mencarinya lewat el.parentElement. --}}
-    @if ($related->isNotEmpty())
+    @if ($otherPortfolios->isNotEmpty())
         <section class="section-sm border-t border-navy-50 bg-neutral-50">
             <div class="container">
                 <div class="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
                     <div class="max-w-2xl">
-                        <p class="kicker mb-3" data-aos="fade-up">{{ $id ? 'Portofolio Terkait' : 'Related Portfolio' }}</p>
+                        <p class="kicker mb-3" data-aos="fade-up">{{ $id ? 'Terus Menelusuri' : 'Keep Exploring' }}</p>
                         <h2 class="font-display text-3xl text-navy text-balance md:text-4xl" data-aos="fade-up">{{ $id ? 'Pekerjaan lain yang pernah kami tangani' : 'Other work we have handled' }}</h2>
                     </div>
 
@@ -270,19 +270,54 @@
                     </div>
                 </div>
 
-                {{-- Satu baris yang bisa digeser. Kartunya sama tinggi lewat
-                     items-stretch + h-auto, sama dengan rel artikel. --}}
+                {{-- Kartunya mengikuti kartu artikel baris demi baris: potongan
+                     16/9 di ponsel dan 16/10 dari sm, lencana kategori di sudut
+                     gambar, baris keterangan tanggal dan tempat, judul berjatah
+                     dua baris, ringkasan, lalu tautan bertanda panah yang
+                     menempel di dasar kartu.
+
+                     Judulnya diberi tinggi minimum dari sm ke atas supaya
+                     ringkasan tiap kartu mulai di ketinggian yang sama; di
+                     ponsel satu kartu mengisi satu baris, jadi jatah itu hanya
+                     akan jadi ruang kosong.
+
+                     Kartunya sama tinggi lewat items-stretch + h-auto, sama
+                     dengan rel artikel. --}}
                 <div class="swiper swiper-equal-height" data-carousel data-carousel-autoplay="false">
                     <div class="swiper-wrapper items-stretch">
-                        @foreach ($related as $r)
+                        @foreach ($otherPortfolios as $r)
                             <div class="swiper-slide h-auto">
-                                <a href="{{ route('portfolio.show', $r->slug) }}" class="group flex h-full flex-col overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
-                                    <div class="relative aspect-[4/3] shrink-0 overflow-hidden bg-navy-900">
-                                        @if ($imgUrl($r->cover_image))<img src="{{ $imgUrl($r->cover_image) }}" alt="{{ $r->title }}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">@else<div class="absolute inset-0 aurora opacity-60"></div>@endif
+                                <a href="{{ route('portfolio.show', $r->slug) }}" data-spotlight
+                                   class="card card-hover group flex h-full flex-col overflow-hidden">
+                                    <div class="relative aspect-[16/9] shrink-0 overflow-hidden bg-navy-900 sm:aspect-[16/10]">
+                                        @if ($imgUrl($r->cover_image))
+                                            <img src="{{ $imgUrl($r->cover_image) }}" alt="{{ $r->title }}" loading="lazy" decoding="async"
+                                                 class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">
+                                        @else
+                                            <div class="absolute inset-0 aurora opacity-60"></div>
+                                        @endif
+
+                                        @if ($r->category)
+                                            <span class="absolute left-4 top-4 rounded-full bg-white/90 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-navy backdrop-blur">{{ $r->category->name }}</span>
+                                        @endif
                                     </div>
-                                    <div class="flex flex-1 flex-col p-5">
-                                        @if ($r->client_name)<p class="font-mono text-[10px] uppercase tracking-wider text-gold-deep">{{ $r->client_name }}</p>@endif
-                                        <h3 class="mt-1.5 line-clamp-2 font-display text-lg leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">{{ $r->title }}</h3>
+
+                                    <div class="flex flex-1 flex-col p-4 sm:p-6">
+                                        <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[11px] uppercase tracking-wider text-slate-500">
+                                            @if ($r->project_date)<span>{{ $r->project_date->translatedFormat('d M Y') }}</span>@endif
+                                            <x-meta-location :value="$r->location" />
+                                        </div>
+
+                                        <h3 class="mt-2 line-clamp-2 font-display text-base leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700 sm:mt-2.5 sm:min-h-[3.25rem] sm:text-lg">{{ $r->title }}</h3>
+
+                                        @if ($r->short_description)
+                                            <p class="mt-1.5 line-clamp-2 text-pretty text-sm leading-relaxed text-slate-600 sm:mt-2 sm:line-clamp-3">{{ $r->short_description }}</p>
+                                        @endif
+
+                                        <span class="mt-auto flex items-center gap-2 border-t border-navy-100 pt-3 text-sm font-medium text-navy sm:pt-4">
+                                            {{ $id ? 'Lihat portofolio' : 'View portfolio' }}
+                                            <svg class="h-4 w-4 text-gold-deep transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </span>
                                     </div>
                                 </a>
                             </div>

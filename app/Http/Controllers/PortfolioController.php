@@ -44,8 +44,18 @@ class PortfolioController extends Controller
 
         return view('pages.portfolio.show', [
             'portfolio' => $portfolio,
-            'related' => Portfolio::where('is_active', true)->where('id', '!=', $portfolio->id)
-                ->where('service_category_id', $portfolio->service_category_id)->take(3)->get(),
+            // Seluruh portofolio lain, bukan hanya yang sekategori dan bukan
+            // hanya tiga. Pembatasan sekategori membuat rel ini kosong pada
+            // kategori yang isinya cuma satu, dan tiga kartu di rel yang bisa
+            // digeser tidak pernah sampai perlu digeser.
+            //
+            // Urutannya sama dengan halaman daftar — sort_order lalu tanggal
+            // terbaru — jadi orang yang berpindah ke sini menemukan susunan
+            // yang sama dengan yang baru saja dilihatnya.
+            'otherPortfolios' => Portfolio::where('is_active', true)
+                ->where('id', '!=', $portfolio->id)
+                ->with('category')
+                ->orderBy('sort_order')->latest('project_date')->get(),
         ]);
     }
 }
