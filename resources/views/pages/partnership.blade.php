@@ -488,4 +488,63 @@
             </div>
         </section>
     </div>
+
+    {{-- ===================== PENUTUP: KONSULTASI =====================
+         Penutup halaman Kemitraan, susunannya sama dengan penutup halaman
+         Layanan: foto berlapis biru, judul di tengah, satu kalimat, satu
+         tombol. Dua halaman yang berakhir dengan bentuk yang sama membuat
+         penutup itu terbaca sebagai bagian dari situsnya, bukan sebagai
+         kejutan di tiap halaman.
+
+         Isinya justru harus berbeda dari formulir tepat di atasnya. Formulir
+         itu untuk yang sudah memilih paket; seksi ini untuk yang menggulir
+         melewatinya karena belum tahu paket mana yang masuk akal — dan tanpa
+         ini, satu-satunya jalan bagi orang itu adalah menutup halaman.
+
+         Fotonya bukan foto yang sama dengan penutup halaman Layanan: dua
+         penutup yang bentuknya sudah seragam akan terbaca sebagai halaman
+         yang sama kalau gambarnya pun sama. --}}
+    @php
+        $closingPhoto = 'images/kemitraan-penutup.webp';
+        $hasClosingPhoto = is_file(public_path($closingPhoto));
+    @endphp
+    <section class="relative isolate overflow-hidden bg-navy-950 text-white">
+        @if ($hasClosingPhoto)
+            <img src="{{ asset($closingPhoto) }}" alt="" aria-hidden="true"
+                 width="1600" height="900" loading="lazy" decoding="async"
+                 class="absolute inset-0 -z-10 h-full w-full object-cover object-center">
+        @endif
+
+        {{-- Lapis biru transparan: satu bidang rata untuk keterbacaan, satu
+             gradien tipis yang menggelapkan tepi atas dan bawah supaya seksi
+             ini menyatu dengan footer navy di bawahnya. --}}
+        <div class="pointer-events-none absolute inset-0 -z-10 bg-navy-900/80"></div>
+        <div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-navy-950/70 via-navy-900/20 to-navy-950/80"></div>
+        <div class="pointer-events-none absolute inset-0 -z-10 grain opacity-20"></div>
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
+
+        <div class="container relative py-20 text-center md:py-28 lg:py-32">
+            <div class="mx-auto max-w-2xl" data-aos="fade-up">
+                <h2 class="text-display-xl text-white">
+                    {{ $id ? 'Masih menimbang tingkat yang mana?' : 'Still weighing up which tier?' }}
+                </h2>
+
+                {{-- Menyebut apa yang perlu disiapkan sebelum menghubungi, bukan
+                     janji umum. Orang menunda bertanya karena tidak tahu apa yang
+                     akan ditanyakan balik. --}}
+                <p class="mx-auto mt-5 max-w-xl text-pretty text-lg leading-relaxed text-navy-100">
+                    {{ $id
+                        ? 'Sebutkan jumlah karyawan dan rencana pelatihan setahun ke depan, lalu kami hitungkan tingkat mana yang paling masuk akal. Tanpa biaya.'
+                        : 'Tell us your headcount and what training the year ahead needs, and we will work out which tier makes sense. No charge.' }}
+                </p>
+
+                <div class="mt-9 flex justify-center">
+                    <a href="{{ route('contact.index') }}" class="btn-blue">
+                        {{ $id ? 'Bicarakan Dulu Kebutuhannya' : 'Talk It Through First' }}
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 </x-layout>
