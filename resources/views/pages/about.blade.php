@@ -167,96 +167,102 @@
         </div>
     </section>
 
-    {{-- ===================== VISION & MISSION ===================== --}}
-    <section class="section-sm relative overflow-hidden text-white">
-        {{-- Background image + overlay --}}
-        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1920&q=80" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover">
-        {{-- Same gradient treatment as the "Keunggulan" band — image visible through the middle --}}
-        <div class="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/88"></div>
-        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-20"></div>
+    {{-- ===================== VISION & MISSION =====================
+         Pita navy berpendar, judul raksasa di kiri, pernyataan visi di kanan,
+         lalu kelima misi berderet mendatar sebagai alur langkah di bawah garis.
+
+         Latarnya pendar dari satu titik di kiri atas, bukan foto. Foto di sini
+         dulu ditarik langsung dari Unsplash pada tiap kunjungan — satu
+         permintaan ke peladen pihak ketiga untuk gambar yang tidak
+         menggambarkan apa pun — dan latar bergambar membuat kata-kata di
+         atasnya harus dilindungi lapis gelap yang justru memadamkan fotonya.
+
+         Dua benda emas saja di seluruh pita: lencana "Arah Kami" dan satu
+         penggalan di dalam pernyataan visi. Label misi memakai biru muda,
+         bukan emas, supaya emasnya tetap jadi penanda yang jarang. --}}
+    @php
+        /* Visi dipecah jadi dua: kalimat pertama tampil besar sebagai
+           pernyataan, sisanya jadi paragraf penjelas. Satu penggalan di antara
+           tanda bintang di kalimat pertama ditampilkan emas — konvensi yang
+           sama dengan judul seksi Lembaga Mitra di halaman Kemitraan, jadi
+           admin tidak perlu mengetik HTML. */
+        [$visionLead, $visionRest] = array_pad(preg_split('/(?<=\.)\s+/', trim((string) $vision), 2), 2, '');
+
+        $vLead = $visionLead;
+        $vAccent = $vTail = '';
+        if (preg_match('/^(.*?)\*(.+?)\*(.*)$/', $visionLead, $m)) {
+            [$vLead, $vAccent, $vTail] = [trim($m[1]), trim($m[2]), $m[3]];
+        }
+    @endphp
+    <section class="relative overflow-hidden bg-navy-950 py-20 text-white md:py-28">
+        <div class="pointer-events-none absolute inset-0 glow-navy"></div>
         <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
 
+        {{-- Kata "VISI" raksasa di sudut kanan atas, nyaris tak terlihat.
+             aria-hidden: ia tekstur, bukan tulisan yang perlu dibacakan. --}}
+        <span class="pointer-events-none absolute -top-6 right-0 select-none font-display text-[22vw] font-bold leading-none tracking-tight text-white/[0.025] md:-top-10 md:text-[14rem]" aria-hidden="true">
+            {{ $isId ? 'VISI' : 'VISION' }}
+        </span>
+
         <div class="container relative">
-            <div class="mb-10 max-w-2xl" data-aos="fade-up">
-                {{-- Judulnya menyebut isi seksinya, bukan nama bagiannya. "Visi &
-                     Misi" hanya mengumumkan dua label yang toh sudah tertulis di
-                     atas masing-masing kolom; kata kuncinya sendiri tidak hilang
-                     karena kedua label itu kini <h3>, jadi "Visi" dan "Misi" tetap
-                     berdiri di kerangka judul halaman.
-
-                     Token text-display-lg, sama dengan judul seksi lain.
-                     font-display tidak ditulis: app.css sudah memberikannya ke
-                     setiap h1–h4. --}}
-                <h2 class="text-display-lg">{{ $isId ? 'Arah yang dituju, dan cara menujunya' : 'The direction, and how we get there' }}</h2>
-            </div>
-
-            {{-- Asymmetric 2fr/3fr rather than two matching glass boxes: the vision is one
-                 statement and the mission is a list, so giving them identical containers
-                 flattened the difference and buried the vision at body size. --}}
-            <div class="grid items-start gap-10 lg:grid-cols-5 lg:gap-14">
-
-                {{-- Vision: set as the statement it is, not as body copy in a card. --}}
-                <div class="lg:col-span-2" data-aos="fade-up">
-                    {{-- .kicker-on-dark menggantikan gaya yang ditulis sendiri.
-                         Yang lama memakai tracking 0,22em, padahal token
-                         tracking-label situs ini sengaja bernilai 0. Garis emas
-                         kecil di bawah tiap label juga dilepas: dengan garis emas
-                         di tepi atas seksi, ada tiga benda emas di satu layar. --}}
-                    <h3 class="kicker-on-dark">{{ $isId ? 'Visi' : 'Vision' }}</h3>
-                    {{-- Rata kanan-kiri mulai sm. Di bawah sm kolomnya selebar
-                         ponsel dan hanya memuat sekitar 35 huruf per baris;
-                         perataan penuh di situ melebarkan jarak antarkata sampai
-                         terbaca sebagai celah, jadi di sana teksnya tetap rata
-                         kiri. text-pretty dilepas: ia mengatur ulang pemenggalan
-                         baris demi menghindari baris terakhir yang sebatang kara,
-                         dan itu melawan perataan penuh alih-alih membantunya. --}}
-                    <blockquote class="mt-5">
-                        <p class="text-left font-display text-xl font-semibold leading-[1.45] text-white sm:text-justify md:text-2xl">
-                            “{{ $vision }}”
-                        </p>
-                    </blockquote>
+            <div class="grid gap-10 lg:grid-cols-12 lg:gap-14">
+                {{-- Judul raksasa. Dua baris, dan "&" berwarna emas: tanda itu
+                     satu-satunya yang menyambung kedua kata, jadi ia yang pantas
+                     diberi warna, bukan salah satu katanya. --}}
+                <div class="lg:col-span-4" data-aos="fade-up">
+                    <p class="inline-flex items-center rounded-full border border-gold/40 px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-gold-soft">
+                        {{ $isId ? 'Arah Kami' : 'Our Direction' }}
+                    </p>
+                    <h2 class="mt-7 font-display text-6xl font-bold leading-[0.95] tracking-tight text-white md:text-7xl">
+                        {{ $isId ? 'Visi' : 'Vision' }}<br>
+                        <span class="text-gold-soft">&amp;</span> {{ $isId ? 'Misi' : 'Mission' }}
+                    </h2>
                 </div>
 
-                {{-- Mission: numbered so the count reads at a glance; the em-dash bullets gave
-                     no sense of how many commitments there are. --}}
-                <div class="lg:col-span-3" data-aos="fade-up" data-aos-delay="100">
-                    <h3 class="kicker-on-dark">{{ $isId ? 'Misi' : 'Mission' }}</h3>
+                <div class="lg:col-span-8 lg:pt-2" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="font-mono text-[10px] uppercase tracking-[0.2em] text-navy-200">{{ $isId ? 'Visi' : 'Vision' }}</h3>
 
-                    @if ($missions->isNotEmpty())
-                        <ol class="mt-5 divide-y divide-white/10 border-y border-white/10">
-                            @foreach ($missions as $mission)
-                                <li class="group flex items-start gap-4 py-5 md:gap-5">
-                                    {{-- Nomornya dibuat tenang: ia hanya penghitung, dan
-                                         isi misinyalah yang harus terbaca lebih dulu.
-                                         Karena itu tinggal angka tanpa ubin kaca, dan
-                                         ikut turun ke putih redup. --}}
-                                    <span class="mt-1 w-6 shrink-0 font-mono text-[11px] font-bold tabular-nums text-gold-soft" aria-hidden="true">
-                                        {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
-                                    </span>
-                                    {{-- Naik dari 15px ke 16/17px dan dari white/90 ke putih
-                                         penuh. Ini kalimat inti halaman, tapi sebelumnya ia
-                                         jadi teks terkecil di seksinya sendiri, di atas
-                                         gradasi yang bagian tengahnya hanya 45% gelap.
+                    {{-- Kalimat pertama sebesar judul seksi, sisanya turun ke
+                         ukuran teks isi. Tanpa jenjang itu, visi tiga kalimat
+                         terbaca sebagai paragraf biasa dan kalimat intinya
+                         hilang di tengahnya. --}}
+                    <p class="mt-4 max-w-3xl text-pretty font-display text-2xl font-bold leading-[1.3] text-white md:text-[1.75rem]">
+                        {{ $vLead }}@if ($vAccent !== '') <span class="text-gold-soft">{{ $vAccent }}</span>@endif{{ $vTail }}
+                    </p>
 
-                                         Rata kanan-kiri mulai sm, rata kiri di bawahnya:
-                                         di lebar ponsel satu baris hanya memuat sekitar
-                                         40 huruf, dan perataan penuh di situ membuka
-                                         sungai putih di antara kata.
-
-                                         Tanpa [hyphens:auto]. Pemenggalan otomatis memang
-                                         merapatkan jarak antarkata, tetapi pada teks
-                                         Indonesia yang memuat istilah Inggris ia memotong
-                                         "human capital" di tempat yang salah — dan satu
-                                         kata yang terpenggal keliru lebih mengganggu
-                                         daripada jarak kata yang sedikit melebar. --}}
-                                    <p class="text-base leading-relaxed text-white sm:text-justify md:text-[17px]">{{ $mission->content }}</p>
-                                </li>
-                            @endforeach
-                        </ol>
+                    @if ($visionRest !== '')
+                        <p class="mt-5 max-w-2xl text-pretty leading-relaxed text-navy-200">{{ $visionRest }}</p>
                     @endif
                 </div>
             </div>
+
+            @if ($missions->isNotEmpty())
+                {{-- Label "Misi" dengan garis rambut yang memanjang ke kanan:
+                     ia memisahkan dua bagian pita ini tanpa menambah judul kedua
+                     yang seukuran judul raksasa di atas. --}}
+                <div class="mt-16 flex items-center gap-5 md:mt-20">
+                    <h3 class="shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-navy-200">{{ $isId ? 'Misi' : 'Mission' }}</h3>
+                    <span class="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent" aria-hidden="true"></span>
+                </div>
+
+                {{-- Lima kolom mendatar, bukan daftar menurun. Kelima misi ini
+                     satu alur: dari menyusun program sampai menjaga standarnya,
+                     dan deretan mendatar memperlihatkan alur itu sekali pandang.
+                     Di layar sempit ia turun jadi dua kolom lalu satu. --}}
+                <ol class="mt-10 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
+                    @foreach ($missions as $mission)
+                        <li data-aos="fade-up" data-aos-delay="{{ min($loop->index, 3) * 50 }}">
+                            <span class="grid h-10 w-10 place-items-center rounded-full font-mono text-[11px] font-bold tabular-nums text-white ring-1 ring-white/25" aria-hidden="true">
+                                {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
+                            </span>
+                            <p class="mt-5 font-mono text-[9px] uppercase tracking-[0.18em] text-navy-200">{{ $mission->label }}</p>
+                            <h4 class="mt-2 text-pretty font-display text-[17px] font-bold leading-snug text-white">{{ $mission->title }}</h4>
+                            <p class="mt-2.5 text-pretty text-[13px] leading-relaxed text-navy-200">{{ $mission->content }}</p>
+                        </li>
+                    @endforeach
+                </ol>
+            @endif
         </div>
     </section>
 

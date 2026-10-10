@@ -512,6 +512,22 @@
     to { background-position: -80% 0; }
 }
 
+/* ── Pendar navy untuk pita gelap ──────────────────────────────────────────
+ * Satu sumber cahaya lonjong di kiri atas yang meluruh ke gelap di tepi, bukan
+ * gradien lurus. Gradien lurus membagi bidangnya jadi dua sisi terang-gelap
+ * yang rata; pendar dari satu titik meninggalkan sudut-sudutnya gelap dan
+ * itulah yang membuat tulisan di tengahnya terbaca menonjol.
+ *
+ * Ditulis di sini, bukan sebagai kelas utilitas: Tailwind tidak punya gradien
+ * radial bawaan, dan menuliskannya sebagai nilai sembarang di atribut class
+ * membuat barisnya tidak terbaca lagi.
+ */
+.glow-navy {
+    background-image:
+        radial-gradient(ellipse 70% 55% at 22% 18%, rgba(43, 131, 223, 0.30), transparent 68%),
+        radial-gradient(ellipse 60% 50% at 85% 85%, rgba(32, 95, 159, 0.22), transparent 70%);
+}
+
 /* ── Hero carousel ── */
 @keyframes kenburns {
     from { transform: scale(1.05); }

@@ -22,9 +22,17 @@ class PageController extends Controller
         // Cadangan ini dijaga sama persis dengan isi pengaturan 'company_vision'
         // di basis data. Kalau keduanya menyimpang, halaman berganti isi begitu
         // barisnya dikosongkan di CMS.
+        // Satu penggalan di antara tanda bintang ditampilkan berwarna emas di
+        // halaman. Konvensi yang sama sudah dipakai judul seksi Lembaga Mitra
+        // di halaman Kemitraan: admin tidak perlu mengetik HTML, dan tidak ada
+        // cara mengetik visi yang bisa merusak halamannya.
+        //
+        // Tanda bintang penutup ditaruh sebelum titik, bukan sesudahnya. Tampilan
+        // memecah visi pada batas kalimat pertama, dan titik yang terkurung di
+        // dalam tanda bintang membuat batas itu tidak terdeteksi.
         $vision = Setting::getLocalized('company_vision') ?: ($id
-            ? 'Menjadi lembaga pelatihan dan sertifikasi profesi yang paling dipercaya di Indonesia. Dipercaya bukan karena mengaku, melainkan karena setiap nama yang diluluskan terbuka untuk diperiksa siapa pun, dan kemampuannya terbukti pada pekerjaan yang ia tangani sehari-hari. Dari situ lahir tenaga kerja Indonesia yang berani berdiri di hadapan standar dunia.'
-            : 'To become the most trusted training and professional certification institution in Indonesia. Trusted not because we say so, but because every name we pass is open for anyone to check, and their ability shows in the work they handle every day. From there comes an Indonesian workforce ready to stand against world standards.');
+            ? 'Menjadi lembaga pelatihan dan sertifikasi profesi *yang paling dipercaya di Indonesia*. Dipercaya bukan karena mengaku, melainkan karena setiap nama yang diluluskan terbuka untuk diperiksa siapa pun, dan kemampuannya terbukti pada pekerjaan yang ia tangani sehari-hari. Dari situ lahir tenaga kerja Indonesia yang berani berdiri di hadapan standar dunia.'
+            : 'To become *the most trusted training and certification institution in Indonesia*. Trusted not because we say so, but because every name we pass is open for anyone to check, and their ability shows in the work they handle every day. From there comes an Indonesian workforce ready to stand against world standards.');
 
         // Lima misi, satu per lini layanan yang benar-benar dijalankan
         // (pelatihan, sertifikasi, headhunter, konsultasi) ditutup satu janji
@@ -38,20 +46,30 @@ class PageController extends Controller
         // sertifikat yang terbuka di halaman Sertifikat, dan nilai perusahaan
         // di halaman ini — supaya janjinya bisa ditelusuri pembaca pada
         // kunjungan yang sama, bukan sekadar dipercaya.
+        //
+        // Tiap butir kini bertiga: label lini layanannya, judul pendek, lalu
+        // kalimat penjelas. Sebagai satu kalimat panjang, kelimanya hanya bisa
+        // dibaca berurutan dari atas ke bawah; dengan judul, pembaca bisa
+        // memindai kelima janji itu lebih dulu lalu berhenti pada yang
+        // menyangkut dirinya.
         $missionItems = $id ? [
-            'Menyusun program dari pekerjaan yang benar-benar dijalankan peserta, lalu menggelarnya di tempat kerja, daring, atau gabungan keduanya, mengikuti jam kerja Anda.',
-            'Menjalankan uji kompetensi berskema BNSP bersama asesor berlisensi, lalu membuka nomor sertifikatnya di situs ini agar siapa pun dapat memverifikasinya sendiri.',
-            'Mempertemukan talenta yang tepat dengan organisasi yang tepat, dan menilai calonnya dari kompetensi yang teruji, bukan dari berkas lamaran.',
-            'Mendampingi organisasi menata manajemen dan human capital-nya sampai perubahannya terbaca di pekerjaan harian, bukan berhenti di laporan akhir.',
-            'Memberi satu standar yang sama kepada perusahaan sepuluh peserta maupun seribu, dan menguji ulang kompetensi pengajar serta asesornya secara berkala.',
+            ['Pelatihan', 'Program sesuai pekerjaan nyata', 'Disusun dari pekerjaan yang benar-benar dijalankan peserta, lalu digelar di tempat kerja, daring, atau gabungan keduanya, mengikuti jam kerja Anda.'],
+            ['Sertifikasi', 'Uji kompetensi berskema BNSP', 'Bersama asesor berlisensi, dengan nomor sertifikat yang dapat diverifikasi siapa pun langsung di situs ini.'],
+            ['Talenta', 'Talenta tepat, organisasi tepat', 'Calon dinilai dari kompetensi yang teruji, bukan dari berkas lamaran.'],
+            ['Konsultasi', 'Pendampingan manajemen & human capital', 'Sampai perubahannya terbaca di pekerjaan harian, bukan berhenti di laporan akhir.'],
+            ['Standar', 'Satu standar untuk semua', 'Sama untuk perusahaan sepuluh peserta maupun seribu; pengajar dan asesornya diuji ulang secara berkala.'],
         ] : [
-            'Build each programme around the work participants actually do, then run it on site, online, or as a mix of both, around your working hours.',
-            'Run BNSP-scheme assessments with licensed assessors, then publish the certificate numbers on this site so anyone can verify them.',
-            'Match the right talent with the right organisation, judging candidates on assessed competency rather than on a CV.',
-            'Work alongside organisations on their management and human capital until the change shows in daily work, not only in a closing report.',
-            'Give the same standard to a company sending ten participants and one sending a thousand, and reassess our own instructors and assessors on a schedule.',
+            ['Training', 'Programmes built on real work', 'Shaped around the work participants actually do, then run on site, online, or as a mix of both, around your working hours.'],
+            ['Certification', 'BNSP-scheme assessment', 'With licensed assessors, and certificate numbers anyone can verify directly on this site.'],
+            ['Talent', 'The right talent, the right place', 'Candidates judged on assessed competency, not on a CV.'],
+            ['Consulting', 'Management & human capital support', 'Carried through until the change shows in daily work, not only in a closing report.'],
+            ['Standard', 'One standard for everyone', 'The same for a company sending ten participants and one sending a thousand; instructors and assessors are reassessed on a schedule.'],
         ];
-        $missions = Collection::make($missionItems)->map(fn ($content) => (object) ['content' => $content]);
+        $missions = Collection::make($missionItems)->map(fn (array $m) => (object) [
+            'label' => $m[0],
+            'title' => $m[1],
+            'content' => $m[2],
+        ]);
 
         $tagline = Setting::getLocalized('company_tagline') ?: ($id
             ? 'Mitra strategis dalam transformasi human capital yang berkelanjutan.'
