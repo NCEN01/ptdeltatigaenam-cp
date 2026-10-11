@@ -721,7 +721,10 @@
          kolom ini sel grid, dan Swiper runtuh jadi kotak kosong di dalamnya.
          Kartunya <x-blog-card> yang sama dengan halaman blog. --}}
     @if ($posts->isNotEmpty())
-        <section class="section relative overflow-hidden border-t border-navy-50 bg-white">
+        {{-- md:pb-44 menambah ruang untuk separuh atas pita ajakan media sosial
+             yang menumpang di kaki seksi ini. Utilitas pb-* mengalahkan py-* dari
+             .section karena lapis utilities datang sesudah lapis components. --}}
+        <section class="section relative overflow-hidden border-t border-navy-50 bg-white md:pb-44 lg:pb-48">
             <div class="pointer-events-none absolute inset-0 aurora-light opacity-60"></div>
 
             <div class="container relative">
@@ -892,8 +895,72 @@
         </section>
     @endif
 
-    {{-- ===================== INSTAGRAM UPDATES ===================== --}}
-    <section class="section bg-white border-t border-navy-50">
+    {{-- ===================== PITA AJAKAN: MEDIA SOSIAL =====================
+         Bentuk dan cara menumpangnya sama persis dengan pita ajakan di
+         sambungan Kategori Layanan dan Pelatihan Terbaru: jarak negatif
+         setinggi separuh pitanya di atas dan di bawah, sehingga sumbangannya
+         pada alur halaman nol dan kedua seksi bersentuhan tepat di tengahnya.
+
+         Letaknya memang di sini: seksi di atasnya berisi tulisan dan yang di
+         bawahnya foto kegiatan, dan ajakan mengikuti media sosial adalah
+         jembatan antara keduanya.
+
+         Dua tombol, bukan satu. Instagram dan Facebook dua tempat yang
+         berbeda, dan satu tombol "ikuti kami" yang hanya menuju salah satunya
+         menyembunyikan yang lain. --}}
+    @php $social = array_filter(config('company.social', [])); @endphp
+    @if ($social)
+        <div class="relative z-20 my-12 md:-my-[90px]">
+            <div class="container">
+                <div class="cta-band flex flex-col items-start gap-7 px-6 py-8 md:min-h-[180px] md:flex-row md:items-center md:justify-between md:gap-10 md:px-14 md:py-0"
+                     data-aos="fade-up">
+                    <div class="cta-band-stamp" aria-hidden="true"></div>
+
+                    <div class="relative">
+                        <h2 class="font-display text-2xl font-bold leading-[1.15] tracking-[-0.03em] text-white md:text-[clamp(1.75rem,2.4vw,2.125rem)] lg:whitespace-nowrap">
+                            {{ $isId ? 'Ikuti perjalanannya ' : 'Follow the work ' }}<em class="font-light italic">{{ $isId ? 'dari dekat' : 'up close' }}</em>.
+                        </h2>
+                        <p class="mt-2.5 text-pretty text-[15px] leading-relaxed text-navy-100 md:text-base lg:whitespace-nowrap">
+                            {{ $isId
+                                ? 'Dokumentasi kelas, uji kompetensi, dan kabar harian kami terbit lebih dulu di sini.'
+                                : 'Class photos, assessment days, and daily news land here first.' }}
+                        </p>
+                    </div>
+
+                    {{-- Pil putih berlingkaran navy, sama dengan pita ajakan satunya.
+                         Yang di dalam lingkarannya lambang platformnya, bukan panah:
+                         di tombol yang menuju ke luar situs, lambang itu sekaligus
+                         menyebut ke mana. --}}
+                    <div class="relative flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:flex-row">
+                        @if (! empty($social['instagram']))
+                            <a href="{{ $social['instagram'] }}" target="_blank" rel="noopener"
+                               class="group/cta inline-flex items-center justify-between gap-3.5 rounded-full bg-white py-[7px] pl-7 pr-[7px] text-[15px] font-semibold text-navy-600 shadow-[0_10px_24px_-10px_rgba(0,0,0,0.3)] transition duration-[250ms] ease-out-soft hover:-translate-y-0.5 hover:shadow-[0_16px_30px_-10px_rgba(0,0,0,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-700 sm:justify-start">
+                                Instagram
+                                <span class="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-full bg-navy-600 text-white transition-transform duration-300 ease-out-soft group-hover/cta:scale-105" aria-hidden="true">
+                                    <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.8 3.8 0 0 1-1.38-.9 3.8 3.8 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16Zm0 3.08A6.76 6.76 0 1 0 18.76 12 6.76 6.76 0 0 0 12 5.24Zm0 11.15A4.39 4.39 0 1 1 16.39 12 4.39 4.39 0 0 1 12 16.39Zm8.6-11.42a1.58 1.58 0 1 1-1.58-1.58 1.58 1.58 0 0 1 1.58 1.58Z"/></svg>
+                                </span>
+                            </a>
+                        @endif
+
+                        @if (! empty($social['facebook']))
+                            <a href="{{ $social['facebook'] }}" target="_blank" rel="noopener"
+                               class="group/cta inline-flex items-center justify-between gap-3.5 rounded-full bg-white py-[7px] pl-7 pr-[7px] text-[15px] font-semibold text-navy-600 shadow-[0_10px_24px_-10px_rgba(0,0,0,0.3)] transition duration-[250ms] ease-out-soft hover:-translate-y-0.5 hover:shadow-[0_16px_30px_-10px_rgba(0,0,0,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-700 sm:justify-start">
+                                Facebook
+                                <span class="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-full bg-navy-600 text-white transition-transform duration-300 ease-out-soft group-hover/cta:scale-105" aria-hidden="true">
+                                    <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.5-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.45 2.91h-2.33V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                                </span>
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- ===================== INSTAGRAM UPDATES =====================
+         pt tambahan di layar md ke atas menampung separuh bawah pita ajakan
+         media sosial yang menumpanginya. --}}
+    <section class="section bg-white border-t border-navy-50 md:pt-44 lg:pt-48">
         <div class="container">
             {{-- Judulnya dulu memakai clamp() yang ditulis sendiri dan tracking
                  sendiri, tanpa kata beraksen — satu-satunya judul seksi di beranda

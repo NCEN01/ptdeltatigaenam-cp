@@ -168,6 +168,25 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Media sosial
+    |--------------------------------------------------------------------------
+    |
+    | Satu sumber untuk tautan media sosial. Sebelumnya kedua alamat ini
+    | ditulis langsung di footer.blade.php, dan begitu pita ajakan di beranda
+    | juga membutuhkannya, dua salinan yang harus diperbarui bersamaan akan
+    | lahir tanpa ada yang mengingatkan kalau salah satunya terlewat.
+    |
+    | Yang dikosongkan tidak ditampilkan di mana pun.
+    |
+    */
+
+    'social' => [
+        'instagram' => 'https://www.instagram.com/deltatigaenam?igsh=MTlsbWhlMHYweXBmcA==',
+        'facebook' => 'https://www.facebook.com/61584080990769',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Nilai Perusahaan (halaman Tentang)
     |--------------------------------------------------------------------------
     |

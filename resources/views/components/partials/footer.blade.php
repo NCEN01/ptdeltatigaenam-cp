@@ -3,8 +3,11 @@
 
     $id = app()->getLocale() === 'id';
     $email = 'info@deltatigaenam.com';
-    $facebook = 'https://www.facebook.com/61584080990769';
-    $instagram = 'https://www.instagram.com/deltatigaenam?igsh=MTlsbWhlMHYweXBmcA==';
+    // config/company.php, sumber yang sama dengan pita ajakan media sosial di
+    // beranda. Ditulis di sini juga, keduanya menyimpang begitu salah satunya
+    // diperbarui.
+    $facebook = config('company.social.facebook');
+    $instagram = config('company.social.instagram');
     $linkedin = Setting::get('linkedin_url', 'https://linkedin.com/company/deltatigaenam');
     $year = now()->year;
 
