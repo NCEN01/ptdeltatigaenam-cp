@@ -78,13 +78,20 @@
                         <{{ $tag }} class="mitra-card flex flex-col gap-5 p-5 outline-none focus-visible:ring-2 focus-visible:ring-navy-200 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950"
                             @if ($href !== '') href="{{ $href }}" target="_blank" rel="noopener" @endif>
 
-                            <div class="mitra-logo-box relative grid h-[150px] place-items-center rounded-[14px] bg-white p-[22px]">
+                            {{-- flex + h-full/w-full pada gambarnya, bukan grid + max-h-full.
+                                 Persen tinggi pada butir grid yang barisnya auto tidak selalu
+                                 punya acuan pasti, dan di situ max-height jatuh ke none: logo
+                                 yang tingginya mendekati lebarnya lalu tampil seukuran
+                                 aslinya dan meluber menimpa nama di bawahnya. Flex berjarak
+                                 pasti menyelesaikannya, dan overflow-hidden menjaganya
+                                 sekalipun ada logo dengan perbandingan tak terduga. --}}
+                            <div class="mitra-logo-box relative flex h-[150px] items-center justify-center overflow-hidden rounded-[14px] bg-white p-[22px]">
                                 @if ($partner->logo)
                                     {{-- alt kosong dengan sengaja: nama mitranya tertulis
                                          tepat di bawah logo ini. Diisi, namanya terbaca dua
                                          kali oleh pembaca layar. --}}
                                     <img src="{{ Storage::url($partner->logo) }}" alt="" loading="lazy" decoding="async"
-                                         class="mitra-logo max-h-full max-w-full object-contain">
+                                         class="mitra-logo h-full w-full object-contain">
                                 @else
                                     <span class="font-display text-4xl font-semibold text-navy-200" aria-hidden="true">{{ mb_strtoupper(mb_substr($name, 0, 1)) }}</span>
                                 @endif
@@ -135,7 +142,16 @@
                          saling berpapasan membuat deretnya tidak pernah terbaca
                          sebagai pengulangan. --}}
                     <div class="mask-fade-x relative w-full min-w-0 flex-1 overflow-hidden">
-                        @foreach ([['klien' => $klienAtas, 'anim' => 'animate-marquee'], ['klien' => $klienBawah, 'anim' => 'animate-marquee-reverse']] as $jalur)
+                        {{-- Lama putarannya ditulis di sini, bukan memakai 40s dan 48s
+                             bawaan animate-marquee: relnya memuat 26 logo selebar 228px,
+                             jadi separuh jalurnya hampir 6000px dan pada 40 detik ia
+                             melaju 148 piksel per detik — terlalu cepat untuk logo yang
+                             memang dimaksudkan untuk dibaca. Pada 100 dan 115 detik ia
+                             turun ke sekitar 55 piksel per detik.
+
+                             Ditulis sebagai properti sembarang supaya tidak mengubah
+                             animate-marquee yang dipakai rel lain di situs ini. --}}
+                        @foreach ([['klien' => $klienAtas, 'anim' => 'animate-marquee [animation-duration:100s]'], ['klien' => $klienBawah, 'anim' => 'animate-marquee-reverse [animation-duration:115s]']] as $jalur)
                             <div class="group/rail flex w-max items-center {{ $jalur['anim'] }} [will-change:transform] hover:[animation-play-state:paused] {{ $loop->first ? '' : 'mt-5' }}">
                                 @for ($h = 0; $h < 2; $h++)
                                     @foreach ($jalur['klien'] as $client)
