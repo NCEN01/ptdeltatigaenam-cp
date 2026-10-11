@@ -349,11 +349,11 @@
                              namanya yang memimpin. --}}
                         <thead>
                             <tr class="border-b-2 border-navy-100 bg-white text-slate-500">
-                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'No. UJK' : 'Reg. No.' }}</th>
-                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Peserta' : 'Participant' }}</th>
-                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Nama Perusahaan' : 'Company' }}</th>
-                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'No. Sertifikat' : 'Certificate No.' }}</th>
-                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider">{{ $id ? 'Kualifikasi' : 'Qualification' }}</th>
+                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600">{{ $id ? 'No. UJK' : 'Reg. No.' }}</th>
+                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600">{{ $id ? 'Peserta' : 'Participant' }}</th>
+                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600">{{ $id ? 'Nama Perusahaan' : 'Company' }}</th>
+                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600">{{ $id ? 'No. Sertifikat' : 'Certificate No.' }}</th>
+                                <th scope="col" class="px-6 py-4 font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600">{{ $id ? 'Kualifikasi' : 'Qualification' }}</th>
                             </tr>
                         </thead>
                         <tbody>
