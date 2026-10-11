@@ -524,17 +524,17 @@
                      bergerak saat admin menambah proyek. --}}
                 <div class="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
                     <div data-aos="fade-up">
-                        <p class="flex items-center gap-2.5 font-display text-xs font-semibold uppercase tracking-[0.28em] text-navy-600">
-                            <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-navy-500" aria-hidden="true"></span>
+                        <p class="font-display text-xs font-semibold uppercase tracking-[0.28em] text-navy-600">
                             {{ $isId ? 'Portofolio Proyek' : 'Project Portfolio' }}
                         </p>
-                        {{-- Baris kedua dimiringkan, diturunkan bobotnya, dan diberi
-                             warna. Miring saja di bawah huruf setebal ini nyaris tidak
-                             terbaca; perbedaan bobot dan warnanya yang memisahkan
-                             kedua baris. --}}
-                        <h2 class="mt-5 font-display text-[clamp(2.5rem,5vw,4rem)] font-extrabold leading-none tracking-[-0.05em] text-navy">
+                        {{-- text-display-lg, token judul seksi situs ini. Ukuran
+                             sendiri sampai 4rem membuat judul ini satu-satunya yang
+                             lebih besar dari judul seksi lain di halaman yang sama.
+                             Tanpa miring dan tanpa warna kedua: pemisah antara kedua
+                             barisnya cukup dikerjakan pergantian barisnya sendiri. --}}
+                        <h2 class="mt-5 text-display-lg text-navy">
                             {{ $isId ? 'Bukti kerja,' : 'Proof of work,' }}<br>
-                            <em class="font-light italic text-navy-500">{{ $isId ? 'bukan sekadar janji.' : 'not just promises.' }}</em>
+                            {{ $isId ? 'bukan sekadar janji.' : 'not just promises.' }}
                         </h2>
                     </div>
 
