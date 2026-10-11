@@ -125,8 +125,14 @@
              merek seperti ini dikenali justru lewat warnanya. --}}
         @if ($clients->isNotEmpty())
             <div class="relative mt-20 bg-white py-10 md:mt-24 md:py-11" data-aos="fade-up">
-                <div class="flex flex-col gap-7 md:flex-row md:items-center md:gap-0">
-                    <div class="shrink-0 px-5 md:w-64 md:border-r md:border-navy-100 md:pl-8 md:pr-12 lg:w-72 lg:pl-10 xl:pl-12">
+                {{-- .container, bukan padding yang ditulis sendiri. Yang lama memakai
+                     px-5 sampai xl:pl-12, jadi di layar lebar isinya mulai 48px dari
+                     tepi jendela sementara seluruh seksi lain mulai dari tepi
+                     container yang maksimal 1280px dan dipusatkan. Di monitor 1920px
+                     selisihnya lebih dari 300px, dan pita ini satu-satunya yang
+                     keluar dari garis itu. --}}
+                <div class="container flex flex-col gap-7 md:flex-row md:items-center md:gap-10">
+                    <div class="shrink-0 md:w-56 lg:w-64">
                         {{-- h2, bukan h3: klien dan mitra dua kelompok yang setara.
                              Sebagai h3 ia terbaca seolah bagian dari Mitra. --}}
                         <h2 class="font-display text-[26px] font-bold leading-tight text-navy">
@@ -140,7 +146,13 @@
                     {{-- Dua jalur berlawanan arah. Satu jalur membuat logo yang sama
                          lewat dalam urutan yang sama terus-menerus; dua jalur yang
                          saling berpapasan membuat deretnya tidak pernah terbaca
-                         sebagai pengulangan. --}}
+                         sebagai pengulangan.
+
+                         Tanpa garis pemisah tegak di antara judul dan rel ini.
+                         Tingginya mengikuti dua jalur logo sementara judulnya jauh
+                         lebih pendek, jadi garis itu menjulang sendirian di tengah
+                         pita putih tanpa menyentuh apa pun di atas atau di bawahnya.
+                         Luruhnya topeng di tepi kiri rel sudah memisahkan keduanya. --}}
                     <div class="mask-fade-x relative w-full min-w-0 flex-1 overflow-hidden">
                         {{-- Lama putarannya ditulis di sini, bukan memakai 40s dan 48s
                              bawaan animate-marquee: relnya memuat 26 logo selebar 228px,
