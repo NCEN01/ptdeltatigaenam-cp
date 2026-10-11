@@ -200,10 +200,13 @@
                              memanjang lima sampai enam baris dan membuat kartunya tinggi
                              sekali; nama kategori sudah menjelaskan isinya, dan uraian
                              lengkapnya memang menunggu di halaman Layanan. --}}
-                        {{-- rail-fade: hanya sisi yang MASIH menyembunyikan kartu yang
-                             meluruh, mengikuti posisi geser yang disetel initHscroll().
-                             Peluruhan permanen membuat kartu terakhir tetap terlihat pudar
-                             dan terpotong padahal relnya sudah digeser sampai habis.
+                        {{-- Tanpa .rail-fade. Topeng peluruhan di kedua tepi rel membuat
+                             kartu pertama dan terakhir terlihat pudar lalu terpotong,
+                             padahal keduanya kartu utuh berisi nama kategori dan tautan.
+                             Di rel yang kartunya bertepi putih dan berbayang, peluruhan
+                             itu terbaca sebagai cacat gambar, bukan sebagai isyarat
+                             bahwa relnya masih bisa digeser. Panah di sudut kanan atas
+                             sudah menjadi isyarat itu.
 
                              snap-proximity, bukan snap-mandatory. Dengan mandatory, browser
                              wajib berhenti tepat di awal sebuah kartu; kartu terakhir yang
@@ -216,7 +219,7 @@
                              saat disentuh kursor; tanpa itu keduanya terpangkas oleh
                              overflow rel ini. -mx-1 mengembalikan ruang itu supaya kartu
                              pertama tetap sejajar dengan tepi kolomnya. --}}
-                        <div data-hscroll-track class="rail-fade -mx-1 flex cursor-grab snap-x snap-proximity select-none items-stretch gap-4 overflow-x-auto scroll-smooth px-1 pb-4 pt-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        <div data-hscroll-track class="-mx-1 flex cursor-grab snap-x snap-proximity select-none items-stretch gap-4 overflow-x-auto scroll-smooth px-1 pb-4 pt-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             @foreach ($categories as $cat)
                                 {{-- Seluruh kartu adalah tautannya. Tombol terisi di tiap
                                      kartu akan menjadi lima tombol biru berjajar di ruang
