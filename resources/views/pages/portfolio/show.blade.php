@@ -238,15 +238,20 @@
          saja dibaca orang. Satu baris yang digeser tidak pernah memanjang ke
          bawah berapa pun jumlahnya.
 
+         Isinya beberapa portofolio terbaru, bukan seluruhnya: jumlahnya
+         dipatok di PortfolioController (KEEP_EXPLORING_LIMIT), sama dengan rel
+         artikel. Cukup untuk membuat relnya benar-benar perlu digeser, dan
+         masih jauh dari memuat seisi katalog di kaki halaman.
+
          Panah, rel, dan titiknya harus bersaudara di dalam satu induk:
          penangan [data-carousel] mencarinya lewat el.parentElement. --}}
-    @if ($otherPortfolios->isNotEmpty())
+    @if ($latestPortfolios->isNotEmpty())
         <section class="section-sm border-t border-navy-50 bg-neutral-50">
             <div class="container">
                 <div class="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
                     <div class="max-w-2xl">
                         <p class="kicker mb-3" data-aos="fade-up">{{ $id ? 'Terus Menelusuri' : 'Keep Exploring' }}</p>
-                        <h2 class="font-display text-3xl text-navy text-balance md:text-4xl" data-aos="fade-up">{{ $id ? 'Pekerjaan lain yang pernah kami tangani' : 'Other work we have handled' }}</h2>
+                        <h2 class="font-display text-3xl text-navy text-balance md:text-4xl" data-aos="fade-up">{{ $id ? 'Portofolio terbaru lainnya' : 'More recent portfolio' }}</h2>
                     </div>
 
                     <div class="flex shrink-0 items-center gap-5" data-aos="fade-up">
@@ -285,7 +290,7 @@
                      dengan rel artikel. --}}
                 <div class="swiper swiper-equal-height" data-carousel data-carousel-autoplay="false">
                     <div class="swiper-wrapper items-stretch">
-                        @foreach ($otherPortfolios as $r)
+                        @foreach ($latestPortfolios as $r)
                             <div class="swiper-slide h-auto">
                                 <a href="{{ route('portfolio.show', $r->slug) }}" data-spotlight
                                    class="card card-hover group flex h-full flex-col overflow-hidden">

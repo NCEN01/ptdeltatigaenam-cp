@@ -13,6 +13,14 @@ class PortfolioController extends Controller
     /** Two rows of three cards per page, matching the blog and agenda indexes. */
     private const PER_PAGE = 6;
 
+    /**
+     * Jumlah kartu di rel penutup halaman detail. Sembilan, sama dengan rel
+     * "Terus Membaca" di halaman artikel: cukup untuk membuat relnya benar-benar
+     * perlu digeser, dan masih jauh dari memuat seluruh katalog di kaki halaman
+     * yang baru saja selesai dibaca orang.
+     */
+    private const KEEP_EXPLORING_LIMIT = 9;
+
     public function index(Request $request)
     {
         $q = trim((string) $request->query('q', ''));
@@ -44,18 +52,19 @@ class PortfolioController extends Controller
 
         return view('pages.portfolio.show', [
             'portfolio' => $portfolio,
-            // Seluruh portofolio lain, bukan hanya yang sekategori dan bukan
-            // hanya tiga. Pembatasan sekategori membuat rel ini kosong pada
-            // kategori yang isinya cuma satu, dan tiga kartu di rel yang bisa
-            // digeser tidak pernah sampai perlu digeser.
+            // Beberapa portofolio terbaru, bukan hanya yang sekategori dan
+            // bukan pula seluruhnya. Pembatasan sekategori membuat rel ini
+            // kosong pada kategori yang isinya cuma satu; memuat seluruhnya
+            // menaruh seisi katalog di kaki halaman yang baru selesai dibaca.
             //
-            // Urutannya sama dengan halaman daftar — sort_order lalu tanggal
-            // terbaru — jadi orang yang berpindah ke sini menemukan susunan
-            // yang sama dengan yang baru saja dilihatnya.
-            'otherPortfolios' => Portfolio::where('is_active', true)
+            // Diurut tanggal terbaru, bukan sort_order: yang dijanjikan
+            // judulnya "terbaru", dan sort_order adalah urutan pilihan admin
+            // untuk halaman daftar, bukan urutan waktu.
+            'latestPortfolios' => Portfolio::where('is_active', true)
                 ->where('id', '!=', $portfolio->id)
                 ->with('category')
-                ->orderBy('sort_order')->latest('project_date')->get(),
+                ->latest('project_date')
+                ->take(self::KEEP_EXPLORING_LIMIT)->get(),
         ]);
     }
 }
