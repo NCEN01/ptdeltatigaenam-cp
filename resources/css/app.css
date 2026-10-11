@@ -774,6 +774,28 @@
 .porto-shift { transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .porto-item[data-on="1"] .porto-shift { transform: translateX(6px); }
 
+/* Satu lama dan satu lengkung untuk seluruh peralihan warna di dalam butir.
+   Tanpa ini tiap bagian memakai lengkung bawaan Tailwind sementara geseran dan
+   bukaannya memakai lengkung lain, dan dua gerakan berlengkung berbeda yang
+   berjalan bersamaan itulah yang terbaca kaku. */
+.porto-fade {
+    transition: color 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Putaran panah dikerjakan di sini, bukan lewat kelas -rotate-45 yang ditukar
+   Alpine. Tailwind memutar lewat peubah --tw-rotate, dan peubah khusus tidak
+   diinterpolasi peramban: nilai barunya langsung berlaku, jadi panahnya
+   meloncat sementara warna lingkarannya meluncur. */
+.porto-arrow {
+    transform: rotate(0deg);
+    transition:
+        transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+        background-color 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+        border-color 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+        color 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.porto-arrow[data-on="1"] { transform: rotate(-45deg); }
+
 /* Bilah waktu putar otomatis. Kelasnya baru dipasang saat butirnya aktif, dan
    animasi CSS mulai dari awal tiap kali kelasnya dipasang — itu yang membuatnya
    terulang sendiri tanpa perlu menyentuhnya dari JavaScript. */
@@ -802,6 +824,8 @@
     .porto-body,
     .porto-body > *,
     .porto-shift,
+    .porto-fade,
+    .porto-arrow,
     .porto-photo { transition: none; }
     .porto-bar-run { animation: none; width: 100%; }
     .porto-photo[data-on="1"] { transform: none; }

@@ -524,15 +524,12 @@
                      bergerak saat admin menambah proyek. --}}
                 <div class="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
                     <div data-aos="fade-up">
-                        <p class="font-display text-xs font-semibold uppercase tracking-[0.28em] text-navy-600">
-                            {{ $isId ? 'Portofolio Proyek' : 'Project Portfolio' }}
-                        </p>
                         {{-- text-display-lg, token judul seksi situs ini. Ukuran
                              sendiri sampai 4rem membuat judul ini satu-satunya yang
                              lebih besar dari judul seksi lain di halaman yang sama.
                              Tanpa miring dan tanpa warna kedua: pemisah antara kedua
                              barisnya cukup dikerjakan pergantian barisnya sendiri. --}}
-                        <h2 class="mt-5 text-display-lg text-navy">
+                        <h2 class="text-display-lg text-navy">
                             {{ $isId ? 'Bukti kerja,' : 'Proof of work,' }}<br>
                             {{ $isId ? 'bukan sekadar janji.' : 'not just promises.' }}
                         </h2>
@@ -635,15 +632,22 @@
                                        class="grid grid-cols-[2.75rem_1fr_auto] items-start gap-3 py-7 outline-none sm:grid-cols-[4rem_1fr_auto]"
                                        x-on:mouseenter="go({{ $i }})" x-on:focus="go({{ $i }})">
 
-                                        <span class="font-display text-[28px] font-light italic leading-none transition-colors duration-500"
+                                        {{-- porto-fade menyeragamkan lama dan lengkung
+                                             peralihan warna di seluruh butir. Tanpa itu
+                                             tiap bagian memakai lengkung bawaan Tailwind
+                                             sementara geseran dan bukaannya memakai
+                                             lengkung lain, dan keduanya yang bergerak
+                                             bersamaan dengan lengkung berbeda itulah yang
+                                             terbaca kaku. --}}
+                                        <span class="porto-fade font-display text-[28px] font-light italic leading-none"
                                               :class="active === {{ $i }} ? 'text-navy-600' : 'text-navy-200'" aria-hidden="true">{{ $portoPad($i + 1) }}</span>
 
                                         <span class="porto-shift block min-w-0">
                                             @if ($p->category)
-                                                <span class="block font-display text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors duration-500"
+                                                <span class="porto-fade block font-display text-[11px] font-semibold uppercase tracking-[0.16em]"
                                                       :class="active === {{ $i }} ? 'text-navy-600' : 'text-slate-500'">{{ $p->category->name }}</span>
                                             @endif
-                                            <span class="mt-1.5 block font-display text-[22px] font-bold leading-[1.25] tracking-[-0.025em] text-balance transition-colors duration-500"
+                                            <span class="porto-fade mt-1.5 block font-display text-[22px] font-bold leading-[1.25] tracking-[-0.025em] text-balance"
                                                   :class="active === {{ $i }} ? 'text-navy' : 'text-slate-500'">{{ $p->title }}</span>
 
                                             <span class="porto-body block">
@@ -660,8 +664,16 @@
                                             </span>
                                         </span>
 
-                                        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full border transition-all duration-[450ms] ease-out-soft"
-                                              :class="active === {{ $i }} ? 'border-navy-500 bg-navy-500 text-white -rotate-45' : 'border-navy-100 bg-white text-slate-400'"
+                                        {{-- Putarannya dikerjakan .porto-arrow lewat atribut
+                                             data, bukan kelas -rotate-45 yang ditukar Alpine.
+                                             Tailwind memutar lewat peubah --tw-rotate, dan
+                                             peubah khusus tidak diinterpolasi peramban: nilai
+                                             barunya langsung berlaku, jadi panahnya meloncat
+                                             sementara warnanya meluncur. Itu yang paling
+                                             terasa kaku di butir ini. --}}
+                                        <span class="porto-arrow grid h-10 w-10 shrink-0 place-items-center rounded-full border"
+                                              :data-on="active === {{ $i }} ? '1' : '0'"
+                                              :class="active === {{ $i }} ? 'border-navy-500 bg-navy-500 text-white' : 'border-navy-100 bg-white text-slate-400'"
                                               aria-hidden="true">
                                             <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </span>
