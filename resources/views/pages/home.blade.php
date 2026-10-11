@@ -476,6 +476,115 @@
         </div>
     </section>
 
+    {{-- ===================== PORTFOLIO =====================
+         Tanpa foto latar. Seksi ini isinya tiga foto proyek; menaruhnya di atas
+         foto keempat membuat keduanya saling berebut perhatian, dan di sela-sela
+         kartunya latar itu menyembul sebagai potongan gambar acak. Bidang gelap
+         polos membuat foto proyeknya yang berbicara. --}}
+    @if ($portfolios->isNotEmpty())
+        {{-- Latar terang, bukan pekat: isi seksi ini tiga foto proyek, dan di atas
+             bidang gelap fotonya kehilangan tenaga karena bersaing dengan latarnya.
+
+             bg-paper, off-white bertinta biru, bukan putih murni. Bersama Berita di
+             atasnya dan Update Terbaru di bawahnya, tiga seksi putih berturut-turut
+             terbaca sebagai satu bidang panjang tanpa jeda; selisih tipis ini cukup
+             untuk memberi irama tanpa mengganggu fotonya.
+
+             --}}
+        <section class="section-sm bg-paper">
+            <div class="container">
+                <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+                    <div class="max-w-xl">
+                        <h2 class="text-display-lg text-navy" data-aos="fade-up">{{ __('site.home.portfolio_kicker') }}</h2>
+                        <p class="mt-4 text-lg leading-relaxed text-slate-600 text-pretty" data-aos="fade-up">{{ __('site.home.portfolio_title') }}</p>
+
+                        {{-- Cakupannya sebagai satu baris keterangan, bukan tiga angka
+                             raksasa berjajar: yang terakhir itu pola halaman SaaS yang
+                             PRODUCT.md justru minta dihindari. Angkanya dihitung dari
+                             data, jadi ikut bertambah sendiri saat admin menambah
+                             proyek. Isinya ditulis apa adanya sebagai cadangan bila
+                             animasi penghitungnya tidak jalan. --}}
+                        @if ($portfolioScope?->total)
+                            @php
+                                $scope = $isId
+                                    ? [[$portfolioScope->total, 'proyek'], [$portfolioScope->clients, 'klien'], [$portfolioScope->categories, 'bidang layanan']]
+                                    : [[$portfolioScope->total, 'projects'], [$portfolioScope->clients, 'clients'], [$portfolioScope->categories, 'service areas']];
+                            @endphp
+                            {{-- slate-600, bukan slate-500: di atas bg-paper slate-500
+                                 hanya 4,45:1, tepat di bawah ambang 4,5:1 untuk teks
+                                 11px. Di atas putih ia masih lolos, jadi kegagalannya
+                                 baru muncul saat seksi ini berpindah ke bg-paper. --}}
+                            <p class="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-wider text-slate-600" data-aos="fade-up">
+                                @foreach ($scope as [$value, $label])
+                                    @if (! $loop->first)
+                                        <span class="h-3.5 w-px bg-navy-200" aria-hidden="true"></span>
+                                    @endif
+                                    <span class="inline-flex items-baseline gap-1.5">
+                                        <span class="font-display text-base tabular-nums text-navy" data-counter="{{ $value }}">{{ $value }}</span>{{ $label }}
+                                    </span>
+                                @endforeach
+                            </p>
+                        @endif
+                    </div>
+
+                    {{-- .btn-ghost, bukan salinan tulisan tangannya. Salinan itu sudah
+                         menyimpang dari tokennya (px-6 py-3, bukan px-7 py-3.5, dan
+                         tanpa active:scale), jadi dua tombol "lihat semua" di halaman
+                         yang sama berukuran berbeda. --}}
+                    <a href="{{ route('portfolio.index') }}" data-aos="fade-up" class="btn-ghost group shrink-0">
+                        {{ $isId ? 'Lihat Semua Portofolio' : 'View All Portfolio' }}
+                        <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                </div>
+
+                {{-- Tanpa kartu kaca. bg-white/[0.06] + backdrop-blur di atas foto
+                     adalah kaca sebagai hiasan, tepat yang disebut anti-referensi
+                     di PRODUCT.md, dan bingkainya justru mengecilkan fotonya.
+                     Susunannya kini sama dengan halaman Portofolio: foto, lalu
+                     judul di bawahnya langsung. --}}
+                <div class="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+                    @foreach ($portfolios as $p)
+                        <a href="{{ route('portfolio.show', $p->slug) }}" class="group block"
+                           data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
+                            <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-navy-100 ring-1 ring-navy-100 transition-shadow duration-500 group-hover:shadow-lift">
+                                @if ($p->cover_image)
+                                    <img src="{{ str_starts_with($p->cover_image, 'http') ? $p->cover_image : Storage::url($p->cover_image) }}" alt="{{ $p->title }}" loading="lazy"
+                                         class="h-full w-full object-cover transition-transform duration-[900ms] ease-out-soft group-hover:scale-[1.07]">
+                                @else
+                                    <div class="h-full w-full bg-gradient-to-br from-navy-700 to-navy-900"></div>
+                                @endif
+
+                                @if ($p->category)
+                                    <span class="absolute left-4 top-4 z-10 rounded-full bg-white/90 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-navy backdrop-blur">{{ $p->category->name }}</span>
+                                @endif
+
+                                {{-- Ajakan yang muncul saat disentuh kursor, bahasa yang
+                                     sama dengan kartu di halaman Portofolio. --}}
+                                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/85 via-navy-950/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+                                <div class="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-3 items-center p-5 opacity-0 transition-all duration-500 ease-out-soft group-hover:translate-y-0 group-hover:opacity-100">
+                                    <span class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-navy shadow-lift">
+                                        {{ $isId ? 'Lihat Detail' : 'View Case' }}
+                                        <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <h3 class="mt-5 font-display text-lg font-semibold leading-snug text-navy text-balance transition-colors duration-300 group-hover:text-sky-700">{{ $p->title }}</h3>
+                            <p class="mt-1.5 flex flex-wrap items-center gap-x-2 text-sm text-slate-600">
+                                @if ($p->client_name)<span>{{ $p->client_name }}</span>@endif
+                                @if ($p->client_name && $p->project_date)<span class="text-navy-200" aria-hidden="true">·</span>@endif
+                                @if ($p->project_date)<span class="font-mono text-xs">{{ $p->project_date->translatedFormat('Y') }}</span>@endif
+                            </p>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
+    {{-- ===================== TESTIMONIALS ===================== --}}
+    <x-testimonial-columns :testimonials="$testimonials" />
+
     {{-- ===================== BERITA (panel + rel kartu) =====================
          Susunannya mengikuti rujukan yang diberikan: judul terpusat, satu panel
          berwarna di kiri, deretan kartu yang bisa digeser di kanan, dan satu
@@ -655,264 +764,6 @@
                 </div>
             </div>
         </section>
-    @endif
-
-    {{-- ===================== PORTFOLIO =====================
-         Tanpa foto latar. Seksi ini isinya tiga foto proyek; menaruhnya di atas
-         foto keempat membuat keduanya saling berebut perhatian, dan di sela-sela
-         kartunya latar itu menyembul sebagai potongan gambar acak. Bidang gelap
-         polos membuat foto proyeknya yang berbicara. --}}
-    @if ($portfolios->isNotEmpty())
-        {{-- Latar terang, bukan pekat: isi seksi ini tiga foto proyek, dan di atas
-             bidang gelap fotonya kehilangan tenaga karena bersaing dengan latarnya.
-
-             bg-paper, off-white bertinta biru, bukan putih murni. Bersama Berita di
-             atasnya dan Update Terbaru di bawahnya, tiga seksi putih berturut-turut
-             terbaca sebagai satu bidang panjang tanpa jeda; selisih tipis ini cukup
-             untuk memberi irama tanpa mengganggu fotonya.
-
-             --}}
-        <section class="section-sm bg-paper">
-            <div class="container">
-                <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-                    <div class="max-w-xl">
-                        <h2 class="text-display-lg text-navy" data-aos="fade-up">{{ __('site.home.portfolio_kicker') }}</h2>
-                        <p class="mt-4 text-lg leading-relaxed text-slate-600 text-pretty" data-aos="fade-up">{{ __('site.home.portfolio_title') }}</p>
-
-                        {{-- Cakupannya sebagai satu baris keterangan, bukan tiga angka
-                             raksasa berjajar: yang terakhir itu pola halaman SaaS yang
-                             PRODUCT.md justru minta dihindari. Angkanya dihitung dari
-                             data, jadi ikut bertambah sendiri saat admin menambah
-                             proyek. Isinya ditulis apa adanya sebagai cadangan bila
-                             animasi penghitungnya tidak jalan. --}}
-                        @if ($portfolioScope?->total)
-                            @php
-                                $scope = $isId
-                                    ? [[$portfolioScope->total, 'proyek'], [$portfolioScope->clients, 'klien'], [$portfolioScope->categories, 'bidang layanan']]
-                                    : [[$portfolioScope->total, 'projects'], [$portfolioScope->clients, 'clients'], [$portfolioScope->categories, 'service areas']];
-                            @endphp
-                            {{-- slate-600, bukan slate-500: di atas bg-paper slate-500
-                                 hanya 4,45:1, tepat di bawah ambang 4,5:1 untuk teks
-                                 11px. Di atas putih ia masih lolos, jadi kegagalannya
-                                 baru muncul saat seksi ini berpindah ke bg-paper. --}}
-                            <p class="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-wider text-slate-600" data-aos="fade-up">
-                                @foreach ($scope as [$value, $label])
-                                    @if (! $loop->first)
-                                        <span class="h-3.5 w-px bg-navy-200" aria-hidden="true"></span>
-                                    @endif
-                                    <span class="inline-flex items-baseline gap-1.5">
-                                        <span class="font-display text-base tabular-nums text-navy" data-counter="{{ $value }}">{{ $value }}</span>{{ $label }}
-                                    </span>
-                                @endforeach
-                            </p>
-                        @endif
-                    </div>
-
-                    {{-- .btn-ghost, bukan salinan tulisan tangannya. Salinan itu sudah
-                         menyimpang dari tokennya (px-6 py-3, bukan px-7 py-3.5, dan
-                         tanpa active:scale), jadi dua tombol "lihat semua" di halaman
-                         yang sama berukuran berbeda. --}}
-                    <a href="{{ route('portfolio.index') }}" data-aos="fade-up" class="btn-ghost group shrink-0">
-                        {{ $isId ? 'Lihat Semua Portofolio' : 'View All Portfolio' }}
-                        <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </a>
-                </div>
-
-                {{-- Tanpa kartu kaca. bg-white/[0.06] + backdrop-blur di atas foto
-                     adalah kaca sebagai hiasan, tepat yang disebut anti-referensi
-                     di PRODUCT.md, dan bingkainya justru mengecilkan fotonya.
-                     Susunannya kini sama dengan halaman Portofolio: foto, lalu
-                     judul di bawahnya langsung. --}}
-                <div class="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-                    @foreach ($portfolios as $p)
-                        <a href="{{ route('portfolio.show', $p->slug) }}" class="group block"
-                           data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
-                            <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-navy-100 ring-1 ring-navy-100 transition-shadow duration-500 group-hover:shadow-lift">
-                                @if ($p->cover_image)
-                                    <img src="{{ str_starts_with($p->cover_image, 'http') ? $p->cover_image : Storage::url($p->cover_image) }}" alt="{{ $p->title }}" loading="lazy"
-                                         class="h-full w-full object-cover transition-transform duration-[900ms] ease-out-soft group-hover:scale-[1.07]">
-                                @else
-                                    <div class="h-full w-full bg-gradient-to-br from-navy-700 to-navy-900"></div>
-                                @endif
-
-                                @if ($p->category)
-                                    <span class="absolute left-4 top-4 z-10 rounded-full bg-white/90 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-navy backdrop-blur">{{ $p->category->name }}</span>
-                                @endif
-
-                                {{-- Ajakan yang muncul saat disentuh kursor, bahasa yang
-                                     sama dengan kartu di halaman Portofolio. --}}
-                                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/85 via-navy-950/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
-                                <div class="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-3 items-center p-5 opacity-0 transition-all duration-500 ease-out-soft group-hover:translate-y-0 group-hover:opacity-100">
-                                    <span class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-navy shadow-lift">
-                                        {{ $isId ? 'Lihat Detail' : 'View Case' }}
-                                        <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    </span>
-                                </div>
-                            </div>
-
-                            <h3 class="mt-5 font-display text-lg font-semibold leading-snug text-navy text-balance transition-colors duration-300 group-hover:text-sky-700">{{ $p->title }}</h3>
-                            <p class="mt-1.5 flex flex-wrap items-center gap-x-2 text-sm text-slate-600">
-                                @if ($p->client_name)<span>{{ $p->client_name }}</span>@endif
-                                @if ($p->client_name && $p->project_date)<span class="text-navy-200" aria-hidden="true">·</span>@endif
-                                @if ($p->project_date)<span class="font-mono text-xs">{{ $p->project_date->translatedFormat('Y') }}</span>@endif
-                            </p>
-                        </a>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-    @endif
-
-    {{-- ===================== UPCOMING AGENDAS =====================
-         Ikut disembunyikan selagi halaman Agenda dimatikan lewat
-         config/company.php: seluruh tombol di seksi ini menuju halaman itu,
-         jadi membiarkannya tampil berarti mengirim pengunjung ke 404. --}}
-    @if (config('company.pages.agenda', true))
-    <section class="section relative overflow-hidden border-t border-navy-50 bg-paper">
-        {{-- Animated background --}}
-        <div class="pointer-events-none absolute inset-0 overflow-hidden">
-            <div class="absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full" style="background: radial-gradient(circle, rgba(28,125,224,0.10), transparent 70%);"></div>
-            <div class="absolute -left-24 top-16 h-72 w-72 animate-float-slow rounded-full bg-sky-300/25 blur-3xl"></div>
-            <div class="absolute -right-24 top-1/3 h-80 w-80 animate-float rounded-full bg-gold-soft/20 blur-3xl"></div>
-            <div class="absolute -bottom-16 left-1/3 h-72 w-72 animate-float-slow rounded-full bg-sky-200/30 blur-3xl"></div>
-            <div class="absolute -left-20 -top-20 h-64 w-64 animate-spin-slow rounded-full border border-dashed border-sky-300/40"></div>
-        </div>
-
-        <div class="container relative">
-            {{-- Centered header --}}
-            <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
-                <h2 class="text-display-lg text-navy">{{ $isId ? 'Jadwal Pelatihan & Sertifikasi' : 'Training & Certification Schedule' }}</h2>
-                <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-600">
-                    {{ $isId
-                        ? 'Ikuti kelas pelatihan, sertifikasi, dan kegiatan terbaru dari kami. Geser untuk melihat jadwal lengkapnya.'
-                        : 'Join our latest training classes, certifications, and events. Swipe to explore the full schedule.' }}
-                </p>
-            </div>
-
-            @if ($upcomingAgendas->isNotEmpty())
-                <div class="relative mt-12" data-hscroll data-hscroll-auto data-aos="fade-up">
-                    {{-- Arrows (desktop) --}}
-                    <button type="button" data-hscroll-prev aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}"
-                        class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 lg:grid">
-                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </button>
-                    <button type="button" data-hscroll-next aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}"
-                        class="absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 lg:grid">
-                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </button>
-
-                    <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none gap-6 overflow-x-auto scroll-smooth pb-4 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                        @foreach ($upcomingAgendas as $agenda)
-                            @php
-                                $isPast = $agenda->starts_at->isPast();
-                                $isNearest = $loop->first && ! $isPast; // first upcoming = soonest
-                            @endphp
-                            <a href="{{ route('agenda.index') }}" data-spotlight
-                               class="group relative flex min-w-0 shrink-0 basis-[80%] snap-start flex-col overflow-hidden rounded-3xl border bg-white shadow-card transition-all duration-500 ease-out-soft hover:-translate-y-1.5 hover:shadow-lift sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)] lg:basis-[calc((100%_-_4.5rem)/4)] {{ $isNearest ? 'border-gold/60 ring-1 ring-gold/40' : 'border-navy-100 hover:border-navy-200' }}">
-
-                            {{-- Media (compact) --}}
-                            <div class="relative aspect-[16/10] overflow-hidden bg-navy-900">
-                                @if ($agenda->image)
-                                    <img src="{{ Storage::url($agenda->image) }}" alt="{{ $agenda->title }}" loading="lazy"
-                                         class="h-full w-full object-cover transition-transform duration-700 ease-out-soft group-hover:scale-[1.05]">
-                                @else
-                                    <div class="absolute inset-0" style="background: linear-gradient(150deg,#123a6b 0%,#071d38 100%);"></div>
-                                    <div class="absolute inset-0 aurora opacity-40"></div>
-                                @endif
-                                <div class="absolute inset-0 bg-gradient-to-t from-navy-950/55 via-navy-950/5 to-transparent"></div>
-
-                                {{-- Compact date badge --}}
-                                <div class="absolute left-3 top-3 flex w-11 flex-col items-center rounded-xl py-1.5 text-center shadow-lift ring-1 backdrop-blur {{ $isNearest ? 'bg-gradient-to-br from-gold to-gold-soft ring-gold-soft/70' : 'bg-white/95 ring-white/60' }}">
-                                    <span class="font-display text-lg font-semibold leading-none {{ $isNearest ? 'text-navy-950' : 'text-navy' }}">{{ $agenda->starts_at->format('d') }}</span>
-                                    {{-- Bulannya bagian dari tanggal, bukan hiasan, jadi
-                                         ambangnya 4,5:1. slate-400 hanya 2,6:1 dan
-                                         gold-deep 3,3:1 di atas lencana yang hampir
-                                         putih ini. --}}
-                                    <span class="font-mono text-[9px] font-bold uppercase tracking-normal {{ $isNearest ? 'text-navy-950/70' : ($isPast ? 'text-slate-600' : 'text-navy') }}">{{ $agenda->starts_at->translatedFormat('M') }}</span>
-                                </div>
-
-                                {{-- Status pill — Segera Hadir (terdekat) / Akan Datang / Selesai (lewat) --}}
-                                @php
-                                    if ($isPast)      { $pillBg = 'bg-slate-500/90 text-white'; $pillDot = 'bg-white/80'; $pillText = $isId ? 'Selesai' : 'Ended'; }
-                                    elseif ($isNearest) { $pillBg = 'bg-gold text-navy-950';    $pillDot = 'bg-navy-950/70'; $pillText = $isId ? 'Segera Hadir' : 'Coming Soon'; }
-                                    // sky-700, bukan sky-600: putih di atas sky-600 hanya
-                                    // 3,45:1, sedangkan pil 9px tebal ini tetap teks biasa
-                                    // menurut WCAG dan butuh 4,5:1.
-                                    else              { $pillBg = 'bg-sky-700/90 text-white';  $pillDot = 'bg-white/90';   $pillText = $isId ? 'Akan Datang' : 'Upcoming'; }
-                                @endphp
-                                <span class="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-normal shadow-lift backdrop-blur {{ $pillBg }}">
-                                    <span class="h-1 w-1 rounded-full {{ $pillDot }}"></span>
-                                    {{ $pillText }}
-                                </span>
-                            </div>
-
-                            {{-- Body (compact) --}}
-                            <div class="flex flex-1 flex-col p-5">
-                                <div class="flex items-center gap-2 font-mono text-[11px] text-slate-500">
-                                    <svg class="h-3.5 w-3.5 shrink-0 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    <span class="shrink-0">{{ $agenda->starts_at->translatedFormat('H:i') }} WIB</span>
-                                    @if ($agenda->location)
-                                        <span class="text-navy-200">&middot;</span>
-                                        <span class="truncate">{{ $agenda->location }}</span>
-                                    @endif
-                                </div>
-
-                                <h3 class="mt-2.5 line-clamp-2 font-display text-base font-semibold leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">
-                                    {{ $agenda->title }}
-                                </h3>
-
-                                <span class="mt-auto inline-flex items-center gap-1.5 pt-4 text-xs font-bold uppercase tracking-normal text-sky-700 transition-colors group-hover:text-navy">
-                                    {{ $isId ? 'Selengkapnya' : 'Read More' }}
-                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                </span>
-                            </div>
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-
-                <div class="mt-10 text-center" data-aos="fade-up">
-                    {{-- .btn-ghost, bukan salinan tulisan tangannya. Kelas itu sudah
-                         berisi bentuk, jarak, dan wujud sentuh yang sama persis, dan
-                         salinan ini tertinggal dari perilaku tekan .btn yang lain. --}}
-                    <a href="{{ route('agenda.index') }}" class="btn-ghost">
-                        {{ $isId ? 'Lihat Semua Agenda' : 'View All Agendas' }}
-                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </a>
-                </div>
-            @else
-                {{-- Premium Empty State / WhatsApp Lead Generation --}}
-                {{-- Tanpa .card: kelas itu membawa bg-white, border-navy-100, lebar
-                     garis, dan rounded-2xl yang keempatnya ditimpa di sini juga,
-                     jadi yang benar-benar terpakai hanya shadow-card. --}}
-                <div class="mt-10 rounded-3xl border-2 border-dashed border-navy-200 bg-navy-50/20 p-8 text-center shadow-card md:p-12" data-aos="fade-up">
-                    <div class="max-w-md mx-auto space-y-4">
-                        <span class="grid h-12 w-12 place-items-center rounded-2xl bg-navy-50 text-slate-500 mx-auto">
-                            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
-                        </span>
-                        <h3 class="font-display text-lg font-semibold text-navy">
-                            {{ $isId ? 'Belum Ada Agenda Terdekat' : 'No Upcoming Agendas' }}
-                        </h3>
-                        <p class="text-xs leading-relaxed text-slate-600 text-balance">
-                            {{ $isId
-                                ? 'Kami sedang merancang berbagai kelas pelatihan dan jadwal sertifikasi kompetensi terbaru. Ingin tahu jadwal terdekat atau berdiskusi?'
-                                : 'We are planning various training classes and new competence certification schedules. Want to know the nearest schedule or discuss?' }}
-                        </p>
-                        <div class="pt-2">
-                            {{-- .btn-blue, sama dengan tombol WhatsApp di seksi FAQ.
-                                 Hijau emerald sebelumnya adalah satu-satunya hijau di
-                                 situs ini, dan dua tombol WhatsApp berwarna berbeda di
-                                 satu halaman terbaca sebagai dua tindakan berbeda. --}}
-                            <a href="https://wa.me/62818834766?text=Halo%20Delta%20Tiga%20Enam,%20saya%20ingin%20tahu%20jadwal%20pelatihan%20dan%20sertifikasi%20terdekat..." target="_blank" rel="noopener" class="btn-blue">
-                                <img src="{{ asset('icons/ic_whatsapp.png') }}" class="h-4.5 w-4.5 object-contain" alt="WhatsApp">
-                                <span>WhatsApp Admin</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            @endif
-        </div>
-    </section>
     @endif
 
     {{-- ===================== INSTAGRAM UPDATES ===================== --}}
@@ -1195,11 +1046,159 @@
         </div>
     </section>
 
-    {{-- ===================== TESTIMONIALS ===================== --}}
-    <x-testimonial-columns :testimonials="$testimonials" />
+    {{-- ===================== UPCOMING AGENDAS =====================
+         Ikut disembunyikan selagi halaman Agenda dimatikan lewat
+         config/company.php: seluruh tombol di seksi ini menuju halaman itu,
+         jadi membiarkannya tampil berarti mengirim pengunjung ke 404. --}}
+    @if (config('company.pages.agenda', true))
+    <section class="section relative overflow-hidden border-t border-navy-50 bg-paper">
+        {{-- Animated background --}}
+        <div class="pointer-events-none absolute inset-0 overflow-hidden">
+            <div class="absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full" style="background: radial-gradient(circle, rgba(28,125,224,0.10), transparent 70%);"></div>
+            <div class="absolute -left-24 top-16 h-72 w-72 animate-float-slow rounded-full bg-sky-300/25 blur-3xl"></div>
+            <div class="absolute -right-24 top-1/3 h-80 w-80 animate-float rounded-full bg-gold-soft/20 blur-3xl"></div>
+            <div class="absolute -bottom-16 left-1/3 h-72 w-72 animate-float-slow rounded-full bg-sky-200/30 blur-3xl"></div>
+            <div class="absolute -left-20 -top-20 h-64 w-64 animate-spin-slow rounded-full border border-dashed border-sky-300/40"></div>
+        </div>
+
+        <div class="container relative">
+            {{-- Centered header --}}
+            <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
+                <h2 class="text-display-lg text-navy">{{ $isId ? 'Jadwal Pelatihan & Sertifikasi' : 'Training & Certification Schedule' }}</h2>
+                <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-600">
+                    {{ $isId
+                        ? 'Ikuti kelas pelatihan, sertifikasi, dan kegiatan terbaru dari kami. Geser untuk melihat jadwal lengkapnya.'
+                        : 'Join our latest training classes, certifications, and events. Swipe to explore the full schedule.' }}
+                </p>
+            </div>
+
+            @if ($upcomingAgendas->isNotEmpty())
+                <div class="relative mt-12" data-hscroll data-hscroll-auto data-aos="fade-up">
+                    {{-- Arrows (desktop) --}}
+                    <button type="button" data-hscroll-prev aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}"
+                        class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 lg:grid">
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <button type="button" data-hscroll-next aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}"
+                        class="absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 lg:grid">
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+
+                    <div data-hscroll-track class="flex cursor-grab snap-x snap-mandatory select-none gap-6 overflow-x-auto scroll-smooth pb-4 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        @foreach ($upcomingAgendas as $agenda)
+                            @php
+                                $isPast = $agenda->starts_at->isPast();
+                                $isNearest = $loop->first && ! $isPast; // first upcoming = soonest
+                            @endphp
+                            <a href="{{ route('agenda.index') }}" data-spotlight
+                               class="group relative flex min-w-0 shrink-0 basis-[80%] snap-start flex-col overflow-hidden rounded-3xl border bg-white shadow-card transition-all duration-500 ease-out-soft hover:-translate-y-1.5 hover:shadow-lift sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)] lg:basis-[calc((100%_-_4.5rem)/4)] {{ $isNearest ? 'border-gold/60 ring-1 ring-gold/40' : 'border-navy-100 hover:border-navy-200' }}">
+
+                            {{-- Media (compact) --}}
+                            <div class="relative aspect-[16/10] overflow-hidden bg-navy-900">
+                                @if ($agenda->image)
+                                    <img src="{{ Storage::url($agenda->image) }}" alt="{{ $agenda->title }}" loading="lazy"
+                                         class="h-full w-full object-cover transition-transform duration-700 ease-out-soft group-hover:scale-[1.05]">
+                                @else
+                                    <div class="absolute inset-0" style="background: linear-gradient(150deg,#123a6b 0%,#071d38 100%);"></div>
+                                    <div class="absolute inset-0 aurora opacity-40"></div>
+                                @endif
+                                <div class="absolute inset-0 bg-gradient-to-t from-navy-950/55 via-navy-950/5 to-transparent"></div>
+
+                                {{-- Compact date badge --}}
+                                <div class="absolute left-3 top-3 flex w-11 flex-col items-center rounded-xl py-1.5 text-center shadow-lift ring-1 backdrop-blur {{ $isNearest ? 'bg-gradient-to-br from-gold to-gold-soft ring-gold-soft/70' : 'bg-white/95 ring-white/60' }}">
+                                    <span class="font-display text-lg font-semibold leading-none {{ $isNearest ? 'text-navy-950' : 'text-navy' }}">{{ $agenda->starts_at->format('d') }}</span>
+                                    {{-- Bulannya bagian dari tanggal, bukan hiasan, jadi
+                                         ambangnya 4,5:1. slate-400 hanya 2,6:1 dan
+                                         gold-deep 3,3:1 di atas lencana yang hampir
+                                         putih ini. --}}
+                                    <span class="font-mono text-[9px] font-bold uppercase tracking-normal {{ $isNearest ? 'text-navy-950/70' : ($isPast ? 'text-slate-600' : 'text-navy') }}">{{ $agenda->starts_at->translatedFormat('M') }}</span>
+                                </div>
+
+                                {{-- Status pill — Segera Hadir (terdekat) / Akan Datang / Selesai (lewat) --}}
+                                @php
+                                    if ($isPast)      { $pillBg = 'bg-slate-500/90 text-white'; $pillDot = 'bg-white/80'; $pillText = $isId ? 'Selesai' : 'Ended'; }
+                                    elseif ($isNearest) { $pillBg = 'bg-gold text-navy-950';    $pillDot = 'bg-navy-950/70'; $pillText = $isId ? 'Segera Hadir' : 'Coming Soon'; }
+                                    // sky-700, bukan sky-600: putih di atas sky-600 hanya
+                                    // 3,45:1, sedangkan pil 9px tebal ini tetap teks biasa
+                                    // menurut WCAG dan butuh 4,5:1.
+                                    else              { $pillBg = 'bg-sky-700/90 text-white';  $pillDot = 'bg-white/90';   $pillText = $isId ? 'Akan Datang' : 'Upcoming'; }
+                                @endphp
+                                <span class="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-normal shadow-lift backdrop-blur {{ $pillBg }}">
+                                    <span class="h-1 w-1 rounded-full {{ $pillDot }}"></span>
+                                    {{ $pillText }}
+                                </span>
+                            </div>
+
+                            {{-- Body (compact) --}}
+                            <div class="flex flex-1 flex-col p-5">
+                                <div class="flex items-center gap-2 font-mono text-[11px] text-slate-500">
+                                    <svg class="h-3.5 w-3.5 shrink-0 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    <span class="shrink-0">{{ $agenda->starts_at->translatedFormat('H:i') }} WIB</span>
+                                    @if ($agenda->location)
+                                        <span class="text-navy-200">&middot;</span>
+                                        <span class="truncate">{{ $agenda->location }}</span>
+                                    @endif
+                                </div>
+
+                                <h3 class="mt-2.5 line-clamp-2 font-display text-base font-semibold leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">
+                                    {{ $agenda->title }}
+                                </h3>
+
+                                <span class="mt-auto inline-flex items-center gap-1.5 pt-4 text-xs font-bold uppercase tracking-normal text-sky-700 transition-colors group-hover:text-navy">
+                                    {{ $isId ? 'Selengkapnya' : 'Read More' }}
+                                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
+                            </div>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="mt-10 text-center" data-aos="fade-up">
+                    {{-- .btn-ghost, bukan salinan tulisan tangannya. Kelas itu sudah
+                         berisi bentuk, jarak, dan wujud sentuh yang sama persis, dan
+                         salinan ini tertinggal dari perilaku tekan .btn yang lain. --}}
+                    <a href="{{ route('agenda.index') }}" class="btn-ghost">
+                        {{ $isId ? 'Lihat Semua Agenda' : 'View All Agendas' }}
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                </div>
+            @else
+                {{-- Premium Empty State / WhatsApp Lead Generation --}}
+                {{-- Tanpa .card: kelas itu membawa bg-white, border-navy-100, lebar
+                     garis, dan rounded-2xl yang keempatnya ditimpa di sini juga,
+                     jadi yang benar-benar terpakai hanya shadow-card. --}}
+                <div class="mt-10 rounded-3xl border-2 border-dashed border-navy-200 bg-navy-50/20 p-8 text-center shadow-card md:p-12" data-aos="fade-up">
+                    <div class="max-w-md mx-auto space-y-4">
+                        <span class="grid h-12 w-12 place-items-center rounded-2xl bg-navy-50 text-slate-500 mx-auto">
+                            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+                        </span>
+                        <h3 class="font-display text-lg font-semibold text-navy">
+                            {{ $isId ? 'Belum Ada Agenda Terdekat' : 'No Upcoming Agendas' }}
+                        </h3>
+                        <p class="text-xs leading-relaxed text-slate-600 text-balance">
+                            {{ $isId
+                                ? 'Kami sedang merancang berbagai kelas pelatihan dan jadwal sertifikasi kompetensi terbaru. Ingin tahu jadwal terdekat atau berdiskusi?'
+                                : 'We are planning various training classes and new competence certification schedules. Want to know the nearest schedule or discuss?' }}
+                        </p>
+                        <div class="pt-2">
+                            {{-- .btn-blue, sama dengan tombol WhatsApp di seksi FAQ.
+                                 Hijau emerald sebelumnya adalah satu-satunya hijau di
+                                 situs ini, dan dua tombol WhatsApp berwarna berbeda di
+                                 satu halaman terbaca sebagai dua tindakan berbeda. --}}
+                            <a href="https://wa.me/62818834766?text=Halo%20Delta%20Tiga%20Enam,%20saya%20ingin%20tahu%20jadwal%20pelatihan%20dan%20sertifikasi%20terdekat..." target="_blank" rel="noopener" class="btn-blue">
+                                <img src="{{ asset('icons/ic_whatsapp.png') }}" class="h-4.5 w-4.5 object-contain" alt="WhatsApp">
+                                <span>WhatsApp Admin</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </section>
+    @endif
 
     {{-- ===================== PARTNERS & CLIENTS ===================== --}}
     <x-partners-clients :partners="$partners" :clients="$clients" />
-
 
 </x-layout>
