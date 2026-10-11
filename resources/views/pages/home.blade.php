@@ -477,106 +477,210 @@
     </section>
 
     {{-- ===================== PORTFOLIO =====================
-         Tanpa foto latar. Seksi ini isinya tiga foto proyek; menaruhnya di atas
-         foto keempat membuat keduanya saling berebut perhatian, dan di sela-sela
-         kartunya latar itu menyembul sebagai potongan gambar acak. Bidang gelap
-         polos membuat foto proyeknya yang berbicara. --}}
+         Indeks berdaftar, bukan kisi tiga kartu. Kisi menampilkan tiga proyek
+         sekaligus dan tidak satu pun sempat diceritakan; daftar yang butirnya
+         membuka bergiliran memberi satu proyek seluruh panel foto di kanannya
+         beserta kalimat penjelasnya.
+
+         Keadaan aktifnya berjalan sendiri tiap lima detik, berhenti saat
+         kursor masuk ke seksinya, dan berpindah saat butirnya ditunjuk,
+         disorot papan tik, atau titiknya diklik.
+
+         Seluruh isi keempat butir tetap ada di DOM dalam keadaan apa pun; yang
+         berubah hanya tinggi dan kepekatannya. Jadi mesin pencari dan pembaca
+         layar membaca keempat proyek itu seluruhnya, dan halaman ini tetap
+         lengkap sekalipun JavaScript gagal dimuat. --}}
     @if ($portfolios->isNotEmpty())
-        {{-- Latar terang, bukan pekat: isi seksi ini tiga foto proyek, dan di atas
-             bidang gelap fotonya kehilangan tenaga karena bersaing dengan latarnya.
-
-             bg-paper, off-white bertinta biru, bukan putih murni. Bersama Berita di
-             atasnya dan Update Terbaru di bawahnya, tiga seksi putih berturut-turut
-             terbaca sebagai satu bidang panjang tanpa jeda; selisih tipis ini cukup
-             untuk memberi irama tanpa mengganggu fotonya.
-
-             --}}
-        <section class="section-sm bg-paper">
+        @php
+            $portoTotal = $portfolios->count();
+            $portoPad = fn (int $n) => str_pad($n, 2, '0', STR_PAD_LEFT);
+        @endphp
+        <section class="section bg-white"
+                 x-data="{
+                     active: 0,
+                     total: {{ $portoTotal }},
+                     paused: false,
+                     timer: null,
+                     reduce: false,
+                     start() {
+                         clearInterval(this.timer);
+                         if (this.reduce || this.total < 2) return;
+                         this.timer = setInterval(() => {
+                             if (! this.paused) this.active = (this.active + 1) % this.total;
+                         }, 5000);
+                     },
+                     go(i) { this.active = i; this.start(); },
+                     init() {
+                         this.reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                         this.start();
+                     },
+                     destroy() { clearInterval(this.timer); },
+                 }"
+                 x-on:mouseenter="paused = true"
+                 x-on:mouseleave="paused = false">
             <div class="container">
-                <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-                    <div class="max-w-xl">
-                        <h2 class="text-display-lg text-navy" data-aos="fade-up">{{ __('site.home.portfolio_kicker') }}</h2>
-                        <p class="mt-4 text-lg leading-relaxed text-slate-600 text-pretty" data-aos="fade-up">{{ __('site.home.portfolio_title') }}</p>
-
-                        {{-- Cakupannya sebagai satu baris keterangan, bukan tiga angka
-                             raksasa berjajar: yang terakhir itu pola halaman SaaS yang
-                             PRODUCT.md justru minta dihindari. Angkanya dihitung dari
-                             data, jadi ikut bertambah sendiri saat admin menambah
-                             proyek. Isinya ditulis apa adanya sebagai cadangan bila
-                             animasi penghitungnya tidak jalan. --}}
-                        @if ($portfolioScope?->total)
-                            @php
-                                $scope = $isId
-                                    ? [[$portfolioScope->total, 'proyek'], [$portfolioScope->clients, 'klien'], [$portfolioScope->categories, 'bidang layanan']]
-                                    : [[$portfolioScope->total, 'projects'], [$portfolioScope->clients, 'clients'], [$portfolioScope->categories, 'service areas']];
-                            @endphp
-                            {{-- slate-600, bukan slate-500: di atas bg-paper slate-500
-                                 hanya 4,45:1, tepat di bawah ambang 4,5:1 untuk teks
-                                 11px. Di atas putih ia masih lolos, jadi kegagalannya
-                                 baru muncul saat seksi ini berpindah ke bg-paper. --}}
-                            <p class="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-wider text-slate-600" data-aos="fade-up">
-                                @foreach ($scope as [$value, $label])
-                                    @if (! $loop->first)
-                                        <span class="h-3.5 w-px bg-navy-200" aria-hidden="true"></span>
-                                    @endif
-                                    <span class="inline-flex items-baseline gap-1.5">
-                                        <span class="font-display text-base tabular-nums text-navy" data-counter="{{ $value }}">{{ $value }}</span>{{ $label }}
-                                    </span>
-                                @endforeach
-                            </p>
-                        @endif
+                {{-- Judul di kiri, tiga angka cakupan di kanan dan dirata-bawah
+                     dengannya. Angkanya dihitung dari datanya sendiri, jadi ikut
+                     bergerak saat admin menambah proyek. --}}
+                <div class="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
+                    <div data-aos="fade-up">
+                        <p class="flex items-center gap-2.5 font-display text-xs font-semibold uppercase tracking-[0.28em] text-navy-600">
+                            <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-navy-500" aria-hidden="true"></span>
+                            {{ $isId ? 'Portofolio Proyek' : 'Project Portfolio' }}
+                        </p>
+                        {{-- Baris kedua dimiringkan, diturunkan bobotnya, dan diberi
+                             warna. Miring saja di bawah huruf setebal ini nyaris tidak
+                             terbaca; perbedaan bobot dan warnanya yang memisahkan
+                             kedua baris. --}}
+                        <h2 class="mt-5 font-display text-[clamp(2.5rem,5vw,4rem)] font-extrabold leading-none tracking-[-0.05em] text-navy">
+                            {{ $isId ? 'Bukti kerja,' : 'Proof of work,' }}<br>
+                            <em class="font-light italic text-navy-500">{{ $isId ? 'bukan sekadar janji.' : 'not just promises.' }}</em>
+                        </h2>
                     </div>
 
-                    {{-- .btn-ghost, bukan salinan tulisan tangannya. Salinan itu sudah
-                         menyimpang dari tokennya (px-6 py-3, bukan px-7 py-3.5, dan
-                         tanpa active:scale), jadi dua tombol "lihat semua" di halaman
-                         yang sama berukuran berbeda. --}}
-                    <a href="{{ route('portfolio.index') }}" data-aos="fade-up" class="btn-ghost group shrink-0">
-                        {{ $isId ? 'Lihat Semua Portofolio' : 'View All Portfolio' }}
-                        <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </a>
+                    @if ($portfolioScope?->total)
+                        @php
+                            $scope = $isId
+                                ? [[$portfolioScope->total, 'Proyek selesai'], [$portfolioScope->clients, 'Klien korporat'], [$portfolioScope->categories, 'Bidang layanan']]
+                                : [[$portfolioScope->total, 'Projects delivered'], [$portfolioScope->clients, 'Corporate clients'], [$portfolioScope->categories, 'Service areas']];
+                        @endphp
+                        {{-- Garis pemisah dipasang di sisi kiri butir kedua dan ketiga
+                             saja, bukan di kedua sisi tiap butir: dua garis
+                             bersebelahan menghasilkan tebal dua kali di tengah dan
+                             garis menggantung di kedua ujungnya. --}}
+                        <dl class="flex shrink-0" data-aos="fade-up" data-aos-delay="50">
+                            @foreach ($scope as $i => [$value, $label])
+                                <div @class([
+                                        'px-5 sm:px-8 first:pl-0 last:pr-0',
+                                        'border-l border-navy-100' => $i > 0,
+                                    ])>
+                                    <dd class="font-display text-3xl font-extrabold tracking-[-0.045em] text-navy sm:text-4xl">
+                                        <span class="tabular-nums" data-counter="{{ $value }}">{{ $value }}</span><span class="text-navy-500">+</span>
+                                    </dd>
+                                    <dt class="mt-1.5 text-[13px] font-medium text-slate-600 sm:whitespace-nowrap">{{ $label }}</dt>
+                                </div>
+                            @endforeach
+                        </dl>
+                    @endif
                 </div>
 
-                {{-- Tanpa kartu kaca. bg-white/[0.06] + backdrop-blur di atas foto
-                     adalah kaca sebagai hiasan, tepat yang disebut anti-referensi
-                     di PRODUCT.md, dan bingkainya justru mengecilkan fotonya.
-                     Susunannya kini sama dengan halaman Portofolio: foto, lalu
-                     judul di bawahnya langsung. --}}
-                <div class="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-                    @foreach ($portfolios as $p)
-                        <a href="{{ route('portfolio.show', $p->slug) }}" class="group block"
-                           data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
-                            <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-navy-100 ring-1 ring-navy-100 transition-shadow duration-500 group-hover:shadow-lift">
-                                @if ($p->cover_image)
-                                    <img src="{{ str_starts_with($p->cover_image, 'http') ? $p->cover_image : Storage::url($p->cover_image) }}" alt="{{ $p->title }}" loading="lazy"
-                                         class="h-full w-full object-cover transition-transform duration-[900ms] ease-out-soft group-hover:scale-[1.07]">
-                                @else
-                                    <div class="h-full w-full bg-gradient-to-br from-navy-700 to-navy-900"></div>
-                                @endif
-
-                                @if ($p->category)
-                                    <span class="absolute left-4 top-4 z-10 rounded-full bg-white/90 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-navy backdrop-blur">{{ $p->category->name }}</span>
-                                @endif
-
-                                {{-- Ajakan yang muncul saat disentuh kursor, bahasa yang
-                                     sama dengan kartu di halaman Portofolio. --}}
-                                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/85 via-navy-950/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
-                                <div class="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-3 items-center p-5 opacity-0 transition-all duration-500 ease-out-soft group-hover:translate-y-0 group-hover:opacity-100">
-                                    <span class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-navy shadow-lift">
-                                        {{ $isId ? 'Lihat Detail' : 'View Case' }}
-                                        <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    </span>
+                <div class="mt-14 grid items-stretch gap-10 md:mt-16 lg:grid-cols-12 lg:gap-16">
+                    {{-- Panel foto. Di layar sempit ia naik ke atas daftarnya: daftar
+                         empat butir yang mendahului foto membuat fotonya baru terlihat
+                         setelah menggulir jauh. --}}
+                    <div class="order-first lg:order-last lg:col-span-7" data-aos="fade-up" data-aos-delay="50">
+                        <div class="relative aspect-[4/5] overflow-hidden rounded-[28px] bg-navy shadow-[0_40px_80px_-40px_rgba(32,95,159,0.45)] sm:aspect-[16/11] lg:aspect-auto lg:h-full lg:min-h-[620px]">
+                            @foreach ($portfolios as $i => $p)
+                                <div class="porto-photo absolute inset-0" :data-on="active === {{ $i }} ? '1' : '0'" aria-hidden="true">
+                                    @if ($p->cover_image)
+                                        <img src="{{ str_starts_with($p->cover_image, 'http') ? $p->cover_image : Storage::url($p->cover_image) }}"
+                                             alt="" loading="lazy" decoding="async" class="h-full w-full object-cover">
+                                    @else
+                                        <div class="h-full w-full bg-gradient-to-br from-navy-700 to-navy-950"></div>
+                                    @endif
                                 </div>
+                            @endforeach
+
+                            {{-- Dua gradasi: yang biru memberi nada seksi ini, yang gelap
+                                 menjamin keterbacaan tulisan di kakinya. Dipisah supaya
+                                 pekatnya bisa diatur sendiri-sendiri. --}}
+                            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-600/60 via-navy-500/20 to-transparent"></div>
+                            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/70 via-transparent to-navy-950/20"></div>
+
+                            <div class="absolute inset-x-5 top-5 flex items-start justify-between gap-3 sm:inset-x-7 sm:top-7">
+                                @foreach ($portfolios as $i => $p)
+                                    @if ($p->category)
+                                        <span class="font-display text-[11px] font-semibold uppercase tracking-[0.16em] text-white"
+                                              x-show="active === {{ $i }}" x-cloak>{{ $p->category->name }}</span>
+                                    @endif
+                                @endforeach
+                                <span class="ml-auto shrink-0 rounded-full bg-white/[0.16] px-3 py-1.5 font-mono text-[11px] text-white backdrop-blur-[10px]"
+                                      x-text="String(active + 1).padStart(2, '0') + ' / {{ $portoPad($portoTotal) }}'" aria-hidden="true">{{ $portoPad(1) }} / {{ $portoPad($portoTotal) }}</span>
                             </div>
 
-                            <h3 class="mt-5 font-display text-lg font-semibold leading-snug text-navy text-balance transition-colors duration-300 group-hover:text-sky-700">{{ $p->title }}</h3>
-                            <p class="mt-1.5 flex flex-wrap items-center gap-x-2 text-sm text-slate-600">
-                                @if ($p->client_name)<span>{{ $p->client_name }}</span>@endif
-                                @if ($p->client_name && $p->project_date)<span class="text-navy-200" aria-hidden="true">·</span>@endif
-                                @if ($p->project_date)<span class="font-mono text-xs">{{ $p->project_date->translatedFormat('Y') }}</span>@endif
-                            </p>
-                        </a>
-                    @endforeach
+                            <div class="absolute inset-x-5 bottom-6 flex flex-col gap-4 sm:inset-x-9 sm:bottom-8 sm:flex-row sm:items-end sm:justify-between">
+                                <div class="min-w-0">
+                                    @foreach ($portfolios as $i => $p)
+                                        <div x-show="active === {{ $i }}" x-cloak>
+                                            <p class="flex flex-wrap items-center gap-x-2 text-[13px] font-medium text-navy-100">
+                                                @if ($p->client_name)<span>{{ $p->client_name }}</span>@endif
+                                                @if ($p->client_name && $p->project_date)<span aria-hidden="true">·</span>@endif
+                                                @if ($p->project_date)<span class="tabular-nums">{{ $p->project_date->translatedFormat('Y') }}</span>@endif
+                                            </p>
+                                            <p class="mt-1.5 max-w-[460px] font-display text-[22px] font-bold leading-snug text-white text-balance">{{ $p->title }}</p>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <div class="flex shrink-0 items-center gap-2">
+                                    @foreach ($portfolios as $i => $p)
+                                        <button type="button" x-on:click="go({{ $i }})"
+                                                class="h-1 rounded-sm transition-all duration-[450ms] ease-out-soft"
+                                                :class="active === {{ $i }} ? 'w-7 bg-white' : 'w-2 bg-white/45'"
+                                                aria-label="{{ $isId ? 'Proyek' : 'Project' }} {{ $i + 1 }}"></button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Daftar proyek --}}
+                    <div class="flex flex-col lg:col-span-5">
+                        <ol>
+                            @foreach ($portfolios as $i => $p)
+                                <li class="porto-item relative border-t border-navy-100" :data-on="active === {{ $i }} ? '1' : '0'">
+                                    <span class="porto-bar" :class="active === {{ $i }} && ! paused ? 'porto-bar-run' : ''" aria-hidden="true"></span>
+
+                                    <a href="{{ route('portfolio.show', $p->slug) }}"
+                                       class="grid grid-cols-[2.75rem_1fr_auto] items-start gap-3 py-7 outline-none sm:grid-cols-[4rem_1fr_auto]"
+                                       x-on:mouseenter="go({{ $i }})" x-on:focus="go({{ $i }})">
+
+                                        <span class="font-display text-[28px] font-light italic leading-none transition-colors duration-500"
+                                              :class="active === {{ $i }} ? 'text-navy-600' : 'text-navy-200'" aria-hidden="true">{{ $portoPad($i + 1) }}</span>
+
+                                        <span class="porto-shift block min-w-0">
+                                            @if ($p->category)
+                                                <span class="block font-display text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors duration-500"
+                                                      :class="active === {{ $i }} ? 'text-navy-600' : 'text-slate-500'">{{ $p->category->name }}</span>
+                                            @endif
+                                            <span class="mt-1.5 block font-display text-[22px] font-bold leading-[1.25] tracking-[-0.025em] text-balance transition-colors duration-500"
+                                                  :class="active === {{ $i }} ? 'text-navy' : 'text-slate-500'">{{ $p->title }}</span>
+
+                                            <span class="porto-body block">
+                                                <span class="block">
+                                                    <span class="mt-2.5 flex flex-wrap items-center gap-x-2 text-sm font-medium text-slate-700">
+                                                        @if ($p->client_name)<span>{{ $p->client_name }}</span>@endif
+                                                        @if ($p->client_name && $p->project_date)<span class="text-navy-200" aria-hidden="true">·</span>@endif
+                                                        @if ($p->project_date)<span class="tabular-nums">{{ $p->project_date->translatedFormat('Y') }}</span>@endif
+                                                    </span>
+                                                    @if ($p->short_description)
+                                                        <span class="mt-1.5 block max-w-[400px] text-sm leading-[1.65] text-slate-600">{{ $p->short_description }}</span>
+                                                    @endif
+                                                </span>
+                                            </span>
+                                        </span>
+
+                                        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full border transition-all duration-[450ms] ease-out-soft"
+                                              :class="active === {{ $i }} ? 'border-navy-500 bg-navy-500 text-white -rotate-45' : 'border-navy-100 bg-white text-slate-400'"
+                                              aria-hidden="true">
+                                            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ol>
+
+                        <div class="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-navy-100 pt-9">
+                            {{-- .btn-blue, tombol andalan situs ini: warnanya, hovernya,
+                                 dan cincin fokusnya sudah ditentukan satu kali di sana. --}}
+                            <a href="{{ route('portfolio.index') }}" class="btn-blue group">
+                                {{ $isId ? 'Lihat Semua Portofolio' : 'View All Portfolio' }}
+                                <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </a>
+                            <span class="font-mono text-[13px] font-medium text-slate-500"
+                                  x-text="String(active + 1).padStart(2, '0') + ' / {{ $portoPad($portoTotal) }}'" aria-hidden="true">{{ $portoPad(1) }} / {{ $portoPad($portoTotal) }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

@@ -41,12 +41,28 @@
          yang memang dipilih, bukan dari kebetulan. --}}
     <section class="section bg-white">
         <div class="container">
-            {{-- Judulnya kini beraksen miring berwarna dan berbobot semibold seperti
-                 judul seksi lain. Sebelumnya font-bold — satu-satunya judul seksi
-                 yang lebih tebal dari yang lain tanpa alasan. --}}
-            <div class="mx-auto max-w-xl text-center" data-aos="fade-up">
-                <h2 class="text-display-lg text-navy">{{ $isId ? 'Testimoni Klien' : 'Client Testimonials' }}</h2>
-                <p class="mt-4 text-pretty text-slate-600">{{ $isId ? 'Cerita dampak dari mereka yang telah bekerja sama dengan kami.' : 'Impact stories from those who have worked with us.' }}</p>
+            {{-- Susunan judul yang sama dengan seksi Portofolio di beranda: label
+                 bertitik, lalu dua baris yang baris keduanya dimiringkan, diturunkan
+                 bobotnya, dan diberi warna. Keduanya berpasangan di halaman yang
+                 sama, dan dua judul berbentuk berbeda di sana terbaca seperti dua
+                 situs yang bertemu.
+
+                 Tetap rata tengah: kartunya berjalan di tiga kolom yang simetris,
+                 dan judul rata kiri di atasnya menggantung ke satu sisi. --}}
+            <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
+                <p class="flex items-center justify-center gap-2.5 font-display text-xs font-semibold uppercase tracking-[0.28em] text-navy-600">
+                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-navy-500" aria-hidden="true"></span>
+                    {{ $isId ? 'Testimoni Klien' : 'Client Testimonials' }}
+                </p>
+                <h2 class="mt-5 font-display text-[clamp(2.25rem,4.4vw,3.5rem)] font-extrabold leading-none tracking-[-0.05em] text-navy">
+                    {{ $isId ? 'Kata mereka,' : 'Their words,' }}<br>
+                    <em class="font-light italic text-navy-500">{{ $isId ? 'bukan kata kami.' : 'not ours.' }}</em>
+                </h2>
+                <p class="mx-auto mt-6 max-w-xl text-pretty text-[17px] leading-[1.7] text-slate-600">
+                    {{ $isId
+                        ? 'Pengalaman langsung dari perusahaan yang telah membuktikan hasil kerja kami.'
+                        : 'First-hand accounts from companies that have seen our work deliver.' }}
+                </p>
             </div>
 
             {{-- Di bawah md hanya satu kolom yang tampil, dan sebelumnya kolom itu

@@ -749,6 +749,64 @@
     .mitra-arrow { transition: none; }
 }
 
+/* ── Indeks portofolio di beranda ─────────────────────────────────────────
+ * Daftar proyek di kiri, satu panel foto di kanan. Butir yang sedang aktif
+ * membuka keterangannya dan menampilkan fotonya.
+ *
+ * Keterangan dibuka dengan grid-template-rows 0fr ke 1fr, bukan max-height:
+ * max-height menuntut angka yang ditebak lebih besar dari isinya, dan tebakan
+ * itu membuat lama bukanya tidak sama antara butir berketerangan pendek dan
+ * panjang. 0fr ke 1fr selalu tepat setinggi isinya.
+ */
+.porto-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.porto-item[data-on="1"] .porto-body { grid-template-rows: 1fr; }
+.porto-body > * {
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+}
+.porto-item[data-on="1"] .porto-body > * { opacity: 1; }
+
+.porto-shift { transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.porto-item[data-on="1"] .porto-shift { transform: translateX(6px); }
+
+/* Bilah waktu putar otomatis. Kelasnya baru dipasang saat butirnya aktif, dan
+   animasi CSS mulai dari awal tiap kali kelasnya dipasang — itu yang membuatnya
+   terulang sendiri tanpa perlu menyentuhnya dari JavaScript. */
+.porto-bar {
+    position: absolute;
+    left: 0;
+    top: -1px;
+    height: 1px;
+    width: 0;
+    background-color: #2b83df;
+}
+.porto-bar-run { animation: porto-bar 5s linear forwards; }
+@keyframes porto-bar { from { width: 0; } to { width: 100%; } }
+
+/* Ken Burns: fotonya membesar pelan selama ia tampil. 6 detik, lebih lama dari
+   5 detik jeda gantinya, jadi gerakannya tidak pernah sempat berhenti dan
+   terbaca sebagai henti. */
+.porto-photo {
+    opacity: 0;
+    transform: scale(1);
+    transition: opacity 0.8s ease, transform 6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.porto-photo[data-on="1"] { opacity: 1; transform: scale(1.06); }
+
+@media (prefers-reduced-motion: reduce) {
+    .porto-body,
+    .porto-body > *,
+    .porto-shift,
+    .porto-photo { transition: none; }
+    .porto-bar-run { animation: none; width: 100%; }
+    .porto-photo[data-on="1"] { transform: none; }
+}
+
 /* ── Pita ajakan di sambungan dua seksi ───────────────────────────────────
  * Dipakai di beranda, menumpang separuh di seksi Kategori Layanan dan separuh
  * di seksi Pelatihan Terbaru.

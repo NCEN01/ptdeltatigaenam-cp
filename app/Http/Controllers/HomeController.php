@@ -44,9 +44,11 @@ class HomeController extends Controller
                     'harga' => (float) $s->price,
                     'harga_awal' => $s->hasDiscount() ? (float) $s->discount_original_price : null,
                 ]),
-            // 3 newest portfolios — auto-updates whenever a more recent one is added.
+            // 4 newest portfolios — auto-updates whenever a more recent one is added.
+            // Empat, bukan tiga: seksi ini kini indeks berdaftar, dan daftar
+            // setinggi tiga butir berakhir jauh di atas panel fotonya.
             'portfolios' => Portfolio::where('is_active', true)
-                ->with('category')->latest('project_date')->latest('id')->take(3)->get(),
+                ->with('category')->latest('project_date')->latest('id')->take(4)->get(),
             // Cakupan portofolio, dihitung dari datanya sendiri sehingga angkanya
             // ikut bergerak saat admin menambah proyek. Satu query, bukan tiga:
             // ketiganya membaca tabel dan filter yang sama persis.
