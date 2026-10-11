@@ -108,11 +108,11 @@
                  letaknya menjelaskan sendiri apa yang akan bergeser. --}}
             <div class="pt-rail" data-aos="fade-up" data-aos-delay="100">
                 <button type="button" data-pt-prev aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}"
-                        class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-40 lg:grid">
+                        class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-40 lg:grid">
                     <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
                 <button type="button" data-pt-next aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}"
-                        class="absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy hover:bg-navy hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-40 lg:grid">
+                        class="absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-40 lg:grid">
                     <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
 

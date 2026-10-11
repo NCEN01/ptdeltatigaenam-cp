@@ -177,9 +177,9 @@
          menggambarkan apa pun — dan latar bergambar membuat kata-kata di
          atasnya harus dilindungi lapis gelap yang justru memadamkan fotonya.
 
-         Dua benda emas saja di seluruh pita: lencana "Arah Kami" dan satu
-         penggalan di dalam pernyataan visi. Label misi memakai biru muda,
-         bukan emas, supaya emasnya tetap jadi penanda yang jarang. --}}
+         Emas dipakai dua kali saja di seluruh pita: ampersan di judul raksasa
+         dan satu penggalan di dalam pernyataan visi. Label misi memakai biru
+         muda, bukan emas, supaya emasnya tetap jadi penanda yang jarang. --}}
     @php
         /* Visi dipecah jadi dua: kalimat pertama tampil besar sebagai
            pernyataan, sisanya jadi paragraf penjelas. Satu penggalan di antara
@@ -218,10 +218,7 @@
                      penggalan emas di dalam visi. Keduanya emas, jadi yang terbaca
                      satu sistem, bukan huruf miring yang bertaburan. --}}
                 <div class="lg:col-span-4" data-aos="fade-up">
-                    <p class="inline-flex items-center rounded-full border border-gold/40 px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-gold-soft">
-                        {{ $isId ? 'Arah Kami' : 'Our Direction' }}
-                    </p>
-                    <h2 class="mt-7 font-display text-6xl font-bold leading-[0.95] tracking-tight text-white md:text-7xl">
+                    <h2 class="font-display text-6xl font-bold leading-[0.95] tracking-tight text-white md:text-7xl">
                         {{ $isId ? 'Visi' : 'Vision' }}<br>
                         <span class="pr-1 italic text-gold-soft">&amp;</span>{{ $isId ? 'Misi' : 'Mission' }}
                     </h2>
@@ -505,21 +502,24 @@
                              x-on:click="active = {{ $i }}"
                              :data-on="active === {{ $i }} ? '1' : '0'"
                              data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
-                            <dt class="flex items-start gap-4 md:w-72 md:shrink-0">
+                            {{-- items-center, bukan items-start: nomornya kini sejajar
+                                 titik tengah judulnya, bukan menggantung di barisnya
+                                 yang pertama. --}}
+                            <dt class="flex items-center gap-4 md:w-72 md:shrink-0">
                                 {{-- Nomor navy di dalam lingkaran bergaris: 12,6:1
                                      terhadap latar putih; saat aktif ia berbalik jadi
-                                     putih di atas navy, 16,1:1. aria-hidden karena
+                                     putih di atas navy-600, 6,6:1. aria-hidden karena
                                      urutannya tidak menyimpan arti apa pun di luar
                                      tampilan. --}}
-                                <span class="nilai-node mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-full font-display text-sm font-bold tabular-nums ring-1 transition-colors duration-300"
+                                <span class="nilai-node grid h-11 w-11 shrink-0 place-items-center rounded-full font-display text-sm font-bold tabular-nums ring-1 transition-colors duration-300"
                                       aria-hidden="true"
                                       :data-on="active === {{ $i }} ? '1' : '0'"
-                                      :class="active === {{ $i }} ? 'bg-navy text-white ring-navy' : 'text-navy ring-navy-200'">{{ sprintf('%02d', $i + 1) }}</span>
-                                <span class="text-lg font-bold leading-snug text-navy md:text-xl">{{ $value['title'] }}</span>
+                                      :class="active === {{ $i }} ? 'bg-navy-600 text-white ring-navy-600' : 'text-navy ring-navy-200'">{{ sprintf('%02d', $i + 1) }}</span>
+                                <span class="text-base font-bold leading-snug text-navy md:text-lg">{{ $value['title'] }}</span>
                             </dt>
                             {{-- 'detail', bukan 'desc'. Kalimat 'desc' sudah tampil
                                  di beranda. --}}
-                            <dd class="text-pretty text-sm leading-relaxed text-slate-600 md:text-[15px]">{{ $value['detail'] }}</dd>
+                            <dd class="text-pretty text-sm leading-relaxed text-slate-600">{{ $value['detail'] }}</dd>
                         </div>
                     @endforeach
                 </dl>

@@ -231,11 +231,11 @@
                     @if ($agendas->count() > 1)
                         <div class="hidden shrink-0 items-center gap-3 md:flex" data-aos="fade-up">
                             <button type="button" data-hscroll-prev aria-label="{{ $id ? 'Sebelumnya' : 'Previous' }}"
-                                    class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 bg-white text-navy shadow-card transition-colors hover:border-navy hover:bg-navy hover:text-white active:scale-95">
+                                    class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 bg-white text-navy shadow-card transition-colors hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                             <button type="button" data-hscroll-next aria-label="{{ $id ? 'Berikutnya' : 'Next' }}"
-                                    class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 bg-white text-navy shadow-card transition-colors hover:border-navy hover:bg-navy hover:text-white active:scale-95">
+                                    class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 bg-white text-navy shadow-card transition-colors hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                         </div>

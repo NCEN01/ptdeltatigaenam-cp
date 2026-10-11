@@ -48,7 +48,10 @@
 
         {{-- The 2-line reserve only matters where cards sit side by side; on phones one
              card fills the row, so the extra blank line is wasted height. --}}
-        <h3 class="mt-2 line-clamp-2 font-display text-base leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700 sm:mt-2.5 sm:min-h-[3.25rem] sm:text-lg">{{ $post->title }}</h3>
+        {{-- Di rel Berita beranda judulnya satu tingkat lebih kecil dan jatah dua
+             barisnya ikut menyusut. Kartunya berdiri di sebelah panel navy, bukan
+             di kisi, jadi tingginya harus menyesuaikan panel itu. --}}
+        <h3 class="mt-2 line-clamp-2 font-display text-base leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700 sm:mt-2.5 {{ $compact ? 'sm:min-h-[2.75rem] sm:text-[15px]' : 'sm:min-h-[3.25rem] sm:text-lg' }}">{{ $post->title }}</h3>
 
         @if ($excerpt && $post->excerpt)
             <p class="mt-1.5 line-clamp-2 text-pretty text-sm leading-relaxed text-slate-600 sm:mt-2 sm:line-clamp-3">{{ $post->excerpt }}</p>
