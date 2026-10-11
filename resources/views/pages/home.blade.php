@@ -83,11 +83,32 @@
                                 @php $heroTag = $loop->first ? 'h1' : 'h2'; @endphp
                                 <{{ $heroTag }} class="font-display font-bold leading-[1.12] text-balance [font-size:clamp(1.95rem,4.6vw,3.5rem)] {{ empty($slide['cat']) ? '' : 'mt-6' }}">
                                     <span class="block">{{ $hl }}</span>
-                                    @if ($ha !== '')<span class="italic-accent block font-normal leading-[1.28] pb-[0.16em] text-gradient-white-navy">{{ $ha }}</span>@endif
+                                    {{-- Bobotnya setebal baris pertama, bukan font-normal.
+                                         Di ukuran sampai 3,5rem, huruf miring berbobot
+                                         normal kehilangan tenaga di bawah baris yang jauh
+                                         lebih tebal, dan gradasi birunya pun ikut pudar
+                                         karena goresannya terlalu tipis untuk membawa
+                                         perubahan warna. --}}
+                                    @if ($ha !== '')<span class="italic-accent block font-bold leading-[1.28] pb-[0.16em] text-gradient-white-navy">{{ $ha }}</span>@endif
                                 </{{ $heroTag }}>
                                 <p class="mt-6 max-w-xl text-[15px] font-normal leading-relaxed text-white/90 text-pretty md:text-lg">{{ $slide['desc'] }}</p>
                                 <div class="mt-10">
-                                    <a href="{{ $slide['link'] }}" class="btn border border-gold text-gold hover:border-gold hover:bg-gold hover:text-navy-950 hover:shadow-gold">{{ $slide['btn_text'] }}</a>
+                                    {{-- Pil bergaris dengan lingkaran panah di kirinya.
+                                         Emas dilepas dari tombol ini: di hero yang seluruhnya
+                                         biru, emas adalah satu-satunya warna hangat dan ia
+                                         menarik mata menjauh dari judulnya.
+
+                                         Saat disentuh, pilnya terisi putih dan lingkarannya
+                                         berbalik jadi navy. Keduanya bertukar, jadi panahnya
+                                         tetap terbaca di kedua keadaan: navy di atas putih
+                                         17:1, putih di atas navy 17:1. --}}
+                                    <a href="{{ $slide['link'] }}"
+                                       class="group inline-flex items-center gap-3.5 rounded-full border border-white/50 py-1.5 pl-1.5 pr-7 text-[15px] font-semibold text-white transition duration-300 ease-out-soft hover:border-white hover:bg-white hover:text-navy-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 active:scale-[0.98]">
+                                        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white text-navy-950 transition duration-300 ease-out-soft group-hover:bg-navy-950 group-hover:text-white" aria-hidden="true">
+                                            <svg class="h-4 w-4 transition-transform duration-300 ease-out-soft group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </span>
+                                        {{ $slide['btn_text'] }}
+                                    </a>
                                 </div>
                             </div>
                         </div>
