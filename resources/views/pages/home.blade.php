@@ -937,7 +937,11 @@
                                class="group/cta inline-flex items-center justify-between gap-3.5 rounded-full bg-white py-[7px] pl-7 pr-[7px] text-[15px] font-semibold text-navy-600 shadow-[0_10px_24px_-10px_rgba(0,0,0,0.3)] transition duration-[250ms] ease-out-soft hover:-translate-y-0.5 hover:shadow-[0_16px_30px_-10px_rgba(0,0,0,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-700 sm:justify-start">
                                 Instagram
                                 <span class="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-full bg-navy-600 text-white transition-transform duration-300 ease-out-soft group-hover/cta:scale-105" aria-hidden="true">
-                                    <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.8 3.8 0 0 1-1.38-.9 3.8 3.8 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16Zm0 3.08A6.76 6.76 0 1 0 18.76 12 6.76 6.76 0 0 0 12 5.24Zm0 11.15A4.39 4.39 0 1 1 16.39 12 4.39 4.39 0 0 1 12 16.39Zm8.6-11.42a1.58 1.58 0 1 1-1.58-1.58 1.58 1.58 0 0 1 1.58 1.58Z"/></svg>
+                                    {{-- Lambang yang sama persis dengan yang di footer:
+                                         bergaris, bukan padat. Dua lambang platform yang
+                                         sama di satu halaman dengan dua gaya berbeda
+                                         terbaca sebagai dua merek. --}}
+                                    <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
                                 </span>
                             </a>
                         @endif
@@ -947,7 +951,7 @@
                                class="group/cta inline-flex items-center justify-between gap-3.5 rounded-full bg-white py-[7px] pl-7 pr-[7px] text-[15px] font-semibold text-navy-600 shadow-[0_10px_24px_-10px_rgba(0,0,0,0.3)] transition duration-[250ms] ease-out-soft hover:-translate-y-0.5 hover:shadow-[0_16px_30px_-10px_rgba(0,0,0,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-700 sm:justify-start">
                                 Facebook
                                 <span class="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-full bg-navy-600 text-white transition-transform duration-300 ease-out-soft group-hover/cta:scale-105" aria-hidden="true">
-                                    <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.5-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.45 2.91h-2.33V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                                    <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                                 </span>
                             </a>
                         @endif

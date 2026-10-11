@@ -46,12 +46,13 @@
                     <p class="font-display text-xs font-semibold uppercase tracking-[0.28em] text-navy-400">
                         {{ $isId ? 'Mitra Kerja Sama' : 'Collaborating Partners' }}
                     </p>
-                    {{-- Baris kedua dimiringkan dan diturunkan bobotnya. Miring
-                         saja di bawah huruf setebal ini nyaris tidak terbaca;
-                         perbedaan bobotnya yang memisahkan kedua baris. --}}
+                    {{-- Baris kedua dimiringkan dan diberi warna, bobotnya tetap
+                         setebal baris pertama. Sebelumnya bobotnya diturunkan ke
+                         300, dan di ukuran sebesar ini huruf setipis itu kehilangan
+                         tenaga di sebelah baris pertamanya. --}}
                     <h2 class="mt-5 font-display text-[clamp(2.25rem,4.4vw,3.5rem)] font-extrabold leading-[1.06] tracking-[-0.04em] text-white">
                         {{ $isId ? 'Sertifikasi resmi,' : 'Official certification,' }}<br>
-                        <em class="font-light italic text-navy-200">{{ $isId ? 'dijamin lembaga terpercaya.' : 'backed by trusted bodies.' }}</em>
+                        <em class="font-extrabold italic text-navy-200">{{ $isId ? 'dijamin lembaga terpercaya.' : 'backed by trusted bodies.' }}</em>
                     </h2>
                 </div>
 
