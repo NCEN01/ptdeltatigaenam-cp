@@ -37,6 +37,15 @@
 }
 .pt-section * { box-sizing: border-box; }
 
+/* Ruang tambahan di kepala seksi untuk separuh bawah pita ajakan yang
+   menumpanginya di beranda. 90px persis separuh tinggi pita itu di layar
+   lebar. Hanya dari 768px: di bawah itu pitanya berdiri di antara kedua
+   seksi, tidak menumpanginya, jadi ruang tambahan ini justru jadi celah
+   kosong. */
+@media (min-width: 768px) {
+    .pt-section--cta-above { padding-top: calc(clamp(40px, 7vw, 96px) + 90px); }
+}
+
 /* Judul, angka, dan label memakai jenis huruf display situs. */
 .pt-title,
 .pt-card-title,

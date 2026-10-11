@@ -615,6 +615,63 @@
     .hover-card[data-on="1"] { transform: none; }
 }
 
+/* ── Pita ajakan di sambungan dua seksi ───────────────────────────────────
+ * Dipakai di beranda, menumpang separuh di seksi Kategori Layanan dan separuh
+ * di seksi Pelatihan Terbaru.
+ *
+ * Gradiennya memakai token situs, bukan biru dari rancangannya: navy-800 ke
+ * sky-500. Titik paling terangnya sengaja ditahan sampai 92% lebar. Di sky-500
+ * teks putih hanya 2,37:1, jadi kalau warnanya sudah terang di pertengahan,
+ * kalimat yang sedikit lebih panjang (atau versi Inggrisnya) akan masuk ke
+ * daerah itu dan hilang. Dengan tangga ini, seluruh daerah teks berada di
+ * navy-800 sampai navy-600: putih 6,6:1 ke atas, navy-100 5,4:1 ke atas.
+ * Ujung terangnya hanya ditempati tombol, yang pilnya putih.
+ *
+ * Cincin dalam ditulis sebagai bayangan kedua, bukan ::after: satu elemen lebih
+ * sedikit, dan bayangan inset tidak pernah menutupi isinya.
+ */
+.cta-band {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    background-image: linear-gradient(110deg, #123a6b 0%, #164a7d 38%, #205f9f 70%, #2b83df 92%, #23b7dc 100%);
+    box-shadow: 0 28px 56px -24px rgba(18, 58, 107, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+/* Garis cahaya tipis di tepi atas. */
+.cta-band::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1px;
+    background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    pointer-events: none;
+}
+
+/* Pola cap sertifikat di sisi kanan, diluruhkan topeng radial supaya tepinya
+   tidak berhenti mendadak. */
+.cta-band-stamp {
+    position: absolute;
+    right: -120px;
+    top: 50%;
+    width: 560px;
+    height: 560px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    background-image: repeating-radial-gradient(circle, rgba(255, 255, 255, 0.11) 0 1px, transparent 1px 16px);
+    -webkit-mask-image: radial-gradient(circle, #000 30%, transparent 70%);
+    mask-image: radial-gradient(circle, #000 30%, transparent 70%);
+}
+
+@media (max-width: 767px) {
+    .cta-band { border-radius: 20px; }
+    /* Diperkecil dan diredupkan: di lebar ponsel pola selebar 560px menutupi
+       seluruh pita dan bersaing dengan kalimatnya. */
+    .cta-band-stamp { width: 340px; height: 340px; right: -130px; opacity: 0.55; }
+}
+
 /* ── Hero carousel ── */
 @keyframes kenburns {
     from { transform: scale(1.05); }

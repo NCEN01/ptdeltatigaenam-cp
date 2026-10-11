@@ -127,7 +127,10 @@
          ini kedalaman sehingga kartu-kartunya punya tempat untuk melayang. Tanpa
          itu kartu putih di atas putih hanya bisa dibedakan lewat garis tepi, dan
          garis tepi membuatnya terbaca sebagai kotak, bukan objek. --}}
-    <section class="section-sm relative overflow-hidden bg-white">
+    {{-- md:pb-44 menambah ruang untuk separuh atas pita ajakan yang menumpang di
+         kaki seksi ini. Utilitas pb-* mengalahkan py-* dari .section-sm karena
+         lapis utilities datang sesudah lapis components. --}}
+    <section class="section-sm relative overflow-hidden bg-white md:pb-44 lg:pb-48">
         <div class="pointer-events-none absolute inset-0 aurora-light opacity-70"></div>
 
         <div class="container relative">
@@ -317,15 +320,66 @@
         </div>
     </section>
 
+    {{-- ===================== PITA AJAKAN =====================
+         Menumpang di garis sambungan dua seksi: separuh atas di Kategori
+         Layanan, separuh bawah di Pelatihan Terbaru.
+
+         Caranya jarak negatif setinggi separuh pitanya di atas dan di bawah,
+         sehingga sumbangan pita ini pada alur halaman nol dan kedua seksi
+         bersentuhan tepat di tengahnya. Ruang untuk separuh yang menumpang
+         itu ditambahkan di kedua seksinya (md:pb-44 di atas, kelas
+         .pt-section--cta-above di bawah), bukan dengan menggeser pitanya
+         memakai transform — transform tidak menyisihkan ruang, jadi isinya
+         akan tertutup.
+
+         Hanya menumpang dari md ke atas. Di ponsel pitanya menumpuk tegak dan
+         tingginya mengikuti isi, jadi jarak negatif setinggi tetap akan
+         menutupi judul seksi di bawahnya. --}}
+    <div class="relative z-20 my-12 md:-my-[90px]">
+        <div class="container">
+            <div class="cta-band flex flex-col items-start gap-7 px-6 py-8 md:min-h-[180px] md:flex-row md:items-center md:justify-between md:gap-10 md:px-14 md:py-0"
+                 data-aos="fade-up">
+                <div class="cta-band-stamp" aria-hidden="true"></div>
+
+                <div class="relative">
+                    {{-- Satu kata dimiringkan dan diturunkan bobotnya. Miring saja di
+                         tengah huruf setebal ini nyaris tidak terbaca; perbedaan
+                         bobotnya yang membuatnya menonjol. --}}
+                    <h2 class="font-display text-2xl font-bold leading-[1.15] tracking-[-0.03em] text-white md:text-[clamp(1.75rem,2.4vw,2.125rem)] lg:whitespace-nowrap">
+                        {{ $isId ? 'Keahlian Anda layak ' : 'Your skills deserve ' }}<em class="font-light italic">{{ $isId ? 'diakui' : 'formal' }}</em>{{ $isId ? ' secara resmi.' : ' recognition.' }}
+                    </h2>
+                    <p class="mt-2.5 text-pretty text-[15px] leading-relaxed text-navy-100 md:text-base lg:whitespace-nowrap">
+                        {{ $isId
+                            ? 'Ceritakan target Anda, lalu kami susun jalur pelatihan hingga uji kompetensinya.'
+                            : 'Tell us your target, and we will map the path from training through to assessment.' }}
+                    </p>
+                </div>
+
+                {{-- Pil putih berlingkaran navy, bukan .btn-blue: di atas bidang biru
+                     tombol biru akan hilang ke dalam latarnya. --}}
+                <a href="{{ route('contact.index') }}"
+                   class="group/cta relative inline-flex shrink-0 items-center gap-3.5 rounded-full bg-white py-[7px] pl-7 pr-[7px] text-[15px] font-semibold text-navy-600 shadow-[0_10px_24px_-10px_rgba(0,0,0,0.3)] transition duration-[250ms] ease-out-soft hover:-translate-y-0.5 hover:shadow-[0_16px_30px_-10px_rgba(0,0,0,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-700">
+                    {{ $isId ? 'Hubungi Kami' : 'Contact Us' }}
+                    <span class="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-full bg-navy-600 text-white transition-transform duration-300 ease-out-soft group-hover/cta:translate-x-0.5" aria-hidden="true">
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+
     {{-- ===================== PELATIHAN TERBARU =====================
          Rancangan dari Claude Design, disesuaikan dengan palet, jenis huruf,
          lebar container, dan radius situs ini. Seksi lama beserta ilustrasi
          papan penilaiannya dihapus seluruhnya, termasuk carousel Swiper-nya.
 
          $programs dipetakan HomeController dari model Service, jadi isinya
-         layanan sungguhan dan ikut berubah saat admin menyuntingnya di CMS. --}}
+         layanan sungguhan dan ikut berubah saat admin menyuntingnya di CMS.
+
+         cta-above menambah ruang di kepala seksi ini untuk separuh bawah pita
+         ajakan di atasnya. --}}
     @if ($programs->isNotEmpty())
-        <x-pelatihan-terbaru :programs="$programs" :lihat-semua-url="route('services.index')" />
+        <x-pelatihan-terbaru :programs="$programs" :lihat-semua-url="route('services.index')" cta-above />
     @endif
 
     {{-- ===================== WHY CHOOSE US (image band + numbered row) ===================== --}}

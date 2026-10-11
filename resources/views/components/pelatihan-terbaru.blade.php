@@ -13,7 +13,7 @@
     berkas di public/ tidak ikut di-hash sehingga peramban menyimpan versi
     lamanya setelah CSS diperbarui.
 --}}
-@props(['programs' => [], 'lihatSemuaUrl' => '#'])
+@props(['programs' => [], 'lihatSemuaUrl' => '#', 'ctaAbove' => false])
 
 @once
     @push('styles')
@@ -26,7 +26,11 @@
 
 @php $isId = app()->getLocale() === 'id'; @endphp
 
-<section class="pt-section" aria-labelledby="pt-title">
+{{-- ctaAbove: separuh bawah pita ajakan di beranda menumpang di kepala
+     seksi ini, jadi ruangnya ditambah supaya judulnya tidak tertutup.
+     Opsional, bukan tetap: seksi ini bisa dipakai di halaman yang tidak
+     punya pita itu. --}}
+<section class="pt-section @if ($ctaAbove) pt-section--cta-above @endif" aria-labelledby="pt-title">
     <div class="pt-grid-bg" aria-hidden="true"></div>
     <div class="pt-glow" aria-hidden="true"></div>
 
