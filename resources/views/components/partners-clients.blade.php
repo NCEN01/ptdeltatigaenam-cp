@@ -5,8 +5,9 @@
     $clients = $clients ?? collect();
     $isId = app()->getLocale() === 'id';
 
-    // Repeat clients so a single marquee "half" fills the viewport, then render
-    // two identical halves for a seamless, never-ending -50% loop.
+    // Logo klien diulang sampai satu "separuh" rel penuh memenuhi layar, lalu
+    // dua separuh yang identik dirender berurutan supaya putaran -50% tidak
+    // pernah menyisakan celah kosong.
     $repeat = function ($col, $min = 16) {
         if (! $col || $col->isEmpty()) {
             return collect();
@@ -16,95 +17,140 @@
         for ($i = 0; $i < $times; $i++) {
             $out = $out->concat($col);
         }
+
         return $out;
     };
 
     $klien = $repeat($clients, 16);
 
-    // Mitra ditata tiga logo per baris dan tetap dua baris saat jumlahnya
-    // bertambah: kolomnya yang tumbuh, sehingga pelatnya mengecil sendiri tanpa
-    // perlu diatur ulang. Minimal 3 supaya empat mitra sekarang tidak melar
-    // menjadi dua pelat raksasa, dan dibatasi 6 karena di bawah itu logonya
-    // sudah tidak terbaca — lewat dua belas mitra, barisnya bertambah.
-    $partnerCols = min(6, max(3, (int) ceil($partners->count() / 2)));
+    // Dua jalur berlawanan arah. Jalur kedua dimulai dari tengah daftar supaya
+    // kedua baris tidak menampilkan logo yang sama bersebelahan.
+    $klienAtas = $klien;
+    $klienBawah = $klien->slice((int) floor($klien->count() / 2))->concat($klien->take((int) floor($klien->count() / 2)))->values();
 @endphp
 
 @if ($partners->isNotEmpty() || $clients->isNotEmpty())
-    {{-- ONE unified section (Mitra + Klien) on a single background image, using the same
-         gradient treatment as the "Alasan Memilih Kami / Keunggulan" band. --}}
-    <section class="relative overflow-hidden bg-navy-950 text-white">
-        <img src="https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?auto=format&fit=crop&w=1920&q=80"
-             alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover">
-        <div class="absolute inset-0 bg-navy-950/82"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/88"></div>
-        <div class="pointer-events-none absolute inset-0 grain opacity-20"></div>
-        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
+    {{-- Satu seksi gelap untuk Mitra dan Klien sekaligus, berlatar kota yang
+         digambar dari kode (lihat <x-skyline />). Keduanya menjawab pertanyaan
+         yang sama, "siapa yang berdiri di belakang sertifikat ini", jadi
+         memisahkannya jadi dua seksi membuat jawabannya terbaca dua kali. --}}
+    <section class="relative overflow-hidden text-white">
+        <x-skyline />
 
-        {{-- ===================== MITRA — centered; logo box on top, name + reg. number below ===================== --}}
-        @if ($partners->isNotEmpty())
-            <div class="relative container pt-14 md:pt-20 {{ $clients->isEmpty() ? 'pb-14 md:pb-20' : 'pb-10 md:pb-12' }}">
-                {{-- Rata kiri, mengikuti pola judul seksi di
-                     halaman lain. Judul di tengah membuat seksi ini terasa
-                     berdiri sendiri, padahal ia bagian dari satu situs. --}}
-                <div class="max-w-2xl" data-aos="fade-up">
-                    <h2 class="text-display-lg font-semibold text-white text-balance">{{ $isId ? 'Mitra Kerja Sama' : 'Collaborating Partners' }}</h2>
-                    <p class="mt-5 text-lg leading-relaxed text-navy-100 text-pretty">
-                        {{ $isId
-                            ? 'Saatnya naik level bersama sertifikasi kompetensi resmi BNSP.'
-                            : 'Time to level up with official BNSP competency certification.' }}
+        <div class="relative container pt-20 md:pt-28 lg:pt-32">
+            {{-- Judul di kiri, kalimat penjelas di kanan dan dirata-bawah
+                 dengannya: keduanya satu pernyataan yang dipecah, bukan judul
+                 lalu paragraf di bawahnya. --}}
+            <div class="grid gap-8 lg:grid-cols-[1fr_420px] lg:items-end lg:gap-20">
+                <div data-aos="fade-up">
+                    <p class="font-display text-xs font-semibold uppercase tracking-[0.28em] text-navy-400">
+                        {{ $isId ? 'Mitra Kerja Sama' : 'Collaborating Partners' }}
                     </p>
+                    {{-- Baris kedua dimiringkan dan diturunkan bobotnya. Miring
+                         saja di bawah huruf setebal ini nyaris tidak terbaca;
+                         perbedaan bobotnya yang memisahkan kedua baris. --}}
+                    <h2 class="mt-5 font-display text-[clamp(2.25rem,4.4vw,3.5rem)] font-extrabold leading-[1.06] tracking-[-0.04em] text-white">
+                        {{ $isId ? 'Sertifikasi resmi,' : 'Official certification,' }}<br>
+                        <em class="font-light italic text-navy-200">{{ $isId ? 'dijamin lembaga terpercaya.' : 'backed by trusted bodies.' }}</em>
+                    </h2>
                 </div>
 
-                {{-- Tanpa kartu kaca. Pelat putih tempat logonya sudah menjadi
-                     wadahnya sendiri; membungkusnya lagi dengan panel buram
-                     hanya menumpuk bingkai.
+                @if ($partners->isNotEmpty())
+                    <p class="text-[17px] leading-[1.7] text-navy-100 text-pretty" data-aos="fade-up" data-aos-delay="50">
+                        {{ $isId
+                            ? 'Empat Lembaga Sertifikasi Profesi berlisensi BNSP mendampingi setiap uji kompetensi kami, sehingga sertifikat Anda sah dan diakui.'
+                            : 'Four BNSP-licensed certification bodies oversee every assessment we run, so your certificate is valid and recognised.' }}
+                    </p>
+                @endif
+            </div>
 
-                     Tiga logo per baris, dan tetap dua baris ketika mitranya
-                     bertambah: yang tumbuh jumlah kolomnya, sehingga pelatnya
-                     mengecil sendiri. Selebar container, sejajar tepi kiri dan
-                     kanan seperti seksi lain — dibatasi max-w-4xl, sisi kanannya
-                     menganga kosong sampai hampir separuh halaman. --}}
-                <div class="mitra-grid mt-12 gap-x-5 gap-y-8 md:mt-14 md:gap-x-6" style="--mitra-cols: {{ $partnerCols }};">
+            @if ($partners->isNotEmpty())
+                <div class="mitra-board mt-14 md:mt-16" data-aos="fade-up">
                     @foreach ($partners as $partner)
-                        <x-partner-plate :partner="$partner" data-aos="fade-up" data-aos-delay="{{ ($loop->index % $partnerCols) * 50 }}" />
+                        @php
+                            $name = trim($partner->name);
+                            $href = trim((string) ($partner->website_url ?? ''));
+                            // Kartunya jadi tautan hanya bila mitranya punya alamat
+                            // situs. Tautan yang tidak menuju ke mana pun tetap
+                            // disinggahi papan tik dan tidak melakukan apa-apa.
+                            $tag = $href !== '' ? 'a' : 'div';
+                        @endphp
+                        <{{ $tag }} class="mitra-card flex flex-col gap-5 p-5 outline-none focus-visible:ring-2 focus-visible:ring-navy-200 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950"
+                            @if ($href !== '') href="{{ $href }}" target="_blank" rel="noopener" @endif>
+
+                            <div class="mitra-logo-box relative grid h-[150px] place-items-center rounded-[14px] bg-white p-[22px]">
+                                @if ($partner->logo)
+                                    {{-- alt kosong dengan sengaja: nama mitranya tertulis
+                                         tepat di bawah logo ini. Diisi, namanya terbaca dua
+                                         kali oleh pembaca layar. --}}
+                                    <img src="{{ Storage::url($partner->logo) }}" alt="" loading="lazy" decoding="async"
+                                         class="mitra-logo max-h-full max-w-full object-contain">
+                                @else
+                                    <span class="font-display text-4xl font-semibold text-navy-200" aria-hidden="true">{{ mb_strtoupper(mb_substr($name, 0, 1)) }}</span>
+                                @endif
+                            </div>
+
+                            <div class="relative flex flex-1 flex-col">
+                                <p class="min-h-10 font-display text-sm font-semibold leading-[1.45] text-white text-balance">{{ $name }}</p>
+
+                                <div class="mt-auto flex items-center justify-between gap-3 pt-3">
+                                    @if ($partner->registration_number)
+                                        <span class="font-mono text-xs font-medium tracking-[0.1em] text-navy-400">{{ trim($partner->registration_number) }}</span>
+                                    @else
+                                        <span></span>
+                                    @endif
+
+                                    @if ($href !== '')
+                                        <span class="mitra-arrow grid h-[30px] w-[30px] shrink-0 place-items-center rounded-full border border-navy-200/50 text-navy-200" aria-hidden="true">
+                                            <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none"><path d="M5 11 11 5M6.5 5H11v4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </{{ $tag }}>
                     @endforeach
                 </div>
-            </div>
-        @endif
+            @endif
+        </div>
 
-        {{-- ===================== KLIEN — clean white logo band: the logos' transparent
-             backgrounds blend in (no boxes), shown in their own colours ===================== --}}
+        {{-- Pita klien putih, menempel di dasar seksi gelapnya. Logo klien
+             transparan dan berwarna asli, jadi latar putih memang tempatnya:
+             merek seperti ini dikenali justru lewat warnanya. --}}
         @if ($clients->isNotEmpty())
-            <div class="relative bg-white pb-11 pt-10 md:pb-12 md:pt-12" data-aos="fade-up">
-                <div class="container flex flex-col gap-6 md:flex-row md:items-center md:gap-10">
-                    {{-- Left: heading + description --}}
-                    <div class="shrink-0 md:w-60 lg:w-72">
-                        {{-- h2, bukan h3: klien dan mitra adalah dua kelompok yang setara.
-                             Sebagai h3 ia terbaca seolah bagian dari "Mitra Kami". --}}
-                        <h2 class="font-display text-2xl font-bold text-navy text-balance md:text-3xl">{{ $isId ? 'Klien & Perusahaan' : 'Clients & Companies' }}</h2>
-                        <p class="mt-3 text-sm leading-relaxed text-slate-600">
-                            {{ $isId ? 'Klien yang telah menggunakan layanan kami.' : 'Clients who have used our services.' }}
+            <div class="relative mt-20 bg-white py-10 md:mt-24 md:py-11" data-aos="fade-up">
+                <div class="flex flex-col gap-7 md:flex-row md:items-center md:gap-0">
+                    <div class="shrink-0 px-5 md:w-64 md:border-r md:border-navy-100 md:pl-8 md:pr-12 lg:w-72 lg:pl-10 xl:pl-12">
+                        {{-- h2, bukan h3: klien dan mitra dua kelompok yang setara.
+                             Sebagai h3 ia terbaca seolah bagian dari Mitra. --}}
+                        <h2 class="font-display text-[26px] font-bold leading-tight text-navy">
+                            {{ $isId ? 'Klien ' : 'Our ' }}<em class="font-normal italic text-navy-600">{{ $isId ? 'Kami' : 'Clients' }}</em>
+                        </h2>
+                        <p class="mt-2 text-sm leading-relaxed text-slate-600 md:whitespace-nowrap">
+                            {{ $isId ? 'Dipercaya BUMN & perusahaan swasta' : 'Trusted by state and private companies' }}
                         </p>
                     </div>
-                    {{-- Right: logos run left in their own colours. Fade both edges (clean on
-                         mobile where it stacks full-width; near the heading on desktop). --}}
+
+                    {{-- Dua jalur berlawanan arah. Satu jalur membuat logo yang sama
+                         lewat dalam urutan yang sama terus-menerus; dua jalur yang
+                         saling berpapasan membuat deretnya tidak pernah terbaca
+                         sebagai pengulangan. --}}
                     <div class="mask-fade-x relative w-full min-w-0 flex-1 overflow-hidden">
-                        <div class="flex w-max items-center gap-10 animate-marquee [will-change:transform] md:gap-14">
-                            @for ($h = 0; $h < 2; $h++)
-                                @foreach ($klien as $client)
-                                    @if ($client->logo)
-                                        {{-- Logonya transparan, jadi menyatu dengan pita putih tanpa
-                                             perlu kotak. Ditampilkan dengan warna aslinya: merek
-                                             seperti ini justru dikenali lewat warnanya. --}}
-                                        <img src="{{ Storage::url($client->logo) }}" alt="{{ $client->name }}" loading="lazy"
-                                             class="h-10 w-auto max-w-[150px] shrink-0 object-contain transition duration-300 hover:scale-105 md:h-12"
-                                             aria-hidden="{{ $h ? 'true' : 'false' }}">
-                                    @else
-                                        <span class="shrink-0 text-base font-semibold text-slate-500 transition hover:text-navy" aria-hidden="{{ $h ? 'true' : 'false' }}">{{ $client->name }}</span>
-                                    @endif
-                                @endforeach
-                            @endfor
-                        </div>
+                        @foreach ([['klien' => $klienAtas, 'anim' => 'animate-marquee'], ['klien' => $klienBawah, 'anim' => 'animate-marquee-reverse']] as $jalur)
+                            <div class="group/rail flex w-max items-center {{ $jalur['anim'] }} [will-change:transform] hover:[animation-play-state:paused] {{ $loop->first ? '' : 'mt-5' }}">
+                                @for ($h = 0; $h < 2; $h++)
+                                    @foreach ($jalur['klien'] as $client)
+                                        <span class="mr-12 flex h-14 w-[180px] shrink-0 items-center justify-center" aria-hidden="{{ $h ? 'true' : 'false' }}">
+                                            @if ($client->logo)
+                                                <img src="{{ Storage::url($client->logo) }}" alt="{{ $h ? '' : $client->name }}" loading="lazy" decoding="async"
+                                                     class="max-h-full max-w-full object-contain opacity-75 grayscale-[.4] transition duration-300 hover:scale-110 hover:opacity-100 hover:grayscale-0">
+                                            @else
+                                                <span class="text-base font-semibold text-slate-500 transition duration-300 hover:text-navy">{{ $client->name }}</span>
+                                            @endif
+                                        </span>
+                                    @endforeach
+                                @endfor
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

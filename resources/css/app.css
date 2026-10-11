@@ -615,6 +615,137 @@
     .hover-card[data-on="1"] { transform: none; }
 }
 
+/* ── Latar kota bergradasi biru (dipakai <x-skyline />) ───────────────────
+ * Siluetnya digambar dari kode, bukan dari berkas gambar. Tiga lapis gradien
+ * berulang pada tiap gedung menggantikan tekstur foto: garis mendatar jadi
+ * lantai, garis tegak jadi kolom jendela, lalu gradien tegak memberi kedalaman
+ * dari atap yang terang ke kaki yang gelap.
+ *
+ * Topeng di kaki kota meluruhkan ujung bawahnya, jadi barisan gedung itu tidak
+ * berhenti pada satu garis lurus yang terbaca sebagai potongan.
+ */
+.skyline-base {
+    background-image: linear-gradient(180deg, #061632 0%, #0a2350 55%, #0f3370 100%);
+}
+
+.skyline-overlay {
+    background-image: linear-gradient(100deg, rgba(5, 18, 42, 0.9) 0%, rgba(7, 28, 66, 0.7) 45%, rgba(12, 52, 120, 0.4) 100%);
+}
+
+.skyline-glow {
+    right: -180px;
+    top: -220px;
+    width: 760px;
+    height: 760px;
+    border-radius: 9999px;
+    background-image: radial-gradient(circle, rgba(47, 160, 240, 0.35), transparent 65%);
+}
+
+.skyline-city {
+    height: 640px;
+    -webkit-mask-image: linear-gradient(0deg, #000 35%, transparent 100%);
+    mask-image: linear-gradient(0deg, #000 35%, transparent 100%);
+}
+
+.skyline-building {
+    position: absolute;
+    bottom: 0;
+    border-top: 1px solid rgba(159, 210, 255, 0.5);
+    background-image:
+        repeating-linear-gradient(0deg, transparent 0 14px, rgba(159, 210, 255, 0.16) 14px 16px),
+        repeating-linear-gradient(90deg, transparent 0 10px, rgba(6, 22, 50, 0.6) 10px 12px),
+        linear-gradient(180deg, #2460b0, #0e3170);
+}
+
+@media (max-width: 767px) {
+    /* Kotanya diperkecil di layar sempit: pada 640px ia menjulang sampai
+       menutupi kalimat di atasnya. */
+    .skyline-city { height: 360px; }
+    .skyline-glow { right: -140px; top: -160px; width: 460px; height: 460px; }
+}
+
+/* ── Kartu mitra di pita kota ─────────────────────────────────────────────
+ * Kisinya memakai celah 1px berlatar terang, jadi garis pemisah antar-kartu
+ * datang dari latar yang menyembul di sela, bukan dari border tiap kartu.
+ * Dengan border, dua kartu bersebelahan menghasilkan garis setebal dua kali
+ * dan sudut-sudutnya menumpuk.
+ */
+.mitra-board {
+    display: grid;
+    gap: 1px;
+    background-color: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 22px;
+    overflow: hidden;
+    grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .mitra-board { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .mitra-board { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.mitra-card {
+    position: relative;
+    background-color: rgba(6, 22, 52, 0.72);
+    backdrop-filter: blur(10px);
+    transition: background-color 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.mitra-card:hover,
+.mitra-card:focus-visible { background-color: rgba(14, 44, 96, 0.85); }
+
+/* Garis 2px yang merambat di tepi atas kartu. Lebarnya digerakkan transform,
+   bukan width: transform tidak memaksa peramban menghitung ulang tata letak. */
+.mitra-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 2px;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background-image: linear-gradient(90deg, #2b83df, #b2d4f5);
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.mitra-card:hover::before,
+.mitra-card:focus-visible::before { transform: scaleX(1); }
+
+/* Pendar yang turun dari tepi atas. */
+.mitra-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    background-image: radial-gradient(400px 220px at 50% 0%, rgba(178, 212, 245, 0.22), transparent 70%);
+    transition: opacity 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.mitra-card:hover::after,
+.mitra-card:focus-visible::after { opacity: 1; }
+
+.mitra-logo-box { transition: box-shadow 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.mitra-card:hover .mitra-logo-box,
+.mitra-card:focus-visible .mitra-logo-box { box-shadow: 0 20px 40px -16px rgba(43, 131, 223, 0.6); }
+
+.mitra-logo { transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.mitra-card:hover .mitra-logo,
+.mitra-card:focus-visible .mitra-logo { transform: scale(1.08); }
+
+.mitra-arrow {
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.mitra-card:hover .mitra-arrow,
+.mitra-card:focus-visible .mitra-arrow { opacity: 1; transform: translateX(0); }
+
+@media (prefers-reduced-motion: reduce) {
+    .mitra-card,
+    .mitra-card::before,
+    .mitra-card::after,
+    .mitra-logo-box,
+    .mitra-logo,
+    .mitra-arrow { transition: none; }
+}
+
 /* ── Pita ajakan di sambungan dua seksi ───────────────────────────────────
  * Dipakai di beranda, menumpang separuh di seksi Kategori Layanan dan separuh
  * di seksi Pelatihan Terbaru.

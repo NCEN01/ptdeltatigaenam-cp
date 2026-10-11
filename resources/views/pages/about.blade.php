@@ -343,15 +343,16 @@
          latar; siluet yang diam menahan diri, dan garis-garis gedungnya yang
          samar justru menegakkan potret di depannya.
 
-         Bidang navy di atasnya tetap ada supaya gelapnya seragam berapa pun
-         tinggi seksinya: gambarnya 16:9, dan di layar sempit ia tidak menutup
-         seluruh bidang. --}}
-    <section class="relative overflow-hidden bg-navy-950 py-20 text-white md:py-28">
-        <img src="{{ asset('images/bg-skyline.webp') }}" alt="" aria-hidden="true"
-             width="1920" height="1080" loading="lazy" decoding="async"
-             class="pointer-events-none absolute inset-0 h-full w-full object-cover object-bottom">
-        <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-navy-950/70 via-navy-950/40 to-navy-950/80"></div>
-        <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
+         Siluetnya digambar dari kode lewat <x-skyline />, bukan dari berkas
+         gambar seperti sebelumnya. Berkas 1920x1080 untuk siluet yang isinya
+         hanya kotak-kotak adalah satu permintaan jaringan dan satu aset yang
+         harus dipelihara untuk sesuatu yang bisa digambar CSS, dan di layar
+         selebar apa pun versi kodenya selalu tajam.
+
+         Sumber yang sama dipakai pita Mitra & Klien di beranda, jadi kedua pita
+         kota itu tidak bisa menyimpang satu sama lain. --}}
+    <section class="relative overflow-hidden py-20 text-white md:py-28">
+        <x-skyline />
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 
         <div class="container relative">
