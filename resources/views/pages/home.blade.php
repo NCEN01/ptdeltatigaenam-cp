@@ -528,11 +528,20 @@
                              sendiri sampai 4rem membuat judul ini satu-satunya yang
                              lebih besar dari judul seksi lain di halaman yang sama.
                              Tanpa miring dan tanpa warna kedua: pemisah antara kedua
-                             barisnya cukup dikerjakan pergantian barisnya sendiri. --}}
+                             barisnya cukup dikerjakan pergantian barisnya sendiri.
+
+                             Tanpa koma dan titik. Pergantian baris sudah menjadi
+                             jedanya, dan tanda baca di ujung baris judul sebesar ini
+                             terbaca sebagai noda kecil, bukan sebagai jeda. --}}
                         <h2 class="text-display-lg text-navy">
-                            {{ $isId ? 'Bukti kerja,' : 'Proof of work,' }}<br>
-                            {{ $isId ? 'bukan sekadar janji.' : 'not just promises.' }}
+                            {{ $isId ? 'Bukti kerja' : 'Proof of work' }}<br>
+                            {{ $isId ? 'bukan sekadar janji' : 'not just promises' }}
                         </h2>
+                        <p class="mt-5 max-w-md text-pretty text-lg leading-relaxed text-slate-600">
+                            {{ $isId
+                                ? 'Jejak kolaborasi kami bersama perusahaan di seluruh Indonesia.'
+                                : 'A trail of collaboration with companies across Indonesia.' }}
+                        </p>
                     </div>
 
                     @if ($portfolioScope?->total)
@@ -628,8 +637,12 @@
                                 <li class="porto-item relative border-t border-navy-100" :data-on="active === {{ $i }} ? '1' : '0'">
                                     <span class="porto-bar" :class="active === {{ $i }} && ! paused ? 'porto-bar-run' : ''" aria-hidden="true"></span>
 
+                                    {{-- Tanpa kolom nomor. Keempat proyek ini tidak
+                                         berurutan dan tidak bertahap, jadi nomornya tidak
+                                         menandai apa pun; penghitungnya sudah ada di
+                                         "01 / 04" di kaki daftar dan di sudut fotonya. --}}
                                     <a href="{{ route('portfolio.show', $p->slug) }}"
-                                       class="grid grid-cols-[2.75rem_1fr_auto] items-start gap-3 py-7 outline-none sm:grid-cols-[4rem_1fr_auto]"
+                                       class="grid grid-cols-[1fr_auto] items-start gap-4 py-7 outline-none"
                                        x-on:mouseenter="go({{ $i }})" x-on:focus="go({{ $i }})">
 
                                         {{-- porto-fade menyeragamkan lama dan lengkung
@@ -639,15 +652,12 @@
                                              lengkung lain, dan keduanya yang bergerak
                                              bersamaan dengan lengkung berbeda itulah yang
                                              terbaca kaku. --}}
-                                        <span class="porto-fade font-display text-[28px] font-light italic leading-none"
-                                              :class="active === {{ $i }} ? 'text-navy-600' : 'text-navy-200'" aria-hidden="true">{{ $portoPad($i + 1) }}</span>
-
                                         <span class="porto-shift block min-w-0">
                                             @if ($p->category)
                                                 <span class="porto-fade block font-display text-[11px] font-semibold uppercase tracking-[0.16em]"
                                                       :class="active === {{ $i }} ? 'text-navy-600' : 'text-slate-500'">{{ $p->category->name }}</span>
                                             @endif
-                                            <span class="porto-fade mt-1.5 block font-display text-[22px] font-bold leading-[1.25] tracking-[-0.025em] text-balance"
+                                            <span class="porto-fade mt-1.5 block font-display text-[19px] font-bold leading-[1.3] tracking-[-0.02em] text-balance"
                                                   :class="active === {{ $i }} ? 'text-navy' : 'text-slate-500'">{{ $p->title }}</span>
 
                                             <span class="porto-body block">
