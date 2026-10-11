@@ -7,6 +7,11 @@
     // Off on the home rail, where the card is asked to carry the same shape as an
     // Agenda card: gambar → tanggal/tempat → judul → tautan, tanpa paragraf.
     'excerpt' => true,
+    // Dipakai rel Berita di beranda. Tanpa paragraf, isian 24px di sana
+    // menyisakan ruang kosong di kaki kartu dan membuatnya menjulang melewati
+    // panel navy di sebelahnya. Di halaman blog isiannya tetap penuh: di sana
+    // kartunya memuat paragraf dan berdiri di kisi, bukan di sebelah panel.
+    'compact' => false,
 ])
 
 @php
@@ -35,7 +40,7 @@
         @endif
     </div>
 
-    <div class="flex flex-1 flex-col p-4 sm:p-6">
+    <div class="flex flex-1 flex-col p-4 {{ $compact ? 'sm:px-5 sm:pb-4 sm:pt-5' : 'sm:p-6' }}">
         <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[11px] uppercase tracking-wider text-slate-500">
             <span>{{ optional($post->published_at)->translatedFormat('d M Y') }}</span>
             <x-meta-location :value="$post->location" />

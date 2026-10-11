@@ -739,7 +739,7 @@
                     </p>
                 </div>
 
-                <div class="mt-12 grid gap-6 lg:grid-cols-12">
+                <div class="mt-12 grid gap-6 lg:grid-cols-12 lg:gap-x-8">
                     {{-- Panel kiri. bg-navy-anim dipakai supaya panel ini satu-satunya
                          bidang berwarna di seksi putih ini, sekaligus memberi kontras
                          yang di rujukannya dibawa warna jingga.
@@ -762,7 +762,7 @@
                          dan judul 24px-nya pecah jadi lima baris; dengan lima kolom
                          menjadi 354px. Di xl empat kolom sudah memberi 352px. --}}
                     <div class="lg:col-span-5 xl:col-span-4" data-aos="fade-up">
-                        <div class="relative h-full overflow-hidden rounded-3xl bg-navy-anim p-7 text-white shadow-lift sm:p-8 lg:-mr-20 lg:rounded-r-none lg:pr-20 xl:-mr-24 xl:pr-24">
+                        <div class="relative h-full overflow-hidden rounded-3xl bg-navy-anim p-7 text-white shadow-lift sm:p-8 lg:-mr-20 lg:rounded-r-none lg:pr-28 xl:-mr-24 xl:pr-36">
                             <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
                             <div class="pointer-events-none absolute -right-14 -top-14 h-44 w-44 rounded-full bg-sky-400/25 blur-3xl"></div>
                             {{-- Tirai gelap tipis. bg-navy-anim menyapukan pita terang
@@ -873,7 +873,7 @@
                                     {{-- Tanpa paragraf ringkasan: bentuknya jadi sama
                                          persis dengan kartu Agenda — gambar, tanggal dan
                                          tempat, judul, lalu tautan. --}}
-                                    <x-blog-card :post="$post" :animate="false" :excerpt="false" />
+                                    <x-blog-card :post="$post" :animate="false" :excerpt="false" compact />
                                 </div>
                             @endforeach
                         </div>
@@ -1014,21 +1014,22 @@
                     </p>
                 </div>
 
-                {{-- WhatsApp CTA Card --}}
+                {{-- WhatsApp CTA Card.
+
+                     Tanpa ubin ikon WhatsApp di atas judulnya. Lambang yang sama
+                     sudah ada di tombol tiga baris di bawahnya, dan dua lambang
+                     yang sama di satu kartu sekecil ini membuat yang kedua
+                     berhenti menjadi penanda.
+
+                     Kedua pendarnya kini sekeluarga biru. Yang kiri bawah dulu
+                     emas, satu-satunya emas di seksi ini selain label FAQ, dan
+                     warna hangat yang muncul sekali di bidang yang seluruhnya
+                     biru terbaca sebagai kekeliruan, bukan sebagai aksen. --}}
                 <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-navy-900 to-navy-950 p-7 text-white shadow-lift ring-1 ring-white/5 space-y-4 md:p-8">
                     <div class="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-sky-400/15 blur-3xl"></div>
-                    <div class="pointer-events-none absolute -bottom-16 -left-10 h-40 w-40 rounded-full bg-gold/10 blur-3xl"></div>
-                    <div class="relative flex items-center gap-3">
-                        {{-- Ubin putih berikon navy, bukan sky-400 berikon putih:
-                             putih di atas #34d3f4 hanya 1,9:1, jadi ikonnya nyaris
-                             tidak terbaca. Bentuknya pun kini sama dengan lencana
-                             ikon di panel Berita. --}}
-                        <span class="grid h-10 w-10 place-items-center rounded-xl bg-white text-navy ring-1 ring-white/20">
-                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.2 4.79 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.16c-.24.68-1.42 1.31-1.95 1.36-.5.05-.96.24-3.23-.67-2.73-1.08-4.47-3.86-4.6-4.04-.14-.18-1.11-1.48-1.11-2.82 0-1.34.7-2 .95-2.28.24-.27.53-.34.7-.34.18 0 .35 0 .5.01.16.01.38-.06.59.45.22.52.73 1.8.8 1.93.06.13.11.28.02.46-.09.18-.13.29-.26.45-.13.16-.28.36-.4.48-.13.13-.27.28-.12.54.15.26.66 1.09 1.42 1.76.97.87 1.79 1.14 2.05 1.27.26.13.41.11.56-.07.15-.18.65-.76.82-1.02.17-.26.35-.22.59-.13.24.09 1.52.72 1.78.85.26.13.43.2.5.31.06.11.06.64-.18 1.32z"/></svg>
-                        </span>
-                        <h3 class="font-display font-semibold text-white text-base">{{ $isId ? 'Punya pertanyaan lain?' : 'Have more questions?' }}</h3>
-                    </div>
-                    <p class="relative text-xs text-navy-200 leading-relaxed">
+                    <div class="pointer-events-none absolute -bottom-16 -left-10 h-40 w-40 rounded-full bg-navy-500/15 blur-3xl"></div>
+                    <h3 class="relative font-display text-base font-semibold text-white">{{ $isId ? 'Punya pertanyaan lain?' : 'Have more questions?' }}</h3>
+                    <p class="relative text-xs leading-relaxed text-navy-200">
                         {{ $isId
                             ? 'Jika Anda tidak menemukan jawaban yang dicari, hubungi admin kami melalui WhatsApp untuk konsultasi cepat.'
                             : 'If you cannot find the answer you are looking for, contact our admin via WhatsApp for a quick consultation.' }}
@@ -1143,7 +1144,13 @@
                                                    satu-satunya isyarat bahwa barisnya bisa
                                                    dibuka, jadi ia komponen antarmuka yang
                                                    harus mencapai 3:1. slate-400 hanya 2,6:1. --}}
-                                              :class="activeFaq === {{ $i }} ? 'rotate-180 text-sky-700' : 'text-slate-500'"
+                                              {{-- text-navy saat terbuka, bukan sky-700:
+                                                   ubin nomor di sisi kiri baris yang sama
+                                                   berubah jadi bg-navy, dan dua penanda
+                                                   keadaan yang sama pada satu baris memakai
+                                                   dua biru berbeda terbaca sebagai dua
+                                                   keadaan yang berbeda pula. --}}
+                                              :class="activeFaq === {{ $i }} ? 'rotate-180 text-navy' : 'text-slate-500'"
                                               aria-hidden="true">
                                             <span class="absolute h-0.5 w-3.5 rounded-full bg-current"></span>
                                             <span class="absolute h-3.5 w-0.5 rounded-full bg-current transition-transform duration-300 ease-out-soft"
