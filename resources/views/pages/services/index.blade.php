@@ -493,7 +493,7 @@
                                              semuanya berisi navy saat disentuh, dan emas di
                                              sini membuat kartu layanan satu-satunya yang
                                              berbeda. --}}
-                                        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-navy-200 text-navy transition-colors group-hover:border-navy group-hover:bg-navy group-hover:text-white">
+                                        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-navy-200 text-navy transition-colors group-hover:border-navy-600 group-hover:bg-navy-600 group-hover:text-white">
                                             <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </span>
                                     </div>

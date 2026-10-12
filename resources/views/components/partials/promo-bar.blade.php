@@ -103,7 +103,7 @@
                                 <span class="hidden shrink-0 text-navy-950/65 sm:inline">{{ $s['note'] }}</span>
                             @endif
                             @if ($s['href'])
-                                <a href="{{ $s['href'] }}" class="group ml-0.5 inline-flex shrink-0 items-center gap-1 rounded-full bg-navy-950 px-2.5 py-[3px] text-[11px] font-semibold text-white shadow-sm transition-colors hover:bg-navy-800">
+                                <a href="{{ $s['href'] }}" class="group ml-0.5 inline-flex shrink-0 items-center gap-1 rounded-full bg-navy-950 px-2.5 py-[3px] text-[11px] font-semibold text-white shadow-sm transition-colors hover:bg-navy-600">
                                     <span>{{ $s['cta'] }}</span>
                                     <svg class="h-2.5 w-2.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </a>
@@ -112,7 +112,7 @@
                             <svg class="hidden h-3.5 w-3.5 shrink-0 text-navy-950/70 sm:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>
                             <span class="truncate font-semibold tracking-tight">{{ $s['text'] }}</span>
                             @if ($s['href'])
-                                <a href="{{ $s['href'] }}" class="group ml-0.5 inline-flex shrink-0 items-center gap-1 rounded-full bg-navy-950 px-2.5 py-[3px] text-[11px] font-semibold text-white shadow-sm transition-colors hover:bg-navy-800">
+                                <a href="{{ $s['href'] }}" class="group ml-0.5 inline-flex shrink-0 items-center gap-1 rounded-full bg-navy-950 px-2.5 py-[3px] text-[11px] font-semibold text-white shadow-sm transition-colors hover:bg-navy-600">
                                     <span>{{ $s['cta'] }}</span>
                                     <svg class="h-2.5 w-2.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </a>

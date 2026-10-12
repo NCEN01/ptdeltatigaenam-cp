@@ -98,13 +98,14 @@
                                          biru, emas adalah satu-satunya warna hangat dan ia
                                          menarik mata menjauh dari judulnya.
 
-                                         Saat disentuh, pilnya terisi putih dan lingkarannya
-                                         berbalik jadi navy. Keduanya bertukar, jadi panahnya
-                                         tetap terbaca di kedua keadaan: navy di atas putih
-                                         17:1, putih di atas navy 17:1. --}}
+                                         Saat disentuh ia terisi navy-600, biru andalan yang
+                                         sama dengan seluruh tombol lain di situs ini.
+                                         Lingkaran panahnya tetap putih berpanah navy: dengan
+                                         begitu ia justru makin menonjol di atas isian biru,
+                                         dan panahnya tetap 6,6:1 di kedua keadaan. --}}
                                     <a href="{{ $slide['link'] }}"
-                                       class="group inline-flex items-center gap-3.5 rounded-full border border-white/50 py-1.5 pl-1.5 pr-7 text-[15px] font-semibold text-white transition duration-300 ease-out-soft hover:border-white hover:bg-white hover:text-navy-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 active:scale-[0.98]">
-                                        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white text-navy-950 transition duration-300 ease-out-soft group-hover:bg-navy-950 group-hover:text-white" aria-hidden="true">
+                                       class="group inline-flex items-center gap-3.5 rounded-full border border-white/50 py-1.5 pl-1.5 pr-7 text-[15px] font-semibold text-white transition-all duration-300 ease-out-soft hover:-translate-y-0.5 hover:border-white hover:bg-navy-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 active:translate-y-0" >
+                                        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white text-navy-600 transition-colors duration-300 ease-out-soft" aria-hidden="true">
                                             <svg class="h-4 w-4 transition-transform duration-300 ease-out-soft group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </span>
                                         {{ $slide['btn_text'] }}
@@ -387,9 +388,9 @@
                 {{-- Pil putih berlingkaran navy, bukan .btn-blue: di atas bidang biru
                      tombol biru akan hilang ke dalam latarnya. --}}
                 <a href="{{ route('contact.index') }}"
-                   class="group/cta relative inline-flex shrink-0 items-center gap-3.5 rounded-full bg-white py-[7px] pl-7 pr-[7px] text-[15px] font-semibold text-navy-600 shadow-[0_10px_24px_-10px_rgba(0,0,0,0.3)] transition duration-[250ms] ease-out-soft hover:-translate-y-0.5 hover:shadow-[0_16px_30px_-10px_rgba(0,0,0,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-700">
+                   class="btn-pill-light relative shrink-0">
                     {{ $isId ? 'Hubungi Kami' : 'Contact Us' }}
-                    <span class="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-full bg-navy-600 text-white transition-transform duration-300 ease-out-soft group-hover/cta:translate-x-0.5" aria-hidden="true">
+                    <span class="btn-pill-light-icon" aria-hidden="true">
                         <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </span>
                 </a>
@@ -963,9 +964,9 @@
                     <div class="relative flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:flex-row">
                         @if (! empty($social['instagram']))
                             <a href="{{ $social['instagram'] }}" target="_blank" rel="noopener"
-                               class="group/cta inline-flex items-center justify-between gap-3.5 rounded-full bg-white py-[7px] pl-7 pr-[7px] text-[15px] font-semibold text-navy-600 shadow-[0_10px_24px_-10px_rgba(0,0,0,0.3)] transition duration-[250ms] ease-out-soft hover:-translate-y-0.5 hover:shadow-[0_16px_30px_-10px_rgba(0,0,0,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-700 sm:justify-start">
+                               class="btn-pill-light justify-between sm:justify-start">
                                 Instagram
-                                <span class="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-full bg-navy-600 text-white transition-transform duration-300 ease-out-soft group-hover/cta:scale-105" aria-hidden="true">
+                                <span class="btn-pill-light-icon" aria-hidden="true">
                                     {{-- Lambang yang sama persis dengan yang di footer:
                                          bergaris, bukan padat. Dua lambang platform yang
                                          sama di satu halaman dengan dua gaya berbeda
@@ -977,9 +978,9 @@
 
                         @if (! empty($social['facebook']))
                             <a href="{{ $social['facebook'] }}" target="_blank" rel="noopener"
-                               class="group/cta inline-flex items-center justify-between gap-3.5 rounded-full bg-white py-[7px] pl-7 pr-[7px] text-[15px] font-semibold text-navy-600 shadow-[0_10px_24px_-10px_rgba(0,0,0,0.3)] transition duration-[250ms] ease-out-soft hover:-translate-y-0.5 hover:shadow-[0_16px_30px_-10px_rgba(0,0,0,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-700 sm:justify-start">
+                               class="btn-pill-light justify-between sm:justify-start">
                                 Facebook
-                                <span class="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-full bg-navy-600 text-white transition-transform duration-300 ease-out-soft group-hover/cta:scale-105" aria-hidden="true">
+                                <span class="btn-pill-light-icon" aria-hidden="true">
                                     <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                                 </span>
                             </a>

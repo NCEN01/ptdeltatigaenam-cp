@@ -89,7 +89,7 @@
                         <div class="group relative text-center" data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
                             {{-- icon + number badge --}}
                             <div class="relative mx-auto grid h-14 w-14 place-items-center md:h-20 md:w-20">
-                                <span class="grid h-14 w-14 place-items-center rounded-full bg-white text-navy shadow-lift ring-1 ring-navy-100 transition-all duration-300 group-hover:-translate-y-1 group-hover:bg-gold group-hover:text-navy-950 md:h-20 md:w-20">
+                                <span class="grid h-14 w-14 place-items-center rounded-full bg-white text-navy shadow-lift ring-1 ring-navy-100 transition-all duration-300 group-hover:-translate-y-1 group-hover:bg-navy-600 group-hover:text-white md:h-20 md:w-20">
                                     @if ($step[2] === 'calendar')
                                         <svg class="h-6 w-6 md:h-8 md:w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="16" x="3" y="4" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
                                     @elseif ($step[2] === 'users')

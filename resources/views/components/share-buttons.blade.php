@@ -64,7 +64,7 @@
         <a href="mailto:?subject={{ rawurlencode($title) }}&body={{ rawurlencode($shareUrl) }}"
            title="{{ $isId ? 'Bagikan lewat Email' : 'Share via Email' }}"
            aria-label="{{ $isId ? 'Bagikan lewat Email' : 'Share via Email' }}"
-           class="{{ $iconBtn }} hover:border-navy hover:bg-navy">
+           class="{{ $iconBtn }} hover:border-navy-600 hover:bg-navy-600">
             <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
             </svg>
@@ -89,7 +89,7 @@
         {{-- Native share sheet — only where the browser supports it (mostly mobile) --}}
         <button type="button" x-show="canShareNatively" x-cloak @click="shareNatively()"
                 aria-label="{{ $isId ? 'Bagikan lewat aplikasi lain' : 'Share via other apps' }}"
-                class="{{ $iconBtn }} hover:border-navy hover:bg-navy sm:hidden">
+                class="{{ $iconBtn }} hover:border-navy-600 hover:bg-navy-600 sm:hidden">
             <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
                 <path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/>
