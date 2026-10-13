@@ -362,14 +362,13 @@
                     <div class="pointer-events-none absolute -left-4 -top-4 h-full w-full rounded-2xl border-2 border-gold/70 md:-left-6 md:-top-6" aria-hidden="true"></div>
 
                     <div class="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 shadow-lift">
-                        {{-- WebP first: the PNG is 1.7 MB for a photograph with no transparency,
-                             the WebP is 53 KB. Dimensions are declared to avoid layout shift. --}}
-                        <picture>
-                            <source srcset="{{ asset('images/pendiri.webp') }}" type="image/webp">
-                            <img src="{{ asset('images/pendiri.png') }}" alt="{{ $founderName }}"
-                                 width="1082" height="1454" loading="lazy" decoding="async"
-                                 class="h-full w-full object-cover object-top">
-                        </picture>
+                        {{-- <picture> dilepas: cadangan PNG-nya 1,7 MB untuk foto yang
+                             tidak punya transparansi, dan seluruh gambar situs ini kini
+                             WebP. Ukurannya ditulis supaya tata letaknya tidak bergeser
+                             saat gambarnya selesai dimuat. --}}
+                        <img src="{{ asset('images/pendiri.webp') }}" alt="{{ $founderName }}"
+                             width="1082" height="1454" loading="lazy" decoding="async"
+                             class="h-full w-full object-cover object-top">
                         <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/75 via-navy-950/10 to-transparent"></div>
 
                         {{-- Name plate on the portrait: on mobile the bio sits far below the photo,

@@ -77,7 +77,7 @@
          mendapat nama perusahaan dari tautan logo di kolom brand. --}}
     <div aria-hidden="true"
          class="pointer-events-none absolute -right-20 -top-10 aspect-[1600/1310] w-[22rem] overflow-hidden opacity-[0.07] sm:-right-24 sm:w-[30rem] lg:-right-28 lg:bottom-0 lg:top-0 lg:h-full lg:w-auto">
-        <img src="{{ asset('images/logodelta36.png') }}" alt="" loading="lazy" class="h-auto w-full max-w-none">
+        <img src="{{ asset('images/logodelta36.webp') }}" alt="" loading="lazy" class="h-auto w-full max-w-none">
     </div>
 
     {{-- Kolom footer. Dulu ditarik naik dengan -mt-24 lalu didorong balik
@@ -95,7 +95,7 @@
                      hanya daftar pendek cukup sempit. --}}
                 <div class="space-y-6 sm:col-span-2 lg:col-span-3">
                     <a href="{{ route('home') }}" class="inline-flex items-center gap-3">
-                        <img src="{{ asset('images/logodelta36.png') }}" alt="PT. Delta Tiga Enam" class="h-10 w-10 shrink-0">
+                        <img src="{{ asset('images/logodelta36.webp') }}" alt="PT. Delta Tiga Enam" class="h-10 w-10 shrink-0">
                         <span class="font-display text-lg font-semibold tracking-wide text-white">PT. Delta Tiga Enam</span>
                     </a>
                     <p class="max-w-sm text-sm leading-relaxed text-white/70">

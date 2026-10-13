@@ -424,7 +424,12 @@
          beranda ini tidak lagi bertumpuk bidang gelap seperti dulu, jadi satu
          pita gelap di sini justru memberi jeda — bukan lagi keempat kalinya. --}}
     <section class="relative overflow-hidden bg-navy-950 text-white">
-        <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1920&q=80" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover">
+        {{-- Foto milik perusahaan, bukan tarikan dari Unsplash seperti sebelumnya:
+             satu permintaan ke peladen pihak ketiga di tiap kunjungan, untuk
+             gambar orang asing di pita yang isinya alasan memilih perusahaan ini. --}}
+        <img src="{{ asset('images/alasan-memilih.webp') }}" alt="" aria-hidden="true"
+             width="1600" height="900" loading="lazy" decoding="async"
+             class="absolute inset-0 h-full w-full object-cover">
         <div class="absolute inset-0 bg-navy-950/82"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/88"></div>
         {{-- Butir dan cahaya samar, alat yang sama dengan kepala halaman dan pita
@@ -1025,8 +1030,8 @@
                         'link' => $ig->instagram_url ?: 'https://www.instagram.com/deltatigaenam/',
                     ])
                     : collect([
-                        ['img' => asset('images/certified-risk-management.png'), 'label' => 'BATCH IV', 'title' => 'Certified Risk Management', 'company' => 'PT Delta Tiga Enam', 'date' => '19 - 22 Agustus 2025', 'link' => 'https://www.instagram.com/deltatigaenam/'],
-                        ['img' => asset('images/training-seminar.png'), 'label' => 'SEMINAR', 'title' => 'Pengembangan Kompetensi SDM', 'company' => 'PT Delta Tiga Enam', 'date' => '05 - 06 Agustus 2025', 'link' => 'https://www.instagram.com/deltatigaenam/'],
+                        ['img' => asset('images/instagram-risk-management.webp'), 'label' => 'BATCH IV', 'title' => 'Certified Risk Management', 'company' => 'PT Delta Tiga Enam', 'date' => '19 - 22 Agustus 2025', 'link' => 'https://www.instagram.com/deltatigaenam/'],
+                        ['img' => asset('images/instagram-seminar-sdm.webp'), 'label' => 'SEMINAR', 'title' => 'Pengembangan Kompetensi SDM', 'company' => 'PT Delta Tiga Enam', 'date' => '05 - 06 Agustus 2025', 'link' => 'https://www.instagram.com/deltatigaenam/'],
                     ]);
             @endphp
 
@@ -1040,7 +1045,7 @@
                     <div class="card card-hover overflow-hidden" data-aos="{{ $loop->first ? 'fade-right' : 'fade-left' }}">
                         <div class="flex items-center justify-between border-b border-navy-50 bg-white p-3.5">
                             <div class="flex items-center gap-2.5">
-                                <img src="{{ asset('images/logodelta36.png') }}" alt="Delta Tiga Enam" class="h-6 w-6 shrink-0 rounded-lg object-contain">
+                                <img src="{{ asset('images/logodelta36.webp') }}" alt="Delta Tiga Enam" class="h-6 w-6 shrink-0 rounded-lg object-contain">
                                 <div class="leading-tight">
                                     <p class="text-xs font-semibold text-navy">deltatigaenam</p>
                                     {{-- slate-500 di 10px, bukan slate-400 di 9px: yang lama

@@ -68,7 +68,9 @@ return [
     | Tentang Kami; ditulis di masing-masing controller, keduanya akan menyimpang
     | begitu salah satu disunting.
     |
-    | 'img' menunjuk ke public/images/values/<nama>.jpg.
+    | Kunci 'img' beserta berkas public/images/values/*.jpg dilepas: tidak
+    | ada satu pun tampilan yang pernah membacanya, dan lima berkas JPEG yang
+    | tidak pernah diminta peramban tetap ikut terkirim ke tiap penyebaran.
     |
     | Tiap nilai punya dua keterangan, dan keduanya tidak boleh sama:
     |
@@ -89,7 +91,6 @@ return [
     'values' => [
         [
             'title' => 'Dynamic',
-            'img' => 'dynamic',
             'desc' => [
                 'id' => 'Selalu adaptif terhadap perubahan dan inovasi dalam dunia kerja.',
                 'en' => 'Always adaptive to change and innovation in the world of work.',
@@ -101,7 +102,6 @@ return [
         ],
         [
             'title' => 'Excellence',
-            'img' => 'excellence',
             'desc' => [
                 'id' => 'Unggul dalam setiap layanan yang diberikan.',
                 'en' => 'Excelling in every service we deliver.',
@@ -113,7 +113,6 @@ return [
         ],
         [
             'title' => 'Leading',
-            'img' => 'leading',
             'desc' => [
                 'id' => 'Pionir dalam pengembangan solusi human capital yang inovatif.',
                 'en' => 'A pioneer in developing innovative human capital solutions.',
@@ -125,7 +124,6 @@ return [
         ],
         [
             'title' => 'Transcendent',
-            'img' => 'transcendent',
             'desc' => [
                 'id' => 'Melampaui ekspektasi klien dan memberikan nilai tambah yang berkelanjutan.',
                 'en' => 'Exceeding client expectations and delivering sustainable added value.',
@@ -137,7 +135,6 @@ return [
         ],
         [
             'title' => 'Action',
-            'img' => 'action',
             'desc' => [
                 'id' => 'Berorientasi pada hasil dan tindakan nyata untuk mencapai tujuan.',
                 'en' => 'Results-oriented, with real action to achieve goals.',

@@ -27,8 +27,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#2b83df">
     <title>{{ $title }} — PT Delta Tiga Enam</title>
-    <link rel="icon" href="{{ asset('images/logodelta36.png') }}" type="image/png">
-    <link rel="apple-touch-icon" href="{{ asset('images/logodelta36.png') }}">
+    {{-- PNG, bukan WebP seperti gambar lain di situs ini: apple-touch-icon
+         berformat WebP tidak dipasang iOS, dan ikon layar awalnya jadi kosong.
+         180x180 adalah ukuran yang diminta iOS, dan versi kecil ini 22 KB
+         dibanding 284 KB berkas aslinya. --}}
+    <link rel="icon" href="{{ asset('images/favicon-180.png') }}" type="image/png">
+    <link rel="apple-touch-icon" href="{{ asset('images/favicon-180.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-dvh bg-white text-ink antialiased">
@@ -47,7 +51,7 @@
             <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/50 to-transparent"></div>
 
             <a href="{{ route('home') }}" class="auth-anim relative flex items-center gap-3 rounded-xl">
-                <img src="{{ asset('images/logodelta36.png') }}" alt="" class="h-11 w-11 shrink-0">
+                <img src="{{ asset('images/logodelta36.webp') }}" alt="" class="h-11 w-11 shrink-0">
                 <span class="font-display text-lg">PT Delta Tiga Enam</span>
             </a>
 
@@ -94,7 +98,7 @@
                 {{-- Di layar kecil panel brand tidak ada sama sekali, jadi baris ini
                      satu-satunya tanda pengunjung masih berada di situs yang sama. --}}
                 <a href="{{ route('home') }}" class="auth-anim mb-8 inline-flex items-center gap-2.5 rounded-xl text-sm font-medium text-navy transition-colors hover:text-sky-700 lg:hidden sm:mb-10">
-                    <img src="{{ asset('images/logodelta36.png') }}" alt="" class="h-9 w-9">
+                    <img src="{{ asset('images/logodelta36.webp') }}" alt="" class="h-9 w-9">
                     PT Delta Tiga Enam
                 </a>
 

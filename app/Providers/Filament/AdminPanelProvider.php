@@ -34,7 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Delta Tiga Enam')
             // Logo sungguhan di kepala kartu masuk, menggantikan tulisan merek
             // bergradasi. Tampil juga di bilah samping panel.
-            ->brandLogo(fn (): string => asset('images/logodelta36.png'))
+            ->brandLogo(fn (): string => asset('images/logodelta36.webp'))
             ->brandLogoHeight('2.5rem')
             ->colors([
                 'primary' => Color::hex('#1565c0'),  // brand dark blue

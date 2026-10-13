@@ -45,8 +45,12 @@
     @if ($ogImage)<meta property="og:image" content="{{ $ogImage }}">@endif
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="icon" href="{{ asset('images/logodelta36.png') }}" type="image/png">
-    <link rel="apple-touch-icon" href="{{ asset('images/logodelta36.png') }}">
+    {{-- PNG, bukan WebP seperti gambar lain di situs ini: apple-touch-icon
+         berformat WebP tidak dipasang iOS, dan ikon layar awalnya jadi kosong.
+         180x180 adalah ukuran yang diminta iOS, dan versi kecil ini 22 KB
+         dibanding 284 KB berkas aslinya. --}}
+    <link rel="icon" href="{{ asset('images/favicon-180.png') }}" type="image/png">
+    <link rel="apple-touch-icon" href="{{ asset('images/favicon-180.png') }}">
     {{-- PWA manifest dinonaktifkan sementara selama fase redesign (VitePWA selfDestroying).
          Aktifkan lagi saat PWA dihidupkan: <link rel="manifest" href="{{ asset('manifest.webmanifest') }}"> --}}
 
@@ -61,7 +65,7 @@
     {{-- ── First-visit intro splash: logo + company name (~3.3s, once per browser session) ── --}}
     <div id="intro" class="intro-screen" role="presentation" aria-hidden="true">
         <div class="intro-inner">
-            <img src="{{ asset('images/logodelta36.png') }}" alt="" width="62" height="62" class="intro-logo">
+            <img src="{{ asset('images/logodelta36.webp') }}" alt="" width="62" height="62" class="intro-logo">
             <p class="intro-name">PT Delta Tiga Enam</p>
             <span class="intro-line"></span>
         </div>

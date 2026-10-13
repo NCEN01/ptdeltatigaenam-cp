@@ -57,7 +57,7 @@
         >
             {{-- Brand (logo only) --}}
             <a href="{{ route('home') }}" class="group flex shrink-0 items-center" aria-label="PT. Delta Tiga Enam">
-                <img src="{{ asset('images/logodelta36.png') }}" alt="PT. Delta Tiga Enam" width="36" height="36" class="h-8 w-8 shrink-0 transition-transform duration-300 group-hover:scale-105 md:h-9 md:w-9">
+                <img src="{{ asset('images/logodelta36.webp') }}" alt="PT. Delta Tiga Enam" width="36" height="36" class="h-8 w-8 shrink-0 transition-transform duration-300 group-hover:scale-105 md:h-9 md:w-9">
             </a>
 
             {{-- Desktop nav --}}
