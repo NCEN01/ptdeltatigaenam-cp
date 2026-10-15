@@ -218,7 +218,12 @@
                      penggalan emas di dalam visi. Keduanya emas, jadi yang terbaca
                      satu sistem, bukan huruf miring yang bertaburan. --}}
                 <div class="lg:col-span-4" data-aos="fade-up">
-                    <h2 class="font-display text-6xl font-bold leading-[0.95] tracking-tight text-white md:text-7xl">
+                    {{-- text-display-lg, ukuran yang sama dengan judul Profil
+                         Perusahaan di awal halaman ini. Sebelumnya text-6xl/7xl —
+                         hampir dua kali lipat — sehingga satu halaman punya dua
+                         jenjang judul seksi yang berbeda dan pembaca kehilangan
+                         patokan mana yang setara dengan mana. --}}
+                    <h2 class="text-display-lg font-bold text-white">
                         {{ $isId ? 'Visi' : 'Vision' }}<br>
                         <span class="pr-1 italic text-gold-soft">&amp;</span>{{ $isId ? 'Misi' : 'Mission' }}
                     </h2>
