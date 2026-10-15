@@ -264,12 +264,20 @@
                                 elseif ($isSoonest) { $pill = 'bg-gold text-navy-950';      $dot = 'bg-navy-950/70'; $pillText = $id ? 'Segera hadir' : 'Starting soon'; }
                                 else                { $pill = 'bg-navy-600/90 text-white';  $dot = 'bg-white/90';    $pillText = $id ? 'Akan datang' : 'Upcoming'; }
                             @endphp
+                            {{-- .card + .card-hover, kelas yang sama dengan kartu layanan
+                                 di bawah seksi ini. Sebelumnya kartu agenda menyusun
+                                 sendiri sudut, latar, garis tepi, bayangan, dan hovernya,
+                                 padahal keduanya berdiri di satu halaman yang sama.
+
+                                 .card-hover sengaja tidak dipasang pada kartu terdekat.
+                                 Di dalamnya ada hover:border-navy-200, dan itu akan
+                                 menghapus garis emas penandanya justru saat kartunya
+                                 disentuh. Kartu itu memang sudah terangkat sejak diam,
+                                 jadi tidak ada yang hilang. --}}
                             <article @class([
-                                        'group relative flex min-w-0 shrink-0 basis-[82%] snap-start flex-col overflow-hidden rounded-2xl bg-white transition-all duration-300 ease-out-soft sm:basis-[calc((100%_-_1.25rem)/2)] lg:basis-[calc((100%_-_2.5rem)/3)]',
-                                        // Yang terdekat bergaris emas dan terangkat sejak diam;
-                                        // dua keadaan lain hanya bergaris rambut.
+                                        'card group relative flex min-w-0 shrink-0 basis-[82%] snap-start flex-col overflow-hidden sm:basis-[calc((100%_-_1.25rem)/2)] lg:basis-[calc((100%_-_2.5rem)/3)]',
                                         'border-2 border-gold shadow-lift' => $isSoonest,
-                                        'border border-navy-100 shadow-card hover:-translate-y-1 hover:border-navy-200 hover:shadow-lift' => ! $isSoonest,
+                                        'card-hover' => ! $isSoonest,
                                     ]) data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
                                 <div class="relative aspect-[3/2] overflow-hidden bg-navy-900">
                                     @if ($agendaImg)
@@ -314,11 +322,23 @@
                                         <x-meta-location :value="$agenda->location" />
                                     </div>
 
-                                    <h3 class="mt-2.5 line-clamp-2 text-lg leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">{{ $agenda->title }}</h3>
+                                    {{-- Setakaran dengan judul kartu layanan: text-xl, dan
+                                         warnanya tidak berubah saat disentuh. Perubahan warna
+                                         judul dulu menjadi satu-satunya penanda bahwa kartu
+                                         ini bisa diklik; sejak panah bundar di kakinya ikut
+                                         berisi dan berputar, penanda itu sudah ada dan lebih
+                                         jelas. Dua penanda untuk satu hal membuat kartu
+                                         agenda bergerak lebih ramai daripada tetangganya.
 
-                                    @if ($agenda->excerpt)
-                                        <p class="mt-2 line-clamp-3 text-pretty text-sm leading-relaxed text-slate-600">{{ $agenda->excerpt }}</p>
-                                    @endif
+                                         Ringkasan dijatah dua baris, bukan tiga, supaya
+                                         tinggi kartunya sejajar dengan kartu layanan. --}}
+                                    <div class="flex-1">
+                                        <h3 class="mt-2.5 line-clamp-2 text-xl leading-snug text-navy">{{ $agenda->title }}</h3>
+
+                                        @if ($agenda->excerpt)
+                                            <p class="mt-2 line-clamp-2 text-sm text-slate-600">{{ $agenda->excerpt }}</p>
+                                        @endif
+                                    </div>
 
                                     {{-- Agenda yang sudah berakhir tidak membawa ajakan
                                          mendaftar: menanyakan jadwal yang sudah lewat
@@ -330,16 +350,23 @@
                                          lewat config/company.php, dan menautkan ke halaman
                                          yang menjawab 404 lebih buruk daripada tidak
                                          menautkan sama sekali. --}}
+                                    {{-- Kakinya mengikuti kartu layanan: garis rambut, pt-5,
+                                         teks di kiri dan panah bundar di kanan. Panah kecil
+                                         emas yang bergeser ke samping dilepas — bentuk panah
+                                         ketiga di satu halaman yang sama, sesudah panah
+                                         bundar kartu layanan dan panah rel di atasnya. --}}
                                     @if ($isPast)
-                                        <p class="mt-auto border-t border-navy-100 pt-4 font-mono text-[11px] uppercase tracking-normal text-slate-600">
+                                        <p class="mt-6 border-t border-navy-100 pt-5 font-mono text-[11px] uppercase tracking-normal text-slate-600">
                                             {{ $id ? 'Sudah terlaksana' : 'Already held' }}
                                         </p>
                                     @else
                                         <a href="https://wa.me/62818834766?text={{ rawurlencode(($id ? 'Halo Delta Tiga Enam, saya ingin bertanya soal agenda: ' : 'Hello Delta Tiga Enam, I would like to ask about this agenda: ').$agenda->title) }}"
                                            target="_blank" rel="noopener"
-                                           class="mt-auto flex items-center gap-2 border-t border-navy-100 pt-4 text-sm font-medium text-navy transition-colors hover:text-sky-700">
+                                           class="mt-6 flex items-center justify-between gap-4 border-t border-navy-100 pt-5 text-sm font-medium text-navy transition-colors duration-300 hover:text-navy-600">
                                             {{ $id ? 'Tanyakan jadwal ini' : 'Ask about this date' }}
-                                            <svg class="h-4 w-4 text-gold-deep transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            <span class="card-arrow grid h-10 w-10 shrink-0 place-items-center rounded-full border border-navy-200 text-navy group-hover:border-navy-600 group-hover:bg-navy-600 group-hover:text-white" aria-hidden="true">
+                                                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </span>
                                         </a>
                                     @endif
                                 </div>
