@@ -50,15 +50,14 @@
                 <x-heading
                     :lead="$id ? 'Ceritakan kebutuhan Anda' : 'Tell us what you need'"
                     class="text-display-lg font-bold text-navy" />
-                {{-- Menyebut apa yang perlu ditulis, bukan menjanjikan kesiapan.
+                {{-- Satu kalimat, tanpa pisah. Ia menyebut tiga hal yang dilayani
+                     lalu dua cara menghubunginya, dan berhenti di situ:
                      "Tim kami siap membantu" tidak menambah apa pun yang tidak
-                     sudah tersirat dari adanya formulir; menyebut bidang dan
-                     jumlah peserta justru membuat jawaban pertama kami langsung
-                     berguna, dan itu menghemat satu putaran surat-menyurat. --}}
+                     sudah tersirat dari adanya formulir itu sendiri. --}}
                 <p class="mt-5 max-w-md text-pretty leading-relaxed text-slate-600">
                     {{ $id
-                        ? 'Pelatihan, uji kompetensi, atau rekrutmen — isi formulir di samping atau hubungi kami langsung lewat nomor dan surel di bawah. Sebutkan bidangnya dan perkiraan jumlah peserta agar jawaban kami langsung tepat sasaran.'
-                        : 'Training, competency assessment, or recruitment — use the form, or reach us directly on the number and email below. Mention the field and a rough headcount so our first reply is already useful.' }}
+                        ? 'Untuk pelatihan, uji kompetensi, atau rekrutmen, isi formulir di samping atau hubungi kami langsung lewat nomor dan surel di bawah.'
+                        : 'For training, competency assessment, or recruitment, use the form or reach us directly on the number and email below.' }}
                 </p>
 
                 {{-- Satu panel bergaris pemisah, bukan empat kartu terpisah.
