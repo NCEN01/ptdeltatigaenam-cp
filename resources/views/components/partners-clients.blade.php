@@ -82,7 +82,7 @@
             </div>
 
             @if ($partners->isNotEmpty())
-                <div class="mitra-board mt-14 md:mt-16" data-aos="fade-up">
+                <div class="glass-surface mitra-board mt-14 md:mt-16" data-aos="fade-up">
                     @foreach ($partners as $partner)
                         @php
                             $name = trim($partner->name);

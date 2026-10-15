@@ -354,10 +354,21 @@
         <img src="{{ asset('images/bg-pendiri.webp') }}" alt="" aria-hidden="true"
              width="1136" height="421" loading="lazy" decoding="async"
              class="absolute inset-0 h-full w-full object-cover">
-        {{-- Tabir pekat ke kanan, tempat nama dan kutipan berdiri; lebih ringan
-             di kiri tempat potretnya, supaya kota di belakang bahu masih
-             terbaca sebagai ruang dan bukan sebagai bidang hitam. --}}
-        <div class="absolute inset-0 bg-gradient-to-l from-navy-950/92 via-navy-950/78 to-navy-950/62"></div>
+        {{-- Dua lapis, dan yang pertama memang harus ada di sini.
+
+             Foto ini rata-rata #626a74 — abu-abu terang yang nyaris tidak
+             bersaturasi, berbeda jauh dari bg-alasan (#36405c) dan bg-mitra
+             (#3d475c) yang sudah biru sejak fotonya. Menabirinya dengan
+             navy-950 yang hampir hitam hanya menggelapkannya menjadi abu
+             gelap; birunya tidak pernah datang. Karena itu lapisan pertama
+             navy-800 — navy yang benar-benar biru — untuk memberi warna,
+             baru lapisan kedua memberi arah gelapnya.
+
+             Tabir arah itu pekat ke kanan tempat nama dan kutipan berdiri,
+             dan ringan di kiri supaya kota di belakang bahu masih terbaca
+             sebagai ruang, bukan bidang mati. --}}
+        <div class="absolute inset-0 bg-navy-800/55"></div>
+        <div class="absolute inset-0 bg-gradient-to-l from-navy-950/88 via-navy-950/62 to-navy-950/28"></div>
         <div class="pointer-events-none absolute inset-0 grain opacity-20"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 
@@ -425,7 +436,7 @@
                          warna seksi ini — label emas, nama putih, kutipan putih
                          redup, riwayat emas. Terukur 7,36:1 di atas kartu ini,
                          jauh di atas ambang AA. --}}
-                    <div class="mt-8 flex max-w-xl flex-col gap-4 rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 sm:flex-row sm:items-center sm:gap-6 sm:p-6">
+                    <div class="glass-surface glass-card mt-8 flex max-w-xl flex-col gap-4 p-5 sm:flex-row sm:items-center sm:gap-6 sm:p-6">
                         <p class="shrink-0 sm:w-28">
                             <span class="block font-display text-3xl font-bold leading-none text-white md:text-4xl">{{ $founderYears }}</span>
                             <span class="mt-1.5 block font-mono text-[10px] uppercase text-navy-100">{{ $founderYearsLabel }}</span>

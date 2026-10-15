@@ -426,7 +426,7 @@
 
         <div class="container relative section-sm">
             <h2 class="max-w-2xl text-display-lg text-white" data-aos="fade-up">
-                {{ $id ? 'Kenapa daftar ini dibuka' : 'Why this register is public' }}
+                {{ $id ? 'Kenapa daftar ini dibuka?' : 'Why is this register public?' }}
             </h2>
 
             @php
@@ -484,7 +484,7 @@
                                  keempat kartu berbagi satu keadaan, jadi kartu kedua
                                  di kolom kanan harus bernomor 3, bukan 1 lagi. --}}
                             @php $n = $colIdx * 2 + $i; @endphp
-                            <li class="hover-card flex flex-1 flex-col rounded-2xl bg-white/5 p-6 outline-none ring-1 ring-white/10 md:p-7"
+                            <li class="glass-surface glass-card flex flex-1 flex-col p-6 outline-none md:p-7"
                                 tabindex="0"
                                 x-on:mouseenter="active = {{ $n }}"
                                 x-on:focus="active = {{ $n }}"

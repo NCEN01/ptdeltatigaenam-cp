@@ -244,11 +244,26 @@
        jendela gedung di foto terbaca menembus kartu dan bertabrakan dengan
        barisan teksnya. Peramban yang tidak mendukungnya tetap aman: isian
        putih tipisnya sendiri sudah memisahkan kartu dari latar. */
-    .glass-card {
+    /* Permukaan kacanya sendiri — satu-satunya tempat ketiga angkanya
+       ditulis. Dipakai kartu nilai di "Alasan Memilih Kami", kartu alasan di
+       "Kenapa daftar ini dibuka", kartu pengalaman di seksi Pendiri, dan
+       panel logo di pita Mitra.
+
+       Dipisah dari .glass-card karena panel Mitra memerlukan permukaan yang
+       sama persis tapi tidak boleh ikut terangkat saat disentuh: ia bukan
+       kartu, melainkan wadah yang memayungi empat kartu di dalamnya. Dengan
+       dipisah begini, keempat tempat itu tidak bisa lagi menyimpang satu
+       sama lain tanpa disengaja — sebelumnya dua di antaranya memakai
+       putih/0.05 tanpa pengaburan sama sekali, dan bedanya terlihat. */
+    .glass-surface {
         background-color: rgb(255 255 255 / 0.07);
         border: 1px solid rgb(255 255 255 / 0.13);
-        border-radius: 18px;
         backdrop-filter: blur(10px);
+    }
+
+    /* Kartunya: permukaan di atas, ditambah sudut dan tanggapan saat disentuh. */
+    .glass-card {
+        border-radius: 18px;
         transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
     }
     .glass-card:hover,
@@ -258,10 +273,23 @@
         transform: translateY(-3px);
     }
 
+    /* Keadaan terpilih, dipakai kartu di "Kenapa daftar ini dibuka" yang
+       keadaannya dikendalikan Alpine dan bertahan setelah tunjukan ditarik.
+       Tepinya emas, bukan putih, supaya yang terpilih terbaca berbeda dari
+       yang sekadar sedang disentuh. Menggantikan .hover-card yang mewarnai
+       --tw-ring-color: cincin Tailwind tidak lagi ada di kartu ini sejak
+       permukaannya memakai border. */
+    .glass-card[data-on="1"] {
+        background-color: rgb(255 255 255 / 0.12);
+        border-color: rgb(218 180 94 / 0.55);
+        transform: translateY(-4px);
+    }
+
     @media (prefers-reduced-motion: reduce) {
         .glass-card { transition: none; }
         .glass-card:hover,
-        .glass-card:focus-within { transform: none; }
+        .glass-card:focus-within,
+        .glass-card[data-on="1"] { transform: none; }
     }
 
     .link-underline {
@@ -772,14 +800,15 @@
  * celah sungguhan dan panel yang memayungi keempatnya, yang terbaca adalah
  * empat hal setara di dalam satu himpunan.
  */
+/* Permukaan kacanya datang dari .glass-surface di markup, bukan ditulis
+   ulang di sini — lihat catatan di kelas itu. Yang tinggal di sini hanya
+   yang memang khas papan ini: kisi, celah, dan sudut yang lebih besar
+   karena bidangnya jauh lebih luas daripada kartu. */
 .mitra-board {
     display: grid;
     gap: 20px;
     padding: 22px;
-    background-color: rgb(255 255 255 / 0.07);
-    border: 1px solid rgb(255 255 255 / 0.13);
     border-radius: 26px;
-    backdrop-filter: blur(10px);
     grid-template-columns: 1fr;
 }
 @media (min-width: 640px) { .mitra-board { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; padding: 26px; } }
