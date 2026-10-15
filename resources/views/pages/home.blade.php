@@ -86,29 +86,37 @@
                                     {{-- Bobotnya setebal baris pertama, bukan font-normal.
                                          Di ukuran sampai 3,5rem, huruf miring berbobot
                                          normal kehilangan tenaga di bawah baris yang jauh
-                                         lebih tebal, dan gradasi birunya pun ikut pudar
-                                         karena goresannya terlalu tipis untuk membawa
-                                         perubahan warna. --}}
-                                    @if ($ha !== '')<span class="italic-accent block font-bold leading-[1.28] pb-[0.16em] text-gradient-white-navy">{{ $ha }}</span>@endif
+                                         lebih tebal, dan gradasinya pun ikut pudar karena
+                                         goresannya terlalu tipis untuk membawa perubahan
+                                         warna.
+
+                                         Gradasinya putih→emas, bukan putih→biru. Seluruh
+                                         pita hero biru, jadi aksen biru di atasnya tidak
+                                         terbaca sebagai aksen. Emas hanya di sini — baris
+                                         miringnya saja, bukan baris tegaknya — supaya yang
+                                         ditandai tetap satu penggalan, bukan judulnya. --}}
+                                    @if ($ha !== '')<span class="italic-accent block font-bold leading-[1.28] pb-[0.16em] text-gradient-white-gold">{{ $ha }}</span>@endif
                                 </{{ $heroTag }}>
                                 <p class="mt-6 max-w-xl text-[15px] font-normal leading-relaxed text-white/90 text-pretty md:text-lg">{{ $slide['desc'] }}</p>
                                 <div class="mt-10">
-                                    {{-- Pil bergaris dengan lingkaran panah di kirinya.
-                                         Emas dilepas dari tombol ini: di hero yang seluruhnya
-                                         biru, emas adalah satu-satunya warna hangat dan ia
-                                         menarik mata menjauh dari judulnya.
+                                    {{-- .btn-ghost-light, bukan pil buatan sendiri: ukuran,
+                                         hover, dan peralihannya ditentukan sekali di app.css
+                                         bersama seluruh tombol bergaris lain, jadi tombol
+                                         pertama yang dilihat pengunjung tidak lagi menjadi
+                                         satu-satunya yang berlaku beda.
 
-                                         Saat disentuh ia terisi navy-600, biru andalan yang
-                                         sama dengan seluruh tombol lain di situs ini.
-                                         Lingkaran panahnya tetap putih berpanah navy: dengan
-                                         begitu ia justru makin menonjol di atas isian biru,
-                                         dan panahnya tetap 6,6:1 di kedua keadaan. --}}
+                                         Lingkaran panahnya dilepas. Ukurannya kini sama
+                                         dengan .btn-blue di seksi Kategori Layanan tepat di
+                                         bawahnya; dengan lingkaran, tombol hero berdiri
+                                         sendiri sebagai bentuk yang tidak muncul lagi di
+                                         mana pun sepanjang halaman.
+
+                                         Panahnya pindah ke kanan dan bergeser saat disentuh,
+                                         sama persis dengan tombol "Lihat Semua" lainnya. --}}
                                     <a href="{{ $slide['link'] }}"
-                                       class="group inline-flex items-center gap-3.5 rounded-full border border-white/50 py-1.5 pl-1.5 pr-7 text-[15px] font-semibold text-white transition-all duration-300 ease-out-soft hover:-translate-y-0.5 hover:border-white hover:bg-navy-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 active:translate-y-0" >
-                                        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white text-navy-600 transition-colors duration-300 ease-out-soft" aria-hidden="true">
-                                            <svg class="h-4 w-4 transition-transform duration-300 ease-out-soft group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                        </span>
+                                       class="btn-ghost-light group focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950">
                                         {{ $slide['btn_text'] }}
+                                        <svg class="h-4 w-4 transition-transform duration-300 ease-out-soft group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                     </a>
                                 </div>
                             </div>
@@ -118,10 +126,10 @@
             </div>
 
             {{-- arrows --}}
-            <button data-hero-prev class="group absolute left-4 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur transition hover:bg-white hover:text-navy md:grid" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
+            <button data-hero-prev class="group absolute left-4 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur transition duration-300 ease-out-soft hover:border-navy-600 hover:bg-navy-600 hover:text-white md:grid" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
                 <svg class="h-5 w-5" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <button data-hero-next class="group absolute right-4 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur transition hover:bg-white hover:text-navy md:grid" aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
+            <button data-hero-next class="group absolute right-4 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur transition duration-300 ease-out-soft hover:border-navy-600 hover:bg-navy-600 hover:text-white md:grid" aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
                 <svg class="h-5 w-5" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
 
@@ -385,14 +393,19 @@
                     </p>
                 </div>
 
-                {{-- Pil putih berlingkaran navy, bukan .btn-blue: di atas bidang biru
-                     tombol biru akan hilang ke dalam latarnya. --}}
+                {{-- Pil putih, bukan .btn-blue: di atas bidang biru tombol biru akan
+                     hilang ke dalam latarnya.
+
+                     Lingkaran panahnya dilepas, sama dengan tombol hero. Panah tidak
+                     butuh ruang sendiri — ia hanya penunjuk arah, dan lingkaran di
+                     belakangnya membuat tombol ini berbeda bentuk dari tombol utama
+                     di seksi terang persis di atasnya. Lingkaran kini tinggal di
+                     tombol Instagram dan Facebook, yang lambangnya memang perlu
+                     bidang sendiri agar terbaca. --}}
                 <a href="{{ route('contact.index') }}"
-                   class="btn-pill-light relative shrink-0">
+                   class="btn-light group relative shrink-0">
                     {{ $isId ? 'Hubungi Kami' : 'Contact Us' }}
-                    <span class="btn-pill-light-icon" aria-hidden="true">
-                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </span>
+                    <svg class="h-4 w-4 transition-transform duration-300 ease-out-soft group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </a>
             </div>
         </div>

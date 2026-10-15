@@ -173,11 +173,16 @@
         @apply btn border border-navy-200 text-navy hover:-translate-y-0.5 hover:border-navy-600 hover:bg-navy-600 hover:text-white active:translate-y-0;
     }
 
-    /* Dipakai di pita gelap. Isiannya tetap navy-600 seperti yang lain, bukan
-       putih seperti sebelumnya: garis putihnya yang menjaga tombol ini tetap
-       terbaca di atas latar gelap, bukan isiannya. */
+    /* Dipakai di pita gelap dan di hero. Isiannya tetap navy-600 seperti yang
+       lain, bukan putih: garis putihnya yang menjaga tombol ini tetap terbaca
+       di atas latar gelap, bukan isiannya.
+
+       Saat disentuh, tepinya ikut menjadi navy-600 — bukan putih penuh seperti
+       sebelumnya. Tepi putih di atas isian biru pekat terbaca sebagai lis tipis
+       yang mengelilingi tombol, dan di hero itu justru yang pertama tertangkap
+       mata. Dengan tepi sewarna isian, yang berubah hanya bidangnya. */
     .btn-ghost-light {
-        @apply btn border border-white/40 text-white hover:-translate-y-0.5 hover:border-white hover:bg-navy-600 hover:text-white active:translate-y-0;
+        @apply btn border border-white/40 text-white hover:-translate-y-0.5 hover:border-navy-600 hover:bg-navy-600 hover:text-white active:translate-y-0;
     }
 
     /* Pil putih di atas pita biru: pita ajakan di beranda dan tombol sosialnya.
@@ -200,6 +205,24 @@
         @apply grid h-[42px] w-[42px] shrink-0 place-items-center rounded-full bg-navy-600 text-white transition-colors duration-300 ease-out-soft;
     }
     .btn-pill-light:hover .btn-pill-light-icon { @apply bg-white text-navy-600; }
+
+    /* Pil putih tanpa lingkaran ikon — ukurannya sama dengan .btn-blue, jadi
+       tombol ajakan di pita biru sebangun dengan tombol utama di seksi terang
+       tepat di atas dan di bawahnya. Lingkaran disediakan .btn-pill-light dan
+       kini hanya dipakai tombol yang lambangnya memang perlu ruang sendiri:
+       Instagram dan Facebook.
+
+       Cincin putih tipis saat disentuh dipertahankan di sini, berbeda dengan
+       .btn-ghost-light yang justru melepasnya. Alasannya terbalik: tombol ini
+       berisi putih di atas pita biru, jadi begitu isiannya berubah navy-600 ia
+       nyaris sewarna latarnya sendiri dan batasnya hilang. Cincin itu yang
+       menahannya tetap terbaca sebagai tombol. */
+    .btn-light {
+        @apply btn bg-white text-navy-600 font-semibold shadow-[0_10px_24px_-10px_rgba(0,0,0,0.3)]
+               hover:-translate-y-0.5 hover:bg-navy-600 hover:text-white hover:shadow-[0_16px_30px_-10px_rgba(0,0,0,0.38)] hover:ring-1 hover:ring-white/60
+               focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-700
+               active:translate-y-0;
+    }
 
     /* Cards — soft layered shadow, hairline border */
     .card {
@@ -1170,6 +1193,23 @@
         color: transparent;
         -webkit-text-fill-color: transparent;
     }
+    /* Putih → emas, kiri ke kanan: baris miring di judul hero.
+       Dipakai menggantikan .text-gradient-white-navy di sana. Judul hero duduk
+       di atas pita yang seluruhnya biru, jadi gradasi putih→biru tenggelam ke
+       dalam latarnya sendiri; emas satu-satunya warna hangat di bidang itu dan
+       ia menandai baris miringnya tanpa perlu menaikkan bobot atau ukuran.
+
+       Berhenti di #dab45e, bukan warna emas yang lebih tua: di titik terburuk
+       pita hero (navy-700) ia masih 4,62:1 — lulus AA untuk teks biasa, bukan
+       hanya untuk teks besar. #edd68a di tengah menahan peralihannya supaya
+       tidak melompat dari putih langsung ke emas pekat. */
+    .text-gradient-white-gold {
+        background: linear-gradient(100deg, #ffffff 0%, #ffffff 22%, #f6ead0 42%, #edd68a 66%, #dab45e 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+    }
     .text-gradient-gold { color: #dab45e; }  /* gold accent */
 
     /* Slanted emphasis word inside display headings — Instrument Sans has a true italic. */
@@ -1187,6 +1227,14 @@
             pointer-events: none;
         }
         .btn:hover::after { transform: translateX(130%); }
+
+        /* Kecuali tombol bergaris. Isinya tembus pandang, jadi pita putih itu
+           melintas di atas apa pun yang ada di belakangnya — di hero, di atas
+           foto, ia terbaca sebagai lis putih tipis yang melesat, bukan sebagai
+           kilau pada permukaan tombol. Tombol berisi tetap memakainya: di sana
+           ada permukaan untuk dikilaukan. */
+        .btn-ghost::after,
+        .btn-ghost-light::after { content: none; }
     }
     .btn > * { position: relative; z-index: 1; }
 
