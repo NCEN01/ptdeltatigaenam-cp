@@ -21,9 +21,12 @@
 
                  total(), bukan count(): count() hanya menghitung proyek di
                  halaman ini, bukan seluruh hasilnya. --}}
+            {{-- Judulnya utuh di 'lead', tanpa 'accent': slot aksen selalu
+                 membawa .italic-accent beserta warnanya, dan di sini judulnya
+                 dikehendaki tegak seluruhnya dalam satu warna. Sama dengan
+                 halaman Blog, yang memakai komponen ini juga. --}}
             <x-list-header
-                :lead="$id ? 'Dampak Nyata bersama' : 'Real Impact alongside'"
-                :accent="$id ? 'Klien' : 'Clients'"
+                :lead="$id ? 'Dampak Nyata bersama Klien' : 'Real Impact alongside Clients'"
                 :intro="$id
                     ? 'Pelatihan, sertifikasi kompetensi, penataan organisasi, dan pencarian posisi kunci yang kami kerjakan bersama klien, ditulis lengkap sampai angka yang berubah setelahnya.'
                     : 'Training, competency certification, organisational restructuring, and executive search we have done alongside clients, written out in full down to the numbers that moved.'"
