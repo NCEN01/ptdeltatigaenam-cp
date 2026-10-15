@@ -278,7 +278,7 @@ class ServiceSeeder extends Seeder
                 ],
                 'deliverables' => [
                     ['id' => 'Laporan pemetaan pasar kandidat beserta pembanding remunerasi.', 'en' => 'A candidate market map with remuneration benchmarks.'],
-                    ['id' => 'Daftar pendek berisi 3–5 kandidat lengkap dengan hasil asesmen.', 'en' => 'A shortlist of three to five candidates with assessment results.'],
+                    ['id' => 'Daftar pendek berisi 3-5 kandidat lengkap dengan hasil asesmen.', 'en' => 'A shortlist of three to five candidates with assessment results.'],
                     ['id' => 'Penelusuran rekam jejak dari minimal dua sumber.', 'en' => 'Reference checks from at least two sources.'],
                     ['id' => 'Masa garansi penggantian 12 bulan.', 'en' => 'A 12-month replacement guarantee.'],
                 ],
@@ -292,7 +292,7 @@ class ServiceSeeder extends Seeder
                 'price_before' => 52000000, // hemat 26%
                 'price_unit' => ['id' => 'penugasan', 'en' => 'assignment'],
                 'batches' => 1, // per penugasan, bukan per angkatan
-                'duration' => ['id' => '8–14 pekan', 'en' => '8–14 weeks'],
+                'duration' => ['id' => '8-14 pekan', 'en' => '8-14 weeks'],
                 'location' => 'Jakarta Selatan, DKI Jakarta',
                 'mode' => 'hybrid',
                 'quota' => 6,
@@ -331,7 +331,7 @@ class ServiceSeeder extends Seeder
                 'price_before' => 90000000, // hemat 20%
                 'price_unit' => ['id' => 'paket proyek', 'en' => 'project package'],
                 'batches' => 1, // per penugasan, bukan per angkatan
-                'duration' => ['id' => '3–6 bulan', 'en' => '3–6 months'],
+                'duration' => ['id' => '3-6 bulan', 'en' => '3-6 months'],
                 'location' => 'Di lokasi klien',
                 'mode' => 'offline',
                 'quota' => 4,
@@ -442,7 +442,7 @@ class ServiceSeeder extends Seeder
                 'price_before' => 60000000, // hemat 20%
                 'price_unit' => ['id' => 'paket proyek', 'en' => 'project package'],
                 'batches' => 1, // per penugasan, bukan per angkatan
-                'duration' => ['id' => '2–4 bulan', 'en' => '2–4 months'],
+                'duration' => ['id' => '2-4 bulan', 'en' => '2-4 months'],
                 'location' => 'Di lokasi klien',
                 'mode' => 'hybrid',
                 'quota' => 5,

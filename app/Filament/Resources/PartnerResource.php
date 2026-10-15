@@ -53,7 +53,7 @@ class PartnerResource extends Resource
         return $table->defaultSort('sort_order')->reorderable('sort_order')->columns([
             Tables\Columns\ImageColumn::make('logo')->disk('public')->label('')->size(80),
             Tables\Columns\TextColumn::make('name')->label('Nama')->searchable(),
-            Tables\Columns\TextColumn::make('registration_number')->label('No. Registrasi')->searchable()->placeholder('—'),
+            Tables\Columns\TextColumn::make('registration_number')->label('No. Registrasi')->searchable()->placeholder('-'),
             Tables\Columns\ToggleColumn::make('is_active')->label('Aktif'),
         ])->actions([
             Tables\Actions\EditAction::make(),

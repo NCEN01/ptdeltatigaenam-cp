@@ -72,7 +72,7 @@
 
     <h2 id="layanan">3. Layanan Kami</h2>
     <p>Kami menyediakan layanan pengembangan sumber daya manusia yang mencakup pelatihan, uji kompetensi dan sertifikasi profesi, konsultasi human capital, serta pencarian dan penempatan talenta.</p>
-    <p>Keterangan Program di Situs — termasuk silabus, durasi, jadwal, dan tempat pelaksanaan — kami susun dengan cermat, namun dapat berubah sewaktu-waktu. Perubahan yang memengaruhi Program yang sudah Anda pesan akan kami beritahukan sedini mungkin.</p>
+    <p>Keterangan Program di Situs (termasuk silabus, durasi, jadwal, dan tempat pelaksanaan) kami susun dengan cermat, namun dapat berubah sewaktu-waktu. Perubahan yang memengaruhi Program yang sudah Anda pesan akan kami beritahukan sedini mungkin.</p>
     <p>Penyelenggaraan sebagian Program bergantung pada tercapainya jumlah peserta minimum. Apabila jumlah itu tidak tercapai, kami berhak menjadwalkan ulang atau membatalkan Program dengan pemberitahuan kepada Anda.</p>
 
     <h2 id="akun">4. Akun Pengguna</h2>
@@ -116,7 +116,7 @@
     <p>Sertifikat yang kami terbitkan atau fasilitasi tidak boleh diubah, digandakan untuk tujuan yang menyesatkan, atau digunakan oleh orang selain pemegangnya. Pelanggaran atas hal ini dapat berakibat pada pembatalan sertifikat dan tindakan hukum.</p>
 
     <h2 id="kekayaan">10. Hak Kekayaan Intelektual</h2>
-    <p>Seluruh isi Situs — termasuk teks, logo, lambang, tata letak, foto, dan materi pelatihan — dilindungi hak cipta dan merek, dan merupakan milik kami atau pihak yang memberi kami lisensi.</p>
+    <p>Seluruh isi Situs (termasuk teks, logo, lambang, tata letak, foto, dan materi pelatihan) dilindungi hak cipta dan merek, dan merupakan milik kami atau pihak yang memberi kami lisensi.</p>
     <p>Materi pelatihan yang Anda terima diberikan untuk keperluan belajar Anda sendiri. Tanpa izin tertulis dari kami, materi itu tidak boleh digandakan, disebarluaskan, dijual, diterjemahkan, atau digunakan untuk menyelenggarakan pelatihan oleh pihak lain.</p>
     <p>Perekaman suara maupun gambar selama Program berlangsung hanya diperkenankan dengan izin kami terlebih dahulu.</p>
 
@@ -160,7 +160,7 @@
     <ul>
         <li>Surel: <a href="mailto:{{ $email }}">{{ $email }}</a></li>
         @foreach ($offices as $o)
-            <li>{{ $o['name'] }}: {{ $o['address'] }}@if (! empty($o['phone'])) — {{ $o['phone'] }}@endif</li>
+            <li>{{ $o['name'] }}: {{ $o['address'] }}@if (! empty($o['phone'])) · {{ $o['phone'] }}@endif</li>
         @endforeach
         <li>Formulir: <a href="{{ route('contact.index') }}">halaman Kontak</a></li>
     </ul>
@@ -182,7 +182,7 @@
 
     <h2 id="layanan">3. Our Services</h2>
     <p>We provide human resource development services covering training, competency assessment and professional certification, human capital consultancy, and talent search and placement.</p>
-    <p>Programme details on the Site — syllabus, duration, schedule, and venue — are prepared carefully but may change. Changes affecting a Programme you have ordered will be notified as early as possible.</p>
+    <p>Programme details on the Site (syllabus, duration, schedule, and venue) are prepared carefully but may change. Changes affecting a Programme you have ordered will be notified as early as possible.</p>
     <p>Some Programmes run only if a minimum number of participants is reached. If that number is not met, we may reschedule or cancel the Programme with notice to you.</p>
 
     <h2 id="akun">4. User Accounts</h2>
@@ -226,7 +226,7 @@
     <p>Certificates we issue or facilitate must not be altered, reproduced for misleading purposes, or used by anyone other than the holder. Breaching this may lead to cancellation of the certificate and legal action.</p>
 
     <h2 id="kekayaan">10. Intellectual Property</h2>
-    <p>All content on the Site — text, logos, marks, layout, photographs, and training material — is protected by copyright and trade mark law, and belongs to us or to those who license it to us.</p>
+    <p>All content on the Site (text, logos, marks, layout, photographs, and training material) is protected by copyright and trade mark law, and belongs to us or to those who license it to us.</p>
     <p>Training material you receive is provided for your own learning. Without our written permission it may not be reproduced, distributed, sold, translated, or used to deliver training by anyone else.</p>
     <p>Audio or video recording during a Programme is permitted only with our prior consent.</p>
 
@@ -270,7 +270,7 @@
     <ul>
         <li>Email: <a href="mailto:{{ $email }}">{{ $email }}</a></li>
         @foreach ($offices as $o)
-            <li>{{ $o['name'] }}: {{ $o['address'] }}@if (! empty($o['phone'])) — {{ $o['phone'] }}@endif</li>
+            <li>{{ $o['name'] }}: {{ $o['address'] }}@if (! empty($o['phone'])) · {{ $o['phone'] }}@endif</li>
         @endforeach
         <li>Form: <a href="{{ route('contact.index') }}">Contact page</a></li>
     </ul>

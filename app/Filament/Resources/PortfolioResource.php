@@ -124,7 +124,7 @@ class PortfolioResource extends Resource
             Tables\Columns\TextColumn::make('title')->label('Judul')->searchable()->wrap(),
             Tables\Columns\TextColumn::make('client_name')->label('Klien'),
             Tables\Columns\TextColumn::make('location')->label('Lokasi')->icon('heroicon-m-map-pin')
-                ->placeholder('—')->searchable()->toggleable(),
+                ->placeholder('-')->searchable()->toggleable(),
             Tables\Columns\TextColumn::make('category.name')->label('Kategori')->badge(),
             Tables\Columns\ToggleColumn::make('is_active')->label('Aktif'),
         ])->actions([

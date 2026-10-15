@@ -1189,7 +1189,7 @@
                         ],
                         [
                             'q' => 'Berapa lama durasi pelatihan dan apakah peserta memperoleh sertifikat?',
-                            'a' => 'Durasi pelatihan bervariasi mulai dari 1–5 hari tergantung program dan tingkat kompetensinya. Setiap peserta yang menyelesaikan pelatihan akan memperoleh sertifikat; khusus program sertifikasi kompetensi, sertifikat diterbitkan resmi oleh LSP berlisensi BNSP setelah peserta dinyatakan kompeten dalam uji sertifikasi.',
+                            'a' => 'Durasi pelatihan bervariasi mulai dari 1-5 hari tergantung program dan tingkat kompetensinya. Setiap peserta yang menyelesaikan pelatihan akan memperoleh sertifikat; khusus program sertifikasi kompetensi, sertifikat diterbitkan resmi oleh LSP berlisensi BNSP setelah peserta dinyatakan kompeten dalam uji sertifikasi.',
                         ],
                         [
                             'q' => 'Bagaimana cara mendaftar program pelatihan atau sertifikasi?',
@@ -1214,7 +1214,7 @@
                         ],
                         [
                             'q' => 'How long is the training and do participants receive a certificate?',
-                            'a' => 'Training duration varies from 1–5 days depending on the program and competency level. Every participant who completes the training receives a certificate; for competency certification programs, certificates are officially issued by BNSP-licensed LSPs once the participant is declared competent in the assessment.',
+                            'a' => 'Training duration varies from 1-5 days depending on the program and competency level. Every participant who completes the training receives a certificate; for competency certification programs, certificates are officially issued by BNSP-licensed LSPs once the participant is declared competent in the assessment.',
                         ],
                         [
                             'q' => 'How can I register for a training or certification program?',

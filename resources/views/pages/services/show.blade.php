@@ -188,7 +188,7 @@
                                         @if ($schedule->start_time)
                                             <p class="mt-1 font-mono text-xs text-slate-600">
                                                 {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }}
-                                                @if ($schedule->end_time) – {{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }} WIB @endif
+                                                @if ($schedule->end_time) - {{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }} WIB @endif
                                             </p>
                                         @endif
                                         @if ($schedule->location)<p class="mt-0.5 text-sm text-slate-500">{{ $schedule->location }}</p>@endif

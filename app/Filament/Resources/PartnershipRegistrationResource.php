@@ -86,13 +86,13 @@ class PartnershipRegistrationResource extends Resource
                 Tables\Columns\TextColumn::make('registration_number')->label('Nomor')->searchable(),
                 Tables\Columns\TextColumn::make('company_name')->label('Perusahaan')->searchable(),
                 Tables\Columns\TextColumn::make('pic_name')->label('PIC'),
-                Tables\Columns\TextColumn::make('package.name')->label('Paket')->badge()->placeholder('—'),
+                Tables\Columns\TextColumn::make('package.name')->label('Paket')->badge()->placeholder('-'),
                 Tables\Columns\TextColumn::make('status')->badge()->formatStateUsing(fn ($state) => self::STATUSES[$state] ?? $state)
                     ->color(fn ($state) => match ($state) {
                         'baru' => 'warning', 'lunas', 'selesai' => 'success',
                         'dibatalkan' => 'danger', default => 'gray',
                     }),
-                Tables\Columns\TextColumn::make('assignee.name')->label('Penanggung Jawab')->placeholder('—'),
+                Tables\Columns\TextColumn::make('assignee.name')->label('Penanggung Jawab')->placeholder('-'),
                 Tables\Columns\TextColumn::make('created_at')->dateTime('d M Y')->label('Masuk')->sortable(),
             ])
             ->filters([

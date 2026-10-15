@@ -58,7 +58,7 @@ class ServiceResource extends Resource
 
             Forms\Components\Section::make('Harga & Detail')->schema([
                 Forms\Components\TextInput::make('price')->label('Harga (IDR)')->numeric()->default(0)->prefix('Rp')
-                    ->helperText('Harga asli yang ditagih. Isi 0 bila ingin menampilkan "Hubungi kami". Diskon di bawah hanya untuk tampilan — tidak mengubah harga ini.'),
+                    ->helperText('Harga asli yang ditagih. Isi 0 bila ingin menampilkan "Hubungi kami". Diskon di bawah hanya untuk tampilan, tidak mengubah harga ini.'),
                 Forms\Components\Toggle::make('discount_active')->label('Tampilkan Diskon (tampilan saja)')->default(false)->live(),
                 Forms\Components\TextInput::make('discount_original_price')->label('Harga Sebelum Diskon (dicoret)')->numeric()->prefix('Rp')
                     ->helperText('Harga "coret" yang lebih tinggi dari harga asli. Persentase "Hemat" dihitung otomatis.')

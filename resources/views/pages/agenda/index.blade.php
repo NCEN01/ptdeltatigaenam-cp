@@ -115,7 +115,7 @@
                                 @if ($agenda->starts_at)
                                     <span class="inline-flex items-center gap-1.5">
                                         <svg class="h-3.5 w-3.5 {{ $isPast ? 'text-slate-400' : 'text-sky-500' }}" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                        {{ $agenda->starts_at->translatedFormat('H:i') }}{{ $agenda->ends_at ? '–'.$agenda->ends_at->translatedFormat('H:i') : '' }}
+                                        {{ $agenda->starts_at->translatedFormat('H:i') }}{{ $agenda->ends_at ? '-'.$agenda->ends_at->translatedFormat('H:i') : '' }}
                                     </span>
                                 @endif
                                 {{-- Komponen yang sama dengan kartu blog dan portofolio,

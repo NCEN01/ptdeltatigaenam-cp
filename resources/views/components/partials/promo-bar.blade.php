@@ -42,7 +42,7 @@
     if ($topbarActive && config('company.pages.agenda', true) && (bool) Setting::get('topbar_agenda_active')) {
         $slides[] = [
             'type' => 'agenda',
-            'text' => $L('topbar_agenda_text') ?: ($loc === 'id' ? 'Pelatihan & sertifikasi terbaru — lihat jadwal terdekat' : 'Latest training & certification — see the upcoming schedule'),
+            'text' => $L('topbar_agenda_text') ?: ($loc === 'id' ? 'Pelatihan & sertifikasi terbaru · lihat jadwal terdekat' : 'Latest training & certification · see the upcoming schedule'),
             'cta' => $L('topbar_agenda_cta') ?: ($loc === 'id' ? 'Lihat Agenda' : 'View Agenda'),
             'href' => $href(Setting::get('topbar_agenda_link')) ?: route('agenda.index'),
         ];

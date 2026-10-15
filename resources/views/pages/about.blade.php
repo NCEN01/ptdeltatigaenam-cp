@@ -282,7 +282,7 @@
                              aria-hidden: ia mengulang butir yang sudah ada di
                              bawahnya, dan pembaca layar tidak mengikuti kursor. --}}
                         <p class="hidden shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-navy-200 sm:block" aria-hidden="true"
-                           x-text="String(active + 1).padStart(2, '0') + ' / ' + String(labels.length).padStart(2, '0') + ' — ' + labels[active].toUpperCase()">
+                           x-text="String(active + 1).padStart(2, '0') + ' / ' + String(labels.length).padStart(2, '0') + ' · ' + labels[active].toUpperCase()">
                             01 / {{ str_pad($missions->count(), 2, '0', STR_PAD_LEFT) }} &mdash; {{ mb_strtoupper($missions->first()->label) }}
                         </p>
                     </div>

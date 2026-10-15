@@ -60,18 +60,18 @@ class ManageStats extends Page implements HasForms
             Section::make('Statistik Perusahaan')
                 ->description('Empat angka ini muncul di dua tempat sekaligus: di bawah bagian Kategori Layanan pada halaman Beranda, dan di halaman Tentang Kami. Mengubahnya di sini mengubah keduanya. Kolom yang dikosongkan tidak ditampilkan.')
                 ->schema([
-                    TextInput::make('about_stat_1_value')->label('Stat #1 — Angka')->required()->maxLength(20),
-                    TextInput::make('about_stat_1_label.id')->label('Stat #1 — Label (ID)')->required()->maxLength(100),
-                    TextInput::make('about_stat_1_label.en')->label('Stat #1 — Label (EN)')->maxLength(100),
-                    TextInput::make('about_stat_2_value')->label('Stat #2 — Angka')->required()->maxLength(20),
-                    TextInput::make('about_stat_2_label.id')->label('Stat #2 — Label (ID)')->required()->maxLength(100),
-                    TextInput::make('about_stat_2_label.en')->label('Stat #2 — Label (EN)')->maxLength(100),
-                    TextInput::make('about_stat_3_value')->label('Stat #3 — Angka')->required()->maxLength(20),
-                    TextInput::make('about_stat_3_label.id')->label('Stat #3 — Label (ID)')->required()->maxLength(100),
-                    TextInput::make('about_stat_3_label.en')->label('Stat #3 — Label (EN)')->maxLength(100),
-                    TextInput::make('about_stat_4_value')->label('Stat #4 — Angka')->required()->maxLength(20),
-                    TextInput::make('about_stat_4_label.id')->label('Stat #4 — Label (ID)')->required()->maxLength(100),
-                    TextInput::make('about_stat_4_label.en')->label('Stat #4 — Label (EN)')->maxLength(100),
+                    TextInput::make('about_stat_1_value')->label('Stat #1: Angka')->required()->maxLength(20),
+                    TextInput::make('about_stat_1_label.id')->label('Stat #1: Label (ID)')->required()->maxLength(100),
+                    TextInput::make('about_stat_1_label.en')->label('Stat #1: Label (EN)')->maxLength(100),
+                    TextInput::make('about_stat_2_value')->label('Stat #2: Angka')->required()->maxLength(20),
+                    TextInput::make('about_stat_2_label.id')->label('Stat #2: Label (ID)')->required()->maxLength(100),
+                    TextInput::make('about_stat_2_label.en')->label('Stat #2: Label (EN)')->maxLength(100),
+                    TextInput::make('about_stat_3_value')->label('Stat #3: Angka')->required()->maxLength(20),
+                    TextInput::make('about_stat_3_label.id')->label('Stat #3: Label (ID)')->required()->maxLength(100),
+                    TextInput::make('about_stat_3_label.en')->label('Stat #3: Label (EN)')->maxLength(100),
+                    TextInput::make('about_stat_4_value')->label('Stat #4: Angka')->required()->maxLength(20),
+                    TextInput::make('about_stat_4_label.id')->label('Stat #4: Label (ID)')->required()->maxLength(100),
+                    TextInput::make('about_stat_4_label.en')->label('Stat #4: Label (EN)')->maxLength(100),
                 ])->columns(3),
         ])->statePath('data');
     }

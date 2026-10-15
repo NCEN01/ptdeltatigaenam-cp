@@ -67,11 +67,11 @@ class EventScheduleResource extends Resource
         return $table
             ->defaultSort('start_date', 'asc')
             ->columns([
-                Tables\Columns\TextColumn::make('service.title')->label('Layanan')->limit(34)->searchable()->placeholder('—'),
+                Tables\Columns\TextColumn::make('service.title')->label('Layanan')->limit(34)->searchable()->placeholder('-'),
                 Tables\Columns\TextColumn::make('start_date')->label('Mulai')->date('d M Y')->sortable(),
-                Tables\Columns\TextColumn::make('end_date')->label('Selesai')->date('d M Y')->placeholder('—'),
+                Tables\Columns\TextColumn::make('end_date')->label('Selesai')->date('d M Y')->placeholder('-'),
                 Tables\Columns\TextColumn::make('mode')->label('Mode')->badge(),
-                Tables\Columns\TextColumn::make('location')->label('Lokasi')->limit(24)->placeholder('—'),
+                Tables\Columns\TextColumn::make('location')->label('Lokasi')->limit(24)->placeholder('-'),
                 Tables\Columns\TextColumn::make('timeframe')
                     ->label('Status')
                     ->badge()
@@ -122,16 +122,16 @@ class EventScheduleResource extends Resource
     {
         return $infolist->schema([
             Infolists\Components\Section::make('Jadwal Acara')->schema([
-                Infolists\Components\TextEntry::make('service.title')->label('Layanan')->placeholder('—'),
+                Infolists\Components\TextEntry::make('service.title')->label('Layanan')->placeholder('-'),
                 Infolists\Components\TextEntry::make('timeframe')->label('Status')->badge()
                     ->formatStateUsing(fn (string $state) => static::timeframeLabel($state))
                     ->color(fn (string $state) => static::timeframeColor($state)),
                 Infolists\Components\TextEntry::make('start_date')->label('Tanggal Mulai')->date('d M Y'),
-                Infolists\Components\TextEntry::make('end_date')->label('Tanggal Selesai')->date('d M Y')->placeholder('—'),
-                Infolists\Components\TextEntry::make('start_time')->label('Jam Mulai')->placeholder('—'),
-                Infolists\Components\TextEntry::make('end_time')->label('Jam Selesai')->placeholder('—'),
+                Infolists\Components\TextEntry::make('end_date')->label('Tanggal Selesai')->date('d M Y')->placeholder('-'),
+                Infolists\Components\TextEntry::make('start_time')->label('Jam Mulai')->placeholder('-'),
+                Infolists\Components\TextEntry::make('end_time')->label('Jam Selesai')->placeholder('-'),
                 Infolists\Components\TextEntry::make('mode')->label('Mode')->badge(),
-                Infolists\Components\TextEntry::make('location')->label('Lokasi')->placeholder('—'),
+                Infolists\Components\TextEntry::make('location')->label('Lokasi')->placeholder('-'),
                 Infolists\Components\TextEntry::make('seats_taken')->label('Kursi Terisi'),
                 Infolists\Components\TextEntry::make('quota')->label('Kuota')->placeholder('Tanpa batas'),
             ])->columns(3),

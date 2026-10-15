@@ -65,7 +65,7 @@ class Order extends Model
             }
 
             $amount = 'Rp '.number_format((float) $this->total_amount, 0, ',', '.');
-            $serviceName = $this->service?->title ?? '—';
+            $serviceName = $this->service?->title ?? '-';
 
             $notification = Notification::make()
                 ->title('Pembelian baru diterima')

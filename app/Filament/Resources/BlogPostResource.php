@@ -89,7 +89,7 @@ class BlogPostResource extends Resource
             Tables\Columns\TextColumn::make('title')->label('Judul')->searchable()->wrap(),
             Tables\Columns\TextColumn::make('category.name')->label('Kategori')->badge(),
             Tables\Columns\TextColumn::make('location')->label('Lokasi')->icon('heroicon-m-map-pin')
-                ->placeholder('—')->searchable()->toggleable(),
+                ->placeholder('-')->searchable()->toggleable(),
             Tables\Columns\TextColumn::make('status')->badge()->colors([
                 'gray' => 'draft', 'success' => 'published', 'warning' => 'archived',
             ]),

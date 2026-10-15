@@ -10,7 +10,7 @@
         ['label' => 'Email', 'value' => $email, 'href' => 'mailto:'.$email, 'icon' => 'mail'],
         ['label' => 'WhatsApp', 'value' => '0818 834 766', 'href' => 'https://wa.me/'.$waNumber.'?text='.$waText, 'icon' => 'whatsapp'],
         ['label' => $id ? 'Telepon' : 'Phone', 'value' => '(021) 5890 5002', 'href' => 'tel:+622158905002', 'icon' => 'phone'],
-        ['label' => $id ? 'Jam Operasional' : 'Office Hours', 'value' => $id ? 'Senin – Jumat · 08.00–17.00' : 'Mon – Fri · 8am–5pm', 'href' => null, 'icon' => 'clock'],
+        ['label' => $id ? 'Jam Operasional' : 'Office Hours', 'value' => $id ? 'Senin sampai Jumat · 08.00-17.00' : 'Mon to Fri · 8am-5pm', 'href' => null, 'icon' => 'clock'],
     ];
 @endphp
 
@@ -20,7 +20,7 @@
          hanya simpul DOM mati beserta satu pendaftaran pengamat AOS. --}}
     <x-page-header
         :title="__('site.contact.title')"
-        :subtitle="$id ? 'Ceritakan kebutuhan organisasi Anda. Tim kami akan merespons dengan cepat.' : 'Tell us about your needs — our team will respond promptly.'"
+        :subtitle="$id ? 'Ceritakan kebutuhan organisasi Anda. Tim kami akan merespons dengan cepat.' : 'Tell us about your needs. Our team will respond promptly.'"
         placement="contact"
         image="photo-1497366754035-f200968a6e72" />
 

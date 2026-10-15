@@ -14,7 +14,7 @@ class AdminUserSeeder extends Seeder
         $password = env('ADMIN_PASSWORD');
 
         if (blank($password)) {
-            $this->command->warn('ADMIN_PASSWORD kosong di .env — melewati AdminUserSeeder.');
+            $this->command->warn('ADMIN_PASSWORD kosong di .env, melewati AdminUserSeeder.');
 
             return;
         }

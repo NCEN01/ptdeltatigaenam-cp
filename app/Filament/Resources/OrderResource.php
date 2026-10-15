@@ -40,16 +40,16 @@ class OrderResource extends Resource
                     'expired', 'cancelled', 'failed' => 'danger', default => 'gray',
                 }),
                 Infolists\Components\TextEntry::make('total_amount')->money('IDR'),
-                Infolists\Components\TextEntry::make('paid_at')->dateTime('d M Y H:i')->placeholder('—'),
+                Infolists\Components\TextEntry::make('paid_at')->dateTime('d M Y H:i')->placeholder('-'),
             ])->columns(4),
             Infolists\Components\Section::make('Pemesan')->schema([
                 Infolists\Components\TextEntry::make('customer_name')->label('Nama'),
                 Infolists\Components\TextEntry::make('customer_email')->label('Email')->copyable(),
                 Infolists\Components\TextEntry::make('customer_phone')->label('Telepon'),
-                Infolists\Components\TextEntry::make('customer_company')->label('Perusahaan')->placeholder('—'),
+                Infolists\Components\TextEntry::make('customer_company')->label('Perusahaan')->placeholder('-'),
             ])->columns(2),
             Infolists\Components\Section::make('Layanan')->schema([
-                Infolists\Components\TextEntry::make('service.title')->label('Layanan')->placeholder('—'),
+                Infolists\Components\TextEntry::make('service.title')->label('Layanan')->placeholder('-'),
                 Infolists\Components\TextEntry::make('quantity')->label('Jumlah'),
                 Infolists\Components\TextEntry::make('unit_price')->money('IDR'),
                 Infolists\Components\TextEntry::make('subtotal')->money('IDR'),
@@ -79,7 +79,7 @@ class OrderResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('order_number')->label('Nomor')->searchable()->copyable(),
                 Tables\Columns\TextColumn::make('customer_name')->label('Pemesan')->searchable(),
-                Tables\Columns\TextColumn::make('service.title')->label('Layanan')->limit(30)->placeholder('—'),
+                Tables\Columns\TextColumn::make('service.title')->label('Layanan')->limit(30)->placeholder('-'),
                 Tables\Columns\TextColumn::make('total_amount')->money('IDR')->sortable(),
                 Tables\Columns\TextColumn::make('status')->badge()->color(fn ($state) => match ($state) {
                     'paid' => 'success', 'pending' => 'warning',

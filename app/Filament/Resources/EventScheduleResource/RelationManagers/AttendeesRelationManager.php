@@ -26,9 +26,9 @@ class AttendeesRelationManager extends RelationManager
             ->paginated(false)
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label('Nama')->searchable()->weight('medium'),
-                Tables\Columns\TextColumn::make('phone')->label('Telepon')->placeholder('—'),
+                Tables\Columns\TextColumn::make('phone')->label('Telepon')->placeholder('-'),
                 Tables\Columns\TextColumn::make('order.order_number')->label('No. Pesanan')->badge()->color('gray'),
-                Tables\Columns\TextColumn::make('order.customer_name')->label('Pemesan')->placeholder('—')->toggleable(),
+                Tables\Columns\TextColumn::make('order.customer_name')->label('Pemesan')->placeholder('-')->toggleable(),
                 Tables\Columns\ToggleColumn::make('present')->label('Hadir'),
             ])
             ->filters([

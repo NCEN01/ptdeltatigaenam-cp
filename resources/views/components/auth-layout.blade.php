@@ -26,7 +26,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#2b83df">
-    <title>{{ $title }} — PT Delta Tiga Enam</title>
+    <title>{{ $title }} · PT Delta Tiga Enam</title>
     {{-- PNG, bukan WebP seperti gambar lain di situs ini: apple-touch-icon
          berformat WebP tidak dipasang iOS, dan ikon layar awalnya jadi kosong.
          180x180 adalah ukuran yang diminta iOS, dan versi kecil ini 22 KB

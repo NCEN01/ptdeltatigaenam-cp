@@ -52,7 +52,7 @@ class PartnershipController extends Controller
         if ($admins->isNotEmpty()) {
             Notification::make()
                 ->title('Pendaftaran Kemitraan Baru')
-                ->body("{$registration->company_name} — {$registration->pic_name}")
+                ->body("{$registration->company_name} · {$registration->pic_name}")
                 ->icon('heroicon-o-clipboard-document-list')
                 ->success()
                 ->sendToDatabase($admins);

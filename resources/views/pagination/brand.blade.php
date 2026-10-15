@@ -27,7 +27,7 @@
         <div class="hidden w-full items-center justify-between sm:flex">
             <p class="text-sm text-slate-500">
                 {!! __('Showing') !!}
-                <span class="font-medium text-navy">{{ $paginator->firstItem() ?? 0 }}</span>–<span class="font-medium text-navy">{{ $paginator->lastItem() ?? 0 }}</span>
+                <span class="font-medium text-navy">{{ $paginator->firstItem() ?? 0 }}</span>-<span class="font-medium text-navy">{{ $paginator->lastItem() ?? 0 }}</span>
                 {!! __('of') !!} <span class="font-medium text-navy">{{ $paginator->total() }}</span>
             </p>
             <span class="inline-flex items-center gap-1.5">

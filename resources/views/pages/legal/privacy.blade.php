@@ -67,7 +67,7 @@
     <p><strong>PT Delta Tiga Enam</strong></p>
     <ul>
         @foreach ($offices as $o)
-            <li><strong>{{ $o['name'] }}</strong> — {{ $o['address'] }}@if (! empty($o['phone'])). Telepon: {{ $o['phone'] }}@endif</li>
+            <li><strong>{{ $o['name'] }}</strong>: {{ $o['address'] }}@if (! empty($o['phone'])). Telepon: {{ $o['phone'] }}@endif</li>
         @endforeach
         <li>Surel: <a href="mailto:{{ $email }}">{{ $email }}</a></li>
     </ul>
@@ -91,15 +91,15 @@
     </ul>
 
     <h3>3.3 Data yang tidak kami kumpulkan</h3>
-    <p>Kami tidak mengumpulkan data pribadi yang bersifat spesifik sebagaimana dimaksud Undang-Undang Pelindungan Data Pribadi — antara lain data kesehatan, data biometrik, data genetika, catatan kejahatan, pandangan politik, dan keyakinan agama. Mohon jangan mencantumkan data semacam itu pada kolom pesan atau catatan.</p>
+    <p>Kami tidak mengumpulkan data pribadi yang bersifat spesifik sebagaimana dimaksud Undang-Undang Pelindungan Data Pribadi, antara lain data kesehatan, data biometrik, data genetika, catatan kejahatan, pandangan politik, dan keyakinan agama. Mohon jangan mencantumkan data semacam itu pada kolom pesan atau catatan.</p>
 
     <h2 id="dasar">4. Dasar Pemrosesan</h2>
     <p>Setiap pemrosesan data pribadi yang kami lakukan berpijak pada salah satu dasar berikut:</p>
     <ul>
-        <li><strong>Persetujuan Anda</strong> — saat Anda mengirim formulir hubungi kami atau mendaftarkan akun secara sukarela.</li>
-        <li><strong>Pelaksanaan perjanjian</strong> — saat kami memproses pemesanan, menjalankan program pelatihan, dan menerbitkan sertifikat yang Anda pesan.</li>
-        <li><strong>Pemenuhan kewajiban hukum</strong> — antara lain kewajiban perpajakan, pembukuan, dan pelaporan kepada lembaga sertifikasi yang berwenang.</li>
-        <li><strong>Kepentingan yang sah</strong> — menjaga keamanan sistem, mencegah penyalahgunaan, dan memperbaiki mutu layanan, sepanjang tidak melampaui hak dan kepentingan Anda.</li>
+        <li><strong>Persetujuan Anda</strong>: saat Anda mengirim formulir hubungi kami atau mendaftarkan akun secara sukarela.</li>
+        <li><strong>Pelaksanaan perjanjian</strong>: saat kami memproses pemesanan, menjalankan program pelatihan, dan menerbitkan sertifikat yang Anda pesan.</li>
+        <li><strong>Pemenuhan kewajiban hukum</strong>: antara lain kewajiban perpajakan, pembukuan, dan pelaporan kepada lembaga sertifikasi yang berwenang.</li>
+        <li><strong>Kepentingan yang sah</strong>: menjaga keamanan sistem, mencegah penyalahgunaan, dan memperbaiki mutu layanan, sepanjang tidak melampaui hak dan kepentingan Anda.</li>
     </ul>
 
     <h2 id="tujuan">5. Tujuan Penggunaan</h2>
@@ -118,29 +118,29 @@
     <h2 id="cookie">6. Cookie</h2>
     <p>Situs ini hanya memasang cookie yang diperlukan agar situsnya berfungsi:</p>
     <ul>
-        <li><strong>Cookie sesi</strong> — menjaga Anda tetap masuk selama berpindah halaman, dan terhapus saat sesi berakhir.</li>
-        <li><strong>Cookie token keamanan</strong> — melindungi formulir dari pemalsuan permintaan lintas situs.</li>
-        <li><strong>Preferensi bahasa</strong> — mengingat pilihan Bahasa Indonesia atau Inggris Anda.</li>
+        <li><strong>Cookie sesi</strong>: menjaga Anda tetap masuk selama berpindah halaman, dan terhapus saat sesi berakhir.</li>
+        <li><strong>Cookie token keamanan</strong>: melindungi formulir dari pemalsuan permintaan lintas situs.</li>
+        <li><strong>Preferensi bahasa</strong>: mengingat pilihan Bahasa Indonesia atau Inggris Anda.</li>
     </ul>
-    <p>Kami <strong>tidak memasang cookie periklanan maupun cookie pelacak pihak ketiga</strong> di situs ini. Cookie teknis di atas dapat Anda hapus melalui pengaturan peramban, namun sebagian fungsi situs — terutama masuk ke akun — tidak akan bekerja tanpanya.</p>
+    <p>Kami <strong>tidak memasang cookie periklanan maupun cookie pelacak pihak ketiga</strong> di situs ini. Cookie teknis di atas dapat Anda hapus melalui pengaturan peramban, namun sebagian fungsi situs, terutama masuk ke akun, tidak akan bekerja tanpanya.</p>
 
     <h2 id="pihak-ketiga">7. Pembagian kepada Pihak Ketiga</h2>
     <p>Data pribadi Anda hanya kami bagikan sepanjang diperlukan, kepada:</p>
     <ul>
-        <li><strong>Penyedia layanan pembayaran</strong> — untuk memproses transaksi pemesanan program. Data kartu atau rekening Anda diproses langsung oleh penyedia tersebut dan tidak pernah tersimpan di sistem kami.</li>
-        <li><strong>Lembaga sertifikasi dan asesor</strong> — nama dan data peserta disampaikan kepada lembaga penerbit sertifikat sepanjang diperlukan untuk pelaksanaan uji kompetensi dan penerbitan sertifikat yang Anda pesan.</li>
-        <li><strong>Penyedia infrastruktur</strong> — layanan hosting dan surel yang kami gunakan untuk menjalankan situs ini.</li>
-        <li><strong>Aparat penegak hukum atau instansi berwenang</strong> — apabila diwajibkan oleh peraturan perundang-undangan atau putusan yang mengikat.</li>
+        <li><strong>Penyedia layanan pembayaran</strong>: untuk memproses transaksi pemesanan program. Data kartu atau rekening Anda diproses langsung oleh penyedia tersebut dan tidak pernah tersimpan di sistem kami.</li>
+        <li><strong>Lembaga sertifikasi dan asesor</strong>: nama dan data peserta disampaikan kepada lembaga penerbit sertifikat sepanjang diperlukan untuk pelaksanaan uji kompetensi dan penerbitan sertifikat yang Anda pesan.</li>
+        <li><strong>Penyedia infrastruktur</strong>: layanan hosting dan surel yang kami gunakan untuk menjalankan situs ini.</li>
+        <li><strong>Aparat penegak hukum atau instansi berwenang</strong>: apabila diwajibkan oleh peraturan perundang-undangan atau putusan yang mengikat.</li>
     </ul>
     <p>Kami mewajibkan setiap pihak di atas memproses data Anda sebatas keperluan yang kami tentukan dan menjaga kerahasiaannya.</p>
 
     <h2 id="retensi">8. Masa Penyimpanan</h2>
     <p>Kami menyimpan data pribadi hanya selama tujuannya masih berjalan atau selama diwajibkan peraturan:</p>
     <ul>
-        <li><strong>Pesan dari formulir hubungi kami</strong> — disimpan selama diperlukan untuk menindaklanjuti dan menjadi rujukan bila percakapan berlanjut.</li>
-        <li><strong>Data akun</strong> — disimpan selama akun Anda aktif. Bila Anda meminta penghapusan, kami hapus kecuali ada bagian yang wajib kami simpan menurut peraturan.</li>
-        <li><strong>Data pemesanan dan transaksi</strong> — disimpan sesuai kewajiban pembukuan dan perpajakan yang berlaku bagi perseroan di Indonesia.</li>
-        <li><strong>Data peserta dan catatan sertifikasi</strong> — disimpan selama sertifikat masih berlaku dan sepanjang dibutuhkan untuk verifikasi keabsahannya.</li>
+        <li><strong>Pesan dari formulir hubungi kami</strong>: disimpan selama diperlukan untuk menindaklanjuti dan menjadi rujukan bila percakapan berlanjut.</li>
+        <li><strong>Data akun</strong>: disimpan selama akun Anda aktif. Bila Anda meminta penghapusan, kami hapus kecuali ada bagian yang wajib kami simpan menurut peraturan.</li>
+        <li><strong>Data pemesanan dan transaksi</strong>: disimpan sesuai kewajiban pembukuan dan perpajakan yang berlaku bagi perseroan di Indonesia.</li>
+        <li><strong>Data peserta dan catatan sertifikasi</strong>: disimpan selama sertifikat masih berlaku dan sepanjang dibutuhkan untuk verifikasi keabsahannya.</li>
     </ul>
     <p>Data yang sudah habis masa simpannya kami hapus atau kami buat tidak lagi dapat dikaitkan dengan orang tertentu.</p>
 
@@ -202,7 +202,7 @@
     <p><strong>PT Delta Tiga Enam</strong></p>
     <ul>
         @foreach ($offices as $o)
-            <li><strong>{{ $o['name'] }}</strong> — {{ $o['address'] }}@if (! empty($o['phone'])). Phone: {{ $o['phone'] }}@endif</li>
+            <li><strong>{{ $o['name'] }}</strong>: {{ $o['address'] }}@if (! empty($o['phone'])). Phone: {{ $o['phone'] }}@endif</li>
         @endforeach
         <li>Email: <a href="mailto:{{ $email }}">{{ $email }}</a></li>
     </ul>
@@ -226,15 +226,15 @@
     </ul>
 
     <h3>3.3 Data we do not collect</h3>
-    <p>We do not collect specific personal data as defined by the Personal Data Protection Law — including health data, biometric data, genetic data, criminal records, political views, and religious beliefs. Please do not include such data in message or note fields.</p>
+    <p>We do not collect specific personal data as defined by the Personal Data Protection Law, including health data, biometric data, genetic data, criminal records, political views, and religious beliefs. Please do not include such data in message or note fields.</p>
 
     <h2 id="dasar">4. Lawful Basis</h2>
     <p>Every processing activity rests on one of the following:</p>
     <ul>
-        <li><strong>Your consent</strong> — when you voluntarily submit the contact form or register an account.</li>
-        <li><strong>Performance of a contract</strong> — when we process your order, run the programme, and issue the certificate you ordered.</li>
-        <li><strong>Compliance with a legal obligation</strong> — including tax, bookkeeping, and reporting duties to the competent certification bodies.</li>
-        <li><strong>Legitimate interests</strong> — keeping the system secure, preventing misuse, and improving service quality, so far as this does not override your rights and interests.</li>
+        <li><strong>Your consent</strong>: when you voluntarily submit the contact form or register an account.</li>
+        <li><strong>Performance of a contract</strong>: when we process your order, run the programme, and issue the certificate you ordered.</li>
+        <li><strong>Compliance with a legal obligation</strong>: including tax, bookkeeping, and reporting duties to the competent certification bodies.</li>
+        <li><strong>Legitimate interests</strong>: keeping the system secure, preventing misuse, and improving service quality, so far as this does not override your rights and interests.</li>
     </ul>
 
     <h2 id="tujuan">5. Purposes of Use</h2>
@@ -253,29 +253,29 @@
     <h2 id="cookie">6. Cookies</h2>
     <p>This site sets only the cookies it needs to work:</p>
     <ul>
-        <li><strong>Session cookie</strong> — keeps you signed in as you move between pages, and is cleared when the session ends.</li>
-        <li><strong>Security token cookie</strong> — protects forms against cross-site request forgery.</li>
-        <li><strong>Language preference</strong> — remembers your choice of Indonesian or English.</li>
+        <li><strong>Session cookie</strong>: keeps you signed in as you move between pages, and is cleared when the session ends.</li>
+        <li><strong>Security token cookie</strong>: protects forms against cross-site request forgery.</li>
+        <li><strong>Language preference</strong>: remembers your choice of Indonesian or English.</li>
     </ul>
-    <p>We set <strong>no advertising cookies and no third-party tracking cookies</strong> on this site. You can clear the technical cookies above through your browser settings, but parts of the site — signing in above all — will not work without them.</p>
+    <p>We set <strong>no advertising cookies and no third-party tracking cookies</strong> on this site. You can clear the technical cookies above through your browser settings, but parts of the site, signing in above all, will not work without them.</p>
 
     <h2 id="pihak-ketiga">7. Sharing with Third Parties</h2>
     <p>We share your personal data only so far as necessary, with:</p>
     <ul>
-        <li><strong>Payment service providers</strong> — to process order transactions. Your card or account details are handled directly by that provider and are never stored in our system.</li>
-        <li><strong>Certification bodies and assessors</strong> — participant names and data are passed to the issuing body so far as needed to run the assessment and issue the certificate you ordered.</li>
-        <li><strong>Infrastructure providers</strong> — the hosting and email services we use to run this site.</li>
-        <li><strong>Law enforcement or competent authorities</strong> — where required by law or a binding order.</li>
+        <li><strong>Payment service providers</strong>: to process order transactions. Your card or account details are handled directly by that provider and are never stored in our system.</li>
+        <li><strong>Certification bodies and assessors</strong>: participant names and data are passed to the issuing body so far as needed to run the assessment and issue the certificate you ordered.</li>
+        <li><strong>Infrastructure providers</strong>: the hosting and email services we use to run this site.</li>
+        <li><strong>Law enforcement or competent authorities</strong>: where required by law or a binding order.</li>
     </ul>
     <p>We require each of these parties to process your data only for the purposes we set and to keep it confidential.</p>
 
     <h2 id="retensi">8. Retention Period</h2>
     <p>We keep personal data only while its purpose stands or while the law requires:</p>
     <ul>
-        <li><strong>Contact form messages</strong> — kept as long as needed to follow up and for reference if the conversation continues.</li>
-        <li><strong>Account data</strong> — kept while your account is active. On a deletion request we remove it, except any part we are legally required to retain.</li>
-        <li><strong>Order and transaction data</strong> — kept in line with the bookkeeping and tax obligations applicable to companies in Indonesia.</li>
-        <li><strong>Participant and certification records</strong> — kept while the certificate remains valid and as long as needed to verify its authenticity.</li>
+        <li><strong>Contact form messages</strong>: kept as long as needed to follow up and for reference if the conversation continues.</li>
+        <li><strong>Account data</strong>: kept while your account is active. On a deletion request we remove it, except any part we are legally required to retain.</li>
+        <li><strong>Order and transaction data</strong>: kept in line with the bookkeeping and tax obligations applicable to companies in Indonesia.</li>
+        <li><strong>Participant and certification records</strong>: kept while the certificate remains valid and as long as needed to verify its authenticity.</li>
     </ul>
     <p>Data past its retention period is deleted or rendered no longer attributable to an identified person.</p>
 
@@ -303,7 +303,7 @@
     <p>We act on requests within a reasonable time and tell you the outcome. Where a request cannot be met in full, we explain why. You also have the right to lodge a complaint with the competent personal data protection authority.</p>
 
     <h2 id="anak">12. Children's Data</h2>
-    <p>Our services are intended for adult users — those aged 18 or over, or already married. We do not knowingly collect children's personal data. Processing a child's personal data requires the consent of a parent or guardian. If you become aware that a child's data has reached us without such consent, please contact us so we can delete it.</p>
+    <p>Our services are intended for adult users: those aged 18 or over, or already married. We do not knowingly collect children's personal data. Processing a child's personal data requires the consent of a parent or guardian. If you become aware that a child's data has reached us without such consent, please contact us so we can delete it.</p>
 
     <h2 id="perubahan">13. Changes to This Policy</h2>
     <p>We may update this policy from time to time, for example as services or regulations change. The current version is always on this page with an updated effective date. For changes that materially affect your rights, we will give notice through this site or by email.</p>

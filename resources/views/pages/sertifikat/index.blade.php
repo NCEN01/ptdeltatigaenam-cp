@@ -312,7 +312,7 @@
                         <div class="flex items-start justify-between gap-3">
                             <div class="min-w-0">
                                 <h3 class="truncate text-[15px] text-navy">{{ $c->participant_name }}</h3>
-                                <p class="mt-0.5 truncate text-xs text-slate-600">{{ $c->company_name ?: '—' }}</p>
+                                <p class="mt-0.5 truncate text-xs text-slate-600">{{ $c->company_name ?: '-' }}</p>
                             </div>
                             <x-certificate-status :expires-at="$c->expires_at" class="shrink-0" />
                         </div>
@@ -326,11 +326,11 @@
                         <dl class="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-navy-50 pt-3 text-xs">
                             <div class="min-w-0">
                                 <dt class="text-[11px] text-slate-500">{{ $id ? 'No. UJK' : 'Reg. No.' }}</dt>
-                                <dd class="truncate font-mono text-slate-700">{{ $c->ujk_number ?: '—' }}</dd>
+                                <dd class="truncate font-mono text-slate-700">{{ $c->ujk_number ?: '-' }}</dd>
                             </div>
                             <div class="min-w-0">
                                 <dt class="text-[11px] text-slate-500">{{ $id ? 'No. Sertifikat' : 'Certificate No.' }}</dt>
-                                <dd class="truncate font-mono text-slate-700">{{ $c->certificate_number ?: '—' }}</dd>
+                                <dd class="truncate font-mono text-slate-700">{{ $c->certificate_number ?: '-' }}</dd>
                             </div>
                         </dl>
                     </article>
@@ -361,7 +361,7 @@
                                 {{-- Baris berselang samar memandu mata menyusuri lima kolom
                                      tanpa perlu garis di setiap baris. --}}
                                 <tr class="transition-colors duration-200 ease-out-soft even:bg-neutral-50/60 hover:bg-sky-50/50">
-                                    <td class="whitespace-nowrap px-6 py-5 font-mono text-xs tracking-tight text-slate-500">{{ $c->ujk_number ?: '—' }}</td>
+                                    <td class="whitespace-nowrap px-6 py-5 font-mono text-xs tracking-tight text-slate-500">{{ $c->ujk_number ?: '-' }}</td>
                                     {{-- Status menempel pada nama, sama seperti kartu mobile.
                                          Kolom Tgl. Berakhir dihapus, tetapi penanda berlaku /
                                          kedaluwarsa tetap perlu ada: tanpanya halaman ini
@@ -370,12 +370,12 @@
                                         <span class="text-[15px] text-navy">{{ $c->participant_name }}</span>
                                         <x-certificate-status :expires-at="$c->expires_at" class="ml-2 align-middle" />
                                     </td>
-                                    <td class="px-6 py-5 text-slate-700">{{ $c->company_name ?: '—' }}</td>
-                                    <td class="whitespace-nowrap px-6 py-5 font-mono text-xs tracking-tight text-slate-600">{{ $c->certificate_number ?: '—' }}</td>
+                                    <td class="px-6 py-5 text-slate-700">{{ $c->company_name ?: '-' }}</td>
+                                    <td class="whitespace-nowrap px-6 py-5 font-mono text-xs tracking-tight text-slate-600">{{ $c->certificate_number ?: '-' }}</td>
                                     <td class="px-6 py-5">
                                         @if ($c->qualification)
                                             <span class="inline-flex rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-xs font-medium text-sky-700">{{ $c->qualification }}</span>
-                                        @else <span class="text-slate-600">—</span> @endif
+                                        @else <span class="text-slate-600">-</span> @endif
                                     </td>
                                 </tr>
                             @endforeach

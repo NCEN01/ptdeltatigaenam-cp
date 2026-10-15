@@ -23,7 +23,7 @@ class OrderPaidNotification extends Notification
         $o = $this->order;
 
         return (new MailMessage)
-            ->subject("Pembayaran Diterima — {$o->order_number}")
+            ->subject("Pembayaran Diterima: {$o->order_number}")
             ->greeting("Halo {$o->customer_name},")
             ->line('Terima kasih. Pembayaran Anda telah kami terima.')
             ->line("Nomor Pesanan: {$o->order_number}")

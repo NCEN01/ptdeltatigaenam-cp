@@ -62,7 +62,7 @@ class ManagePromoBar extends Page implements HasForms
                 ->schema([
                     Toggle::make('topbar_active')->label('Aktifkan bar promo atas')->live()->columnSpanFull(),
 
-                    Fieldset::make('Slide 1 — Promo / Diskon')
+                    Fieldset::make('Slide 1: Promo / Diskon')
                         ->schema([
                             Toggle::make('topbar_promo_active')->label('Tampilkan slide promo')->live()->columnSpanFull(),
                             TextInput::make('topbar_promo_text.id')->label('Teks (ID)')->placeholder('Promo Sertifikasi BNSP')->maxLength(80)->visible(fn ($get) => (bool) $get('topbar_promo_active')),
@@ -76,11 +76,11 @@ class ManagePromoBar extends Page implements HasForms
                             TextInput::make('topbar_promo_link')->label('Tautan Tujuan')->placeholder('/checkout/6  atau  /layanan/sertifikasi-bnsp')->helperText('Path tanpa kode bahasa. Contoh: /checkout/6 atau /layanan/slug. Kode bahasa (id/en) ditambahkan otomatis.')->maxLength(255)->visible(fn ($get) => (bool) $get('topbar_promo_active'))->columnSpanFull(),
                         ])->columns(2)->visible(fn ($get) => (bool) $get('topbar_active')),
 
-                    Fieldset::make('Slide 2 — Agenda / Pelatihan')
+                    Fieldset::make('Slide 2: Agenda / Pelatihan')
                         ->schema([
                             Toggle::make('topbar_agenda_active')->label('Tampilkan slide agenda')->live()->columnSpanFull(),
-                            TextInput::make('topbar_agenda_text.id')->label('Teks (ID)')->placeholder('Pelatihan & sertifikasi terbaru — lihat jadwal terdekat')->maxLength(100)->visible(fn ($get) => (bool) $get('topbar_agenda_active')),
-                            TextInput::make('topbar_agenda_text.en')->label('Teks (EN)')->placeholder('Latest training & certification — see upcoming schedule')->maxLength(100)->visible(fn ($get) => (bool) $get('topbar_agenda_active')),
+                            TextInput::make('topbar_agenda_text.id')->label('Teks (ID)')->placeholder('Pelatihan & sertifikasi terbaru · lihat jadwal terdekat')->maxLength(100)->visible(fn ($get) => (bool) $get('topbar_agenda_active')),
+                            TextInput::make('topbar_agenda_text.en')->label('Teks (EN)')->placeholder('Latest training & certification · see upcoming schedule')->maxLength(100)->visible(fn ($get) => (bool) $get('topbar_agenda_active')),
                             TextInput::make('topbar_agenda_cta.id')->label('Teks Tombol (ID)')->placeholder('Lihat Agenda')->maxLength(30)->visible(fn ($get) => (bool) $get('topbar_agenda_active')),
                             TextInput::make('topbar_agenda_cta.en')->label('Teks Tombol (EN)')->placeholder('View Agenda')->maxLength(30)->visible(fn ($get) => (bool) $get('topbar_agenda_active')),
                             TextInput::make('topbar_agenda_link')->label('Tautan (opsional)')->placeholder('kosongkan → halaman Agenda')->helperText('Kosongkan untuk mengarah ke halaman Agenda, atau isi path tanpa kode bahasa.')->maxLength(255)->visible(fn ($get) => (bool) $get('topbar_agenda_active'))->columnSpanFull(),

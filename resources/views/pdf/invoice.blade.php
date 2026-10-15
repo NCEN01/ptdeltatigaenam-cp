@@ -57,9 +57,9 @@
             </td>
             <td class="right">
                 <div class="label">Tanggal Terbit</div>
-                {{ optional($invoice->issued_date)->format('d M Y') ?? '—' }}<br><br>
+                {{ optional($invoice->issued_date)->format('d M Y') ?? '-' }}<br><br>
                 <div class="label">Jatuh Tempo</div>
-                {{ optional($invoice->due_date)->format('d M Y') ?? '—' }}
+                {{ optional($invoice->due_date)->format('d M Y') ?? '-' }}
             </td>
         </tr>
     </table>

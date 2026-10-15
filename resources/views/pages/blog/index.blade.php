@@ -22,8 +22,8 @@
                      dikehendaki tegak seluruhnya dalam satu warna. --}}
                 :lead="$id ? 'Wawasan & Artikel' : 'Insights & Articles'"
                 :intro="$id
-                    ? 'Catatan dari ruang pelatihan, lokasi uji kompetensi, dan meja konsultasi kami — ditulis dari pekerjaan yang benar-benar kami kerjakan, bukan rangkuman bacaan.'
-                    : 'Notes from our training rooms, assessment sites, and consulting desks — written from work we have actually done, not summarised from reading.'"
+                    ? 'Catatan dari ruang pelatihan, lokasi uji kompetensi, dan meja konsultasi kami. Ditulis dari pekerjaan yang benar-benar kami kerjakan, bukan rangkuman bacaan.'
+                    : 'Notes from our training rooms, assessment sites, and consulting desks. Written from work we have actually done, not summarised from reading.'"
                 search-id="blog-q"
                 :search-action="route('blog.index')"
                 :search-value="$q ?? ''"
