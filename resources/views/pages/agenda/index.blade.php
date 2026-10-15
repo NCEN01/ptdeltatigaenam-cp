@@ -64,8 +64,10 @@
                 </div>
             </div>
 
-            {{-- Grid --}}
-            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {{-- Kisi dan jaraknya disamakan dengan halaman Layanan: gap-5, bukan
+                 gap-8. Keduanya kartu bergambar tiga kolom, dan dua jarak berbeda
+                 membuat yang satu terbaca lebih renggang tanpa alasan. --}}
+            <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
                 @php $nearestTaken = false; @endphp
                 @forelse ($agendas as $agenda)
                     @php
@@ -79,12 +81,21 @@
                         else                  { $pill = 'bg-sky-600 text-white';       $pillText = $id ? 'Akan Datang' : 'Upcoming'; }
                     @endphp
 
-                    {{-- Plain card, not card-3d: there is no agenda detail route, so a pointer-tilt
-                         would promise a click that leads nowhere. Radius matches every other card. --}}
-                    <article class="card group flex h-full flex-col overflow-hidden transition-all duration-300 ease-out-soft hover:-translate-y-1 hover:shadow-lift {{ $isPast ? 'opacity-85' : '' }}"
+                    {{-- Bukan card-3d: tidak ada halaman rincian agenda, jadi kemiringan
+                         yang mengikuti kursor akan menjanjikan klik yang tidak menuju ke
+                         mana pun.
+
+                         .card-hover, bukan rangkaian hover yang ditulis sendiri. Yang lama
+                         mengangkat dan menambah bayangan tapi melewatkan perubahan garis
+                         tepinya, jadi kartu agenda satu-satunya kartu di situs ini yang
+                         tepinya diam saat disentuh. --}}
+                    <article class="card card-hover group flex h-full flex-col overflow-hidden {{ $isPast ? 'opacity-85' : '' }}"
                              data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 50 }}">
 
-                        <div class="relative aspect-[16/10] shrink-0 overflow-hidden bg-navy-100">
+                        {{-- 3/2, mengikuti kartu Layanan. Sebelumnya 16/10, sehingga dua
+                             halaman yang kartunya bersebelahan dalam ingatan pembaca
+                             punya tinggi gambar yang berbeda. --}}
+                        <div class="relative aspect-[3/2] shrink-0 overflow-hidden bg-navy-100">
                             @if ($agenda->image)
                                 {{-- Past events desaturate so the upcoming ones carry the colour. --}}
                                 <img src="{{ Storage::url($agenda->image) }}" alt="{{ $agenda->title }}" loading="lazy"
@@ -130,19 +141,41 @@
                                     class="gap-1.5" />
                             </div>
 
-                            <h3 class="mt-3 line-clamp-2 min-h-[3.5rem] font-display text-xl font-semibold leading-snug text-navy">{{ $agenda->title }}</h3>
+                            {{-- Judul dan ringkasan dibungkus satu blok yang tumbuh, pola
+                                 yang sama dengan kartu Layanan: sisa ruang kartu diserap di
+                                 sini sehingga baris penutup selalu mendarat di dasar kartu,
+                                 berapa pun panjang judulnya.
 
-                            @if ($agenda->excerpt)
-                                <p class="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600">{{ $agenda->excerpt }}</p>
-                            @endif
+                                 min-h-[3.5rem] pada judul dilepas, alasan yang sama dengan
+                                 kartu Layanan: ia menjatah dua baris supaya ringkasan tiap
+                                 kartu mulai di ketinggian yang sama, tapi judul satu baris
+                                 lalu menyisakan ruang kosong yang terbaca sebagai cacat,
+                                 bukan sebagai perataan. Yang meratakan baris penutup adalah
+                                 flex-1 di pembungkus ini. --}}
+                            <div class="flex-1">
+                                <h3 class="line-clamp-2 mt-3 text-xl leading-snug text-navy">{{ $agenda->title }}</h3>
+                                @if ($agenda->excerpt)
+                                    <p class="mt-2 line-clamp-2 text-sm text-slate-600">{{ $agenda->excerpt }}</p>
+                                @endif
+                            </div>
 
-                            {{-- Gives the card somewhere to lead: there is no detail page, so the next
-                                 useful step is asking about this specific event. --}}
+                            {{-- Baris penutup bergaris rambut dengan panah bundar di kanan,
+                                 bentuk yang sama dengan kartu Layanan. Sebelumnya tautan
+                                 bergaris bawah tanpa pemisah, jadi dua halaman berkartu
+                                 serupa berakhir dengan dua cara yang berbeda.
+
+                                 Seluruh barisnya yang jadi tautan, bukan hanya teksnya:
+                                 dengan begitu panah di ujung kanan ikut bisa diklik, persis
+                                 seperti di kartu Layanan yang seluruh kartunya tautan. Di
+                                 sini kartunya sendiri tidak bisa jadi tautan karena agenda
+                                 tidak punya halaman rincian. --}}
                             <a href="{{ route('contact.index') }}"
-                               class="link-underline mt-auto w-fit pt-5 text-sm font-medium"
+                               class="mt-6 flex items-center justify-between gap-4 border-t border-navy-100 pt-5 text-sm font-medium text-navy transition-colors duration-300 hover:text-navy-600"
                                aria-label="{{ ($id ? 'Tanya tentang: ' : 'Ask about: ') . $agenda->title }}">
                                 {{ $isPast ? ($id ? 'Tanya kegiatan serupa' : 'Ask about similar events') : ($id ? 'Tanya jadwal ini' : 'Ask about this event') }}
-                                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <span class="card-arrow grid h-10 w-10 shrink-0 place-items-center rounded-full border border-navy-200 text-navy group-hover:border-navy-600 group-hover:bg-navy-600 group-hover:text-white" aria-hidden="true">
+                                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
                             </a>
                         </div>
                     </article>

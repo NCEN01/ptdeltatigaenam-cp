@@ -489,11 +489,18 @@
                                             @endif
                                         </div>
                                         {{-- Sentuhnya ke navy, bukan emas. Panah bundar di
-                                             seluruh situs — rel Pelatihan, Agenda, Berita —
+                                             seluruh situs (rel Pelatihan, Agenda, Berita)
                                              semuanya berisi navy saat disentuh, dan emas di
                                              sini membuat kartu layanan satu-satunya yang
-                                             berbeda. --}}
-                                        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-navy-200 text-navy transition-colors group-hover:border-navy-600 group-hover:bg-navy-600 group-hover:text-white">
+                                             berbeda.
+
+                                             .card-arrow menambahkan putaran -45° saat kartunya
+                                             disentuh, sehingga panahnya menunjuk ke atas-kanan
+                                             seperti di indeks Portofolio. Putarannya ada di CSS,
+                                             bukan lewat -rotate-45: utilitas itu menulis
+                                             --tw-rotate, dan custom property tidak diinterpolasi
+                                             peramban sehingga panahnya akan mematah. --}}
+                                        <span class="card-arrow grid h-10 w-10 shrink-0 place-items-center rounded-full border border-navy-200 text-navy group-hover:border-navy-600 group-hover:bg-navy-600 group-hover:text-white">
                                             <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </span>
                                     </div>

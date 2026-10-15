@@ -789,6 +789,37 @@
     .skyline-glow { right: -140px; top: -160px; width: 460px; height: 460px; }
 }
 
+/* ── Panah bundar di pojok kartu ──────────────────────────────────────────
+ * Dipakai kartu Layanan dan kartu Agenda. Saat kartunya disentuh, panahnya
+ * berputar -45° sehingga menunjuk ke atas-kanan, gerakan yang sama dengan
+ * indeks Portofolio di beranda (.porto-arrow).
+ *
+ * Putarannya ditulis sebagai transform biasa, bukan lewat -rotate-45 dari
+ * Tailwind. Utilitas itu menulis --tw-rotate, dan peramban tidak
+ * menginterpolasi custom property: hasilnya panah yang mematah ke posisi
+ * barunya, bukan berputar. Persoalan yang sama pernah muncul di
+ * .porto-arrow dan diselesaikan dengan cara ini.
+ *
+ * Warnanya tetap diurus utilitas group-hover di markup; yang di sini hanya
+ * putarannya, ditambah transisi warna supaya keduanya bergerak bersamaan.
+ */
+.card-arrow {
+    transform: rotate(0deg);
+    transition:
+        transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        color 0.3s ease;
+}
+.group:hover .card-arrow,
+.group:focus-within .card-arrow { transform: rotate(-45deg); }
+
+@media (prefers-reduced-motion: reduce) {
+    .card-arrow { transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; }
+    .group:hover .card-arrow,
+    .group:focus-within .card-arrow { transform: none; }
+}
+
 /* ── Kartu mitra di pita kota ─────────────────────────────────────────────
  * Satu panel kaca berisi empat kartu yang benar-benar terpisah, bukan kisi
  * rapat bercelah 1px seperti sebelumnya.
