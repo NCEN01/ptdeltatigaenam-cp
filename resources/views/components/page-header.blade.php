@@ -70,15 +70,16 @@
              <p> kosong beserta pendaftaran pengamat AOS di tiap halaman, dan
              tiga pemanggilnya masih membayar pencarian terjemahan untuk keluaran
              yang tidak terlihat. --}}
-        {{-- Kata terakhir judul dimiringkan sekaligus diberi warna, sama seperti
-             judul seksi di seluruh situs — sebelumnya hanya miring putih polos,
-             satu-satunya aksen di situs ini yang tidak membawa warna.
+        {{-- Kata terakhir judul dimiringkan saja, tanpa warna. Ia sempat
+             bergradasi putih ke biru muda seperti judul seksi lain, lalu
+             dikembalikan ke putih polos atas permintaan.
 
-             Gradasinya putih → biru muda, bukan biru → cyan seperti di latar
-             navy polos: pita ini bisa memakai foto, dan ujung biru #2b83df
-             terlalu gelap di atas bagian foto yang terang. Ujung putihnya
-             menjaga awal kata tetap terbaca di latar apa pun. --}}
-        <h1 class="mx-auto max-w-4xl text-display-xl" data-aos="fade-up" data-aos-delay="50">{{ $hwLead }}@if ($hwLead) @endif<span class="italic-accent text-gradient-white-navy">{{ $hwAccent }}</span></h1>
+             Alasannya masuk akal di tempat ini: judul kepala halaman berdiri
+             di tengah, sendirian, dan tidak bersaing dengan apa pun di
+             sekitarnya. Warna yang di seksi lain berguna untuk menandai satu
+             penggalan di antara banyak isi, di sini hanya memecah satu judul
+             pendek menjadi dua bagian tanpa sebab. Kemiringannya sudah cukup. --}}
+        <h1 class="mx-auto max-w-4xl text-display-xl" data-aos="fade-up" data-aos-delay="50">{{ $hwLead }}@if ($hwLead) @endif<span class="italic-accent">{{ $hwAccent }}</span></h1>
         @if ($bannerSubtitle)
             <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-navy-100 text-pretty" data-aos="fade-up" data-aos-delay="150">{{ $bannerSubtitle }}</p>
         @endif

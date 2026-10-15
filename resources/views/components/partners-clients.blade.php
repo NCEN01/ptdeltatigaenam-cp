@@ -151,9 +151,16 @@
                 <div class="container flex flex-col gap-7 md:flex-row md:items-center md:gap-10">
                     <div class="shrink-0 md:w-56 lg:w-64">
                         {{-- h2, bukan h3: klien dan mitra dua kelompok yang setara.
-                             Sebagai h3 ia terbaca seolah bagian dari Mitra. --}}
+                             Sebagai h3 ia terbaca seolah bagian dari Mitra.
+
+                             Satu untaian teks, bukan <em> di dalam h2. Kata
+                             keduanya dulu dimiringkan, diturunkan bobotnya, dan
+                             diberi warna sendiri; sekarang tebal dan sewarna
+                             dengan kata pertama. Begitu tampilannya sama persis,
+                             <em> tidak lagi menandai apa pun — ia hanya menyuruh
+                             pembaca layar menekankan satu kata tanpa alasan. --}}
                         <h2 class="font-display text-[26px] font-bold leading-tight text-navy">
-                            {{ $isId ? 'Klien ' : 'Our ' }}<em class="font-normal italic text-navy-600">{{ $isId ? 'Kami' : 'Clients' }}</em>
+                            {{ $isId ? 'Klien Kami' : 'Our Clients' }}
                         </h2>
                         <p class="mt-2 text-sm leading-relaxed text-slate-600 md:whitespace-nowrap">
                             {{ $isId ? 'Dipercaya BUMN & perusahaan swasta' : 'Trusted by state and private companies' }}
