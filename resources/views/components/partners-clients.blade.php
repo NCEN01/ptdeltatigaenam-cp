@@ -30,12 +30,24 @@
 @endphp
 
 @if ($partners->isNotEmpty() || $clients->isNotEmpty())
-    {{-- Satu seksi gelap untuk Mitra dan Klien sekaligus, berlatar kota yang
-         digambar dari kode (lihat <x-skyline />). Keduanya menjawab pertanyaan
-         yang sama, "siapa yang berdiri di belakang sertifikat ini", jadi
-         memisahkannya jadi dua seksi membuat jawabannya terbaca dua kali. --}}
+    {{-- Satu seksi gelap untuk Mitra dan Klien sekaligus. Keduanya menjawab
+         pertanyaan yang sama, "siapa yang berdiri di belakang sertifikat ini",
+         jadi memisahkannya jadi dua seksi membuat jawabannya terbaca dua kali.
+
+         Latarnya foto kota, menggantikan siluet yang sebelumnya digambar dari
+         kode lewat <x-skyline />. Siluet itu dibuat saat belum ada fotonya;
+         begitu fotonya ada, kota sungguhan membawa kedalaman yang tidak bisa
+         ditiru beberapa persegi panjang bertumpuk. --}}
     <section class="relative overflow-hidden text-white">
-        <x-skyline />
+        <img src="{{ asset('images/bg-mitra.webp') }}" alt="" aria-hidden="true"
+             width="1916" height="821" loading="lazy" decoding="async"
+             class="absolute inset-0 h-full w-full object-cover">
+        {{-- Dua tabir bertumpuk. Yang mendatar menjaga judul di kiri tetap
+             terbaca; yang menurun menggelapkan dasar seksi supaya pita klien
+             putih di bawahnya tidak bertabrakan langsung dengan langit senja. --}}
+        <div class="absolute inset-0 bg-gradient-to-r from-navy-950/90 via-navy-950/72 to-navy-900/62"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-navy-950/60 via-transparent to-navy-950/75"></div>
+        <div class="pointer-events-none absolute inset-0 grain opacity-20"></div>
 
         <div class="relative container pt-20 md:pt-28 lg:pt-32">
             {{-- Judul di kiri, kalimat penjelas di kanan dan dirata-bawah
@@ -77,7 +89,7 @@
                             // disinggahi papan tik dan tidak melakukan apa-apa.
                             $tag = $href !== '' ? 'a' : 'div';
                         @endphp
-                        <{{ $tag }} class="mitra-card flex flex-col gap-5 p-5 outline-none focus-visible:ring-2 focus-visible:ring-navy-200 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950"
+                        <{{ $tag }} class="mitra-card flex flex-col gap-4 outline-none focus-visible:ring-2 focus-visible:ring-navy-200 focus-visible:ring-offset-4 focus-visible:ring-offset-navy-900"
                             @if ($href !== '') href="{{ $href }}" target="_blank" rel="noopener" @endif>
 
                             {{-- flex + h-full/w-full pada gambarnya, bukan grid + max-h-full.
@@ -99,22 +111,22 @@
                                 @endif
                             </div>
 
-                            <div class="relative flex flex-1 flex-col">
-                                <p class="min-h-10 font-display text-sm font-semibold leading-[1.45] text-white text-balance">{{ $name }}</p>
+                            {{-- Nama lalu nomor, menurun. Sebelumnya nomornya sebaris
+                                 dengan lingkaran panah di kanan; panahnya dilepas
+                                 karena seluruh kartu memang sudah bisa diklik, dan
+                                 lingkaran kecil yang hanya muncul saat disentuh tidak
+                                 pernah sempat memberi tahu itu kepada orang yang
+                                 belum menyentuhnya.
 
-                                <div class="mt-auto flex items-center justify-between gap-3 pt-3">
-                                    @if ($partner->registration_number)
-                                        <span class="font-mono text-xs font-medium tracking-[0.1em] text-navy-400">{{ trim($partner->registration_number) }}</span>
-                                    @else
-                                        <span></span>
-                                    @endif
-
-                                    @if ($href !== '')
-                                        <span class="mitra-arrow grid h-[30px] w-[30px] shrink-0 place-items-center rounded-full border border-navy-200/50 text-navy-200" aria-hidden="true">
-                                            <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none"><path d="M5 11 11 5M6.5 5H11v4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                        </span>
-                                    @endif
-                                </div>
+                                 Nomornya navy-200, bukan navy-400. Di atas panel kaca
+                                 navy-400 hanya 4,13:1 — di bawah ambang 4,5:1 untuk
+                                 teks sekecil ini. navy-200 mencapai 8,25:1 dan masih
+                                 terbaca biru. --}}
+                            <div class="relative">
+                                <p class="font-display text-sm font-semibold leading-[1.45] text-white text-balance">{{ $name }}</p>
+                                @if ($partner->registration_number)
+                                    <p class="mt-2 font-mono text-xs font-medium tracking-[0.1em] text-navy-200">{{ trim($partner->registration_number) }}</p>
+                                @endif
                             </div>
                         </{{ $tag }}>
                     @endforeach

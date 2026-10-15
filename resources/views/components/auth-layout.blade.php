@@ -42,8 +42,13 @@
              foto beropasitas 40% ditumpuk di atas bg-navy-anim lalu ditutup aurora,
              empat lapisan bergerak yang saling melawan sehingga fotonya keruh. --}}
         <div class="relative hidden overflow-hidden bg-navy-950 p-12 text-white lg:flex lg:flex-col lg:justify-between">
-            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=80"
-                 alt="" loading="lazy" class="pointer-events-none absolute inset-0 h-full w-full object-cover">
+            {{-- Foto milik perusahaan, bukan tarikan Unsplash seperti sebelumnya:
+                 satu permintaan ke peladen pihak ketiga di tiap kunjungan halaman
+                 masuk, untuk ruang kerja orang asing. Foto yang sama dipakai pita
+                 "Kenapa daftar ini dibuka" di halaman Sertifikat. --}}
+            <img src="{{ asset('images/bg-login.webp') }}" alt="" aria-hidden="true"
+                 width="1870" height="841" loading="lazy" decoding="async"
+                 class="pointer-events-none absolute inset-0 h-full w-full object-cover">
             <div class="pointer-events-none absolute inset-0 bg-navy-950/82"></div>
             <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-navy-950/70 via-navy-950/45 to-navy-950/92"></div>
             <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>

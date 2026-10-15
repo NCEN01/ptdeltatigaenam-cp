@@ -410,9 +410,18 @@
          Ajakannya turun ke bawah seksi, bukan berdiri di kolom sebelahnya. Di
          kolom, ia bersaing dengan keempat alasan itu; di bawah, ia dibaca sesudah
          alasannya selesai, yaitu saat orang memang sudah bisa memutuskan. --}}
-    <section class="relative overflow-hidden bg-navy-anim text-white">
-        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-35"></div>
-        <div class="pointer-events-none absolute inset-0 grain opacity-30"></div>
+    <section class="relative overflow-hidden bg-navy-950 text-white">
+        {{-- Foto ruang kerja, menggantikan gradien bg-navy-anim yang menyapu
+             sendiri tiap 22 detik. Penggantinya bukan sekadar soal rupa: tabir
+             tetap membuat latar seksi ini berhenti berubah terang-gelap, dan
+             perhitungan kontras di bawah tidak lagi harus mengejar puncak
+             terang yang bergerak. --}}
+        <img src="{{ asset('images/bg-login.webp') }}" alt="" aria-hidden="true"
+             width="1870" height="841" loading="lazy" decoding="async"
+             class="absolute inset-0 h-full w-full object-cover">
+        <div class="absolute inset-0 bg-navy-950/80"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-navy-950/70 via-navy-950/55 to-navy-950/85"></div>
+        <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 
         <div class="container relative section-sm">
@@ -439,16 +448,20 @@
                  tunjukan ditarik — pola yang sama dengan lini masa Misi dan daftar
                  Nilai di halaman Tentang.
 
-                 Yang aktif ditambahi, bukan yang lain diredupkan. Latar pita ini
-                 gradien yang menyapu tiap 22 detik, dan pada puncak terangnya teks
-                 navy-100 di atas kartu bg-white/5 tinggal 4,69:1 — persis di atas
-                 ambang AA, tanpa sisa sama sekali. Meredupkan kartu lain akan
-                 menjatuhkannya ke bawah ambang, dan menerangkan kartu aktif ke
-                 bg-white/10 juga: 4,23:1.
-
-                 Jadi yang berubah hanya hal yang tidak membawa teks: cincin kartu
+                 Yang aktif ditambahi, bukan yang lain diredupkan: cincin kartu
                  jadi emas, ubin ikonnya ikut emas dan berpendar, dan kartunya naik
-                 sedikit. Warna dan kepekatan tulisannya tidak disentuh. --}}
+                 sedikit. Warna dan kepekatan tulisannya tidak disentuh.
+
+                 Dulu itu keharusan. Latar pita ini gradien yang menyapu tiap 22
+                 detik, dan pada puncak terangnya navy-100 di atas kartu bg-white/5
+                 tinggal 4,69:1 — persis di ambang AA, tanpa sisa, sehingga
+                 meredupkan kartu lain pasti menjatuhkannya ke bawah ambang.
+
+                 Latarnya kini foto diam di bawah tabir tetap, dan angka yang sama
+                 menjadi 10,63:1. Batasan itu sudah lepas. Polanya tetap dipakai
+                 karena memang pola yang lebih baik — meredupkan tiga kartu untuk
+                 menonjolkan satu membuat tiga perempat seksi ini terbaca mati —
+                 tapi sekarang itu pilihan, bukan paksaan. --}}
             <div class="mt-12 grid items-stretch gap-6 md:mt-14 lg:grid-cols-12 lg:gap-8" x-data="{ active: 0 }">
                 @foreach ([$proofLeft, $proofRight] as $column)
                     @php $colIdx = $loop->index; @endphp

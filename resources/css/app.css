@@ -233,6 +233,37 @@
         @apply hover:-translate-y-1 hover:shadow-lift hover:border-navy-200;
     }
 
+    /* Kartu kaca di atas pita berfoto gelap — seksi "Alasan Memilih Kami" di
+       beranda dan "Kenapa daftar ini dibuka" di halaman Sertifikat.
+
+       Isinya putih tipis, bukan navy pekat seperti .mitra-card: di sini
+       fotonya memang ingin terlihat menembus kartunya, sedangkan di pita
+       Mitra logo-logo putih butuh bidang gelap yang rata di belakangnya.
+
+       backdrop-filter bukan sekadar hiasan. Tanpa pengaburan, garis-garis
+       jendela gedung di foto terbaca menembus kartu dan bertabrakan dengan
+       barisan teksnya. Peramban yang tidak mendukungnya tetap aman: isian
+       putih tipisnya sendiri sudah memisahkan kartu dari latar. */
+    .glass-card {
+        background-color: rgb(255 255 255 / 0.07);
+        border: 1px solid rgb(255 255 255 / 0.13);
+        border-radius: 18px;
+        backdrop-filter: blur(10px);
+        transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    }
+    .glass-card:hover,
+    .glass-card:focus-within {
+        background-color: rgb(255 255 255 / 0.12);
+        border-color: rgb(255 255 255 / 0.24);
+        transform: translateY(-3px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .glass-card { transition: none; }
+        .glass-card:hover,
+        .glass-card:focus-within { transform: none; }
+    }
+
     .link-underline {
         @apply relative inline-flex items-center gap-1.5 text-navy after:absolute after:-bottom-0.5 after:left-0
                after:h-px after:w-0 after:bg-sky-500 after:transition-all after:duration-300 hover:after:w-full;
@@ -731,61 +762,40 @@
 }
 
 /* ── Kartu mitra di pita kota ─────────────────────────────────────────────
- * Kisinya memakai celah 1px berlatar terang, jadi garis pemisah antar-kartu
- * datang dari latar yang menyembul di sela, bukan dari border tiap kartu.
- * Dengan border, dua kartu bersebelahan menghasilkan garis setebal dua kali
- * dan sudut-sudutnya menumpuk.
+ * Satu panel kaca berisi empat kartu yang benar-benar terpisah, bukan kisi
+ * rapat bercelah 1px seperti sebelumnya.
+ *
+ * Yang lama menempelkan keempat kartu menjadi satu balok dengan garis rambut
+ * di antaranya. Logo keempat lembaga ini berbeda bentuk dan berbeda warna —
+ * ada yang kotak, ada yang bundar — dan di dalam balok rapat itu perbedaannya
+ * terbaca sebagai ketidakrapian, bukan sebagai empat lembaga berbeda. Dengan
+ * celah sungguhan dan panel yang memayungi keempatnya, yang terbaca adalah
+ * empat hal setara di dalam satu himpunan.
  */
 .mitra-board {
     display: grid;
-    gap: 1px;
-    background-color: rgba(255, 255, 255, 0.14);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 22px;
-    overflow: hidden;
+    gap: 20px;
+    padding: 22px;
+    background-color: rgb(255 255 255 / 0.07);
+    border: 1px solid rgb(255 255 255 / 0.13);
+    border-radius: 26px;
+    backdrop-filter: blur(10px);
     grid-template-columns: 1fr;
 }
-@media (min-width: 640px) { .mitra-board { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 640px) { .mitra-board { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; padding: 26px; } }
 @media (min-width: 1024px) { .mitra-board { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
+/* Kartunya sendiri tidak berlatar. Kotak logo putih di dalamnya yang membawa
+   bidang; nama dan nomornya duduk langsung di atas panel. Memberi kartu ini
+   latar sendiri akan menghasilkan bidang di dalam bidang — dan panel kacanya
+   berubah jadi sekadar bingkai kosong. */
 .mitra-card {
     position: relative;
-    background-color: rgba(6, 22, 52, 0.72);
-    backdrop-filter: blur(10px);
-    transition: background-color 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.mitra-card:hover,
-.mitra-card:focus-visible { background-color: rgba(14, 44, 96, 0.85); }
-
-/* Garis 2px yang merambat di tepi atas kartu. Lebarnya digerakkan transform,
-   bukan width: transform tidak memaksa peramban menghitung ulang tata letak. */
-.mitra-card::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 2px;
-    transform: scaleX(0);
-    transform-origin: left center;
-    background-image: linear-gradient(90deg, #2b83df, #b2d4f5);
+    border-radius: 16px;
     transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.mitra-card:hover::before,
-.mitra-card:focus-visible::before { transform: scaleX(1); }
-
-/* Pendar yang turun dari tepi atas. */
-.mitra-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    pointer-events: none;
-    background-image: radial-gradient(400px 220px at 50% 0%, rgba(178, 212, 245, 0.22), transparent 70%);
-    transition: opacity 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.mitra-card:hover::after,
-.mitra-card:focus-visible::after { opacity: 1; }
+.mitra-card:hover,
+.mitra-card:focus-visible { transform: translateY(-5px); }
 
 .mitra-logo-box { transition: box-shadow 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .mitra-card:hover .mitra-logo-box,
@@ -793,23 +803,14 @@
 
 .mitra-logo { transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .mitra-card:hover .mitra-logo,
-.mitra-card:focus-visible .mitra-logo { transform: scale(1.08); }
-
-.mitra-arrow {
-    opacity: 0;
-    transform: translateX(-8px);
-    transition: opacity 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.mitra-card:hover .mitra-arrow,
-.mitra-card:focus-visible .mitra-arrow { opacity: 1; transform: translateX(0); }
+.mitra-card:focus-visible .mitra-logo { transform: scale(1.06); }
 
 @media (prefers-reduced-motion: reduce) {
     .mitra-card,
-    .mitra-card::before,
-    .mitra-card::after,
     .mitra-logo-box,
-    .mitra-logo,
-    .mitra-arrow { transition: none; }
+    .mitra-logo { transition: none; }
+    .mitra-card:hover,
+    .mitra-card:focus-visible { transform: none; }
 }
 
 /* ── Indeks portofolio di beranda ─────────────────────────────────────────

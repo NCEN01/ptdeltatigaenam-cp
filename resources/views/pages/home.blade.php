@@ -440,11 +440,16 @@
         {{-- Foto milik perusahaan, bukan tarikan dari Unsplash seperti sebelumnya:
              satu permintaan ke peladen pihak ketiga di tiap kunjungan, untuk
              gambar orang asing di pita yang isinya alasan memilih perusahaan ini. --}}
-        <img src="{{ asset('images/alasan-memilih.webp') }}" alt="" aria-hidden="true"
-             width="1600" height="900" loading="lazy" decoding="async"
+        <img src="{{ asset('images/bg-alasan.webp') }}" alt="" aria-hidden="true"
+             width="1915" height="821" loading="lazy" decoding="async"
              class="absolute inset-0 h-full w-full object-cover">
-        <div class="absolute inset-0 bg-navy-950/82"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/88"></div>
+        {{-- Tabirnya diringankan dari /82 ke /62 dan diberi arah: pekat di kiri
+             tempat judulnya berdiri, menipis ke kanan tempat kartunya. Dengan
+             tabir rata /82 fotonya praktis hilang dan pita ini kembali menjadi
+             bidang navy datar — padahal justru siluet kotanya yang memberi
+             kedalaman di belakang kartu kaca. --}}
+        <div class="absolute inset-0 bg-gradient-to-r from-navy-950/88 via-navy-950/68 to-navy-900/58"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-navy-950/55 via-transparent to-navy-950/70"></div>
         {{-- Butir dan cahaya samar, alat yang sama dengan kepala halaman dan pita
              Mitra. Tanpa keduanya foto gelap ini rata betul dan terbaca sebagai
              bidang datar, bukan ruang. --}}
@@ -477,7 +482,7 @@
                 {{-- Kalimat pengantarnya menyebut akronimnya. Tanpa itu, lima huruf
                      emas di sebelah kanan hanya terbaca sebagai hiasan; dengan itu,
                      ia jadi keterangan. --}}
-                <p class="mt-6 max-w-md text-lg leading-relaxed text-navy-100 text-pretty">{{ $isId ? 'Lima nilai yang kami pegang di setiap program. Huruf depannya mengeja nama kami sendiri: DELTA.' : 'Five values we hold to in every programme. Their initials spell our own name: DELTA.' }}</p>
+                <p class="mt-6 max-w-md text-lg leading-relaxed text-navy-100 text-pretty">{{ $isId ? 'Komitmen kami untuk Anda terangkum dalam lima nilai utama yang membentuk nama kami: DELTA.' : 'Our commitment to you is held in five values that spell our own name: DELTA.' }}</p>
             </div>
 
             {{-- Satu daftar, bukan dua salinan. Dulu ada pita berjalan untuk layar
@@ -501,22 +506,21 @@
                  Garis rambut dan centang memakai nilai latar gelap: navy-100
                  hampir tak terlihat di atas navy pekat, dan sky-600 terlalu
                  gelap di sana. --}}
-            <ul class="lg:col-span-7">
-                @foreach ($reasons as $i => $r)
-                    <li class="group flex items-start gap-5 border-t border-white/10 py-5 md:py-6" data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 50 }}">
-                        {{-- Huruf depan nilainya, bukan centang. Kelimanya berderet
-                             ke bawah mengeja DELTA, jadi penanda barisnya sekaligus
-                             membawa nama perusahaannya — centang hanya menyatakan
-                             "ada", dan itu sudah jelas dari daftarnya sendiri.
+            {{-- Huruf di luar kartu, bukan di dalamnya. Kelimanya berdiri di satu
+                 kolom tegak lurus setinggi kartunya masing-masing, sehingga yang
+                 terbaca menurun adalah D-E-L-T-A — nama perusahaannya sendiri.
+                 Begitu hurufnya masuk ke dalam kartu, ia hanya menjadi hiasan di
+                 pojok tiap kartu dan akronimnya tidak pernah terbaca.
 
-                             Lebarnya dipatok w-10 supaya kelima huruf berdiri di
-                             satu garis tegak lurus; tanpa itu, "L" yang sempit dan
-                             "A" yang lebar membuat judul di sebelahnya bergeser
-                             tidak rata. --}}
-                        <span class="mt-0.5 w-10 shrink-0 text-center font-display text-3xl font-bold leading-none text-gold-soft md:text-4xl" aria-hidden="true">{{ mb_substr($r['title'], 0, 1) }}</span>
-                        <div class="min-w-0">
-                            <p class="font-display text-lg font-semibold leading-snug text-white md:text-xl">{{ $r['title'] }}</p>
-                            <p class="mt-1.5 max-w-prose text-pretty text-sm leading-relaxed text-navy-100">{{ $r['desc'] }}</p>
+                 Lebar kolom hurufnya dipatok. Tanpa itu "L" yang sempit dan "A"
+                 yang lebar membuat tepi kiri kartunya bergeser tidak rata. --}}
+            <ul class="space-y-3.5 lg:col-span-7">
+                @foreach ($reasons as $i => $r)
+                    <li class="flex items-center gap-4 md:gap-6" data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 60 }}">
+                        <span class="w-9 shrink-0 text-center font-display text-[2rem] font-bold leading-none text-navy-400 md:w-12 md:text-[2.6rem]" aria-hidden="true">{{ mb_substr($r['title'], 0, 1) }}</span>
+                        <div class="glass-card min-w-0 flex-1 px-5 py-4 md:px-7 md:py-5">
+                            <p class="font-display text-lg font-bold leading-snug text-white md:text-xl">{{ $r['title'] }}</p>
+                            <p class="mt-1.5 text-pretty text-[13.5px] leading-relaxed text-navy-100">{{ $r['desc'] }}</p>
                         </div>
                     </li>
                 @endforeach

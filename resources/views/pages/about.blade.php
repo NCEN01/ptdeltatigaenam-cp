@@ -345,16 +345,20 @@
          latar; siluet yang diam menahan diri, dan garis-garis gedungnya yang
          samar justru menegakkan potret di depannya.
 
-         Siluetnya digambar dari kode lewat <x-skyline />, bukan dari berkas
-         gambar seperti sebelumnya. Berkas 1920x1080 untuk siluet yang isinya
-         hanya kotak-kotak adalah satu permintaan jaringan dan satu aset yang
-         harus dipelihara untuk sesuatu yang bisa digambar CSS, dan di layar
-         selebar apa pun versi kodenya selalu tajam.
-
-         Sumber yang sama dipakai pita Mitra & Klien di beranda, jadi kedua pita
-         kota itu tidak bisa menyimpang satu sama lain. --}}
+         Latarnya foto kota, menggantikan siluet yang sempat digambar dari kode
+         lewat <x-skyline />. Siluet itu dibuat ketika fotonya belum ada; kini
+         fotonya ada, dan kedalaman sungguhan di belakang satu potret adalah
+         justru yang menegakkan potret itu. Pita Mitra di beranda mendapat
+         perlakuan yang sama, jadi kedua pita kota ini tetap satu bahasa. --}}
     <section class="relative overflow-hidden py-20 text-white md:py-28">
-        <x-skyline />
+        <img src="{{ asset('images/bg-pendiri.webp') }}" alt="" aria-hidden="true"
+             width="1136" height="421" loading="lazy" decoding="async"
+             class="absolute inset-0 h-full w-full object-cover">
+        {{-- Tabir pekat ke kanan, tempat nama dan kutipan berdiri; lebih ringan
+             di kiri tempat potretnya, supaya kota di belakang bahu masih
+             terbaca sebagai ruang dan bukan sebagai bidang hitam. --}}
+        <div class="absolute inset-0 bg-gradient-to-l from-navy-950/92 via-navy-950/78 to-navy-950/62"></div>
+        <div class="pointer-events-none absolute inset-0 grain opacity-20"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 
         <div class="container relative">
@@ -414,12 +418,19 @@
                          sampingnya. Angka itu dulu terkubur di tengah kalimat
                          ("lebih dari 20 tahun"), tempat yang paling tidak mungkin
                          terbaca orang yang sedang memindai. --}}
+                    {{-- Angkanya putih dan riwayatnya emas, bukan sebaliknya. Emas
+                         pada angka membuat kartu ini punya dua titik emas yang
+                         bersaing dengan label "Pendiri & CEO" di atasnya; dipindah
+                         ke kalimat riwayatnya, emas justru menyelesaikan turunan
+                         warna seksi ini — label emas, nama putih, kutipan putih
+                         redup, riwayat emas. Terukur 7,36:1 di atas kartu ini,
+                         jauh di atas ambang AA. --}}
                     <div class="mt-8 flex max-w-xl flex-col gap-4 rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 sm:flex-row sm:items-center sm:gap-6 sm:p-6">
                         <p class="shrink-0 sm:w-28">
-                            <span class="block font-display text-3xl font-bold leading-none text-gold-soft md:text-4xl">{{ $founderYears }}</span>
+                            <span class="block font-display text-3xl font-bold leading-none text-white md:text-4xl">{{ $founderYears }}</span>
                             <span class="mt-1.5 block font-mono text-[10px] uppercase text-navy-100">{{ $founderYearsLabel }}</span>
                         </p>
-                        <p class="text-pretty text-sm leading-relaxed text-navy-100 sm:border-l sm:border-white/10 sm:pl-6">{{ $founderBio }}</p>
+                        <p class="text-pretty text-sm leading-relaxed text-gold sm:border-l sm:border-white/10 sm:pl-6">{{ $founderBio }}</p>
                     </div>
                 </div>
             </div>
