@@ -17,11 +17,13 @@
                  yang sama dipakai halaman Portofolio, jadi keduanya tidak bisa
                  menyimpang lagi seperti sebelumnya. --}}
             <x-list-header
-                :lead="$id ? 'Wawasan &' : 'Insights &'"
-                :accent="$id ? 'Artikel' : 'Articles'"
+                {{-- Judulnya utuh di 'lead', tanpa 'accent': slot aksen selalu
+                     membawa .italic-accent beserta warnanya, dan di sini judulnya
+                     dikehendaki tegak seluruhnya dalam satu warna. --}}
+                :lead="$id ? 'Wawasan & Artikel' : 'Insights & Articles'"
                 :intro="$id
-                    ? 'Catatan dari ruang pelatihan, lokasi uji kompetensi, dan meja konsultasi kami. Yang kami tulis di sini berangkat dari pekerjaan yang benar-benar kami kerjakan bersama klien.'
-                    : 'Notes from our training rooms, assessment sites, and consulting desks. What we write here comes from work we have actually done alongside our clients.'"
+                    ? 'Catatan dari ruang pelatihan, lokasi uji kompetensi, dan meja konsultasi kami — ditulis dari pekerjaan yang benar-benar kami kerjakan, bukan rangkuman bacaan.'
+                    : 'Notes from our training rooms, assessment sites, and consulting desks — written from work we have actually done, not summarised from reading.'"
                 search-id="blog-q"
                 :search-action="route('blog.index')"
                 :search-value="$q ?? ''"
@@ -39,7 +41,11 @@
                 </div>
             @else
                 <div class="rounded-3xl border border-dashed border-navy-200 bg-neutral-50 p-16 text-center">
-                    <span class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-navy text-sky-400">
+                    {{-- text-gold, sama dengan ikon keadaan kosong di halaman
+                         Portofolio dan Layanan. Sebelumnya sky-400, dan halaman
+                         daftar di situs ini jadi punya dua rupa untuk keadaan
+                         yang sama persis. 8,19:1 di atas navy. --}}
+                    <span class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-navy text-gold">
                         <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none"><path d="M6 4h9l3 3v13H6z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 9h6M9 13h6M9 17h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
                     </span>
                     <p class="mt-5 font-display text-lg text-navy">{{ ($q ?? '') !== '' ? ($id ? 'Tidak ada hasil' : 'No results found') : ($id ? 'Belum ada artikel' : 'No articles yet') }}</p>

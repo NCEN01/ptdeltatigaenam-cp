@@ -138,12 +138,12 @@
                         <div class="flex shrink-0 items-center gap-2">
                             <button type="button" data-carousel-prev
                                     aria-label="{{ $id ? 'Testimoni sebelumnya' : 'Previous testimonials' }}"
-                                    class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95 disabled:pointer-events-none disabled:opacity-35">
+                                    class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:bg-none hover:bg-navy-600 active:scale-95 disabled:pointer-events-none disabled:opacity-35">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                             <button type="button" data-carousel-next
                                     aria-label="{{ $id ? 'Testimoni berikutnya' : 'Next testimonials' }}"
-                                    class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95 disabled:pointer-events-none disabled:opacity-35">
+                                    class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:bg-none hover:bg-navy-600 active:scale-95 disabled:pointer-events-none disabled:opacity-35">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                         </div>
@@ -263,12 +263,12 @@
                         <div class="flex items-center gap-2">
                             <button type="button" data-carousel-prev
                                     aria-label="{{ $id ? 'Portofolio sebelumnya' : 'Previous portfolio' }}"
-                                    class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95 disabled:pointer-events-none disabled:opacity-35">
+                                    class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:bg-none hover:bg-navy-600 active:scale-95 disabled:pointer-events-none disabled:opacity-35">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                             <button type="button" data-carousel-next
                                     aria-label="{{ $id ? 'Portofolio berikutnya' : 'Next portfolio' }}"
-                                    class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:from-navy-600 hover:to-navy-500 active:scale-95 disabled:pointer-events-none disabled:opacity-35">
+                                    class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:bg-none hover:bg-navy-600 active:scale-95 disabled:pointer-events-none disabled:opacity-35">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                         </div>

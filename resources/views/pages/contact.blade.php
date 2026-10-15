@@ -43,14 +43,22 @@
                      font-display dan text-balance tidak ditulis: app.css sudah
                      memberikannya ke setiap h1–h4. font-bold ditulis karena memang
                      menimpa font-semibold bawaan itu. --}}
+                {{-- Seluruh judul masuk ke 'lead', tanpa 'accent'. Slot aksen di
+                     <x-heading> selalu membawa .italic-accent beserta warnanya,
+                     dan di halaman ini keduanya tidak dikehendaki: judulnya tegak
+                     seluruhnya, satu warna. --}}
                 <x-heading
-                    :lead="$id ? 'Mari bicarakan' : 'Let\'s talk about'"
-                    :accent="$id ? 'kebutuhan Anda' : 'your needs'"
+                    :lead="$id ? 'Ceritakan kebutuhan Anda' : 'Tell us what you need'"
                     class="text-display-lg font-bold text-navy" />
+                {{-- Menyebut apa yang perlu ditulis, bukan menjanjikan kesiapan.
+                     "Tim kami siap membantu" tidak menambah apa pun yang tidak
+                     sudah tersirat dari adanya formulir; menyebut bidang dan
+                     jumlah peserta justru membuat jawaban pertama kami langsung
+                     berguna, dan itu menghemat satu putaran surat-menyurat. --}}
                 <p class="mt-5 max-w-md text-pretty leading-relaxed text-slate-600">
                     {{ $id
-                        ? 'Punya pertanyaan seputar pelatihan, sertifikasi, atau rekrutmen? Isi formulir di samping atau hubungi kami langsung. Tim kami siap membantu.'
-                        : 'Questions about training, certification, or recruitment? Fill out the form or reach us directly — our team is ready to help.' }}
+                        ? 'Pelatihan, uji kompetensi, atau rekrutmen — isi formulir di samping atau hubungi kami langsung lewat nomor dan surel di bawah. Sebutkan bidangnya dan perkiraan jumlah peserta agar jawaban kami langsung tepat sasaran.'
+                        : 'Training, competency assessment, or recruitment — use the form, or reach us directly on the number and email below. Mention the field and a rough headcount so our first reply is already useful.' }}
                 </p>
 
                 {{-- Satu panel bergaris pemisah, bukan empat kartu terpisah.
@@ -73,7 +81,7 @@
                         <{{ $tag }} @if ($row['href']) href="{{ $row['href'] }}" @endif
                             @if ($row['href'] && str_starts_with($row['href'], 'http')) target="_blank" rel="noopener" @endif
                             class="group flex items-center gap-4 px-5 py-4 {{ $row['href'] ? 'transition-colors duration-300 hover:bg-navy-50/60' : '' }}">
-                            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-sky-50 text-sky-700 {{ $row['href'] ? 'transition-colors duration-300 group-hover:bg-navy-500 group-hover:text-white' : '' }}">
+                            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-sky-50 text-sky-700 {{ $row['href'] ? 'transition-colors duration-300 group-hover:bg-navy-600 group-hover:text-white' : '' }}">
                                 @if ($row['icon'] === 'mail')
                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                                 @elseif ($row['icon'] === 'whatsapp')
@@ -170,14 +178,14 @@
                              dihitung ulang. --}}
                         <button type="button" x-on:click="activeOffice = {{ $index }}"
                                 class="group flex flex-col gap-2.5 rounded-2xl border bg-white p-5 text-left transition duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"
-                                x-bind:class="activeOffice === {{ $index }} ? 'border-navy-500 shadow-lift' : 'border-navy-100 hover:border-navy-200 hover:shadow-card'">
+                                x-bind:class="activeOffice === {{ $index }} ? 'border-navy-600 shadow-lift' : 'border-navy-100 hover:border-navy-200 hover:shadow-card'">
                             <div class="flex items-center gap-3">
                                 {{-- Satu penanda terpilih, bukan tiga. Warna garis tepi,
                                      ubin ikon, dan titik kecil di kanan dulu menyatakan
                                      hal yang sama persis; titiknya yang paling sulit
                                      dilihat, jadi itu yang dilepas. --}}
                                 <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl transition-colors duration-300"
-                                      x-bind:class="activeOffice === {{ $index }} ? 'bg-navy-500 text-white' : 'bg-sky-50 text-sky-700 group-hover:bg-navy-100'">
+                                      x-bind:class="activeOffice === {{ $index }} ? 'bg-navy-600 text-white' : 'bg-sky-50 text-sky-700 group-hover:bg-navy-100'">
                                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M15 9h.01M9 13h.01M15 13h.01M10 21v-4h4v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </span>
                                 <span class="text-[17px] font-semibold text-navy">{{ $office['name'] }}</span>
