@@ -468,17 +468,22 @@
                 {{-- text-display-lg, sama dengan judul seksi lain di situs ini,
                      dan ukurannya ikut lebar layar lewat clamp. Pasangan
                      text-3xl/md:text-5xl sebelumnya melompat sekali di satu
-                     titik henti lalu diam di 48px berapa pun lebar layarnya. --}}
-                {{-- Aksen miring bergradasi biru-cyan, dibuat khusus untuk latar
-                     gelap. Ia sempat diturunkan ke arang pekat saat pita ini
-                     sempat terang; sekarang fotonya kembali, jadi gradasinya pun
-                     kembali — di atas navy pekat justru warna inilah yang
-                     kontrasnya paling kuat. --}}
-                <x-heading
-                    :lead="$isId ? 'Alasan Memilih' : 'Why Choose'"
-                    :accent="$isId ? 'Kami?' : 'Us?'"
-                    accent-class="text-gradient-white-navy"
-                    class="text-display-lg font-semibold text-white text-balance" />
+                     titik henti lalu diam di 48px berapa pun lebar layarnya.
+
+                     <h2> langsung, bukan <x-heading>: komponen itu merangkai
+                     pengantar dan aksennya dalam satu baris mengalir dan tidak
+                     punya cara memaksa pindah baris. Pola yang sama sudah dipakai
+                     judul pita Mitra, yang juga dua baris.
+
+                     Dua baris, bukan satu yang membungkus sendiri: tempat
+                     patahnya jadi pasti. Dibiarkan mengalir, "Alasan Memilih
+                     Kami?" patah di tempat berbeda-beda menurut lebar layar, dan
+                     di sebagian lebar "Memilih" tertinggal sendirian di baris
+                     pertama bersama "Alasan". --}}
+                <h2 class="text-display-lg font-semibold text-white">
+                    {{ $isId ? 'Alasan' : 'Why Choose' }}<br>
+                    <span class="italic-accent text-gradient-white-blue">{{ $isId ? 'Memilih Kami?' : 'Us?' }}</span>
+                </h2>
                 {{-- Kalimat pengantarnya menyebut akronimnya. Tanpa itu, lima huruf
                      emas di sebelah kanan hanya terbaca sebagai hiasan; dengan itu,
                      ia jadi keterangan. --}}

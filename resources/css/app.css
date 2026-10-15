@@ -1211,6 +1211,29 @@
         color: transparent;
         -webkit-text-fill-color: transparent;
     }
+    /* Putih → biru andalan, pasangan biru dari .text-gradient-white-gold di
+       hero. Dipakai baris miring di seksi "Alasan Memilih Kami" dan pita
+       "Mitra Kerja Sama" — keduanya berlatar foto kota gelap.
+
+       Kelas tersendiri, bukan .text-gradient-white-navy yang sudah ada.
+       Kelas itu berhenti di #bcdcfa yang pucat justru karena ia juga dipakai
+       kepala halaman di atas pita bg-navy-anim yang terang, dan di sana biru
+       yang lebih pekat jatuh ke 1,7:1. Dua seksi ini berlatar foto gelap di
+       bawah tabir, jadi ujungnya boleh jauh lebih bertenaga.
+
+       Berhenti di navy-400, bukan navy-500. navy-500 memang biru andalan yang
+       sesungguhnya dan masih lulus di atas kertas (3,06:1 terhadap ambang 3:1
+       untuk teks sebesar ini), tapi sisanya nyaris nol — dan di latar foto
+       terang setempat, misalnya jendela gedung yang menyala tepat di belakang
+       hurufnya, sisa setipis itu habis. navy-400 memberi 3,86:1 dan tetap
+       terbaca sebagai biru situs ini. */
+    .text-gradient-white-blue {
+        background: linear-gradient(100deg, #ffffff 0%, #ffffff 22%, #cfe4fa 42%, #8ec5f7 66%, #4d96e6 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+    }
     .text-gradient-gold { color: #dab45e; }  /* gold accent */
 
     /* Slanted emphasis word inside display headings — Instrument Sans has a true italic. */

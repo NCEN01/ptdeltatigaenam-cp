@@ -61,11 +61,14 @@
                      besar dari judul seksi lain. --}}
                 <div data-aos="fade-up">
                     <p class="kicker-on-dark">{{ $isId ? 'Mitra Kerja Sama' : 'Collaborating Partners' }}</p>
-                    {{-- Baris kedua dimiringkan dan diberi warna, bobotnya tetap
-                         setebal baris pertama. --}}
+                    {{-- Baris kedua dimiringkan dan bergradasi, bobotnya tetap
+                         setebal baris pertama. Gradasinya menggantikan navy-200
+                         polos: perlakuan yang sama dengan baris miring di hero,
+                         hanya birunya — jadi kedua judul bergradasi di situs ini
+                         terbaca sebagai satu sistem, bukan dua kebetulan. --}}
                     <h2 class="mt-4 text-display-lg text-white">
                         {{ $isId ? 'Sertifikasi resmi,' : 'Official certification,' }}<br>
-                        <em class="font-extrabold italic text-navy-200">{{ $isId ? 'dijamin lembaga terpercaya.' : 'backed by trusted bodies.' }}</em>
+                        <em class="italic-accent font-extrabold text-gradient-white-blue">{{ $isId ? 'dijamin lembaga terpercaya.' : 'backed by trusted bodies.' }}</em>
                     </h2>
                 </div>
 
