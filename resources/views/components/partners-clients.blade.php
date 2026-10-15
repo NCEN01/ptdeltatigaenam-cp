@@ -68,7 +68,7 @@
                          terbaca sebagai satu sistem, bukan dua kebetulan. --}}
                     <h2 class="mt-4 text-display-lg text-white">
                         {{ $isId ? 'Sertifikasi resmi,' : 'Official certification,' }}<br>
-                        <em class="italic-accent font-extrabold text-gradient-white-blue">{{ $isId ? 'dijamin lembaga terpercaya.' : 'backed by trusted bodies.' }}</em>
+                        <em class="italic-accent font-extrabold text-gradient-white-gold">{{ $isId ? 'dijamin lembaga terpercaya.' : 'backed by trusted bodies.' }}</em>
                     </h2>
                 </div>
 

@@ -482,7 +482,7 @@
                      pertama bersama "Alasan". --}}
                 <h2 class="text-display-lg font-semibold text-white">
                     {{ $isId ? 'Alasan' : 'Why Choose' }}<br>
-                    <span class="italic-accent text-gradient-white-blue">{{ $isId ? 'Memilih Kami?' : 'Us?' }}</span>
+                    <span class="italic-accent text-gradient-white-gold">{{ $isId ? 'Memilih Kami?' : 'Us?' }}</span>
                 </h2>
                 {{-- Kalimat pengantarnya menyebut akronimnya. Tanpa itu, lima huruf
                      emas di sebelah kanan hanya terbaca sebagai hiasan; dengan itu,
@@ -522,7 +522,7 @@
             <ul class="space-y-3.5 lg:col-span-7">
                 @foreach ($reasons as $i => $r)
                     <li class="flex items-center gap-4 md:gap-6" data-aos="fade-up" data-aos-delay="{{ min($i, 3) * 60 }}">
-                        <span class="w-9 shrink-0 text-center font-display text-[2rem] font-bold leading-none text-navy-400 md:w-12 md:text-[2.6rem]" aria-hidden="true">{{ mb_substr($r['title'], 0, 1) }}</span>
+                        <span class="w-9 shrink-0 text-center font-display text-[2rem] font-bold leading-none text-gold md:w-12 md:text-[2.6rem]" aria-hidden="true">{{ mb_substr($r['title'], 0, 1) }}</span>
                         <div class="glass-surface glass-card min-w-0 flex-1 px-5 py-4 md:px-7 md:py-5">
                             <p class="font-display text-lg font-bold leading-snug text-white md:text-xl">{{ $r['title'] }}</p>
                             <p class="mt-1.5 text-pretty text-[13.5px] leading-relaxed text-navy-100">{{ $r['desc'] }}</p>
