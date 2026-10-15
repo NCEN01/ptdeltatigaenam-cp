@@ -16,10 +16,19 @@ class SitemapController extends Controller
         $urls = [];
 
         // Static routes (per locale)
-        $static = ['home', 'about', 'services.index', 'portfolio.index', 'blog.index', 'partnership.index', 'contact.index'];
+        $static = ['home', 'about', 'services.index', 'portfolio.index', 'blog.index', 'partnership.index', 'contact.index', 'privacy', 'terms'];
         foreach ($locales as $locale) {
             foreach ($static as $name) {
-                $urls[] = ['loc' => route($name, ['locale' => $locale]), 'priority' => $name === 'home' ? '1.0' : '0.8'];
+                // Halaman hukum tetap didaftarkan, tapi di prioritas terendah.
+                // Keduanya wajib ada dan wajib bisa ditemukan — mesin pencari
+                // dan sebagian penyedia pembayaran memeriksanya — namun bukan
+                // halaman yang kami ingin bersaing di hasil pencarian.
+                $priority = match (true) {
+                    $name === 'home' => '1.0',
+                    in_array($name, ['privacy', 'terms'], true) => '0.3',
+                    default => '0.8',
+                };
+                $urls[] = ['loc' => route($name, ['locale' => $locale]), 'priority' => $priority];
             }
         }
 

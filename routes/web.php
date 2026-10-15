@@ -58,6 +58,12 @@ Route::prefix('{locale}')
             ->middleware(['throttle:5,1', 'honeypot'])
             ->name('contact.store');
 
+        // Halaman hukum. Alamatnya dibuat berbahasa Indonesia seperti /layanan
+        // dan /kemitraan, bukan /privacy-policy, supaya satu situs tidak
+        // memakai dua bahasa di bilah alamatnya.
+        Route::view('/kebijakan-privasi', 'pages.legal.privacy')->name('privacy');
+        Route::view('/syarat-ketentuan', 'pages.legal.terms')->name('terms');
+
         /* ---------- Customer auth (guard: customer) ---------- */
         Route::middleware('guest:customer')->group(function () {
             Route::get('/daftar', [RegisteredCustomerController::class, 'show'])->name('register');

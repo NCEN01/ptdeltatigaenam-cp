@@ -193,12 +193,12 @@
             <div class="mt-12 flex flex-col items-start justify-between gap-4 border-t border-white/15 pt-7 text-xs text-white/60 md:flex-row md:items-center">
                 <p>© {{ $year }} PT. Delta Tiga Enam. {{ $id ? 'Hak Cipta Dilindungi Undang-Undang.' : 'All rights reserved.' }}</p>
                 <div class="flex items-center gap-5">
-                    <a href="#" class="transition-colors hover:text-gold">{{ $id ? 'Kebijakan Privasi' : 'Privacy Policy' }}</a>
+                    <a href="{{ route('privacy') }}" class="transition-colors hover:text-gold">{{ $id ? 'Kebijakan Privasi' : 'Privacy Policy' }}</a>
                     {{-- Garis, bukan huruf "|": pemisah ini tidak membawa makna, dan
                          sebagai teks ia hanya 2,2:1 sekaligus ikut dibacakan pembaca
                          layar. --}}
                     <span class="h-3 w-px bg-white/30" aria-hidden="true"></span>
-                    <a href="#" class="transition-colors hover:text-gold">{{ $id ? 'Syarat & Ketentuan' : 'Terms & Conditions' }}</a>
+                    <a href="{{ route('terms') }}" class="transition-colors hover:text-gold">{{ $id ? 'Syarat & Ketentuan' : 'Terms & Conditions' }}</a>
                 </div>
             </div>
         </div>
