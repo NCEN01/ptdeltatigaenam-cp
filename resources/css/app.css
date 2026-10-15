@@ -814,10 +814,18 @@
 .group:hover .card-arrow,
 .group:focus-within .card-arrow { transform: rotate(-45deg); }
 
+/* Saat sistem meminta gerak dikurangi, yang dilepas hanya transisinya:
+   panahnya tetap berputar, cuma langsung sampai tanpa dianimasikan.
+   Perlakuan yang sama dengan .porto-arrow.
+
+   Sebelumnya di sini putarannya ikut dibatalkan (transform: none), dan
+   akibatnya panah ini diam sama sekali di mesin yang menyalakan "kurangi
+   gerak" — sementara panah Portofolio yang seharusnya ditirunya tetap
+   berputar. Arah panah membawa keterangan, bukan hiasan: ia yang
+   menyatakan tautannya menuju ke luar. Yang boleh dikurangi geraknya,
+   bukan keterangannya. */
 @media (prefers-reduced-motion: reduce) {
-    .card-arrow { transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; }
-    .group:hover .card-arrow,
-    .group:focus-within .card-arrow { transform: none; }
+    .card-arrow { transition: none; }
 }
 
 /* ── Kartu mitra di pita kota ─────────────────────────────────────────────
