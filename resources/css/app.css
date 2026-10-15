@@ -790,34 +790,39 @@
 }
 
 /* ── Panah bundar di pojok kartu ──────────────────────────────────────────
- * Dipakai kartu Layanan dan kartu Agenda. Saat kartunya disentuh, panahnya
- * berputar -45° sehingga menunjuk ke atas-kanan, gerakan yang sama dengan
- * indeks Portofolio di beranda (.porto-arrow).
+ * Satu-satunya perlakuan panah bundar di situs ini. Dipakai kartu Layanan,
+ * rel Agenda di halaman yang sama, kartu halaman Portofolio, dan indeks
+ * Portofolio di beranda. Keempatnya berbentuk sama persis, tapi sebelum
+ * disatukan punya tiga tempo dan tiga warna yang berbeda — dan dua di
+ * antara warna itu gagal kontras: putih di atas sky-500 hanya 2,37:1 dan
+ * di atas navy-500 3,88:1. Semuanya kini mendarat di navy-600, 6,56:1.
+ *
+ * Dua cara memicunya, keduanya ditangani di sini: .group:hover untuk kartu
+ * yang hovernya murni CSS, dan [data-on="1"] untuk indeks di beranda yang
+ * keadaannya dipegang Alpine dan bertahan setelah tunjukan ditarik.
  *
  * Putarannya ditulis sebagai transform biasa, bukan lewat -rotate-45 dari
- * Tailwind. Utilitas itu menulis --tw-rotate, dan peramban tidak
- * menginterpolasi custom property: hasilnya panah yang mematah ke posisi
- * barunya, bukan berputar. Persoalan yang sama pernah muncul di
- * .porto-arrow dan diselesaikan dengan cara ini.
- *
- * Warnanya tetap diurus utilitas group-hover di markup; yang di sini hanya
- * putarannya, ditambah transisi warna supaya keduanya bergerak bersamaan.
+ * Tailwind. Utilitas itu memutar lewat --tw-rotate, dan peubah khusus tidak
+ * diinterpolasi peramban: nilainya langsung berlaku, sehingga panahnya
+ * meloncat sementara warnanya meluncur.
  */
 .card-arrow {
     transform: rotate(0deg);
-    transition:
-        transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
-        background-color 0.3s ease,
-        border-color 0.3s ease,
-        color 0.3s ease;
+    /* Ditulis terpisah, bukan sebagai daftar transition, supaya keempat sifat
+       ini tidak bisa lagi berbeda tempo. Sebelumnya putarannya 0,5 detik
+       dengan kurva ini sementara warnanya 0,3 detik dengan kurva ease:
+       isiannya mendarat 200ms lebih dulu, dan selisih itu persis yang
+       terbaca sebagai gerakan kasar — bukan kecepatannya. */
+    transition-property: transform, background-color, border-color, color;
+    transition-duration: 0.35s;
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .group:hover .card-arrow,
-.group:focus-within .card-arrow { transform: rotate(-45deg); }
+.group:focus-within .card-arrow,
+.card-arrow[data-on="1"] { transform: rotate(-45deg); }
 
 /* Saat sistem meminta gerak dikurangi, yang dilepas hanya transisinya:
    panahnya tetap berputar, cuma langsung sampai tanpa dianimasikan.
-   Perlakuan yang sama dengan .porto-arrow.
-
    Sebelumnya di sini putarannya ikut dibatalkan (transform: none), dan
    akibatnya panah ini diam sama sekali di mesin yang menyalakan "kurangi
    gerak" — sementara panah Portofolio yang seharusnya ditirunya tetap
@@ -918,15 +923,10 @@
    Alpine. Tailwind memutar lewat peubah --tw-rotate, dan peubah khusus tidak
    diinterpolasi peramban: nilai barunya langsung berlaku, jadi panahnya
    meloncat sementara warna lingkarannya meluncur. */
-.porto-arrow {
-    transform: rotate(0deg);
-    transition:
-        transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
-        background-color 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
-        border-color 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
-        color 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.porto-arrow[data-on="1"] { transform: rotate(-45deg); }
+/* .porto-arrow dilepas. Panah indeks Portofolio kini memakai .card-arrow
+   yang sama dengan kartu Layanan, rel Agenda, dan kartu halaman Portofolio:
+   satu putaran, satu tempo, satu kurva. Empat panah bundar yang bentuknya
+   sama persis sebelumnya punya tiga tempo dan tiga warna yang berbeda. */
 
 /* Bilah waktu putar otomatis. Kelasnya baru dipasang saat butirnya aktif, dan
    animasi CSS mulai dari awal tiap kali kelasnya dipasang — itu yang membuatnya
@@ -957,7 +957,6 @@
     .porto-body > *,
     .porto-shift,
     .porto-fade,
-    .porto-arrow,
     .porto-photo { transition: none; }
     .porto-bar-run { animation: none; width: 100%; }
     .porto-photo[data-on="1"] { transform: none; }

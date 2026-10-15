@@ -78,7 +78,13 @@
                                         <x-meta-location :value="$p->location" :separator="(bool) ($p->client_name || $p->project_date)" class="text-xs" />
                                     </p>
                                 </div>
-                                <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full border border-navy-200 text-navy transition-all duration-300 group-hover:-rotate-45 group-hover:border-sky-500 group-hover:bg-sky-500 group-hover:text-white">
+                                {{-- .card-arrow, sama dengan panah kartu Layanan, rel Agenda,
+                                     dan indeks Portofolio di beranda. Putarannya pindah ke
+                                     sana dari -rotate-45 milik Tailwind, dan isiannya dari
+                                     sky-500 ke navy-600: putih di atas sky-500 hanya 2,37:1,
+                                     jauh di bawah ambang mana pun, sementara navy-600 yang
+                                     dipakai seluruh tombol situs ini mencapai 6,56:1. --}}
+                                <span class="card-arrow mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full border border-navy-200 text-navy group-hover:border-navy-600 group-hover:bg-navy-600 group-hover:text-white">
                                     <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </span>
                             </div>

@@ -731,16 +731,16 @@
                                             </span>
                                         </span>
 
-                                        {{-- Putarannya dikerjakan .porto-arrow lewat atribut
+                                        {{-- Putarannya dikerjakan .card-arrow lewat atribut
                                              data, bukan kelas -rotate-45 yang ditukar Alpine.
                                              Tailwind memutar lewat peubah --tw-rotate, dan
                                              peubah khusus tidak diinterpolasi peramban: nilai
                                              barunya langsung berlaku, jadi panahnya meloncat
                                              sementara warnanya meluncur. Itu yang paling
                                              terasa kaku di butir ini. --}}
-                                        <span class="porto-arrow grid h-10 w-10 shrink-0 place-items-center rounded-full border"
+                                        <span class="card-arrow grid h-10 w-10 shrink-0 place-items-center rounded-full border"
                                               :data-on="active === {{ $i }} ? '1' : '0'"
-                                              :class="active === {{ $i }} ? 'border-navy-500 bg-navy-500 text-white' : 'border-navy-100 bg-white text-slate-400'"
+                                              :class="active === {{ $i }} ? 'border-navy-600 bg-navy-600 text-white' : 'border-navy-100 bg-white text-slate-400'"
                                               aria-hidden="true">
                                             <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </span>
