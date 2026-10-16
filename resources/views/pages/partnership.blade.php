@@ -389,7 +389,13 @@
             $draftValue = fn (string $key) => data_get($draft, $key);
             $hasDraft = filled(array_filter($draft));
         @endphp
-        <section id="daftar" class="section scroll-mt-28 border-t border-navy-50 bg-neutral-50">
+        {{-- overflow-hidden wajib di sini: pendar lapisan belakang rel kiri
+             menjorok keluar batas kolomnya dan bergeser sampai ratusan piksel
+             sepanjang seksi ini. Tanpa pengurung, pendar itu memanjangkan
+             dokumen ke kanan dan memunculkan bilah gulir mendatar di seluruh
+             halaman — cacat yang muncul di halaman lain, bukan di sini, jadi
+             paling sulit dilacak ke sumbernya. --}}
+        <section id="daftar" class="section relative scroll-mt-28 overflow-hidden border-t border-navy-50 bg-neutral-50">
             <div class="container">
                 <div class="mx-auto max-w-3xl text-center">
                     <h2 class="text-display-lg text-navy">{{ $id ? 'Mulai kolaborasi' : 'Start a collaboration' }}</h2>
@@ -402,19 +408,40 @@
 
                 <div class="mt-12 grid items-start gap-6 lg:grid-cols-12 lg:gap-8">
                     {{-- ── Rel kiri: alur & jaminan ──────────────────────── --}}
-                    {{-- data-parallax dipasang di pembungkus dalam, bukan di
-                         <aside> ini: AOS menganimasikan transform elemen yang
-                         membawa data-aos, dan GSAP menulis transform yang sama
-                         untuk pergeserannya. Di satu elemen, keduanya saling
-                         menimpa dan yang terlihat adalah kartu yang tersentak
-                         saat pertama kali masuk layar.
+                    {{-- Parallax di sini dua lapisan, bukan satu.
 
-                         Nilainya kecil, 0,12 — sekitar 65 piksel sepanjang
-                         seluruh tinggi seksi. Rel ini berisi nomor langkah dan
-                         kalimat yang memang untuk dibaca, bukan hiasan latar;
-                         pergeseran yang terasa akan membuat tulisannya
-                         berpindah tempat selagi mata mengikutinya. --}}
-                    <aside class="lg:col-span-4" data-aos="fade-up">
+                         Percobaan pertama hanya menggeser relnya sendiri pada
+                         0,12 — dan gerak itu praktis tidak terbaca. Parallax
+                         tidak pernah dirasakan dari kecepatan satu benda,
+                         melainkan dari SELISIH kecepatan dua benda di
+                         kedalaman berbeda. Satu lapisan yang bergeser
+                         sendirian hanya tampak seperti isi yang sedikit
+                         tertinggal, bukan seperti ruang.
+
+                         Jadi sekarang: pendar di belakang melaju 0,45,
+                         relnya 0,08. Selisih itulah yang terlihat, dan
+                         relnya tetap nyaris diam sehingga nomor langkah
+                         serta kalimatnya tidak berpindah tempat selagi
+                         dibaca — hiasan yang boleh bergerak jauh, tulisan
+                         yang tidak.
+
+                         data-parallax tidak dipasang di <aside> ini: AOS
+                         menganimasikan transform elemen yang membawa data-aos,
+                         dan GSAP menulis transform yang sama. Di satu elemen,
+                         keduanya saling menimpa dan kartunya tersentak saat
+                         pertama masuk layar. --}}
+                    <aside class="relative lg:col-span-4" data-aos="fade-up">
+                        {{-- Lapisan belakang. Dua pendar kabur yang mengintip
+                             di sekeliling kartu putih di depannya — itulah yang
+                             memberi acuan gerak. Hanya dari lg: di bawah itu
+                             kedua kolomnya menumpuk dan parallax-nya memang
+                             dimatikan, jadi merender pendarnya pun sia-sia. --}}
+                        <div class="pointer-events-none absolute -inset-x-8 -top-12 -z-10 hidden h-[560px] lg:block"
+                             aria-hidden="true" data-parallax="0.45" data-parallax-from="1024">
+                            <div class="absolute left-0 top-0 h-64 w-64 rounded-full bg-navy-200/40 blur-3xl"></div>
+                            <div class="absolute bottom-0 right-2 h-56 w-56 rounded-full bg-sky-300/30 blur-3xl"></div>
+                        </div>
+
                         {{-- lg:sticky dilepas. Menempel dan parallax menjawab
                              dua maksud yang saling meniadakan: yang satu
                              menahan rel di tempatnya, yang lain menggesernya
@@ -422,7 +449,7 @@
                              menempel di bawah navbar lalu merayap turun
                              sendiri — gerak yang terbaca sebagai cacat, bukan
                              sebagai kedalaman. --}}
-                        <div class="space-y-5" data-parallax="0.12" data-parallax-from="1024">
+                        <div class="relative space-y-5" data-parallax="0.08" data-parallax-from="1024">
                             <div class="rounded-3xl border border-navy-100 bg-white p-6 shadow-card sm:p-7">
                                 <p class="font-mono text-[11px] uppercase tracking-label text-sky-700">{{ $id ? 'Alur Pendaftaran' : 'Registration Flow' }}</p>
 
