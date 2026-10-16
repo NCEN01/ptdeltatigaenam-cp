@@ -231,7 +231,6 @@
                                     {{ $id ? 'Jadwal terdekat' : 'Next available schedule' }}
                                 @endif
                             </h3>
-                            <p class="mt-2 text-sm text-navy-200">{{ $id ? 'Kursi terbatas, daftar sekarang sebelum kehabisan.' : 'Limited seats, register now before they’re gone.' }}</p>
                         </div>
                     </div>
 
