@@ -45,7 +45,7 @@
         {{-- Dua tabir bertumpuk. Yang mendatar menjaga judul di kiri tetap
              terbaca; yang menurun menggelapkan dasar seksi supaya pita klien
              putih di bawahnya tidak bertabrakan langsung dengan langit senja. --}}
-        <div class="absolute inset-0 bg-gradient-to-r from-navy-950/90 via-navy-950/72 to-navy-900/62"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-navy-950/90 via-navy-950/70 to-navy-900/60"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-navy-950/60 via-transparent to-navy-950/75"></div>
         <div class="pointer-events-none absolute inset-0 grain opacity-20"></div>
 

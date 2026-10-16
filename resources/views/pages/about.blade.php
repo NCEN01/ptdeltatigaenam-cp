@@ -367,8 +367,19 @@
              Tabir arah itu pekat ke kanan tempat nama dan kutipan berdiri,
              dan ringan di kiri supaya kota di belakang bahu masih terbaca
              sebagai ruang, bukan bidang mati. --}}
-        <div class="absolute inset-0 bg-navy-800/55"></div>
-        <div class="absolute inset-0 bg-gradient-to-l from-navy-950/88 via-navy-950/62 to-navy-950/28"></div>
+        <div class="absolute inset-0 bg-navy-800/60"></div>
+        {{-- Sisi kirinya diturunkan dari /28 ke /55. Fotonya yang paling terang
+             di antara ketiga latar seksi gelap, dan pada /28 bagian kiri masih
+             terbaca abu-abu terang sementara pita Alasan dan Mitra sudah pekat.
+             Di /55 ia mendarat di #193250, sejajar dengan sisi kiri pita Mitra
+             (#16304f). Teks putih di sisi kanan tetap 16,2:1. --}}
+        <div class="absolute inset-0 bg-gradient-to-l from-navy-950/90 via-navy-950/80 to-navy-950/55"></div>
+        {{-- Lingkaran pendar di pojok kanan atas. Seksi ini satu-satunya pita
+             gelap di situs yang belum punya: beranda, kepala halaman, dan panel
+             masuk semuanya memakai lingkaran kabur yang sama. Tanpa itu, bidang
+             kanan yang memang sengaja dipekatkan terbaca rata tanpa kedalaman.
+             Digeser keluar tepi supaya yang terlihat hanya lengkungnya. --}}
+        <div class="pointer-events-none absolute -right-24 -top-32 h-[32rem] w-[32rem] rounded-full bg-sky-500/20 blur-3xl" data-parallax="0.08"></div>
         <div class="pointer-events-none absolute inset-0 grain opacity-20"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 

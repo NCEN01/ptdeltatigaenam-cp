@@ -448,7 +448,7 @@
              tabir rata /82 fotonya praktis hilang dan pita ini kembali menjadi
              bidang navy datar — padahal justru siluet kotanya yang memberi
              kedalaman di belakang kartu kaca. --}}
-        <div class="absolute inset-0 bg-gradient-to-r from-navy-950/88 via-navy-950/68 to-navy-900/58"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-navy-950/90 via-navy-950/70 to-navy-900/60"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-navy-950/55 via-transparent to-navy-950/70"></div>
         {{-- Butir dan cahaya samar, alat yang sama dengan kepala halaman dan pita
              Mitra. Tanpa keduanya foto gelap ini rata betul dan terbaca sebagai

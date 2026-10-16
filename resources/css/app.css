@@ -7,6 +7,26 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * CATATAN PENTING — opasitas warna hanya boleh kelipatan 5.
+ *
+ * Tailwind membangun pengubah miring (bg-navy-950/80, from-navy-900/60, …)
+ * dari skala theme.opacity, dan skala bawaannya melangkah lima-lima. Nilai di
+ * luar itu — /82, /88, /68, /58, /72, /62, /78, /92 — tidak menghasilkan kelas
+ * apa pun. Dan ia gagal tanpa suara: tidak ada galat, tidak ada peringatan di
+ * build, hanya satu lapisan yang hilang dari halaman.
+ *
+ * Kekeliruan itu pernah terjadi dan sempat lama tidak terlihat: sepuluh kelas
+ * tabir di seksi Alasan, Mitra, Pendiri, dan panel halaman masuk ternyata tidak
+ * pernah ada. Seluruh gradien arah di seksi Alasan mati — ketiga perhentiannya
+ * bernilai di luar skala sekaligus — dan yang menggelapkannya selama itu hanya
+ * lapisan kedua yang kebetulan bernilai sah.
+ *
+ * Perhitungan di atas kertas tidak menangkapnya; yang menangkap hanya
+ * memeriksa nama kelasnya ada di berkas CSS hasil build. Kalau butuh nilai di
+ * antaranya, pakai bentuk nilai sembarang: bg-navy-950/[0.82].
+ */
+
 @layer base {
     :root {
         --header-h: 84px;

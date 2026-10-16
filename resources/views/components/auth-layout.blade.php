@@ -49,8 +49,8 @@
             <img src="{{ asset('images/bg-login.webp') }}" alt="" aria-hidden="true"
                  width="1870" height="841" loading="lazy" decoding="async"
                  class="pointer-events-none absolute inset-0 h-full w-full object-cover">
-            <div class="pointer-events-none absolute inset-0 bg-navy-950/82"></div>
-            <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-navy-950/70 via-navy-950/45 to-navy-950/92"></div>
+            <div class="pointer-events-none absolute inset-0 bg-navy-950/80"></div>
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-navy-950/70 via-navy-950/45 to-navy-950/90"></div>
             <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
             <div class="pointer-events-none absolute -right-24 top-1/4 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl"></div>
             <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/50 to-transparent"></div>
