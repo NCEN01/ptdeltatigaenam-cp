@@ -520,7 +520,7 @@
         <div class="container relative py-20 text-center md:py-28 lg:py-32">
             <div class="mx-auto max-w-2xl" data-aos="fade-up">
                 <h2 class="text-display-xl text-white">
-                    {{ $id ? 'Masih menimbang tingkat yang mana?' : 'Still weighing up which tier?' }}
+                    {{ $id ? 'Masih bingung tingkat yang mana?' : 'Still unsure which tier?' }}
                 </h2>
 
                 {{-- Menyebut apa yang perlu disiapkan sebelum menghubungi, bukan
@@ -528,7 +528,7 @@
                      akan ditanyakan balik. --}}
                 <p class="mx-auto mt-5 max-w-xl text-pretty text-lg leading-relaxed text-navy-100">
                     {{ $id
-                        ? 'Sebutkan jumlah karyawan Anda, kami hitungkan tingkat yang paling pas. Gratis.'
+                        ? 'Sebutkan jumlah karyawannya, kami hitungkan tingkat yang paling pas. Gratis.'
                         : 'Tell us your headcount and we will work out the right tier. Free.' }}
                 </p>
 
