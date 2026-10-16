@@ -6,6 +6,7 @@ use App\Models\ContactMessage;
 use App\Rules\PersonName;
 use App\Rules\PhoneNumber;
 use App\Rules\Recaptcha;
+use App\Rules\SafeEmail;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
@@ -24,7 +25,7 @@ class ContactController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:150', new PersonName],
-            'email' => ['required', 'email', 'max:150'],
+            'email' => ['required', 'email', 'max:150', new SafeEmail],
             'phone' => ['nullable', 'string', 'max:50', new PhoneNumber],
             'subject' => ['nullable', 'string', 'max:200'],
             'message' => ['required', 'string', 'max:5000'],

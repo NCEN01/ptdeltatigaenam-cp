@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Rules\PersonName;
 use App\Rules\PhoneNumber;
 use App\Rules\Recaptcha;
+use App\Rules\SafeEmail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +45,7 @@ class RegisteredCustomerController extends Controller
             // min:2 menutup nama satu huruf yang hampir selalu salah ketik atau
             // isian asal-asalan.
             'name' => ['required', 'string', 'min:2', 'max:255', new PersonName],
-            'email' => ['required', 'string', 'email:rfc', 'max:255', 'unique:customers,email'],
+            'email' => ['required', 'string', 'email:rfc', 'max:255', 'unique:customers,email', new SafeEmail],
             /* Aturan yang sama dengan lima kolom telepon lain di situs, bukan
                regex sendiri seperti sebelumnya. min:7 dulu menghitung panjang
                string, bukan jumlah angka — "+62 1" lolos karena lima karakter

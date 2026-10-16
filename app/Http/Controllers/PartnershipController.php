@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Rules\PersonName;
 use App\Rules\PhoneNumber;
 use App\Rules\Recaptcha;
+use App\Rules\SafeEmail;
 use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,7 +51,7 @@ class PartnershipController extends Controller
             'pic_name' => ['required', 'string', 'max:150', new PersonName],
             'pic_position' => ['nullable', 'string', 'max:150'],
             'phone' => ['required', 'string', 'max:50', new PhoneNumber],
-            'email' => ['required', 'email', 'max:150'],
+            'email' => ['required', 'email', 'max:150', new SafeEmail],
             'partnership_package_id' => ['nullable', 'exists:partnership_packages,id'],
             'preferred_meeting_at' => ['nullable', 'date'],
             'alternative_meeting_at' => ['nullable', 'date'],

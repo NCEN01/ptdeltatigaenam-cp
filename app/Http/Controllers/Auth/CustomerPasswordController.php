@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Rules\SafeEmail;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +25,7 @@ class CustomerPasswordController extends Controller
 
     public function email(Request $request, string $locale)
     {
-        $request->validate(['email' => ['required', 'email']]);
+        $request->validate(['email' => ['required', 'email', new SafeEmail]]);
 
         $status = $this->broker()->sendResetLink($request->only('email'));
 
@@ -42,7 +43,7 @@ class CustomerPasswordController extends Controller
     {
         $request->validate([
             'token' => ['required'],
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email', new SafeEmail],
             'password' => ['required', 'confirmed', PasswordRule::defaults()],
         ]);
 
