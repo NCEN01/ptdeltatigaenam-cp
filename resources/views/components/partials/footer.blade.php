@@ -2,7 +2,11 @@
     use App\Models\Setting;
 
     $id = app()->getLocale() === 'id';
-    $email = 'info@deltatigaenam.com';
+    // Pengaturan Situs → Kontak, sumber yang sama dengan kartu kontak di
+    // halaman Kontak. Sebelumnya alamat surel ini diketik di sini DAN di
+    // berkas itu; dua salinan yang harus diperbarui bersamaan selalu
+    // berakhir sama, yaitu satu diperbarui dan satu tertinggal.
+    $email = \App\Support\Company::contact()['email'];
     // config/company.php, sumber yang sama dengan pita ajakan media sosial di
     // beranda. Ditulis di sini juga, keduanya menyimpang begitu salah satunya
     // diperbarui.

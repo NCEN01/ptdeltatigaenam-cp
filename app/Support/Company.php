@@ -7,6 +7,47 @@ use App\Models\Setting;
 class Company
 {
     /**
+     * Data kontak perusahaan, dari Pengaturan Situs.
+     *
+     * Satu sumber untuk dua tempat yang sebelumnya menulisnya sendiri-sendiri:
+     * kartu kontak di halaman Kontak dan kolom Kontak di footer. Alamat surel
+     * dan nomor WhatsApp yang sama diketik ulang di kedua berkas Blade itu —
+     * dua salinan yang harus diperbarui bersamaan setiap kali nomornya
+     * berganti, tanpa ada yang mengingatkan kalau salah satunya terlewat.
+     *
+     * Nilai bawaannya tetap ditulis di sini, bukan dibiarkan kosong: situs
+     * tidak boleh kehilangan alamat surelnya hanya karena satu baris
+     * pengaturan belum pernah diisi.
+     *
+     * Nomor telepon disimpan dua rupa dengan sengaja. Yang tampil ditulis
+     * apa adanya untuk dibaca manusia — "(021) 5890 5002" — sedangkan tautan
+     * tel: menuntut bentuk yang hanya angka beserta kode negara. Menurunkan
+     * yang kedua dari yang pertama tidak bisa diandalkan: kode wilayah 021
+     * harus kehilangan nol depannya dan mendapat +62, aturan yang berbeda
+     * untuk nomor seluler dan untuk nomor luar negeri.
+     *
+     * @return array{email: string, phone: string, phone_tel: string, whatsapp: string, whatsapp_label: string, hours: string}
+     */
+    public static function contact(): array
+    {
+        $isId = app()->getLocale() === 'id';
+
+        $jam = Setting::get('site_hours');
+        if (is_array($jam)) {
+            $jam = $jam[app()->getLocale()] ?? ($jam['id'] ?? '');
+        }
+
+        return [
+            'email' => trim((string) Setting::get('site_email')) ?: 'info@deltatigaenam.com',
+            'phone' => trim((string) Setting::get('site_phone')) ?: '(021) 5890 5002',
+            'phone_tel' => trim((string) Setting::get('site_phone_tel')) ?: '+622158905002',
+            'whatsapp' => trim((string) Setting::get('site_whatsapp')) ?: '62818834766',
+            'whatsapp_label' => trim((string) Setting::get('site_whatsapp_label')) ?: '0818 834 766',
+            'hours' => trim((string) $jam) ?: ($isId ? 'Senin sampai Jumat · 08.00-17.00' : 'Mon to Fri · 8am-5pm'),
+        ];
+    }
+
+    /**
      * Daftar kantor dari config/company.php, dengan nama yang sudah dipilih
      * menurut bahasa yang sedang aktif.
      *
@@ -125,6 +166,33 @@ class Company
     public static function offices(): array
     {
         $locale = app()->getLocale();
+
+        /* Dibaca dari tabel offices, yang bisa disunting admin lewat
+           Pengaturan → Alamat Kantor, paling banyak tiga baris.
+
+           config/company.php tetap dipakai sebagai cadangan ketika tabelnya
+           kosong — pada pemasangan baru yang penyemainya belum dijalankan.
+           Tanpa cadangan itu, footer kehilangan seluruh kolom alamatnya dan
+           halaman Kontak kehilangan peta sematannya, dan yang tampak bukan
+           "belum diisi" melainkan halaman yang rusak.
+
+           Bentuk keluarannya sengaja sama persis dengan yang dulu dibaca dari
+           config: array biasa dengan nama yang sudah dipilih menurut bahasa.
+           Pemakainya di footer dan halaman Kontak tidak perlu diubah
+           sedikit pun — dan halaman Kontak khususnya menyisipkan seluruh array
+           ini ke atribut x-data Alpine, jadi nama yang tetap berupa array akan
+           terbaca "[object Object]" di judul petanya. */
+        $dariDb = \App\Models\Office::displayable()->get();
+
+        if ($dariDb->isNotEmpty()) {
+            return $dariDb->map(static fn ($o): array => [
+                'name' => $o->getTranslation('name', $locale, true) ?: $o->name,
+                'address' => (string) $o->address,
+                'phone' => (string) $o->phone,
+                'tel' => (string) $o->tel,
+                'maps' => (string) ($o->maps ?: $o->address),
+            ])->all();
+        }
 
         return array_map(static function (array $office) use ($locale): array {
             if (is_array($office['name'] ?? null)) {

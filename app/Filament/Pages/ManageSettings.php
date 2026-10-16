@@ -67,6 +67,10 @@ class ManageSettings extends Page implements HasForms
             'program_consult_cta' => Setting::get('program_consult_cta') ?: ['id' => '', 'en' => ''],
             'program_consult_whatsapp' => Setting::get('program_consult_whatsapp'),
             'company_profile_file' => Setting::get('company_profile_file'),
+            'site_phone_tel' => Setting::get('site_phone_tel'),
+            'site_whatsapp' => Setting::get('site_whatsapp'),
+            'site_whatsapp_label' => Setting::get('site_whatsapp_label'),
+            'site_hours' => Setting::get('site_hours') ?: ['id' => '', 'en' => ''],
         ]);
     }
 
@@ -75,10 +79,41 @@ class ManageSettings extends Page implements HasForms
         return $form->schema([
             Section::make('Profil Perusahaan')->schema([
                 TextInput::make('site_name')->label('Nama Situs')->required()->maxLength(100),
-                TextInput::make('site_email')->label('Email')->email()->required()->maxLength(255),
-                TextInput::make('site_phone')->label('Telepon')->required()->maxLength(30),
                 TextInput::make('linkedin_url')->label('LinkedIn')->url()->nullable()->maxLength(255),
             ])->columns(2),
+
+            Section::make('Kontak')
+                ->description('Dipakai bersama oleh kartu kontak di halaman Kontak dan kolom Kontak di footer. Sebelumnya keduanya menuliskannya sendiri-sendiri, sehingga satu nomor yang berganti harus disunting di dua berkas.')
+                ->schema([
+                    TextInput::make('site_email')->label('Email')->email()->required()->maxLength(255)
+                        ->placeholder('info@deltatigaenam.com'),
+
+                    /* Jam operasional dwibahasa: ia kalimat, bukan angka, dan
+                       "Senin sampai Jumat" tidak berarti apa-apa di versi
+                       Inggris situs ini. */
+                    TextInput::make('site_hours.id')->label('Jam Operasional (ID)')->maxLength(80)
+                        ->placeholder('Senin sampai Jumat · 08.00-17.00'),
+                    TextInput::make('site_hours.en')->label('Jam Operasional (EN)')->maxLength(80)
+                        ->placeholder('Mon to Fri · 8am-5pm'),
+
+                    /* Nomor telepon disimpan dua rupa dengan sengaja. Yang
+                       tampil ditulis untuk dibaca manusia; tautan tel:
+                       menuntut bentuk hanya-angka berkode negara. Menurunkan
+                       yang kedua dari yang pertama tidak bisa diandalkan —
+                       kode wilayah 021 harus kehilangan nol depannya dan
+                       mendapat +62, aturan yang berbeda untuk nomor seluler. */
+                    TextInput::make('site_phone')->label('Telepon (tampil)')->required()->maxLength(30)
+                        ->placeholder('(021) 5890 5002'),
+                    TextInput::make('site_phone_tel')->label('Telepon (untuk tautan panggil)')->maxLength(30)
+                        ->placeholder('+622158905002')
+                        ->helperText('Hanya angka dengan kode negara. Dipakai tombol panggil di ponsel.'),
+
+                    TextInput::make('site_whatsapp_label')->label('WhatsApp (tampil)')->maxLength(30)
+                        ->placeholder('0818 834 766'),
+                    TextInput::make('site_whatsapp')->label('WhatsApp (untuk tautan chat)')->maxLength(30)
+                        ->placeholder('62818834766')
+                        ->helperText('Diawali 62, tanpa tanda plus dan tanpa spasi.'),
+                ])->columns(2),
 
             Section::make('Dokumen Profil Perusahaan (PDF)')
                 ->description('Berkas yang diunduh pengunjung dari kartu "Profil Perusahaan" di halaman Tentang. Kosongkan bila belum ada; kartunya otomatis tidak ditampilkan.')
@@ -163,6 +198,10 @@ class ManageSettings extends Page implements HasForms
         $this->put('site_email', $data['site_email'], 'text', 'general');
         $this->put('site_phone', $data['site_phone'], 'text', 'general');
         $this->put('linkedin_url', $data['linkedin_url'], 'text', 'general');
+        $this->put('site_phone_tel', $data['site_phone_tel'] ?? null, 'text', 'general');
+        $this->put('site_whatsapp', $data['site_whatsapp'] ?? null, 'text', 'general');
+        $this->put('site_whatsapp_label', $data['site_whatsapp_label'] ?? null, 'text', 'general');
+        $this->put('site_hours', json_encode($data['site_hours'] ?? []), 'json', 'general');
         $this->put('company_tagline', json_encode($data['company_tagline']), 'json', 'general');
         $this->put('company_about', json_encode($data['company_about']), 'json', 'general');
         $this->put('company_vision', json_encode($data['company_vision']), 'json', 'general');

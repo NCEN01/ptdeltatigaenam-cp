@@ -1,16 +1,21 @@
 @php
     $id = app()->getLocale() === 'id';
 
-    $email = 'info@deltatigaenam.com';
+    /* Keempat barisnya dibaca dari Pengaturan Situs lewat Company::contact(),
+       bukan diketik di sini seperti sebelumnya. Alamat surel dan nomor yang
+       sama juga ditulis di footer, dan dua salinan yang harus diperbarui
+       bersamaan selalu berakhir sama: satu diperbarui, satu tertinggal, dan
+       pengunjung menelepon nomor yang sudah tidak dipakai. */
+    $kontak = \App\Support\Company::contact();
+    $email = $kontak['email'];
 
-    $waNumber = '62818834766';
     $waText = rawurlencode($id ? 'Halo Delta Tiga Enam, saya ingin bertanya seputar layanan Anda.' : 'Hello Delta Tiga Enam, I would like to ask about your services.');
 
     $contactRows = [
         ['label' => 'Email', 'value' => $email, 'href' => 'mailto:'.$email, 'icon' => 'mail'],
-        ['label' => 'WhatsApp', 'value' => '0818 834 766', 'href' => 'https://wa.me/'.$waNumber.'?text='.$waText, 'icon' => 'whatsapp'],
-        ['label' => $id ? 'Telepon' : 'Phone', 'value' => '(021) 5890 5002', 'href' => 'tel:+622158905002', 'icon' => 'phone'],
-        ['label' => $id ? 'Jam Operasional' : 'Office Hours', 'value' => $id ? 'Senin sampai Jumat · 08.00-17.00' : 'Mon to Fri · 8am-5pm', 'href' => null, 'icon' => 'clock'],
+        ['label' => 'WhatsApp', 'value' => $kontak['whatsapp_label'], 'href' => 'https://wa.me/'.$kontak['whatsapp'].'?text='.$waText, 'icon' => 'whatsapp'],
+        ['label' => $id ? 'Telepon' : 'Phone', 'value' => $kontak['phone'], 'href' => 'tel:'.$kontak['phone_tel'], 'icon' => 'phone'],
+        ['label' => $id ? 'Jam Operasional' : 'Office Hours', 'value' => $kontak['hours'], 'href' => null, 'icon' => 'clock'],
     ];
 @endphp
 
