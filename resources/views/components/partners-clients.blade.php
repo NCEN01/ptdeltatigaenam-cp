@@ -27,6 +27,29 @@
     // kedua baris tidak menampilkan logo yang sama bersebelahan.
     $klienAtas = $klien;
     $klienBawah = $klien->slice((int) floor($klien->count() / 2))->concat($klien->take((int) floor($klien->count() / 2)))->values();
+
+    /* Mitra bergeser hanya kalau jumlahnya melewati satu baris kisi.
+       Empat adalah lebar baris di layar besar (lihat .mitra-board di app.css);
+       tepat empat atau kurang, semuanya terlihat sekaligus dan deretan yang
+       bergerak tidak menambah apa pun selain waktu tunggu.
+
+       $mitraSeparuh adalah satu separuh rel; markahnya yang menggandakannya. */
+    $mitraBergeser = $partners->count() > 4;
+
+    /* $repeat tidak dipakai di sini: ia memaksa minimal dua salinan, yang
+       benar untuk klien (logonya sedikit dan kecil) tetapi tidak di sini.
+       Pada 25 mitra, dua salinan per separuh berarti 100 kartu dirender untuk
+       rel yang hanya memperlihatkan sepuluh sekaligus. Yang dibutuhkan cuma
+       cukup kartu untuk melewati layar terlebar — kartu 248px beserta jaraknya
+       butuh sekitar sepuluh — dan daftar yang sudah sepanjang itu tidak perlu
+       diulang sama sekali. */
+    $mitraSeparuh = collect();
+    if ($mitraBergeser) {
+        while ($mitraSeparuh->count() < 10) {
+            $mitraSeparuh = $mitraSeparuh->concat($partners);
+        }
+    }
+    $mitraSeparuh = $mitraSeparuh->values();
 @endphp
 
 @if ($partners->isNotEmpty() || $clients->isNotEmpty())
@@ -73,67 +96,65 @@
                 </div>
 
                 @if ($partners->isNotEmpty())
+                    {{-- Jumlahnya tidak lagi disebut di kalimat ini. "Empat
+                         Lembaga Sertifikasi Profesi…" benar hanya selama
+                         mitranya tetap empat, dan kalimat ini tidak punya cara
+                         mengetahui kapan admin menambah yang kelima — yang
+                         tertinggal kemudian adalah angka yang keliru di seksi
+                         yang justru sedang meyakinkan pembaca soal keabsahan. --}}
                     <p class="max-w-md text-[15px] leading-relaxed text-navy-100 text-pretty" data-aos="fade-up" data-aos-delay="50">
                         {{ $isId
-                            ? 'Empat Lembaga Sertifikasi Profesi berlisensi BNSP mendampingi setiap uji kompetensi kami, sehingga sertifikat Anda sah dan diakui.'
-                            : 'Four BNSP-licensed certification bodies oversee every assessment we run, so your certificate is valid and recognised.' }}
+                            ? 'Lembaga Sertifikasi Profesi berlisensi BNSP mendampingi setiap uji kompetensi kami, sehingga sertifikat Anda sah dan diakui.'
+                            : 'BNSP-licensed certification bodies oversee every assessment we run, so your certificate is valid and recognised.' }}
                     </p>
                 @endif
             </div>
 
             @if ($partners->isNotEmpty())
-                <div class="glass-surface mitra-board mt-14 md:mt-16" data-aos="fade-up">
-                    @foreach ($partners as $partner)
-                        @php
-                            $name = trim($partner->name);
-                            $href = trim((string) ($partner->website_url ?? ''));
-                            // Kartunya jadi tautan hanya bila mitranya punya alamat
-                            // situs. Tautan yang tidak menuju ke mana pun tetap
-                            // disinggahi papan tik dan tidak melakukan apa-apa.
-                            $tag = $href !== '' ? 'a' : 'div';
-                        @endphp
-                        <{{ $tag }} class="mitra-card flex flex-col gap-4 outline-none focus-visible:ring-2 focus-visible:ring-navy-200 focus-visible:ring-offset-4 focus-visible:ring-offset-navy-900"
-                            @if ($href !== '') href="{{ $href }}" target="_blank" rel="noopener" @endif>
+                @if ($mitraBergeser)
+                    {{-- Lebih dari empat mitra: relnya bergeser sendiri ke kiri,
+                         perlakuan yang sama dengan pita klien di bawah seksi ini.
 
-                            {{-- flex + h-full/w-full pada gambarnya, bukan grid + max-h-full.
-                                 Persen tinggi pada butir grid yang barisnya auto tidak selalu
-                                 punya acuan pasti, dan di situ max-height jatuh ke none: logo
-                                 yang tingginya mendekati lebarnya lalu tampil seukuran
-                                 aslinya dan meluber menimpa nama di bawahnya. Flex berjarak
-                                 pasti menyelesaikannya, dan overflow-hidden menjaganya
-                                 sekalipun ada logo dengan perbandingan tak terduga. --}}
-                            <div class="mitra-logo-box relative flex h-[150px] items-center justify-center overflow-hidden rounded-[14px] bg-white p-[22px]">
-                                @if ($partner->logo)
-                                    {{-- alt kosong dengan sengaja: nama mitranya tertulis
-                                         tepat di bawah logo ini. Diisi, namanya terbaca dua
-                                         kali oleh pembaca layar. --}}
-                                    <img src="{{ Storage::url($partner->logo) }}" alt="" loading="lazy" decoding="async"
-                                         class="mitra-logo h-full w-full object-contain">
-                                @else
-                                    <span class="font-display text-4xl font-semibold text-navy-200" aria-hidden="true">{{ mb_strtoupper(mb_substr($name, 0, 1)) }}</span>
-                                @endif
+                         Sampai empat, kisinya diam — dan itu memang yang
+                         diinginkan: keempat kartunya muat utuh dalam satu baris,
+                         jadi tidak ada yang tersembunyi, dan menggeser deretan
+                         yang sudah terlihat seluruhnya hanya membuat pembaca
+                         menunggu logo yang sudah dibacanya kembali lewat.
+
+                         Dua separuh identik dirender berurutan supaya putaran
+                         -50% tidak pernah menyisakan celah kosong, sama seperti
+                         pita klien. --}}
+                    <div class="glass-surface mitra-shelf mt-14 md:mt-16" data-aos="fade-up">
+                        <div class="mask-fade-x overflow-hidden">
+                            {{-- Lama putarannya ditulis sendiri, bukan 40s bawaan
+                                 animate-marquee: separuh relnya sekitar 2700px, dan
+                                 pada 40 detik ia melaju 67 piksel per detik — terlalu
+                                 cepat untuk nama lembaga beserta nomor registrasinya
+                                 yang memang dimaksudkan untuk dibaca. --}}
+                            <div class="mitra-rail animate-marquee [animation-duration:72s] [will-change:transform] hover:[animation-play-state:paused]">
+                                {{-- Digandakan di markah, pola yang sama dengan pita
+                                     klien di bawah: animate-marquee menggeser -50%,
+                                     jadi isi relnya harus dua separuh identik supaya
+                                     putarannya tidak pernah memperlihatkan celah.
+                                     aria-hidden pada separuh kedua — pembaca layar
+                                     tidak perlu mendengar daftar mitra dua kali. --}}
+                                @for ($h = 0; $h < 2; $h++)
+                                    @foreach ($mitraSeparuh as $partner)
+                                        <x-mitra-card :partner="$partner"
+                                                      class="mitra-rail-card"
+                                                      aria-hidden="{{ $h ? 'true' : 'false' }}" />
+                                    @endforeach
+                                @endfor
                             </div>
-
-                            {{-- Nama lalu nomor, menurun. Sebelumnya nomornya sebaris
-                                 dengan lingkaran panah di kanan; panahnya dilepas
-                                 karena seluruh kartu memang sudah bisa diklik, dan
-                                 lingkaran kecil yang hanya muncul saat disentuh tidak
-                                 pernah sempat memberi tahu itu kepada orang yang
-                                 belum menyentuhnya.
-
-                                 Nomornya navy-200, bukan navy-400. Di atas panel kaca
-                                 navy-400 hanya 4,13:1 — di bawah ambang 4,5:1 untuk
-                                 teks sekecil ini. navy-200 mencapai 8,25:1 dan masih
-                                 terbaca biru. --}}
-                            <div class="relative">
-                                <p class="font-display text-sm font-semibold leading-[1.45] text-white text-balance">{{ $name }}</p>
-                                @if ($partner->registration_number)
-                                    <p class="mt-2 font-mono text-xs font-medium tracking-[0.1em] text-navy-200">{{ trim($partner->registration_number) }}</p>
-                                @endif
-                            </div>
-                        </{{ $tag }}>
-                    @endforeach
-                </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="glass-surface mitra-board mt-14 md:mt-16" data-aos="fade-up">
+                        @foreach ($partners as $partner)
+                            <x-mitra-card :partner="$partner" />
+                        @endforeach
+                    </div>
+                @endif
             @endif
         </div>
 

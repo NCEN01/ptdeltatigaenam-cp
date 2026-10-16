@@ -3,13 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Concerns\HasRecordLimit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\HasTranslations;
 
 class ServiceCategory extends Model
 {
-    use HasFactory, HasTranslations;
+    use HasFactory, HasRecordLimit, HasTranslations;
+
+    /**
+     * Kategori layanan. Dua belas ditentukan oleh menu atas, bukan oleh basis
+     * data: tarikan "Layanan" di navbar menampilkan seluruh kategori aktif
+     * tanpa penggal, dan daftar yang lebih panjang dari ini melewati tinggi
+     * layar laptop sehingga butir terakhirnya tidak bisa diklik sama sekali.
+     *
+     * Footer sengaja hanya menampilkan enam teratas menurut sort_order; itu
+     * ringkasan, bukan daftar lengkap, dan tidak terpengaruh batas ini.
+     */
+    public const MAX_RECORDS = 12;
 
     protected $guarded = ['id'];
 

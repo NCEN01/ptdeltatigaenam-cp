@@ -945,6 +945,35 @@
 @media (min-width: 640px) { .mitra-board { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; padding: 26px; } }
 @media (min-width: 1024px) { .mitra-board { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
+/* Panel yang sama dengan .mitra-board, tetapi isinya rel bergeser alih-alih
+   kisi — dipakai begitu mitranya lebih dari empat. Hanya paddingnya yang
+   dibagi: tepi membulat dan permukaan kacanya datang dari .glass-surface,
+   seperti pada kisinya.
+
+   Padding kiri-kanannya nol. Rel yang bergeser harus dipotong tepat di tepi
+   panel; dengan padding mendatar, kartunya terlihat muncul dan hilang di
+   tengah bidang kaca, beberapa piksel dari tepinya. */
+.mitra-shelf {
+    padding: 22px 0;
+    border-radius: 26px;
+}
+@media (min-width: 640px) { .mitra-shelf { padding: 26px 0; } }
+
+.mitra-rail {
+    display: flex;
+    width: max-content;
+    gap: 20px;
+    padding-inline: 22px;
+}
+@media (min-width: 640px) { .mitra-rail { gap: 22px; padding-inline: 26px; } }
+
+/* Lebar pasti, bukan 1fr seperti di kisinya: butir flex di dalam rel
+   width:max-content akan menyusut mengikuti isinya, dan kartu yang lebarnya
+   berbeda-beda membuat jarak antar logo terlihat tidak beraturan saat
+   bergeser. */
+.mitra-rail-card { width: 232px; flex-shrink: 0; }
+@media (min-width: 640px) { .mitra-rail-card { width: 248px; } }
+
 /* Kartunya sendiri tidak berlatar. Kotak logo putih di dalamnya yang membawa
    bidang; nama dan nomornya duduk langsung di atas panel. Memberi kartu ini
    latar sendiri akan menghasilkan bidang di dalam bidang — dan panel kacanya

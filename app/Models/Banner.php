@@ -46,6 +46,7 @@ class Banner extends Model
     {
         return [
             'is_active' => 'boolean',
+            'show_subtitle' => 'boolean',
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
         ];

@@ -68,12 +68,35 @@ class BannerResource extends Resource
                     Forms\Components\TextInput::make('title.en')
                         ->label('Judul (EN)')
                         ->maxLength(250),
+
+                    /* Deskripsi kepala halaman punya tiga keadaan, dan dua di
+                       antaranya dulu tidak bisa dibedakan. Mengosongkan kolom
+                       subjudul tidak menghilangkan deskripsinya: <x-page-header>
+                       hanya menimpa kalimat bawaan halaman kalau subjudulnya
+                       terisi, jadi kolom yang dikosongkan justru memunculkan
+                       kembali teks yang ditulis di Blade.
+
+                       Saklar ini memisahkan "jangan tampilkan apa pun" dari
+                       "pakai kalimat bawaan halaman", sehingga ketiga keadaannya
+                       bisa dipilih admin: mati, nyala dan diisi, atau nyala dan
+                       dibiarkan kosong. */
+                    Forms\Components\Toggle::make('show_subtitle')
+                        ->label('Tampilkan deskripsi')
+                        ->helperText('Matikan bila kepala halaman ini sebaiknya hanya berisi judul.')
+                        ->default(true)
+                        ->live()
+                        ->columnSpanFull(),
                     Forms\Components\TextInput::make('subtitle.id')
-                        ->label('Subjudul (ID)')
-                        ->maxLength(500),
+                        ->label('Deskripsi (ID)')
+                        ->placeholder('Kosongkan untuk memakai kalimat bawaan halaman')
+                        ->helperText('Opsional. Dibiarkan kosong, kalimat bawaan halaman yang dipakai.')
+                        ->maxLength(500)
+                        ->visible(fn (Forms\Get $get): bool => (bool) $get('show_subtitle')),
                     Forms\Components\TextInput::make('subtitle.en')
-                        ->label('Subjudul (EN)')
-                        ->maxLength(500),
+                        ->label('Deskripsi (EN)')
+                        ->placeholder('Leave empty to use the page default')
+                        ->maxLength(500)
+                        ->visible(fn (Forms\Get $get): bool => (bool) $get('show_subtitle')),
                     Forms\Components\TextInput::make('button_text.id')
                         ->label('Teks Tombol (ID)')
                         ->maxLength(100)
@@ -110,6 +133,9 @@ class BannerResource extends Resource
                     ->label('Halaman')
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => self::PLACEMENT_OPTIONS[$state] ?? $state),
+                Tables\Columns\ToggleColumn::make('show_subtitle')
+                    ->label('Deskripsi')
+                    ->tooltip('Matikan agar kepala halaman ini hanya berisi judul.'),
                 Tables\Columns\ToggleColumn::make('is_active')
                     ->label('Aktif'),
             ])

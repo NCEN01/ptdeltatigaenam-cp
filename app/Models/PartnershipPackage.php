@@ -2,13 +2,25 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasRecordLimit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\HasTranslations;
 
 class PartnershipPackage extends Model
 {
-    use HasTranslations;
+    use HasRecordLimit, HasTranslations;
+
+    /**
+     * Empat tingkat kemitraan. Halaman Kemitraan menyusunnya dalam satu kisi
+     * empat kolom di layar besar, dan formulir pendaftarannya menampilkan
+     * keempatnya sebagai pilihan paket — kolom kelima akan memecah kisinya
+     * menjadi dua baris yang tidak sama panjang.
+     *
+     * Angka "4 Tingkat kemitraan" di halaman itu dihitung dari jumlah baris
+     * tabel ini, jadi batas ini sekaligus menjaga angka tersebut tetap benar.
+     */
+    public const MAX_RECORDS = 4;
 
     protected $guarded = ['id'];
 

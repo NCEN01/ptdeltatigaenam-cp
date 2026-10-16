@@ -32,7 +32,15 @@
             if (! empty($banner->title)) {
                 $bannerTitle = $banner->title;
             }
-            if (! empty($banner->subtitle)) {
+
+            /* Tiga keadaan, sengaja dibedakan — lihat saklarnya di
+               BannerResource. Saklar mati berarti kepala halaman ini memang
+               diminta tampil tanpa deskripsi, jadi kalimat bawaan halaman pun
+               tidak dipakai; sebelumnya keadaan itu tidak bisa diminta sama
+               sekali karena kolom yang dikosongkan selalu jatuh ke bawaannya. */
+            if (! $banner->show_subtitle) {
+                $bannerSubtitle = null;
+            } elseif (! empty($banner->subtitle)) {
                 $bannerSubtitle = $banner->subtitle;
             }
         }
