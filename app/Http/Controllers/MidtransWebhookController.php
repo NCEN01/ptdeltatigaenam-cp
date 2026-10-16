@@ -8,6 +8,7 @@ use App\Notifications\OrderPaidNotification;
 use App\Services\MidtransService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
@@ -25,16 +26,58 @@ class MidtransWebhookController extends Controller
             return response()->json(['message' => 'Invalid signature'], 403);
         }
 
-        $order = Order::where('order_number', $payload['order_id'] ?? '')->first();
-        if (! $order) {
-            return response()->json(['message' => 'Order not found'], 404);
-        }
-
         $newStatus = $this->midtrans->mapStatus(
             $payload['transaction_status'] ?? 'pending',
             $payload['fraud_status'] ?? null,
         );
 
+        /* Seluruh pemrosesan dibungkus satu transaksi dengan baris pesanannya
+           dikunci (lockForUpdate).
+           -----------------------------------------------------------------
+           Midtrans mengirim ulang webhook-nya bila balasan pertama tidak
+           diterima, dan kiriman ulang bisa tiba BERSAMAAN dengan yang pertama.
+           Sebelumnya tidak ada apa pun yang menyerialkan keduanya, dan
+           akibatnya berlipat:
+
+             1. updateOrCreate melakukan SELECT lalu INSERT — bukan operasi
+                atomik. Dua permintaan sama-sama mendapat "tidak ketemu" dan
+                keduanya menyisipkan baris. (Kini juga ditahan indeks unik
+                pada midtrans_order_id.)
+             2. Keduanya membaca status pesanan "pending", jadi keduanya
+                menghitung dirinya sebagai perpindahan ke "paid".
+             3. Keduanya mengirim surel konfirmasi — pelanggan menerimanya
+                dua kali.
+             4. Keduanya menambah seats_taken. Inilah kerugian yang nyata:
+                kuota terpakai dua kali untuk satu peserta, dan satu kursi
+                yang sebenarnya kosong menolak pendaftar berikutnya.
+
+           lockForUpdate menahan permintaan kedua sampai yang pertama selesai
+           dan mengakhiri transaksinya. Ketika giliran yang kedua tiba, ia
+           membaca status yang SUDAH diperbarui, sehingga pemeriksaan
+           perpindahan di bawah bekerja sebagaimana dimaksud sejak awal.
+
+           Pencarian pesanannya dipindah ke dalam transaksi: baris yang dibaca
+           di luar kunci adalah salinan lama, dan mengunci setelah membacanya
+           tidak menolong apa-apa. */
+        return DB::transaction(function () use ($payload, $newStatus) {
+            $order = Order::where('order_number', $payload['order_id'] ?? '')
+                ->lockForUpdate()
+                ->first();
+
+            if (! $order) {
+                return response()->json(['message' => 'Order not found'], 404);
+            }
+
+            return $this->applyPayment($order, $payload, $newStatus);
+        });
+    }
+
+    /**
+     * Mencatat transaksinya lalu menjalankan efek samping yang hanya boleh
+     * terjadi sekali. Dipanggil hanya dari dalam transaksi berkunci di atas.
+     */
+    private function applyPayment(Order $order, array $payload, string $newStatus): JsonResponse
+    {
         // Idempotent: record/update the transaction and only act on real transitions.
         Transaction::updateOrCreate(
             ['midtrans_order_id' => $payload['order_id']],
@@ -65,16 +108,34 @@ class MidtransWebhookController extends Controller
                 'paid_at' => $newStatus === 'paid' ? now() : $order->paid_at,
             ]);
 
-            // Send confirmation once, only on the transition into "paid".
             if ($newStatus === 'paid' && ! $wasPaid) {
-                Notification::route('mail', $order->customer_email)
-                    ->notify(new OrderPaidNotification($order));
-
-                // Increment seats_taken on the service
+                /* Kursi ditambah di dalam transaksi: ia tulisan basis data
+                   yang harus jadi atau batal bersama perubahan status. Kalau
+                   di luar, pesanan yang gagal disimpan tetap memakan kuota. */
                 $service = $order->service;
                 if ($service && $service->quota) {
                     $service->increment('seats_taken', $order->quantity);
                 }
+
+                /* Surelnya justru harus di LUAR — afterCommit, bukan langsung.
+                   Dua alasan, keduanya nyata:
+
+                   Pertama, surel tidak bisa dibatalkan. Dikirim di dalam
+                   transaksi, ia tetap sampai ke pelanggan sekalipun transaksi
+                   itu kemudian digagalkan dan pembayarannya tidak pernah
+                   tercatat — pelanggan memegang bukti lunas yang tidak ada
+                   padanannya di basis data.
+
+                   Kedua, baris pesanan ini sedang dikunci lockForUpdate.
+                   Selama SMTP bekerja — dan SMTP bisa makan beberapa detik —
+                   kunci itu ditahan, dan setiap kiriman ulang webhook untuk
+                   pesanan yang sama ikut menunggu di belakangnya. Di
+                   pengembangan hal ini tak terasa karena MAIL_MAILER=log
+                   menulis ke berkas dalam hitungan milidetik. */
+                DB::afterCommit(function () use ($order) {
+                    Notification::route('mail', $order->customer_email)
+                        ->notify(new OrderPaidNotification($order));
+                });
             }
         }
 
