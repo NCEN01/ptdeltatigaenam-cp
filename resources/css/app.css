@@ -913,29 +913,48 @@
  * itu membuat lama bukanya tidak sama antara butir berketerangan pendek dan
  * panjang. 0fr ke 1fr selalu tepat setinggi isinya.
  */
+/* Satu tempo dan satu lengkung untuk SELURUH perpindahan butir, disimpan
+   sebagai peubah supaya tidak bisa lagi menyimpang satu sama lain.
+
+   Berpindah dari satu butir ke butir lain menggerakkan enam hal sekaligus:
+   tinggi butir lama menutup, tinggi butir baru membuka, isinya memudar
+   masuk, judulnya bergeser, warnanya berubah, panahnya berputar, dan
+   fotonya berganti. Sebelumnya keenamnya berjalan di lima tempo berbeda
+   (0,35 / 0,45 / 0,5 / 0,55 / 0,8 detik) dengan dua lengkung berbeda —
+   sebagian memakai ease bawaan, sebagian lengkung proyek ini.
+
+   Tidak ada satu pun yang salah sendiri; yang membuatnya terbaca kasar
+   adalah keenamnya mendarat di enam saat yang berbeda. Mata membaca satu
+   perpindahan, bukan enam, dan menuntut semuanya selesai bersamaan. */
+.porto-item,
+.porto-photo {
+    --porto-dur: 0.5s;
+    --porto-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
 .porto-body {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: grid-template-rows var(--porto-dur) var(--porto-ease);
 }
 .porto-item[data-on="1"] .porto-body { grid-template-rows: 1fr; }
 .porto-body > * {
     overflow: hidden;
     opacity: 0;
-    transition: opacity 0.45s ease;
+    transition: opacity var(--porto-dur) var(--porto-ease);
 }
 .porto-item[data-on="1"] .porto-body > * { opacity: 1; }
 
-.porto-shift { transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.porto-shift { transition: transform var(--porto-dur) var(--porto-ease); }
 .porto-item[data-on="1"] .porto-shift { transform: translateX(6px); }
 
-/* Satu lama dan satu lengkung untuk seluruh peralihan warna di dalam butir.
-   Tanpa ini tiap bagian memakai lengkung bawaan Tailwind sementara geseran dan
-   bukaannya memakai lengkung lain, dan dua gerakan berlengkung berbeda yang
-   berjalan bersamaan itulah yang terbaca kaku. */
-.porto-fade {
-    transition: color 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
+.porto-fade { transition: color var(--porto-dur) var(--porto-ease); }
+
+/* Panahnya ikut tempo butir ini, bukan 0,35 detik bawaan .card-arrow. Di
+   kartu Layanan dan Agenda panah itu satu-satunya yang bergerak sehingga
+   boleh lebih cepat; di sini ia salah satu dari enam, dan harus mendarat
+   bersama yang lain. */
+.porto-item .card-arrow { transition-duration: var(--porto-dur); }
 
 /* Putaran panah dikerjakan di sini, bukan lewat kelas -rotate-45 yang ditukar
    Alpine. Tailwind memutar lewat peubah --tw-rotate, dan peubah khusus tidak
@@ -963,10 +982,15 @@
 /* Ken Burns: fotonya membesar pelan selama ia tampil. 6 detik, lebih lama dari
    5 detik jeda gantinya, jadi gerakannya tidak pernah sempat berhenti dan
    terbaca sebagai henti. */
+/* Pudarnya ikut tempo butir, bukan 0,8 detik berlengkung ease. Fotonya yang
+   paling besar di seksi ini, jadi ia yang paling terlihat kalau mendarat
+   belakangan — 300ms setelah sisanya selesai, perpindahannya terbaca dua
+   tahap. Penskalaannya tetap 6 detik: itu hanyutan lambat sepanjang butir
+   aktif, bukan bagian dari perpindahannya. */
 .porto-photo {
     opacity: 0;
     transform: scale(1);
-    transition: opacity 0.8s ease, transform 6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: opacity var(--porto-dur) var(--porto-ease), transform 6s var(--porto-ease);
 }
 .porto-photo[data-on="1"] { opacity: 1; transform: scale(1.06); }
 
