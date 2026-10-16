@@ -505,7 +505,6 @@
                 <div class="lg:col-span-4 lg:flex lg:justify-end">
                     <a href="{{ route('services.index') }}" class="btn-blue">
                         {{ $isId ? 'Lihat Semua Layanan' : 'View All Services' }}
-                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
                 </div>
             </div>

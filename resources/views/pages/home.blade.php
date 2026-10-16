@@ -116,7 +116,6 @@
                                     <a href="{{ $slide['link'] }}"
                                        class="btn-ghost-light group focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950">
                                         {{ $slide['btn_text'] }}
-                                        <svg class="h-4 w-4 transition-transform duration-300 ease-out-soft group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                     </a>
                                 </div>
                             </div>
@@ -197,7 +196,6 @@
                     </p>
                     <a href="{{ route('services.index') }}" class="btn-blue mt-8">
                         {{ $isId ? 'Lihat Semua Kategori' : 'View All Categories' }}
-                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
                 </div>
 
@@ -439,7 +437,6 @@
                 <a href="{{ route('contact.index') }}"
                    class="btn-light group relative shrink-0">
                     {{ $isId ? 'Hubungi Kami' : 'Contact Us' }}
-                    <svg class="h-4 w-4 transition-transform duration-300 ease-out-soft group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </a>
             </div>
         </div>
@@ -793,7 +790,6 @@
                                  dan cincin fokusnya sudah ditentukan satu kali di sana. --}}
                             <a href="{{ route('portfolio.index') }}" class="btn-blue group">
                                 {{ $isId ? 'Lihat Semua Portofolio' : 'View All Portfolio' }}
-                                <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </a>
                             <span class="font-mono text-[13px] font-medium text-slate-500"
                                   x-text="String(active + 1).padStart(2, '0') + ' / {{ $portoPad($portoTotal) }}'" aria-hidden="true">{{ $portoPad(1) }} / {{ $portoPad($portoTotal) }}</span>
@@ -984,7 +980,6 @@
                 <div class="mt-10 text-center" data-aos="fade-up">
                     <a href="{{ route('blog.index') }}" class="btn-blue">
                         {{ $isId ? 'Lihat Semua Berita' : 'View All News' }}
-                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
                 </div>
             </div>

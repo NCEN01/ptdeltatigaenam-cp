@@ -208,12 +208,6 @@
             ? $benefits->map(fn ($b) => ['title' => $b->title, 'desc' => $b->description, 'icon' => $b->icon])
             : collect($manfaat)->map(fn ($m) => ['title' => $m[0], 'desc' => $m[1], 'icon' => null]);
 
-        /* Angka mitra diambil dari sumber yang sama dengan papan angka di beranda
-           dan halaman Tentang. Ia hanya dipakai kalau memang ada — kartu pertama
-           tetap utuh tanpanya. */
-        $partnerStat = collect(\App\Support\Company::stats())
-            ->first(fn ($s) => str_contains(mb_strtolower((string) $s['label']), $id ? 'klien' : 'client'));
-
         /* Ikonnya datang dari kolom 'icon' tiap baris (nama bergaya heroicon yang
            diketik admin). Yang tidak dikenali jatuh ke tanda centang, jadi salah
            ketik di panel tidak pernah menghasilkan kartu tanpa ikon. */
@@ -283,20 +277,10 @@
                                 <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">{!! $icon !!}</svg>
                             </span>
 
-                            {{-- Angka mitra hanya menempel di kartu pembuka, sebagai
-                                 keterangan kecil di atas judulnya. Ia bukti, bukan
-                                 pokok kalimat, jadi ia tidak menggantikan judulnya. --}}
-                            @if ($i === 0 && $partnerStat)
-                                <p class="mt-6 font-mono text-[11px] uppercase tracking-wider text-gold-soft">
-                                    {{ $partnerStat['number'] }}{{ $partnerStat['suffix'] }} {{ mb_strtolower($partnerStat['label']) }}
-                                </p>
-                            @endif
-
                             <h3 @class([
-                                'leading-snug',
-                                'mt-2.5 text-2xl md:text-3xl' => $i === 0 && $partnerStat,
-                                'mt-6 text-2xl md:text-3xl' => $i === 0 && ! $partnerStat,
-                                'mt-6 text-lg md:text-xl' => $i !== 0,
+                                'mt-6 leading-snug',
+                                'text-2xl md:text-3xl' => $i === 0,
+                                'text-lg md:text-xl' => $i !== 0,
                                 'text-white' => $dark,
                                 'text-navy' => ! $dark,
                             ])>{{ $card['title'] }}</h3>
@@ -497,7 +481,6 @@
                             <p class="max-w-sm text-xs leading-relaxed text-slate-500">{{ $id ? 'Dengan mengirim, Anda setuju dihubungi oleh tim PT Delta Tiga Enam. Tanpa pembayaran online.' : 'By submitting, you agree to be contacted by the PT Delta Tiga Enam team. No online payment.' }}</p>
                             <button type="submit" class="btn-blue shrink-0">
                                 {{ __('site.cta.send') }}
-                                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                         </div>
                     </form>
@@ -551,14 +534,13 @@
                      akan ditanyakan balik. --}}
                 <p class="mx-auto mt-5 max-w-xl text-pretty text-lg leading-relaxed text-navy-100">
                     {{ $id
-                        ? 'Sebutkan jumlah karyawan dan rencana pelatihan setahun ke depan, lalu kami hitungkan tingkat mana yang paling masuk akal. Tanpa biaya.'
-                        : 'Tell us your headcount and what training the year ahead needs, and we will work out which tier makes sense. No charge.' }}
+                        ? 'Sebutkan jumlah karyawan Anda, kami hitungkan tingkat yang paling pas. Gratis.'
+                        : 'Tell us your headcount and we will work out the right tier. Free.' }}
                 </p>
 
                 <div class="mt-9 flex justify-center">
                     <a href="{{ route('contact.index') }}" class="btn-blue">
                         {{ $id ? 'Bicarakan Dulu Kebutuhannya' : 'Talk It Through First' }}
-                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
                 </div>
             </div>

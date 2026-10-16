@@ -213,9 +213,9 @@
                  jauh dari panel yang menempel di atasnya. --}}
             <div class="lg:col-span-5" id="daftar">
                 <div class="sticky top-28 space-y-5">
-                <div class="overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-lift">
+                <div class="overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-lift lg:flex lg:aspect-[123/100] lg:flex-col">
                     {{-- Header — same aurora/blue-gradient treatment as the hero above --}}
-                    <div class="relative overflow-hidden border-b border-navy-100 bg-navy-950 p-6 text-white">
+                    <div class="relative shrink-0 overflow-hidden border-b border-navy-100 bg-navy-950 p-6 text-white">
                         <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-60"></div>
                         <div class="pointer-events-none absolute inset-0 grain opacity-40"></div>
                         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
@@ -235,8 +235,10 @@
                         </div>
                     </div>
 
-                    {{-- Schedules --}}
-                    <div class="space-y-3 p-5">
+                    {{-- Jadwal. min-h-0 wajib menyertai overflow di dalam flex:
+                         tanpa itu butir flex menolak menyusut di bawah tinggi isinya
+                         dan gulirnya tidak pernah aktif. --}}
+                    <div class="space-y-3 p-5 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
                         @php
                             $left = $service->quota ? max(0, $service->quota - $service->seats_taken) : null;
                             $full = $left !== null && $left <= 0;
@@ -296,7 +298,7 @@
                     </div>
 
                     @if ($service->is_purchasable && $service->schedules->isNotEmpty())
-                        <div class="space-y-2 border-t border-navy-100 bg-neutral-50 px-6 py-5 text-xs text-slate-600">
+                        <div class="shrink-0 space-y-2 border-t border-navy-100 bg-neutral-50 px-6 py-5 text-xs text-slate-600">
                             <div class="flex items-center gap-2">
                                 <svg class="h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 24 24" fill="none"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
                                 {{ $id ? 'Pembayaran aman: QRIS, e-wallet, VA, & kartu (Midtrans).' : 'Secure payment: QRIS, e-wallet, VA & card (Midtrans).' }}

@@ -137,7 +137,6 @@
                             </p>
                             <button type="submit" class="btn-blue group w-full justify-center sm:w-auto">
                                 <span>{{ __('site.cta.send') }}</span>
-                                <svg class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                         </div>
                     </form>
