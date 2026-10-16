@@ -518,15 +518,24 @@
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 
         <div class="container relative py-20 text-center md:py-28 lg:py-32">
-            <div class="mx-auto max-w-2xl" data-aos="fade-up">
+            <div class="mx-auto max-w-3xl" data-aos="fade-up">
                 <h2 class="text-display-xl text-white">
                     {{ $id ? 'Masih bingung tingkat yang mana?' : 'Still unsure which tier?' }}
                 </h2>
 
                 {{-- Menyebut apa yang perlu disiapkan sebelum menghubungi, bukan
                      janji umum. Orang menunda bertanya karena tidak tahu apa yang
-                     akan ditanyakan balik. --}}
-                <p class="mx-auto mt-5 max-w-xl text-pretty text-lg leading-relaxed text-navy-100">
+                     akan ditanyakan balik.
+
+                     Lebarnya dinaikkan ke max-w-2xl, dan induknya ke max-w-3xl,
+                     supaya kalimatnya jatuh dalam satu baris di layar lebar.
+                     Pada 18px ia menuntut sekitar 631px; max-w-xl hanya 576px
+                     dan di situ "Gratis." selalu turun sendirian ke baris kedua.
+
+                     text-pretty dilepas: ia menyetel tempat patah baris agar
+                     tidak ada kata yatim, dan pada kalimat yang memang muat satu
+                     baris ia justru bisa memaksa patah lebih awal. --}}
+                <p class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-navy-100">
                     {{ $id
                         ? 'Sebutkan jumlah karyawannya, kami hitungkan tingkat yang paling pas. Gratis.'
                         : 'Tell us your headcount and we will work out the right tier. Free.' }}
