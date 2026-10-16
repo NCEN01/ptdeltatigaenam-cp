@@ -100,7 +100,7 @@
                                  membuat mata membaca dua kali. --}}
                             <div class="rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 p-4 shadow-lift ring-1 ring-white/10 sm:w-36 sm:p-5">
                                 <p class="font-display text-2xl font-bold leading-none text-white sm:text-[1.75rem]">
-                                    <span class="tabular-nums" data-counter="{{ $stat['number'] }}">{{ $stat['number'] }}</span><span class="text-sky-400">{{ $stat['suffix'] }}</span>
+                                    <span class="tabular-nums" data-counter="{{ $stat['number'] }}">{{ $stat['number'] }}</span><span class="text-navy-200">{{ $stat['suffix'] }}</span>
                                 </p>
                                 <p class="mt-2 text-[11px] leading-tight text-navy-100">{{ $stat['label'] }}</p>
                             </div>

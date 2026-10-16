@@ -309,7 +309,7 @@
     .glass-card:focus-within {
         background-color: rgb(255 255 255 / 0.12);
         border-color: rgb(255 255 255 / 0.24);
-        transform: translateY(-3px);
+        transform: translateY(-4px);
     }
 
     /* Keadaan terpilih bertepi emas dilepas bersama kendali Alpine di seksi
@@ -742,38 +742,28 @@
     box-shadow: 0 0 0 6px rgba(32, 95, 159, 0.18);
 }
 
-/* Kartu yang menyala saat ditunjuk. Dipakai di dua tempat yang latarnya
-   berbeda-beda: "Kenapa daftar ini dibuka" di halaman Sertifikat (kartu tembus
-   pandang di atas gradien yang menyapu) dan "Mengapa menjadi mitra" di halaman
-   Kemitraan (kartu putih, navy, dan navy bergradasi dalam satu baris).
-
-   Karena itu yang berubah hanya hal yang tidak membawa teks: warna cincinnya,
-   pendar pada ubin ikonnya, dan ketinggiannya. Meredupkan kartu lain tidak
-   bisa dipakai di sini — di halaman Sertifikat teks navy-100 di atas kartu
-   bg-white/5 sudah 4,69:1 pada puncak terang gradiennya, persis di ambang AA
-   tanpa sisa, dan di halaman Kemitraan teks slate-600 di atas kartu putih
-   jatuh ke 2,88:1 begitu diredupkan.
-
-   Warna penandanya mengikuti latar kartunya, bukan dipatok satu. Diukur di
-   atas kartunya masing-masing, emas 8,59:1 pada kartu navy tapi hanya 1,97:1
-   pada kartu putih; navy-600 justru kebalikannya, 6,56:1 pada putih dan
-   2,58:1 pada navy. Satu warna untuk ketiganya berarti satu di antaranya
-   pasti kehilangan penandanya — dan selama ini yang kehilangan adalah kartu
-   putih, yang cincin emasnya praktis tidak pernah terlihat.
-
-   Bawaannya navy-600, biru andalan situs ini; kartu berlatar gelap menimpanya
-   ke emas lewat .hover-card-on-dark. */
-.hover-card {
-    --hover-accent: 32 95 159;
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
+/* ── Kartu yang terangkat saat disentuh ──────────────────────────────────
+ * Satu jarak angkat untuk seluruh kartu di situs ini: 4px.
+ *
+ * Sebelumnya ada tiga nilai yang berdiri sendiri-sendiri — .glass-card 3px,
+ * .mitra-card 5px, .card-hover 4px. Selisih satu piksel tidak terlihat bila
+ * dilihat satu per satu, tapi terasa begitu dua seksi bersebelahan: yang
+ * satu seperti melompat lebih tinggi daripada yang lain untuk gerakan yang
+ * semestinya sama.
+ *
+ * .lift-card dipakai kartu "Mengapa menjadi mitra kami" di halaman
+ * Kemitraan. Ia sebelumnya memakai .hover-card: keadaan yang dipegang
+ * Alpine, bertahan setelah tunjukan ditarik, dan ditandai cincin emas pada
+ * kartu gelap. Seluruh lapisan itu dilepas — yang tersisa angkat dan
+ * bayangan, sama dengan kartu di "Kenapa daftar ini dibuka" dan pita Mitra,
+ * jadi tidak ada satu seksi pun yang bergerak dengan caranya sendiri. */
+.lift-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.hover-card-on-dark { --hover-accent: 218 180 94; }
-.hover-card[data-on="1"] {
-    --tw-ring-color: rgb(var(--hover-accent) / 0.55);
+.lift-card:hover {
     transform: translateY(-4px);
+    box-shadow: 0 2px 4px rgba(10, 42, 94, 0.05), 0 24px 48px -20px rgba(10, 42, 94, 0.28);
 }
-.hover-card-icon { transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; }
-.hover-card-icon[data-on="1"] { box-shadow: 0 0 0 5px rgb(var(--hover-accent) / 0.16); }
 
 @media (prefers-reduced-motion: reduce) {
     .misi-line-fill,
@@ -781,9 +771,8 @@
     .misi-body,
     .nilai-row,
     .nilai-node,
-    .hover-card,
-    .hover-card-icon { transition: none; }
-    .hover-card[data-on="1"] { transform: none; }
+    .lift-card { transition: none; }
+    .lift-card:hover { transform: none; }
 }
 
 /* ── Latar kota bergradasi biru (dipakai <x-skyline />) ───────────────────
@@ -914,7 +903,7 @@
     transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .mitra-card:hover,
-.mitra-card:focus-visible { transform: translateY(-5px); }
+.mitra-card:focus-visible { transform: translateY(-4px); }
 
 .mitra-logo-box { transition: box-shadow 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .mitra-card:hover .mitra-logo-box,
