@@ -39,9 +39,7 @@
         <button type="submit" class="btn-blue w-full">{{ __('site.nav.login') }}</button>
     </form>
 
-    <x-auth-security class="[animation-delay:360ms]" />
-
-    <p class="auth-anim mt-8 border-t border-navy-100 pt-6 text-center text-sm text-slate-600 [animation-delay:480ms]">
+    <p class="auth-anim mt-8 border-t border-navy-100 pt-6 text-center text-sm text-slate-600 [animation-delay:420ms]">
         {{ $id ? 'Belum punya akun?' : "Don't have an account?" }}
         <a href="{{ route('register') }}" class="font-medium link-underline">{{ $id ? 'Daftar sekarang' : 'Create one' }}</a>
     </p>

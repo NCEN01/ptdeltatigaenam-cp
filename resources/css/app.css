@@ -283,6 +283,16 @@
         @apply border-rose-500 ring-2 ring-rose-200;
     }
 
+    /* Kotak centang yang digambar sendiri — persetujuan di halaman Daftar.
+       Input aslinya sr-only supaya tetap jadi kotak centang sungguhan bagi
+       papan tik dan pembaca layar, sementara yang tampil adalah span di
+       sebelahnya. Akibatnya penanda .field-invalid mendarat di elemen yang
+       lebarnya nol dan tidak terlihat di mana pun; warnanya diteruskan ke
+       kotak yang memang dilihat orang. */
+    .field-invalid + [data-checkbox-face] {
+        @apply border-rose-400 bg-rose-50;
+    }
+
     .field-note {
         @apply mt-1.5 flex items-start gap-1.5 text-sm leading-relaxed text-rose-600;
     }

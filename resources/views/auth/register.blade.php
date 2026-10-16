@@ -65,10 +65,43 @@
              dalamnya akan berdiri di sebelah kanan kotak centang, bukan di
              bawahnya. Wadah ini juga tempat pesan @error('terms') dari
              peladen muncul, jadi keduanya sejajar. --}}
+        {{-- Kotak centang bawaan peramban diganti kotak yang digambar sendiri.
+             Yang bawaan tidak bisa diberi sudut membulat, tidak bisa diberi
+             peralihan warna, dan centangnya langsung muncul utuh — di tengah
+             formulir yang seluruh kolomnya rounded-2xl dengan peralihan
+             halus, satu-satunya persegi bersudut tajam di halaman ini justru
+             yang paling akhir harus disentuh sebelum tombol kirim.
+
+             Input-nya tidak dihapus, hanya disembunyikan dengan sr-only: ia
+             tetap kotak centang sungguhan yang bisa disinggahi papan tik,
+             dibaca pembaca layar, dan dikirim bersama formulir. Yang digambar
+             di sebelahnya hanya penampakannya, dan keadaannya mengikuti
+             peer-checked milik input itu. --}}
         <div class="pt-1" data-field-box="terms">
-            <label for="terms" class="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-slate-600">
+            <label for="terms"
+                   class="group flex cursor-pointer items-start gap-3.5 rounded-2xl border border-navy-100 bg-navy-50/40 px-4 py-3.5 text-sm leading-relaxed text-slate-600 transition-colors duration-300 ease-out-soft hover:border-navy-200 hover:bg-navy-50 has-[:checked]:border-navy-200 has-[:checked]:bg-navy-50">
                 <input type="checkbox" name="terms" id="terms" value="1" required @checked(old('terms'))
-                       class="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-navy-200 text-navy-600 focus:ring-2 focus:ring-navy-600 focus:ring-offset-0">
+                       class="peer sr-only">
+
+                {{-- Centangnya digambar dengan stroke-dasharray: garisnya
+                     tertarik dari pangkal ke ujung, bukan muncul sekaligus.
+                     peer-checked ditujukan ke svg lewat [&>svg] karena svg ini
+                     cucu input-nya, bukan saudara sekandung — peer-checked yang
+                     ditulis di svg sendiri tidak akan pernah menyala. --}}
+                {{-- data-checkbox-face dibaca app.css. Ketika form-validate.js
+                     menandai input yang belum dicentang dengan .field-invalid,
+                     penanda merahnya mendarat di input yang sr-only dan tidak
+                     terlihat di mana pun — jadi warnanya harus diteruskan ke
+                     kotak yang benar-benar tampil, yaitu span ini. --}}
+                <span data-checkbox-face
+                      class="mt-px grid h-[22px] w-[22px] shrink-0 place-items-center rounded-lg border-[1.5px] border-navy-200 bg-white shadow-sm transition-all duration-300 ease-out-soft group-hover:border-navy-400 peer-checked:border-navy-600 peer-checked:bg-navy-600 peer-checked:[&>svg]:[stroke-dashoffset:0] peer-focus-visible:ring-2 peer-focus-visible:ring-navy-600 peer-focus-visible:ring-offset-2"
+                      aria-hidden="true">
+                    <svg class="h-3 w-3 text-white [stroke-dasharray:18] [stroke-dashoffset:18] transition-[stroke-dashoffset] duration-300 ease-out-soft"
+                         viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 10.5l4 4 8-9"/>
+                    </svg>
+                </span>
+
                 <span>
                     {{ $id ? 'Saya menyetujui ' : 'I agree to the ' }}<a href="{{ route('terms') }}" target="_blank" rel="noopener" class="font-medium text-sky-700 underline-offset-4 hover:underline">{{ $id ? 'Syarat & Ketentuan' : 'Terms & Conditions' }}</a>{{ $id ? ' dan ' : ' and the ' }}<a href="{{ route('privacy') }}" target="_blank" rel="noopener" class="font-medium text-sky-700 underline-offset-4 hover:underline">{{ $id ? 'Kebijakan Privasi' : 'Privacy Policy' }}</a>{{ $id ? '.' : '.' }}
                 </span>
@@ -81,9 +114,7 @@
         <button type="submit" class="btn-blue w-full">{{ $id ? 'Buat Akun' : 'Create account' }}</button>
     </form>
 
-    <x-auth-security class="[animation-delay:420ms]" />
-
-    <p class="auth-anim mt-8 border-t border-navy-100 pt-6 text-center text-sm text-slate-600 [animation-delay:540ms]">
+    <p class="auth-anim mt-8 border-t border-navy-100 pt-6 text-center text-sm text-slate-600 [animation-delay:480ms]">
         {{ $id ? 'Sudah punya akun?' : 'Already have an account?' }}
         <a href="{{ route('login') }}" class="font-medium link-underline">{{ __('site.nav.login') }}</a>
     </p>

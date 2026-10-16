@@ -5,7 +5,32 @@ import typography from '@tailwindcss/typography';
 export default {
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
+
+        // Folder hasil kompilasi Blade (storage/framework/views) sengaja TIDAK
+        // dipindai, meski Laravel memasangnya secara bawaan. Komentarnya
+        // ditulis sebagai baris, bukan blok: pola glob di bawah mengandung
+        // urutan yang menutup blok komentar lebih awal dan memutus berkas ini.
+        //
+        // Di proyek yang memakai Filament, folder itu merugikan. Isinya hasil
+        // kompilasi SELURUH Blade yang pernah dirender atau di-cache, termasuk
+        // ratusan view milik panel admin. Tailwind memindainya, menemukan
+        // kelas-kelas panel di sana, lalu ikut membangunnya ke dalam app.css
+        // yang diunduh setiap pengunjung situs publik.
+        //
+        // Terukur: 172 kB tanpa folder itu, 228 kB dengan isinya — 55,6 kB
+        // (7 kB ter-gzip) kelas yang tidak pernah dipakai satu pun halaman
+        // depan. Filament memuat CSS-nya sendiri dan tidak pernah
+        // membutuhkannya dari sini.
+        //
+        // Lebih buruk lagi, hasil bangunannya jadi tidak tentu: besar app.css
+        // bergantung pada apakah `php artisan view:cache` kebetulan sudah
+        // dijalankan sebelum `npm run build`. Di peladen produksi view:cache
+        // memang selalu dijalankan, jadi yang terkirim ke pengunjung justru
+        // selalu versi yang 228 kB.
+        //
+        // Tidak ada yang hilang: berkas di folder itu hasil kompilasi dari
+        // pola resources di bawah ini, yang sudah dipindai, dan view
+        // pagination disebut sendiri di baris pertama.
         './resources/**/*.blade.php',
         './resources/**/*.js',
     ],
