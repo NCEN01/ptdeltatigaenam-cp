@@ -65,18 +65,39 @@
                     @endif
 
                     @if ($intro)
-                        <p class="mt-6 text-[17px] leading-[1.75] text-slate-700 text-pretty">{{ $intro }}</p>
+                        {{-- Ikut dirata kanan-kiri seperti badan halamannya. text-pretty
+                             dilepas: ia bekerja dengan menyetel ulang tempat patah baris
+                             agar tepi kanannya enak dipandang, dan di teks yang sudah
+                             dirata kanan-kiri tepi itu memang selalu lurus — jadi yang
+                             tersisa hanya biayanya. --}}
+                        <p class="mt-6 text-[17px] leading-[1.75] text-slate-700 [hyphens:auto] sm:text-justify">{{ $intro }}</p>
                     @endif
 
                     {{-- Gaya bacanya mengikuti halaman artikel: satu situs, satu cara
                          menyajikan teks panjang. Bedanya hanya penomoran pasal, yang
-                         di sini dibawa oleh judulnya sendiri. --}}
-                    <div class="legal-body prose prose-lg mt-10 max-w-none
+                         di sini dibawa oleh judulnya sendiri.
+
+                         Butir daftar ikut dirata kanan-kiri, bukan hanya paragrafnya.
+                         Dua halaman ini isinya didominasi daftar — pasal tentang hak,
+                         tujuan, dan masa simpan semuanya berupa <li> — jadi merata
+                         paragrafnya saja menyisakan justru bagian terbesar halaman
+                         bertepi kanan bergerigi.
+
+                         [hyphens:auto] wajib menyertainya, bukan hiasan. Teks rata
+                         kanan-kiri bekerja dengan melebarkan jarak antar kata sampai
+                         barisnya penuh, dan bahasa Indonesia punya banyak kata panjang
+                         — "perundang-undangan", "pertanggungjawaban", "penyelenggaraan".
+                         Tanpa izin memenggal, satu kata panjang yang tidak muat
+                         mendorong seluruh baris sebelumnya merenggang, dan celah itu
+                         menyambung ke bawah menjadi alur putih yang menarik mata keluar
+                         dari barisnya. Peramban memenggal menurut lang pada <html>,
+                         yang di situs ini memang sudah diisi id atau en. --}}
+                    <div class="legal-body prose prose-lg mt-10 max-w-none [hyphens:auto]
                                 prose-headings:font-display prose-headings:text-navy prose-headings:tracking-tight prose-headings:scroll-mt-28
                                 prose-h2:mb-4 prose-h2:mt-12 prose-h2:text-[1.4rem] prose-h2:font-bold prose-h2:leading-snug
                                 prose-h3:mb-3 prose-h3:mt-8 prose-h3:text-[1.05rem] prose-h3:font-semibold
                                 prose-p:text-slate-700 prose-p:leading-[1.85] prose-p:text-left sm:prose-p:text-justify
-                                prose-li:text-slate-700 prose-li:leading-[1.75] prose-li:marker:text-navy-400
+                                prose-li:text-slate-700 prose-li:leading-[1.75] prose-li:marker:text-navy-400 prose-li:text-left sm:prose-li:text-justify
                                 prose-ul:my-5 prose-ol:my-5 prose-li:my-1.5
                                 prose-a:font-medium prose-a:text-sky-700 prose-a:no-underline hover:prose-a:underline
                                 prose-strong:font-semibold prose-strong:text-navy
