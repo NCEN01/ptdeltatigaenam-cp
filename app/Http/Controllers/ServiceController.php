@@ -19,8 +19,14 @@ class ServiceController extends Controller
         $agendaActive = (bool) Setting::get('service_agenda_active', true);
 
         return view('pages.services.index', [
+            // schedules ikut dimuat: kartu layanan menyebut jadwal terdekat
+            // lewat nextSchedule(), dan tanpa ini tiap kartu menembak satu
+            // kueri sendiri — sepuluh layanan berarti sepuluh kueri tambahan
+            // di satu halaman.
             'categories' => ServiceCategory::where('is_active', true)
-                ->with(['services' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order')])
+                ->with(['services' => fn ($q) => $q->where('is_active', true)
+                    ->with(['schedules' => fn ($s) => $s->where('is_active', true)->orderBy('start_date')])
+                    ->orderBy('sort_order')])
                 ->orderBy('sort_order')->get(),
 
             'agendaActive' => $agendaActive,
@@ -87,14 +93,38 @@ class ServiceController extends Controller
     public function show(string $locale, string $slug)
     {
         $service = Service::where('slug', $slug)->where('is_active', true)
-            ->with(['category', 'activities', 'schedules' => fn ($q) => $q->where('is_active', true)->orderBy('start_date')])
+            ->with([
+                'category',
+                'activities',
+                'schedules' => fn ($q) => $q->where('is_active', true)->orderBy('start_date'),
+                // Mentor yang dinonaktifkan di pustaka tidak ikut tampil, tanpa
+                // perlu dilepas satu per satu dari tiap program yang diampunya.
+                'mentors' => fn ($q) => $q->where('is_active', true),
+            ])
             ->firstOrFail();
 
         return view('pages.services.show', [
             'service' => $service,
+
+            // Benefit yang berlaku bagi program ini: miliknya sendiri bila ada,
+            // kalau tidak daftar bawaannya. Resolusinya ada di model supaya
+            // aturannya tidak tersebar ke tampilan.
+            'benefits' => $service->resolvedBenefits(),
+
+            // Ajakan konsultasi, satu teks untuk semua program. Nomornya boleh
+            // kosong; tampilannya lalu menautkan ke halaman Kontak.
+            'consult' => [
+                'title' => Setting::getLocalized('program_consult_title'),
+                'desc' => Setting::getLocalized('program_consult_desc'),
+                'cta' => Setting::getLocalized('program_consult_cta'),
+                'whatsapp' => trim((string) Setting::get('program_consult_whatsapp')),
+            ],
+
             'related' => Service::where('is_active', true)
                 ->where('service_category_id', $service->service_category_id)
-                ->where('id', '!=', $service->id)->take(3)->get(),
+                ->where('id', '!=', $service->id)
+                ->with(['schedules' => fn ($q) => $q->where('is_active', true)->orderBy('start_date')])
+                ->take(3)->get(),
         ]);
     }
 }

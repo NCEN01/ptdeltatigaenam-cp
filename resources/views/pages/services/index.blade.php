@@ -470,6 +470,44 @@
                                     @endif
                                 </div>
                                 <div class="flex flex-1 flex-col p-6">
+                                    {{-- Baris keterangan di atas judul: jadwal terdekat, cara
+                                         pelaksanaan, dan kotanya. Bentuknya sama dengan kartu
+                                         agenda — ikon kecil lalu teks mono — karena keduanya
+                                         menjawab pertanyaan yang sama.
+
+                                         Kartu ini dulu hanya menyebut harga, padahal pertanyaan
+                                         pertama pembaca justru "kapan" dan "di mana". Keduanya
+                                         sudah tersimpan sejak awal di services.mode,
+                                         services.location, dan tiap jadwalnya; yang kurang hanya
+                                         menampilkannya. --}}
+                                    @php
+                                        $svcNext = $service->nextSchedule();
+                                        $svcMode = $service->modeLabel();
+                                        $svcPlace = $svcNext?->location ?: $service->location;
+                                    @endphp
+                                    @if ($svcNext || $svcMode || $svcPlace)
+                                        <div class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[11px] text-slate-600">
+                                            @if ($svcNext?->start_date)
+                                                <span class="inline-flex items-center gap-1.5">
+                                                    <svg class="h-3.5 w-3.5 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+                                                    {{ $svcNext->start_date->translatedFormat('d M Y') }}
+                                                </span>
+                                            @endif
+                                            @if ($svcMode)
+                                                <span class="inline-flex items-center gap-1.5">
+                                                    <svg class="h-3.5 w-3.5 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+                                                    {{ $svcMode }}
+                                                </span>
+                                            @endif
+                                            {{-- Komponen yang sama dengan kartu agenda, blog, dan
+                                                 portofolio, supaya lokasi berwarna sama di seluruh
+                                                 situs. --}}
+                                            @if ($svcPlace)
+                                                <x-meta-location :value="$svcPlace" :separator="false" tone="text-gold-deep" size="h-3.5 w-3.5" class="gap-1.5" />
+                                            @endif
+                                        </div>
+                                    @endif
+
                                     {{-- Judul dan deskripsi dibungkus satu blok yang tumbuh (flex-1),
                                          sehingga sisa ruang kartu diserap di sini dan baris harga
                                          selalu mendarat di dasar kartu. Tanpa ini, harga menempel

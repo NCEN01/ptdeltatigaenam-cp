@@ -115,8 +115,58 @@
         </div>
     </section>
 
+    {{-- ===================== SPANDUK PROGRAM =====================
+         Hanya tampil bila admin mengunggahnya. Tanpa penjaga ini, program yang
+         belum punya spanduk akan menyisakan bidang abu-abu kosong setinggi
+         seperempat layar di tengah halaman.
+
+         Keterangan cara pelaksanaan ditempelkan di atasnya: di sinilah pembaca
+         pertama kali berhenti setelah membaca tiga langkah daftar, dan "di mana
+         dan bagaimana" adalah pertanyaan yang sudah terbentuk saat itu. --}}
+    @if ($service->banner_image)
+        <section class="border-t border-navy-50 bg-white pt-12 md:pt-16">
+            <div class="container">
+                <div class="relative overflow-hidden rounded-3xl bg-navy-100 shadow-lift">
+                    <img src="{{ \Illuminate\Support\Facades\Storage::url($service->banner_image) }}"
+                         alt="{{ $service->title }}"
+                         loading="lazy" decoding="async"
+                         class="aspect-[21/9] w-full object-cover">
+
+                    @php
+                        $bModeLabel = $service->modeLabel();
+                        $bPlace = $service->location;
+                    @endphp
+                    @if ($bModeLabel || $bPlace || $service->duration)
+                        <div class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-950/85 via-navy-950/40 to-transparent p-5 md:p-7">
+                            <div class="flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[11px] uppercase tracking-normal text-white md:text-xs">
+                                @if ($bModeLabel)
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <svg class="h-4 w-4 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+                                        {{ $bModeLabel }}
+                                    </span>
+                                @endif
+                                @if ($bPlace)
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <svg class="h-4 w-4 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                        {{ $bPlace }}
+                                    </span>
+                                @endif
+                                @if ($service->duration)
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <svg class="h-4 w-4 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                                        {{ $service->duration }}
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </section>
+    @endif
+
     {{-- ===================== BODY + PURCHASE PANEL ===================== --}}
-    <section class="section-sm border-t border-navy-50 bg-neutral-50">
+    <section class="section-sm {{ $service->banner_image ? 'bg-white' : 'border-t border-navy-50 bg-neutral-50' }}">
         <div class="container grid gap-12 lg:grid-cols-12">
             {{-- Description + activities --}}
             <div class="lg:col-span-7">
@@ -130,23 +180,11 @@
                     </div>
                 @endif
 
-                @if ($service->activities->isNotEmpty())
-                    <div class="mt-12">
-                        <p class="eyebrow mb-2">{{ $id ? 'Materi & Kegiatan' : 'Topics & Activities' }}</p>
-                        <p class="mb-6 text-sm text-slate-600">{{ $id ? 'Rangkaian materi yang dirancang aplikatif dan siap pakai.' : 'A curriculum designed to be practical and ready to apply.' }}</p>
-                        <div class="space-y-3">
-                            @foreach ($service->activities as $activity)
-                                <div class="group flex gap-5 rounded-2xl border border-navy-100 bg-white p-6 transition-all duration-300 hover:border-navy-200 hover:shadow-card">
-                                    <span class="font-display text-2xl leading-none text-gold-deep">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                                    <div>
-                                        <h3 class="font-display text-lg text-navy">{{ $activity->title }}</h3>
-                                        @if ($activity->description)<p class="mt-1.5 text-pretty leading-relaxed text-slate-600">{{ $activity->description }}</p>@endif
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
+                {{-- Materi dipindah keluar dari kolom ini ke seksi lebar penuh di
+                     bawah. Di lebar 7/12 tiap kartu materi tinggal sekitar 540px
+                     dan isinya berdesakan dalam satu lajur sempit, sementara
+                     separuh kanan halaman menganggur di bawah panel pembelian
+                     yang jauh lebih pendek. --}}
             </div>
 
             {{-- Purchase panel --}}
@@ -246,6 +284,179 @@
                         </div>
                     @endif
                 </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ===================== MENTOR PENGAMPU =====================
+         Di atas materi, bukan di bawahnya: siapa yang mengajar ikut menentukan
+         apakah materinya layak dibaca, dan pembaca menilai keduanya sekaligus.
+         Dari pustaka mentor bersama, jadi satu orang yang mengampu beberapa
+         program cukup didaftarkan sekali. --}}
+    @if ($service->mentors->isNotEmpty())
+        <section class="section-sm border-t border-navy-50 bg-neutral-50">
+            <div class="container">
+                <h2 class="text-display-lg font-bold text-navy" data-aos="fade-up">
+                    {{ $id ? 'Mentor ' : 'The mentors ' }}<span class="italic-accent text-gradient-navy">{{ $id ? 'yang akan membimbing Anda' : 'who will guide you' }}</span>
+                </h2>
+
+                <div class="mt-10 grid gap-5 {{ $service->mentors->count() > 1 ? 'lg:grid-cols-2' : '' }}">
+                    @foreach ($service->mentors as $mentor)
+                        <article class="card flex gap-5 p-5 sm:gap-6 sm:p-6" data-aos="fade-up" data-aos-delay="{{ min($loop->index, 3) * 60 }}">
+                            {{-- Potret tegak di kolom kiri. Bila mentornya belum
+                                 punya foto, huruf depan namanya yang mengisi —
+                                 lingkaran kosong terbaca sebagai gambar yang gagal
+                                 dimuat, dan itu menurunkan kepercayaan pada kartu
+                                 yang justru tugasnya membangun kepercayaan. --}}
+                            <div class="h-28 w-24 shrink-0 overflow-hidden rounded-2xl bg-navy-100 sm:h-32 sm:w-28">
+                                @if ($mentor->photo)
+                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($mentor->photo) }}"
+                                         alt="{{ $mentor->name }}" loading="lazy" decoding="async"
+                                         class="h-full w-full object-cover object-top">
+                                @else
+                                    <span class="grid h-full w-full place-items-center bg-gradient-to-br from-navy-700 to-navy-950 font-display text-3xl font-bold text-white" aria-hidden="true">{{ $mentor->initial }}</span>
+                                @endif
+                            </div>
+
+                            <div class="min-w-0 flex-1">
+                                <h3 class="font-display text-lg font-semibold leading-snug text-navy">{{ $mentor->name }}</h3>
+                                @if ($mentor->role)
+                                    <p class="mt-0.5 font-mono text-[11px] uppercase tracking-normal text-sky-700">{{ $mentor->role }}</p>
+                                @endif
+                                @if ($mentor->bio)
+                                    <p class="mt-2.5 text-pretty text-sm leading-relaxed text-slate-600">{{ $mentor->bio }}</p>
+                                @endif
+                                @if ($mentor->linkedin_url)
+                                    <a href="{{ $mentor->linkedin_url }}" target="_blank" rel="noopener"
+                                       class="mt-3 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-navy-50 text-navy-600 transition-colors duration-200 hover:bg-navy-600 hover:text-white"
+                                       aria-label="LinkedIn {{ $mentor->name }}">
+                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+                                    </a>
+                                @endif
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
+    {{-- ===================== RANGKAIAN MATERI =====================
+         Pindah ke lebar penuh dan menjadi kisi dua kolom. Nomornya besar dan
+         samar di belakang judulnya, bukan sebagai lajur tersendiri di kiri:
+         di kisi dua kolom lajur nomor memakan lebar yang justru dibutuhkan
+         keterangannya, dan urutan materi memang bukan hal pertama yang dicari
+         mata. --}}
+    @if ($service->activities->isNotEmpty())
+        <section class="section-sm border-t border-navy-50 bg-white">
+            <div class="container">
+                <div class="max-w-2xl" data-aos="fade-up">
+                    <h2 class="text-display-lg font-bold text-navy">
+                        {{ $id ? 'Rangkaian materi ' : 'The curriculum ' }}<span class="italic-accent text-gradient-navy">{{ $id ? 'yang akan Anda dapat' : 'you will receive' }}</span>
+                    </h2>
+                    <p class="mt-4 leading-relaxed text-slate-600 text-pretty">
+                        {{ $id
+                            ? 'Disusun berurutan dari dasar sampai penerapannya di pekerjaan, bukan kumpulan topik lepas.'
+                            : 'Sequenced from fundamentals through to application at work, not a loose collection of topics.' }}
+                    </p>
+                </div>
+
+                <div class="mt-10 grid gap-5 md:grid-cols-2">
+                    @foreach ($service->activities as $activity)
+                        <article class="card card-hover group relative overflow-hidden p-6 md:p-7" data-aos="fade-up" data-aos-delay="{{ min($loop->index % 4, 3) * 50 }}">
+                            {{-- Nomor raksasa yang separuh keluar dari pojok kanan
+                                 atas. Ia penanda urutan, bukan isi, jadi ia boleh
+                                 terpotong — dan terpotong justru membuatnya tidak
+                                 pernah tertukar dengan tulisan yang harus dibaca. --}}
+                            <span class="pointer-events-none absolute -right-2 -top-4 select-none font-display text-[5rem] font-bold leading-none text-navy-50 transition-colors duration-300 group-hover:text-navy-100" aria-hidden="true">
+                                {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
+                            </span>
+
+                            <div class="relative">
+                                <span class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-normal text-sky-700">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-sky-600" aria-hidden="true"></span>
+                                    {{ $id ? 'Materi' : 'Topic' }} {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
+                                </span>
+                                <h3 class="mt-2.5 font-display text-lg font-semibold leading-snug text-navy md:text-xl">{{ $activity->title }}</h3>
+                                @if ($activity->description)
+                                    <p class="mt-2 text-pretty text-sm leading-relaxed text-slate-600">{{ $activity->description }}</p>
+                                @endif
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
+    {{-- ===================== YANG KAMU DAPATKAN =====================
+         Daftar benefit: milik program ini bila diisi, kalau tidak daftar
+         bawaannya. Resolusinya dikerjakan model, jadi tampilan di sini tidak
+         perlu tahu mana yang sedang dipakainya. --}}
+    @if ($benefits->isNotEmpty())
+        <section class="relative overflow-hidden bg-navy-950 text-white">
+            <div class="absolute inset-0 bg-gradient-to-tr from-navy-950 via-navy-900 to-navy-800"></div>
+            <div class="pointer-events-none absolute -right-24 -top-32 h-[32rem] w-[32rem] rounded-full bg-sky-500/20 blur-3xl" data-parallax="0.08"></div>
+            <div class="pointer-events-none absolute inset-0 grain opacity-20"></div>
+            <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
+
+            <div class="container relative section-sm">
+                <div class="max-w-2xl" data-aos="fade-up">
+                    <p class="kicker-on-dark">{{ $id ? 'Fasilitas' : 'What is included' }}</p>
+                    <h2 class="mt-4 text-display-lg text-white">
+                        {{ $id ? 'Yang Anda ' : 'What you ' }}<span class="italic-accent font-extrabold text-gradient-white-gold">{{ $id ? 'dapatkan' : 'receive' }}</span>
+                    </h2>
+                </div>
+
+                <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    @foreach ($benefits as $benefit)
+                        <li class="glass-surface glass-card flex gap-4 p-5 md:p-6" data-aos="fade-up" data-aos-delay="{{ min($loop->index % 3, 2) * 60 }}">
+                            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/10 text-sky-400 ring-1 ring-white/10" aria-hidden="true">
+                                <x-category-icon :name="$benefit->icon" class="h-5 w-5" />
+                            </span>
+                            <div class="min-w-0">
+                                <p class="font-display text-base font-semibold leading-snug text-white">{{ $benefit->title }}</p>
+                                @if ($benefit->description)
+                                    <p class="mt-1.5 text-pretty text-[13.5px] leading-relaxed text-navy-100">{{ $benefit->description }}</p>
+                                @endif
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </section>
+    @endif
+
+    {{-- ===================== KONSULTASI PROGRAM GRATIS =====================
+         Satu teks untuk semua program, diatur di Pengaturan Situs. Tombolnya
+         menuju WhatsApp bila nomornya diisi; bila tidak, ke halaman Kontak —
+         menautkan ke WhatsApp tanpa nomor hanya menghasilkan tautan rusak. --}}
+    @php
+        $consultTitle = $consult['title'] ?: ($id ? 'Konsultasi Program Gratis' : 'Free programme consultation');
+        $consultDesc = $consult['desc'] ?: ($id
+            ? 'Punya pertanyaan dan ingin berbicara langsung dengan tim kami sebelum mendaftar? Ceritakan kebutuhan Anda, kami bantu memilih jalurnya.'
+            : 'Questions before you register? Tell us what you need and we will help you pick the right path.');
+        $consultCta = $consult['cta'] ?: ($id ? 'Konsultasi Sekarang' : 'Start a consultation');
+        $consultHref = $consult['whatsapp'] !== ''
+            ? 'https://wa.me/'.preg_replace('/\D/', '', $consult['whatsapp']).'?text='.rawurlencode(($id ? 'Halo Delta Tiga Enam, saya ingin berkonsultasi soal program: ' : 'Hello Delta Tiga Enam, I would like to ask about this programme: ').$service->title)
+            : route('contact.index');
+    @endphp
+    <section class="section-sm border-t border-navy-50 bg-white">
+        <div class="container">
+            <div class="cta-band flex flex-col items-start gap-7 px-6 py-8 md:min-h-[180px] md:flex-row md:items-center md:justify-between md:gap-10 md:px-14 md:py-0" data-aos="fade-up">
+                <div class="cta-band-stamp" aria-hidden="true"></div>
+
+                <div class="relative">
+                    <h2 class="font-display text-2xl font-bold leading-[1.15] tracking-[-0.03em] text-white md:text-[clamp(1.75rem,2.4vw,2.125rem)]">{{ $consultTitle }}</h2>
+                    <p class="mt-2.5 max-w-xl text-pretty text-[15px] leading-relaxed text-navy-100 md:text-base">{{ $consultDesc }}</p>
+                </div>
+
+                <a href="{{ $consultHref }}"
+                   @if ($consult['whatsapp'] !== '') target="_blank" rel="noopener" @endif
+                   class="btn-light group relative shrink-0">
+                    {{ $consultCta }}
+                    <svg class="h-4 w-4 transition-transform duration-300 ease-out-soft group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
             </div>
         </div>
     </section>
