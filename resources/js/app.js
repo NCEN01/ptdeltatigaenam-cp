@@ -1,4 +1,5 @@
 import './bootstrap';
+import initFormValidation from './form-validate';
 
 import Alpine from 'alpinejs';
 import AOS from 'aos';
@@ -176,6 +177,13 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(refreshScr
 // stacked and the Blog/Agenda arrows + auto-scroll dead.
 try { initCoverflow(); } catch (e) { console.error('[coverflow]', e); }
 try { initHscroll(); } catch (e) { console.error('[hscroll]', e); }
+
+// Peringatan bidang wajib yang belum terisi, di seluruh formulir situs. Dipasang
+// di sini dan dikurung try/catch dengan alasan yang sama seperti kedua carousel
+// di atas: kalau modul lain di bawahnya melempar galat, formulirnya tetap bisa
+// memberi peringatan. Jika justru modul ini yang gagal, atribut novalidate tidak
+// pernah terpasang sehingga validasi bawaan peramban kembali bekerja.
+try { initFormValidation(); } catch (e) { console.error('[form-validate]', e); }
 
 // Cursor spotlight glow on cards — delegated; positions the radial glow under the cursor.
 document.addEventListener('pointermove', (e) => {

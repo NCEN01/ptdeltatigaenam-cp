@@ -4,6 +4,20 @@
     :heading="$id ? 'Buat akun' : 'Create your account'"
     :subheading="$id ? 'Cukup sekali isi. Data ini yang nanti terpakai saat Anda memesan layanan.' : 'Fill this in once. These details carry over every time you book a service.'">
 
+    {{-- Sama seperti di halaman Masuk: tamu yang datang dari formulir Kemitraan
+         perlu tahu isiannya tidak hilang. Di sini kalimatnya menyebut "membuat
+         akun", karena yang membuka halaman ini memang belum punya. --}}
+    @if (session()->has('partnership.draft'))
+        <div class="auth-anim mb-6 flex items-start gap-3 rounded-2xl border border-navy-200 bg-navy-50 px-4 py-3.5 text-sm leading-relaxed text-navy-800" role="status">
+            <svg class="mt-0.5 h-4 w-4 shrink-0 text-navy-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 118 0v3"/>
+            </svg>
+            <span>{{ $id
+                ? 'Buat akun dulu untuk mengirim pendaftaran kemitraan Anda. Isian formulirnya sudah kami simpan dan akan dikembalikan setelah akun Anda siap.'
+                : 'Create an account to submit your partnership registration. The details you filled in are saved and will be restored once your account is ready.' }}</span>
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('register') }}" class="auth-form space-y-4">
         @csrf
         <div style="display:none !important" aria-hidden="true">
@@ -45,7 +59,13 @@
 
              Kedua tautannya dibuka di tab baru supaya isian yang sudah diketik
              tidak hilang saat pendaftar memeriksa isinya. --}}
-        <div class="pt-1">
+        {{-- data-field-box di pembungkusnya, bukan di label: form-validate.js
+             menaruh kalimat peringatannya di dalam wadah ini, dan label di
+             bawah ini sebuah flex row — satu paragraf yang disisipkan ke
+             dalamnya akan berdiri di sebelah kanan kotak centang, bukan di
+             bawahnya. Wadah ini juga tempat pesan @error('terms') dari
+             peladen muncul, jadi keduanya sejajar. --}}
+        <div class="pt-1" data-field-box="terms">
             <label for="terms" class="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-slate-600">
                 <input type="checkbox" name="terms" id="terms" value="1" required @checked(old('terms'))
                        class="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-navy-200 text-navy-600 focus:ring-2 focus:ring-navy-600 focus:ring-offset-0">
@@ -61,7 +81,10 @@
         <button type="submit" class="btn-blue w-full">{{ $id ? 'Buat Akun' : 'Create account' }}</button>
     </form>
 
-    <p class="auth-anim mt-8 border-t border-navy-100 pt-6 text-center text-sm text-slate-600 [animation-delay:480ms]">
+    <x-auth-security class="[animation-delay:420ms]"
+        :heading="$id ? 'Data registrasi Anda aman' : 'Your registration data is safe'" />
+
+    <p class="auth-anim mt-8 border-t border-navy-100 pt-6 text-center text-sm text-slate-600 [animation-delay:540ms]">
         {{ $id ? 'Sudah punya akun?' : 'Already have an account?' }}
         <a href="{{ route('login') }}" class="font-medium link-underline">{{ __('site.nav.login') }}</a>
     </p>

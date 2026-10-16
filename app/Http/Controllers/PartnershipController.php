@@ -10,12 +10,26 @@ use App\Models\Setting;
 use App\Models\User;
 use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PartnershipController extends Controller
 {
-    public function index()
+    /**
+     * Kunci sesi tempat isian formulir tamu dititipkan selama ia pergi masuk.
+     * Dititipkan ke sesi, bukan ke _old_input milik withInput(): old input
+     * hanya bertahan satu permintaan, dan perjalanan tamu dari sini ke halaman
+     * masuk lalu kembali memakan tiga permintaan.
+     */
+    private const DRAFT = 'partnership.draft';
+
+    public function index(Request $request)
     {
         return view('pages.partnership', [
+            // Isian yang dititipkan sebelum pemiliknya diminta masuk. Dibaca,
+            // belum dihapus: dihapusnya setelah pendaftarannya benar-benar
+            // tersimpan, supaya menyegarkan halaman atau membuka tab lain di
+            // tengah jalan tidak ikut membuang isiannya.
+            'draft' => $request->session()->get(self::DRAFT, []),
             'intro' => Setting::getLocalized('partnership_intro'),
             'partnersTitle' => Setting::getLocalized('partnership_partners_title'),
             'partnersDesc' => Setting::getLocalized('partnership_partners_desc'),
@@ -40,9 +54,33 @@ class PartnershipController extends Controller
             'notes' => ['nullable', 'string', 'max:2000'],
         ]);
 
+        /* Pemeriksaan isian dijalankan lebih dulu, baru keharusan masuk.
+           Urutannya dibalik akan memulangkan tamu ke halaman masuk untuk
+           formulir yang ternyata masih kosong — ia baru tahu nama
+           perusahaannya belum diisi setelah membuat akun. */
+        if (! Auth::guard('customer')->check()) {
+            $request->session()->put(self::DRAFT, $data);
+
+            /* Tujuan setelah masuk ditetapkan di sini karena permintaan ini
+               tidak lewat middleware auth:customer lagi, jadi tidak ada yang
+               mengisi url.intended untuknya. Dengan #daftar, yang bersangkutan
+               kembali tepat ke formulirnya, bukan ke pucuk halaman Kemitraan
+               yang panjang. */
+            $request->session()->put(
+                'url.intended',
+                route('partnership.index', ['locale' => $locale]).'#daftar'
+            );
+
+            return redirect()->route('login', ['locale' => $locale]);
+        }
+
         $registration = PartnershipRegistration::create([
             ...$data, 'status' => 'baru', 'locale' => app()->getLocale(), 'is_read' => false,
         ]);
+
+        // Titipan isian dibuang di sini, bukan saat halaman formulir dibuka:
+        // selama pendaftarannya belum tersimpan, isian itu masih dibutuhkan.
+        $request->session()->forget(self::DRAFT);
 
         // Notify Admin Transaksi (+ super admins) of the new lead.
         $admins = User::where('is_active', true)

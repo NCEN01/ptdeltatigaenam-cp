@@ -224,6 +224,22 @@ return [
         'schedule_id' => 'jadwal',
         'participants' => 'daftar peserta',
         'token' => 'token',
+
+        /* Formulir Kemitraan. Tanpa baris-baris ini, pesan galatnya terbaca
+           "Kolom company address wajib diisi." — setengah bahasa Indonesia,
+           setengah nama kolom basis data. */
+        'company_address' => 'alamat perusahaan',
+        'pic_position' => 'jabatan penanggung jawab',
+        'partnership_package_id' => 'paket kemitraan',
+        'preferred_meeting_at' => 'waktu presentasi yang diinginkan',
+        'alternative_meeting_at' => 'waktu presentasi alternatif',
+
+        /* Checkout. Nama berindeks seperti participants.0.name dicocokkan
+           Laravel ke kunci berbintang di bawah ini, jadi satu baris cukup
+           untuk seluruh baris peserta berapa pun jumlahnya. */
+        'service_schedule_id' => 'jadwal layanan',
+        'participants.*.name' => 'nama peserta',
+        'participants.*.phone' => 'nomor telepon peserta',
     ],
 
 ];

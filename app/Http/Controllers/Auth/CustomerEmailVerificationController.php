@@ -32,7 +32,14 @@ class CustomerEmailVerificationController extends Controller
 
         Auth::guard('customer')->login($customer);
 
-        return redirect()->route('account.profile')->with('status', __('site.contact.success'));
+        /* intended() dipakai supaya orang yang mendaftar di tengah pekerjaan
+           lain kembali ke pekerjaannya, bukan selalu mendarat di halaman
+           Profil. Tujuan itu dititipkan PartnershipController::store bagi tamu
+           yang formulir kemitraannya belum terkirim; selama CUSTOMER_AUTO_VERIFY
+           masih false, tautan verifikasi inilah satu-satunya jalannya kembali.
+           Tanpa titipan apa pun, halaman Profil tetap tujuan bawaannya. */
+        return redirect()->intended(route('account.profile'))
+            ->with('status', __('site.contact.success'));
     }
 
     public function resend(Request $request, string $locale)

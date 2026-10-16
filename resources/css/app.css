@@ -263,6 +263,58 @@
                active:translate-y-0;
     }
 
+    /* ── Peringatan bidang wajib (resources/js/form-validate.js) ──────────
+       Ditulis sebagai kelas, bukan dirangkai dari deretan kelas Tailwind di
+       dalam JavaScript: Tailwind hanya membuat kelas yang ditemukannya saat
+       memindai berkas sumber, jadi menaruh nama kelasnya di JavaScript
+       membuat satu perubahan kecil di sana diam-diam menghapus gayanya di
+       CSS hasil bangunan. Satu nama per maksud juga berarti tampilan
+       peringatannya sama di semua formulir situs. */
+
+    /* Bidang yang ditolak. Garis merah saja tidak cukup — sekitar 8% lelaki
+       tidak bisa memisahkan merah dari abu-abu di sekelilingnya — jadi
+       isiannya ikut dipucatkan merah muda dan di bawahnya selalu ada
+       kalimat, bukan warna sendirian. */
+    .field-invalid {
+        @apply border-rose-400 bg-rose-50/60;
+    }
+
+    .field-invalid:focus {
+        @apply border-rose-500 ring-2 ring-rose-200;
+    }
+
+    .field-note {
+        @apply mt-1.5 flex items-start gap-1.5 text-sm leading-relaxed text-rose-600;
+    }
+
+    .field-note::before {
+        content: '';
+        /* Bulatan kecil sebagai jangkar baris, bukan ikon SVG per bidang:
+           di formulir Kemitraan bisa ada lima sekaligus, dan lima ikon
+           peringatan berjejer membuat halamannya terbaca seperti rusak. */
+        @apply mt-[0.45rem] h-1.5 w-1.5 shrink-0 rounded-full bg-rose-500;
+    }
+
+    /* Ringkasan di kepala formulir. Bentuknya mengikuti kotak galat peladen
+       yang sudah ada di halaman Kemitraan dan Checkout supaya peringatan dari
+       peramban dan dari peladen tidak terlihat seperti dua sistem berbeda. */
+    .form-alert {
+        @apply mb-6 flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50
+               px-5 py-4 text-sm leading-relaxed text-rose-700;
+    }
+
+    .form-alert > div > p:first-child {
+        @apply font-semibold;
+    }
+
+    .form-alert-icon {
+        @apply mt-0.5 h-5 w-5 shrink-0 text-rose-500;
+    }
+
+    .form-alert-hint {
+        @apply mt-1 text-rose-600;
+    }
+
     /* Cards — soft layered shadow, hairline border */
     .card {
         @apply rounded-2xl border border-navy-100 bg-white shadow-card transition-all duration-300 ease-out-soft;

@@ -49,8 +49,14 @@ Route::prefix('{locale}')
         Route::get('/sertifikat', [CertificateController::class, 'index'])->name('certificates.index');
 
         Route::get('/kemitraan', [PartnershipController::class, 'index'])->name('partnership.index');
+        // Keharusan masuk diperiksa di dalam store(), bukan oleh middleware
+        // auth:customer seperti sebelumnya. Middleware itu memulangkan tamu ke
+        // halaman masuk sebelum pengontrolnya dijalankan, sehingga seluruh
+        // isian yang baru saja diketik — nama perusahaan, alamat, jadwal
+        // presentasi — hilang tanpa pemberitahuan dan harus diketik ulang dari
+        // nol setelah ia berhasil masuk.
         Route::post('/kemitraan/daftar', [PartnershipController::class, 'store'])
-            ->middleware(['auth:customer', 'throttle:5,1', 'honeypot'])
+            ->middleware(['throttle:5,1', 'honeypot'])
             ->name('partnership.store');
 
         Route::get('/kontak', [ContactController::class, 'index'])->name('contact.index');

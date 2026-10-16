@@ -287,8 +287,10 @@
         </div>
     </section>
 
-    {{-- Packages + Form share the selected-package state so "Pilih Paket" pre-fills the form --}}
-    <div x-data="{ pkg: '{{ old('partnership_package_id') }}' }">
+    {{-- Packages + Form share the selected-package state so "Pilih Paket" pre-fills the form.
+         Paket yang sudah dipilih tamu sebelum ia diminta masuk ikut dipulihkan dari
+         titipan sesi, sama seperti kolom-kolom teks di formulirnya. --}}
+    <div x-data="{ pkg: '{{ old('partnership_package_id', data_get($draft ?? [], 'partnership_package_id')) }}' }">
 
         {{-- ===================== PACKAGES ===================== --}}
         @if ($packages->isNotEmpty())
@@ -367,117 +369,309 @@
             </section>
         @endif
 
-        {{-- ===================== REGISTRATION FORM ===================== --}}
+        {{-- ===================== REGISTRATION FORM =====================
+             Susunannya dua lajur, bukan satu kolom tengah seperti sebelumnya:
+             alur tiga langkah pindah ke rel kiri yang menempel saat digulir,
+             dan formulirnya mengisi lajur kanan. Sebelumnya ketiga langkah itu
+             berjejer mendatar di atas formulir, lalu hilang dari pandangan
+             begitu pengisian dimulai — padahal yang ingin diketahui orang di
+             tengah formulir panjang justru "setelah ini apa".
+
+             Bentuk rel-menempel-plus-kartu ini sama dengan panel pembelian di
+             halaman Layanan, jadi dua halaman yang sama-sama meminta orang
+             mengisi sesuatu tersusun dengan cara yang sama. --}}
+        @php
+            /* Isian yang dititipkan ke sesi saat tamu diminta masuk lebih dulu
+               (lihat PartnershipController::store). old() tetap didahulukan:
+               kalau pengiriman gagal karena isian yang salah, yang baru saja
+               diketik lebih relevan daripada titipan lama. */
+            $draft = $draft ?? [];
+            $draftValue = fn (string $key) => data_get($draft, $key);
+            $hasDraft = filled(array_filter($draft));
+        @endphp
         <section id="daftar" class="section scroll-mt-28 border-t border-navy-50 bg-neutral-50">
             <div class="container">
-                {{-- Centered heading --}}
-                <div class="mx-auto max-w-2xl text-center">
+                <div class="mx-auto max-w-3xl text-center">
                     <h2 class="text-display-lg text-navy">{{ $id ? 'Mulai kolaborasi' : 'Start a collaboration' }}</h2>
-                    <p class="mx-auto mt-5 max-w-xl text-pretty leading-relaxed text-slate-600">
+                    <p class="mx-auto mt-5 max-w-2xl leading-relaxed text-slate-600">
                         {{ $id
                             ? 'Isi formulir dan tim PT Delta Tiga Enam akan menghubungi Anda untuk menjadwalkan presentasi serta menyiapkan penawaran. Tanpa pembayaran online, penagihan melalui invoice.'
                             : 'Submit the form and the PT Delta Tiga Enam team will contact you to schedule a presentation and prepare an offer. No online payment, billing via invoice.' }}
                     </p>
                 </div>
 
-                {{-- Steps --}}
-                {{-- A connector line ties the three into one flow; as plain columns they read
-                     as unrelated items rather than "first this, then this, then this". --}}
-                <div class="relative mx-auto mt-10 grid max-w-3xl grid-cols-3 gap-3 sm:gap-5">
-                    <span class="pointer-events-none absolute left-[16.667%] right-[16.667%] top-[18px] hidden h-px bg-gradient-to-r from-sky-200 via-sky-300 to-sky-200 sm:block md:top-5" aria-hidden="true"></span>
-                    @foreach ($steps as $i => $step)
-                        <div class="flex flex-col items-center gap-2 text-center md:gap-3">
-                            <span class="relative grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 font-display text-xs text-white ring-4 ring-neutral-50 md:h-10 md:w-10 md:text-sm">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
-                            <p class="text-xs leading-relaxed text-slate-700 md:text-sm">{{ $step }}</p>
-                        </div>
-                    @endforeach
-                </div>
+                <div class="mt-12 grid items-start gap-6 lg:grid-cols-12 lg:gap-8">
+                    {{-- ── Rel kiri: alur & jaminan ──────────────────────── --}}
+                    <aside class="lg:col-span-4" data-aos="fade-up">
+                        <div class="space-y-5 lg:sticky lg:top-28">
+                            <div class="rounded-3xl border border-navy-100 bg-white p-6 shadow-card sm:p-7">
+                                <p class="font-mono text-[11px] uppercase tracking-label text-sky-700">{{ $id ? 'Alur Pendaftaran' : 'Registration Flow' }}</p>
 
-                {{-- Form --}}
-                <div class="mx-auto mt-12 max-w-3xl">
-                    @if (session('status'))
-                        <div class="mb-6 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800" role="status" aria-live="polite">
-                            <svg class="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.7a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 10a1 1 0 011.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z"/></svg>
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    @if ($errors->any())
-                        <div class="mb-6 rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
-                            <p class="font-semibold">{{ $id ? 'Periksa kembali isian berikut:' : 'Please review the following:' }}</p>
-                            <ul class="mt-2 list-disc space-y-1 pl-5">@foreach ($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
-                        </div>
-                    @endif
-
-                    <form method="POST" action="{{ route('partnership.store') }}" class="overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card">
-                        @csrf
-                        <div style="display:none !important" aria-hidden="true">
-                            <input type="text" name="website_url" tabindex="-1" autocomplete="off">
-                        </div>
-
-                        <div class="space-y-8 p-5 sm:p-7 md:space-y-10 md:p-10">
-                            {{-- A. Company info --}}
-                            <div>
-                                <p class="font-mono text-[11px] uppercase tracking-label text-sky-700">A · {{ $id ? 'Informasi Perusahaan' : 'Company Information' }}</p>
-                                <div class="mt-5 grid gap-5 sm:grid-cols-2">
-                                    <x-field name="company_name" :label="$id ? 'Nama Perusahaan' : 'Company Name'" required />
-                                    <x-field name="pic_name" :label="$id ? 'Nama PIC' : 'PIC Name'" required />
-                                    <x-field name="pic_position" :label="$id ? 'Jabatan PIC' : 'PIC Position'" />
-                                    <x-field name="phone" :label="$id ? 'No. Telp/WhatsApp' : 'Phone/WhatsApp'" required />
-                                    <x-field name="email" type="email" :label="__('site.contact.email')" required />
-                                </div>
-                                <div class="mt-5">
-                                    <x-field name="company_address" type="textarea" :label="$id ? 'Alamat Perusahaan' : 'Company Address'" required />
-                                </div>
-                            </div>
-
-                            {{-- B. Package --}}
-                            <div class="border-t border-navy-100 pt-8 md:pt-10">
-                                <p class="font-mono text-[11px] uppercase tracking-label text-sky-700">B · {{ $id ? 'Pilihan Paket' : 'Package Choice' }}</p>
-                                <div class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                                    @foreach ($packages as $package)
-                                        <label class="cursor-pointer">
-                                            <input type="radio" name="partnership_package_id" value="{{ $package->id }}" x-model="pkg" class="peer sr-only">
-                                            <span class="block rounded-2xl border border-navy-200 bg-white px-4 py-3 text-center font-display text-navy transition-all hover:border-navy-300 peer-checked:border-sky-700 peer-checked:text-sky-700 peer-checked:ring-1 peer-checked:ring-sky-700">{{ $package->name }}</span>
-                                        </label>
+                                {{-- Garis penghubungnya menegak di belakang nomor dan
+                                     berhenti sebelum nomor terakhir, bukan menembusnya:
+                                     garis yang lewat di bawah angka ketiga terbaca
+                                     seperti masih ada langkah keempat yang terpotong. --}}
+                                <ol class="relative mt-6 space-y-6">
+                                    <span class="pointer-events-none absolute bottom-5 left-5 top-5 w-px -translate-x-1/2 bg-gradient-to-b from-navy-200 via-sky-300 to-navy-200" aria-hidden="true"></span>
+                                    @foreach ($steps as $i => $step)
+                                        <li class="relative flex items-start gap-4">
+                                            <span class="relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-navy-600 to-sky-500 font-display text-xs text-white ring-4 ring-white">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                                            <p class="pt-2 text-sm leading-relaxed text-slate-700">{{ $step }}</p>
+                                        </li>
                                     @endforeach
-                                </div>
-                                @error('partnership_package_id')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </ol>
                             </div>
 
-                            {{-- C. Scheduling --}}
-                            <div class="border-t border-navy-100 pt-8 md:pt-10">
-                                <p class="font-mono text-[11px] uppercase tracking-label text-sky-700">C · {{ $id ? 'Penjadwalan Presentasi/Meeting' : 'Presentation/Meeting Scheduling' }}</p>
-                                <p class="mt-2 text-sm text-slate-600">{{ $id ? 'Pilih waktu yang Anda inginkan; tim kami akan mengonfirmasi.' : 'Choose your preferred time; our team will confirm.' }}</p>
-                                <div class="mt-5 grid gap-5 sm:grid-cols-2">
-                                    <div class="min-w-0">
-                                        <label for="preferred_meeting_at" class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'Waktu Diinginkan' : 'Preferred Time' }}</label>
-                                        <input type="datetime-local" id="preferred_meeting_at" name="preferred_meeting_at" value="{{ old('preferred_meeting_at') }}" class="w-full min-w-0 rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-700">
-                                    </div>
-                                    <div class="min-w-0">
-                                        <label for="alternative_meeting_at" class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'Waktu Alternatif' : 'Alternative Time' }}</label>
-                                        <input type="datetime-local" id="alternative_meeting_at" name="alternative_meeting_at" value="{{ old('alternative_meeting_at') }}" class="w-full min-w-0 rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-700">
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- D. Notes --}}
-                            <div class="border-t border-navy-100 pt-8 md:pt-10">
-                                <p class="font-mono text-[11px] uppercase tracking-label text-sky-700">D · {{ $id ? 'Catatan Tambahan' : 'Additional Notes' }}</p>
-                                <div class="mt-5">
-                                    <x-field name="notes" type="textarea" :label="$id ? 'Catatan' : 'Notes'" />
-                                </div>
+                            {{-- Tiga baris jaminan. Isinya hal yang bisa diperiksa
+                                 sendiri di halaman ini — penagihan lewat invoice,
+                                 jadwal yang dipilih sendiri di bagian C, dan tautan
+                                 ke Kebijakan Privasi — bukan janji umum tentang
+                                 "kepercayaan" dan "komitmen". --}}
+                            <div class="rounded-3xl border border-navy-100 bg-white p-6 shadow-card sm:p-7">
+                                <ul class="space-y-5">
+                                    <li class="flex items-start gap-3.5">
+                                        <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-navy-100 bg-navy-50 text-navy-600">
+                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/>
+                                            </svg>
+                                        </span>
+                                        <p class="text-sm leading-relaxed text-slate-600">
+                                            <span class="block font-medium text-navy">{{ $id ? 'Penagihan lewat invoice resmi' : 'Billed by formal invoice' }}</span>
+                                            {{ $id ? 'Tidak ada pembayaran online di halaman ini.' : 'No online payment on this page.' }}
+                                        </p>
+                                    </li>
+                                    <li class="flex items-start gap-3.5">
+                                        <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-navy-100 bg-navy-50 text-navy-600">
+                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/>
+                                            </svg>
+                                        </span>
+                                        <p class="text-sm leading-relaxed text-slate-600">
+                                            <span class="block font-medium text-navy">{{ $id ? 'Jadwal presentasi Anda yang pilih' : 'You choose the meeting time' }}</span>
+                                            {{ $id ? 'Tim kami mengonfirmasi lebih dulu sebelum dipastikan.' : 'Our team confirms before anything is fixed.' }}
+                                        </p>
+                                    </li>
+                                    <li class="flex items-start gap-3.5">
+                                        <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-navy-100 bg-navy-50 text-navy-600">
+                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path d="M12 3l7 3v5.5c0 4.5-3 8-7 9.5-4-1.5-7-5-7-9.5V6z"/><path d="M9 12l2 2 4-4"/>
+                                            </svg>
+                                        </span>
+                                        <p class="text-sm leading-relaxed text-slate-600">
+                                            <span class="block font-medium text-navy">{{ $id ? 'Isian ini tidak dipakai untuk hal lain' : 'Used only for this enquiry' }}</span>
+                                            {{ $id ? 'Hanya untuk menindaklanjuti pengajuan Anda. ' : 'Only to follow up on your submission. ' }}<a href="{{ route('privacy') }}" class="link-underline font-medium">{{ $id ? 'Kebijakan Privasi' : 'Privacy Policy' }}</a>
+                                        </p>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
+                    </aside>
 
-                        {{-- Footer bar --}}
-                        <div class="flex flex-col gap-4 border-t border-navy-100 bg-neutral-50 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-7 sm:py-6 md:px-10">
-                            <p class="max-w-sm text-xs leading-relaxed text-slate-500">{{ $id ? 'Dengan mengirim, Anda setuju dihubungi oleh tim PT Delta Tiga Enam. Tanpa pembayaran online.' : 'By submitting, you agree to be contacted by the PT Delta Tiga Enam team. No online payment.' }}</p>
-                            <button type="submit" class="btn-blue shrink-0">
-                                {{ __('site.cta.send') }}
-                            </button>
-                        </div>
-                    </form>
+                    {{-- ── Kartu formulir ────────────────────────────────── --}}
+                    <div class="lg:col-span-8" data-aos="fade-up" data-aos-delay="100">
+                        @if (session('status'))
+                            <div class="mb-6 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800" role="status" aria-live="polite">
+                                <svg class="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.7a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 10a1 1 0 011.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z"/></svg>
+                                {{ session('status') }}
+                            </div>
+                        @endif
+
+                        @if ($errors->any())
+                            <div class="form-alert" role="alert">
+                                <svg class="form-alert-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 1.8a8.2 8.2 0 100 16.4A8.2 8.2 0 0010 1.8zm0 3.4a1 1 0 011 1v4.4a1 1 0 01-2 0V6.2a1 1 0 011-1zm0 8.2a1.1 1.1 0 110 2.2 1.1 1.1 0 010-2.2z"/></svg>
+                                <div>
+                                    <p>{{ $id ? 'Periksa kembali isian berikut:' : 'Please review the following:' }}</p>
+                                    <ul class="mt-1.5 list-disc space-y-1 pl-5">@foreach ($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- Pemberitahuan isian yang dititipkan. Muncul setelah
+                             pemiliknya kembali dari halaman masuk, supaya kolom yang
+                             tiba-tiba sudah terisi tidak terbaca seperti data orang
+                             lain yang tertinggal di peramban. --}}
+                        @if ($hasDraft)
+                            <div class="mb-6 flex items-start gap-3 rounded-2xl border border-navy-200 bg-navy-50 px-5 py-4 text-sm leading-relaxed text-navy-800" role="status">
+                                <svg class="mt-0.5 h-5 w-5 shrink-0 text-navy-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                                </svg>
+                                <span>{{ $id
+                                    ? 'Isian yang Anda ketik sebelum masuk sudah kami kembalikan. Periksa sekali lagi, lalu tekan Kirim.'
+                                    : 'The details you typed before signing in have been restored. Check them once more, then press Send.' }}</span>
+                            </div>
+                        @endif
+
+                        {{-- Penghitung bidang wajib hidup di x-data formulir ini.
+                             tally() membaca [required] langsung dari DOM, bukan
+                             daftar nama yang ditulis ulang di sini: menambah satu
+                             bidang wajib nanti tidak perlu disertai menambah
+                             angkanya di dua tempat. --}}
+                        <form method="POST" action="{{ route('partnership.store') }}"
+                              class="overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-card"
+                              x-data="{
+                                  req: 0,
+                                  done: 0,
+                                  tally() {
+                                      const f = [...$el.querySelectorAll('[required]')].filter((e) => e.type !== 'hidden');
+                                      this.req = f.length;
+                                      this.done = f.filter((e) => e.value.trim() !== '').length;
+                                  },
+                              }"
+                              x-init="tally()" x-on:input="tally()" x-on:change="tally()">
+                            @csrf
+                            <div style="display:none !important" aria-hidden="true">
+                                <input type="text" name="website_url" tabindex="-1" autocomplete="off">
+                            </div>
+
+                            {{-- Kepala kartu. Pita gradasi setipis 2px di tepi atas
+                                 memakai warna yang sama dengan nomor langkah di rel
+                                 kiri, jadi keduanya terbaca sebagai satu bagian. --}}
+                            <div class="relative border-b border-navy-100 bg-gradient-to-br from-navy-50 via-white to-navy-50 px-5 py-5 sm:px-7 sm:py-6 md:px-10">
+                                <span class="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-navy-600 via-sky-500 to-navy-600" aria-hidden="true"></span>
+                                <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+                                    <div>
+                                        <p class="font-display text-lg text-navy">{{ $id ? 'Formulir pendaftaran mitra' : 'Partner registration form' }}</p>
+                                        <p class="mt-1 text-sm text-slate-600">{{ $id ? 'Bidang bertanda * wajib diisi.' : 'Fields marked * are required.' }}</p>
+                                    </div>
+                                    {{-- aria-live polite, bukan assertive: angkanya berubah
+                                         di tiap ketukan tombol, dan assertive akan memotong
+                                         pembacaan label kolom yang sedang diisi. --}}
+                                    <p class="font-mono text-xs text-slate-500" aria-live="polite">
+                                        <span class="text-base text-navy" x-text="done">0</span>/<span x-text="req">0</span>
+                                        <span class="ml-1">{{ $id ? 'wajib terisi' : 'required done' }}</span>
+                                    </p>
+                                </div>
+                                <div class="mt-4 h-1 overflow-hidden rounded-full bg-navy-100">
+                                    <div class="h-full rounded-full bg-gradient-to-r from-navy-600 to-sky-500 transition-[width] duration-500 ease-out-soft"
+                                         x-bind:style="`width: ${req ? Math.round(done / req * 100) : 0}%`"></div>
+                                </div>
+                            </div>
+
+                            {{-- divide-y dengan jarak di tiap bagiannya, bukan
+                                 border-t + padding-top yang dipasang satu per satu:
+                                 garis pemisahnya kini mencapai tepi kartu, sehingga
+                                 keempat bagian terbaca sebagai lajur yang bersusun,
+                                 bukan empat blok yang mengapung di satu kotak. --}}
+                            <div class="divide-y divide-navy-100">
+                                {{-- A. Informasi perusahaan --}}
+                                <div class="p-5 sm:p-7 md:p-10" role="group" aria-labelledby="part-a">
+                                    <div class="flex items-center gap-3">
+                                        <span class="grid h-8 w-8 shrink-0 place-items-center rounded-xl border border-navy-100 bg-navy-50 font-mono text-xs text-navy-700" aria-hidden="true">A</span>
+                                        <p id="part-a" class="font-display text-navy">{{ $id ? 'Informasi Perusahaan' : 'Company Information' }}</p>
+                                    </div>
+                                    <div class="mt-6 grid gap-5 sm:grid-cols-2">
+                                        <x-field name="company_name" :label="$id ? 'Nama Perusahaan' : 'Company Name'" :value="$draftValue('company_name')" required />
+                                        <x-field name="pic_name" :label="$id ? 'Nama PIC' : 'PIC Name'" :value="$draftValue('pic_name')" required />
+                                        <x-field name="pic_position" :label="$id ? 'Jabatan PIC' : 'PIC Position'" :value="$draftValue('pic_position')" />
+                                        <x-field name="phone" :label="$id ? 'No. Telp/WhatsApp' : 'Phone/WhatsApp'" :value="$draftValue('phone')" required />
+                                        <x-field name="email" type="email" :label="__('site.contact.email')" :value="$draftValue('email')" required />
+                                    </div>
+                                    <div class="mt-5">
+                                        <x-field name="company_address" type="textarea" :label="$id ? 'Alamat Perusahaan' : 'Company Address'" :value="$draftValue('company_address')" required />
+                                    </div>
+                                </div>
+
+                                {{-- B. Pilihan paket --}}
+                                <div class="p-5 sm:p-7 md:p-10" role="group" aria-labelledby="part-b">
+                                    <div class="flex items-center gap-3">
+                                        <span class="grid h-8 w-8 shrink-0 place-items-center rounded-xl border border-navy-100 bg-navy-50 font-mono text-xs text-navy-700" aria-hidden="true">B</span>
+                                        <div>
+                                            <p id="part-b" class="font-display text-navy">{{ $id ? 'Pilihan Paket' : 'Package Choice' }}</p>
+                                            <p class="mt-0.5 text-sm text-slate-600">{{ $id ? 'Boleh dilewati kalau belum pasti.' : 'Skip it if you are unsure.' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6 grid gap-3 sm:grid-cols-2">
+                                        @foreach ($packages as $package)
+                                            <label class="cursor-pointer">
+                                                <input type="radio" name="partnership_package_id" value="{{ $package->id }}" x-model="pkg" class="peer sr-only">
+                                                {{-- Paket terpilih ditandai dua hal sekaligus,
+                                                     warna tepi dan centang: tanda yang hanya
+                                                     berupa warna tidak terbaca oleh pembaca yang
+                                                     tidak memisahkan biru dari abu-abu. --}}
+                                                {{-- Centangnya disembunyikan lewat varian induknya
+                                                     (peer-checked:[&>svg]:…), bukan kelas peer-checked
+                                                     di svg-nya sendiri: peer-checked hanya berlaku bagi
+                                                     saudara sekandung radio itu, dan svg ini cucunya —
+                                                     jadi kelas di svg tidak akan pernah menyala. --}}
+                                                <span class="flex items-center justify-between gap-3 rounded-2xl border border-navy-200 bg-white px-4 py-3.5 text-left font-display text-navy transition-all hover:border-navy-400 peer-checked:border-navy-600 peer-checked:bg-navy-50 peer-checked:text-navy-700 peer-checked:[&>svg]:opacity-100 peer-focus-visible:ring-2 peer-focus-visible:ring-sky-700 peer-focus-visible:ring-offset-2">
+                                                    {{ $package->name }}
+                                                    <svg class="h-4 w-4 shrink-0 text-navy-600 opacity-0 transition-opacity" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                        <path d="M4 10.5l4 4 8-9"/>
+                                                    </svg>
+                                                </span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                    @error('partnership_package_id')<p class="field-note">{{ $message }}</p>@enderror
+                                </div>
+
+                                {{-- C. Penjadwalan --}}
+                                <div class="p-5 sm:p-7 md:p-10" role="group" aria-labelledby="part-c">
+                                    <div class="flex items-center gap-3">
+                                        <span class="grid h-8 w-8 shrink-0 place-items-center rounded-xl border border-navy-100 bg-navy-50 font-mono text-xs text-navy-700" aria-hidden="true">C</span>
+                                        <div>
+                                            <p id="part-c" class="font-display text-navy">{{ $id ? 'Penjadwalan Presentasi' : 'Presentation Scheduling' }}</p>
+                                            <p class="mt-0.5 text-sm text-slate-600">{{ $id ? 'Pilih waktu yang Anda inginkan; tim kami akan mengonfirmasi.' : 'Choose your preferred time; our team will confirm.' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6 grid gap-5 sm:grid-cols-2">
+                                        <div class="min-w-0" data-field-box="preferred_meeting_at">
+                                            <label for="preferred_meeting_at" class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'Waktu Diinginkan' : 'Preferred Time' }}</label>
+                                            <input type="datetime-local" id="preferred_meeting_at" name="preferred_meeting_at" value="{{ old('preferred_meeting_at', $draftValue('preferred_meeting_at')) }}" class="w-full min-w-0 rounded-2xl border border-navy-400 bg-white px-4 py-3 text-navy shadow-sm transition-colors focus:border-navy focus:outline-none focus:ring-2 focus:ring-sky-700">
+                                        </div>
+                                        <div class="min-w-0" data-field-box="alternative_meeting_at">
+                                            <label for="alternative_meeting_at" class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'Waktu Alternatif' : 'Alternative Time' }}</label>
+                                            <input type="datetime-local" id="alternative_meeting_at" name="alternative_meeting_at" value="{{ old('alternative_meeting_at', $draftValue('alternative_meeting_at')) }}" class="w-full min-w-0 rounded-2xl border border-navy-400 bg-white px-4 py-3 text-navy shadow-sm transition-colors focus:border-navy focus:outline-none focus:ring-2 focus:ring-sky-700">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- D. Catatan --}}
+                                <div class="p-5 sm:p-7 md:p-10" role="group" aria-labelledby="part-d">
+                                    <div class="flex items-center gap-3">
+                                        <span class="grid h-8 w-8 shrink-0 place-items-center rounded-xl border border-navy-100 bg-navy-50 font-mono text-xs text-navy-700" aria-hidden="true">D</span>
+                                        <div>
+                                            <p id="part-d" class="font-display text-navy">{{ $id ? 'Catatan Tambahan' : 'Additional Notes' }}</p>
+                                            <p class="mt-0.5 text-sm text-slate-600">{{ $id ? 'Bidang yang ingin dilatih, perkiraan jumlah peserta, atau target waktunya.' : 'The field you need trained, rough participant count, or your target timing.' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6">
+                                        <x-field name="notes" type="textarea" :label="$id ? 'Catatan' : 'Notes'" :value="$draftValue('notes')" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Kaki kartu --}}
+                            <div class="border-t border-navy-100 bg-neutral-50 px-5 py-5 sm:px-7 sm:py-6 md:px-10">
+                                @guest('customer')
+                                    {{-- Diberitahukan sebelum Kirim ditekan, bukan sesudahnya.
+                                         Isiannya memang dititipkan dan dikembalikan, tapi
+                                         terlempar ke halaman masuk tanpa peringatan tetap
+                                         terasa seperti formulirnya gagal. --}}
+                                    <p class="mb-4 flex items-start gap-2.5 rounded-2xl border border-navy-100 bg-white px-4 py-3 text-xs leading-relaxed text-slate-600">
+                                        <svg class="mt-0.5 h-4 w-4 shrink-0 text-navy-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><path d="M10 17l5-5-5-5M15 12H3"/>
+                                        </svg>
+                                        <span>{{ $id
+                                            ? 'Anda belum masuk. Setelah menekan Kirim, Anda diminta masuk dulu — isian di atas kami simpan dan kembalikan ke formulir ini.'
+                                            : 'You are not signed in. After pressing Send you will be asked to sign in first — the details above are saved and restored to this form.' }}</span>
+                                    </p>
+                                @endguest
+
+                                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                    <p class="flex items-start gap-2.5 text-xs leading-relaxed text-slate-500 sm:max-w-sm">
+                                        <svg class="mt-0.5 h-4 w-4 shrink-0 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 118 0v3"/>
+                                        </svg>
+                                        {{ $id ? 'Dengan mengirim, Anda setuju dihubungi oleh tim PT Delta Tiga Enam. Tanpa pembayaran online.' : 'By submitting, you agree to be contacted by the PT Delta Tiga Enam team. No online payment.' }}
+                                    </p>
+                                    <button type="submit" class="btn-blue shrink-0">
+                                        {{ __('site.cta.send') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </section>

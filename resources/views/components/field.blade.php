@@ -10,7 +10,10 @@
 
 @php $val = old($name, $value); $invalid = $errors->has($name); @endphp
 
-<div class="{{ $type === 'textarea' ? '' : '' }}">
+{{-- data-field-box dibaca resources/js/form-validate.js: di situlah kalimat
+     "bagian ini belum diisi" disisipkan saat Kirim ditekan, supaya letaknya
+     sama persis dengan pesan galat dari peladen di kaki komponen ini. --}}
+<div data-field-box="{{ $name }}">
     {{-- Bintang wajib memakai biru, bukan emas. Emas di atas putih hanya
          sekitar 1,9:1, jadi penanda yang justru harus terbaca malah nyaris
          tidak terlihat. Cincin fokusnya pun ikut pindah ke biru: selain gagal
