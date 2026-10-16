@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Rules\PersonName;
 use App\Rules\PhoneNumber;
+use App\Rules\Recaptcha;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,11 +45,6 @@ class RegisteredCustomerController extends Controller
             // isian asal-asalan.
             'name' => ['required', 'string', 'min:2', 'max:255', new PersonName],
             'email' => ['required', 'string', 'email:rfc', 'max:255', 'unique:customers,email'],
-            // Angka, spasi, dan tanda yang lazim dipakai nomor telepon. Sengaja
-            // longgar: pelanggan korporat menulis nomornya dengan bermacam cara
-            // ("+62 818-834-766", "(021) 5890 5002"), dan menolak salah satunya
-            // hanya menghalangi pendaftaran tanpa membuat datanya lebih bersih.
-            // Yang ditolak hanya yang jelas bukan nomor.
             /* Aturan yang sama dengan lima kolom telepon lain di situs, bukan
                regex sendiri seperti sebelumnya. min:7 dulu menghitung panjang
                string, bukan jumlah angka — "+62 1" lolos karena lima karakter
@@ -65,6 +61,11 @@ class RegisteredCustomerController extends Controller
             // ini, dasar pemrosesan yang kami tulis sendiri di Kebijakan
             // Privasi tidak pernah benar-benar dikumpulkan.
             'terms' => ['accepted'],
+
+            /* Kotak "Saya bukan robot". rules() mengembalikan array kosong
+               selama kuncinya belum diisi di .env, jadi kolom ini tidak
+               divalidasi sama sekali sampai fiturnya dinyalakan. */
+            'g-recaptcha-response' => Recaptcha::rules(),
         ], [], [
             'terms' => app()->getLocale() === 'id' ? 'persetujuan' : 'agreement',
         ]);

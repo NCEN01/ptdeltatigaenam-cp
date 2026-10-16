@@ -116,6 +116,8 @@
             @enderror
         </div>
 
+        <x-recaptcha />
+
         <button type="submit" class="btn-blue w-full">{{ $id ? 'Buat Akun' : 'Create account' }}</button>
     </form>
 

@@ -43,6 +43,23 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- @stack('styles') dan @stack('scripts') di bawah TIDAK ada di sini
+         sebelumnya, dan ketiadaannya tidak pernah terlihat karena belum ada
+         komponen yang mendorong apa pun ke tumpukan itu di halaman Masuk,
+         Daftar, atau Lupa Sandi.
+
+         Begitu ada, kegagalannya diam: @push mengantre tanpa mengeluh, dan
+         komponen yang mengandalkannya merender penanda kosong tanpa skrip
+         yang menghidupkannya. Pada <x-recaptcha> itu berarti kotak "Saya
+         bukan robot" yang tidak pernah muncul, di halaman yang pengirimannya
+         justru menuntut kotak itu dicentang — pendaftaran menjadi mustahil
+         diselesaikan tanpa satu pun pesan galat yang menjelaskan sebabnya.
+
+         Nama tumpukannya sama persis dengan components/layout.blade.php,
+         supaya komponen mana pun bekerja di kedua layout tanpa tahu sedang
+         dirender di yang mana. --}}
+    @stack('styles')
 </head>
 <body class="min-h-dvh bg-white text-ink antialiased">
     <div class="grid min-h-dvh lg:grid-cols-2">
@@ -130,5 +147,7 @@
             </div>
         </div>
     </div>
+
+    @stack('scripts')
 </body>
 </html>

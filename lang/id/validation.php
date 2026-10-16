@@ -187,6 +187,15 @@ return [
         'email' => [
             'unique' => 'Surel ini sudah terdaftar. Silakan masuk atau gunakan surel lain.',
         ],
+
+        /* Aturan 'required' berjalan lebih dulu dan menghentikan App\Rules\Recaptcha
+           sebelum sempat dipanggil, jadi pesan untuk kotak yang belum dicentang
+           harus ditulis di sini — bukan di dalam aturannya. Yang di dalam aturan
+           tetap dipakai untuk keadaan lain: jawaban yang kedaluwarsa, jawaban
+           yang ditolak Google, dan peladen Google yang tidak bisa dihubungi. */
+        'g-recaptcha-response' => [
+            'required' => 'Centang dulu kotak "Saya bukan robot" sebelum mengirim.',
+        ],
     ],
 
     /*
@@ -240,6 +249,11 @@ return [
         'service_schedule_id' => 'jadwal layanan',
         'participants.*.name' => 'nama peserta',
         'participants.*.phone' => 'nomor telepon peserta',
+
+        /* Nama kolom milik Google, bukan milik kita — tanpa baris ini
+           pesannya terbaca "Kolom g-recaptcha-response wajib diisi.", nama
+           teknis yang tidak berarti apa-apa bagi pengisi formulir. */
+        'g-recaptcha-response' => 'verifikasi "Saya bukan robot"',
     ],
 
 ];

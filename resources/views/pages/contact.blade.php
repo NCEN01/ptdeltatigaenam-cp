@@ -135,6 +135,8 @@
                         </div>
                         <x-field name="message" :label="__('site.contact.message')" type="textarea" required />
 
+                        <x-recaptcha />
+
                         <div class="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
                             <p class="flex items-center gap-2 font-mono text-[11px] text-slate-500">
                                 <svg class="h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>

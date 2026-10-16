@@ -10,6 +10,7 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Rules\PersonName;
 use App\Rules\PhoneNumber;
+use App\Rules\Recaptcha;
 use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,7 +55,18 @@ class PartnershipController extends Controller
             'preferred_meeting_at' => ['nullable', 'date'],
             'alternative_meeting_at' => ['nullable', 'date'],
             'notes' => ['nullable', 'string', 'max:2000'],
+
+            /* Kotak "Saya bukan robot". rules() mengembalikan array kosong
+               selama kuncinya belum diisi di .env, jadi kolom ini tidak
+               divalidasi sama sekali sampai fiturnya dinyalakan. */
+            'g-recaptcha-response' => Recaptcha::rules(),
         ]);
+
+        /* Dibuang sebelum apa pun memakainya: ia bukti sesaat bahwa
+           pengirimnya manusia, bukan bagian dari pendaftarannya — dan $data
+           di bawah ini dititipkan ke sesi serta dipakai membuat baris
+           PartnershipRegistration. */
+        unset($data['g-recaptcha-response']);
 
         /* Pemeriksaan isian dijalankan lebih dulu, baru keharusan masuk.
            Urutannya dibalik akan memulangkan tamu ke halaman masuk untuk

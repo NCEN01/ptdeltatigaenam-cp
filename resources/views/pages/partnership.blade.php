@@ -693,6 +693,13 @@
 
                             {{-- Kaki kartu --}}
                             <div class="border-t border-navy-100 bg-neutral-50 px-5 py-5 sm:px-7 sm:py-6 md:px-10">
+                                {{-- Kotaknya di kaki kartu, bukan di salah satu bagian
+                                     A sampai D: ia bukan data perusahaan melainkan
+                                     syarat pengiriman, dan tempatnya memang di dekat
+                                     tombol Kirim. Tidak merender apa pun selama kunci
+                                     reCAPTCHA belum diisi di .env. --}}
+                                <x-recaptcha class="mb-4" />
+
                                 @guest('customer')
                                     {{-- Diberitahukan sebelum Kirim ditekan, bukan sesudahnya.
                                          Isiannya memang dititipkan dan dikembalikan, tapi
