@@ -213,9 +213,9 @@
                  jauh dari panel yang menempel di atasnya. --}}
             <div class="lg:col-span-5" id="daftar">
                 <div class="sticky top-28 space-y-5">
-                <div class="overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-lift lg:flex lg:aspect-[123/100] lg:flex-col">
+                <div class="overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-lift">
                     {{-- Header — same aurora/blue-gradient treatment as the hero above --}}
-                    <div class="relative shrink-0 overflow-hidden border-b border-navy-100 bg-navy-950 p-6 text-white">
+                    <div class="relative overflow-hidden border-b border-navy-100 bg-navy-950 p-5 text-white">
                         <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-60"></div>
                         <div class="pointer-events-none absolute inset-0 grain opacity-40"></div>
                         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
@@ -235,35 +235,33 @@
                         </div>
                     </div>
 
-                    {{-- Jadwal. min-h-0 wajib menyertai overflow di dalam flex:
-                         tanpa itu butir flex menolak menyusut di bawah tinggi isinya
-                         dan gulirnya tidak pernah aktif. --}}
-                    <div class="space-y-3 p-5 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
+                    {{-- Jadwal --}}
+                    <div class="space-y-2.5 p-4">
                         @php
                             $left = $service->quota ? max(0, $service->quota - $service->seats_taken) : null;
                             $full = $left !== null && $left <= 0;
                             $low = $left !== null && $left > 0 && $left <= 5;
                         @endphp
                         @forelse ($service->schedules as $schedule)
-                            <div class="rounded-2xl border {{ $low ? 'border-amber-200' : 'border-navy-100' }} bg-white p-5 transition-shadow duration-300 hover:shadow-card">
+                            <div class="rounded-2xl border {{ $low ? 'border-amber-200' : 'border-navy-100' }} bg-white p-4 transition-shadow duration-300 hover:shadow-card">
                                 <div class="flex items-start justify-between gap-3">
                                     <div>
-                                        <p class="font-display text-lg text-navy">{{ $schedule->start_date?->translatedFormat('d M Y') }}</p>
+                                        <p class="font-display text-base text-navy">{{ $schedule->start_date?->translatedFormat('d M Y') }}</p>
                                         @if ($schedule->start_time)
                                             <p class="mt-1 font-mono text-xs text-slate-600">
                                                 {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }}
                                                 @if ($schedule->end_time) - {{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }} WIB @endif
                                             </p>
                                         @endif
-                                        @if ($schedule->location)<p class="mt-0.5 text-sm text-slate-500">{{ $schedule->location }}</p>@endif
+                                        @if ($schedule->location)<p class="mt-0.5 text-[13px] text-slate-500">{{ $schedule->location }}</p>@endif
                                     </div>
                                     <span class="shrink-0 rounded-full bg-navy-50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-slate-600">{{ $service->mode }}</span>
                                 </div>
 
                                 @if ($left !== null)
-                                    <div class="mt-3 flex items-center gap-3">
+                                    <div class="mt-2.5 flex items-center gap-3">
                                         {{-- Quota bar --}}
-                                        <div class="flex-1 h-2 rounded-full bg-navy-100 overflow-hidden">
+                                        <div class="flex-1 h-1.5 rounded-full bg-navy-100 overflow-hidden">
                                             <div class="h-full rounded-full transition-all {{ $full ? 'bg-rose-500' : ($low ? 'bg-amber-500' : 'bg-emerald-500') }}"
                                                  style="width: {{ $service->quota > 0 ? round(($service->seats_taken / $service->quota) * 100) : 0 }}%"></div>
                                         </div>
@@ -274,18 +272,18 @@
                                 @endif
 
                                 @if ($schedule->effectivePrice() > 0)
-                                    <p class="mt-3 font-display text-xl text-navy">Rp {{ number_format($schedule->effectivePrice(), 0, ',', '.') }}<span class="text-sm font-normal text-slate-500"> / {{ $priceUnit }}</span></p>
+                                    <p class="mt-2.5 font-display text-lg text-navy">Rp {{ number_format($schedule->effectivePrice(), 0, ',', '.') }}<span class="text-sm font-normal text-slate-500"> / {{ $priceUnit }}</span></p>
                                 @endif
 
                                 @if ($service->is_purchasable)
                                     @if ($full)
-                                        <button disabled class="mt-4 w-full justify-center !py-2.5 text-sm rounded-full border border-navy-200 bg-navy-50 text-slate-500 cursor-not-allowed font-medium">
+                                        <button disabled class="mt-3 w-full justify-center !py-2 text-sm rounded-full border border-navy-200 bg-navy-50 text-slate-500 cursor-not-allowed font-medium">
                                             {{ $id ? 'Kuota Penuh' : 'Fully Booked' }}
                                         </button>
                                     @elseif (Route::has('checkout.create'))
-                                        <a href="{{ route('checkout.create', $schedule->id) }}" class="btn-blue mt-4 w-full justify-center !py-2.5 text-sm">{{ $id ? 'Daftar / Beli' : 'Register / Buy' }}</a>
+                                        <a href="{{ route('checkout.create', $schedule->id) }}" class="btn-blue mt-3 w-full justify-center !py-2 text-sm">{{ $id ? 'Daftar / Beli' : 'Register / Buy' }}</a>
                                     @else
-                                        <a href="{{ route('contact.index') }}" class="btn-ghost mt-4 w-full justify-center !py-2.5 text-sm">{{ __('site.cta.consult') }}</a>
+                                        <a href="{{ route('contact.index') }}" class="btn-ghost mt-3 w-full justify-center !py-2 text-sm">{{ __('site.cta.consult') }}</a>
                                     @endif
                                 @endif
                             </div>
@@ -298,7 +296,7 @@
                     </div>
 
                     @if ($service->is_purchasable && $service->schedules->isNotEmpty())
-                        <div class="shrink-0 space-y-2 border-t border-navy-100 bg-neutral-50 px-6 py-5 text-xs text-slate-600">
+                        <div class="space-y-1.5 border-t border-navy-100 bg-neutral-50 px-5 py-4 text-xs text-slate-600">
                             <div class="flex items-center gap-2">
                                 <svg class="h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 24 24" fill="none"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
                                 {{ $id ? 'Pembayaran aman: QRIS, e-wallet, VA, & kartu (Midtrans).' : 'Secure payment: QRIS, e-wallet, VA & card (Midtrans).' }}
@@ -340,7 +338,7 @@
     @if ($service->mentors->isNotEmpty())
         <section class="section-sm border-t border-navy-50 bg-neutral-50">
             <div class="container">
-                <h2 class="font-display text-2xl font-bold leading-snug text-navy md:text-3xl" data-aos="fade-up">
+                <h2 class="font-display text-2xl font-normal leading-snug text-navy md:text-3xl" data-aos="fade-up">
                     {{ $id ? 'Mentor yang akan membimbing Anda' : 'The mentors who will guide you' }}
                 </h2>
 
@@ -395,7 +393,7 @@
         <section class="bg-neutral-50 pb-14 md:pb-20">
             <div class="container">
                 <div class="max-w-2xl" data-aos="fade-up">
-                    <h2 class="font-display text-2xl font-bold leading-snug text-navy md:text-3xl">
+                    <h2 class="font-display text-2xl font-normal leading-snug text-navy md:text-3xl">
                         {{ $id ? 'Rangkaian materi yang akan Anda dapat' : 'The curriculum you will receive' }}
                     </h2>
                     <p class="mt-4 leading-relaxed text-slate-600 text-pretty">
