@@ -173,16 +173,22 @@
         @apply btn border border-navy-200 text-navy hover:-translate-y-0.5 hover:border-navy-600 hover:bg-navy-600 hover:text-white active:translate-y-0;
     }
 
-    /* Dipakai di pita gelap dan di hero. Isiannya tetap navy-600 seperti yang
-       lain, bukan putih: garis putihnya yang menjaga tombol ini tetap terbaca
-       di atas latar gelap, bukan isiannya.
+    /* Tombol bergaris di atas latar gelap: tombol hero di beranda dan
+       "Konsultasi Gratis" di halaman Sertifikat.
 
-       Saat disentuh, tepinya ikut menjadi navy-600 — bukan putih penuh seperti
-       sebelumnya. Tepi putih di atas isian biru pekat terbaca sebagai lis tipis
-       yang mengelilingi tombol, dan di hero itu justru yang pertama tertangkap
-       mata. Dengan tepi sewarna isian, yang berubah hanya bidangnya. */
+       Saat disentuh ia terisi putih, bukan navy-600 seperti tombol lain.
+       Alasannya letaknya: keduanya berdiri di atas bidang yang sudah biru
+       pekat seluruhnya, dan isian biru di atas latar biru nyaris tidak
+       terbaca sebagai perubahan. Putih adalah satu-satunya isian yang
+       benar-benar membalik tombol ini.
+
+       Hurufnya ikut navy-600, warna yang sama dengan .btn-light saat diam,
+       sehingga kedua tombol putih di situs ini satu rupa. Terukur 6,56:1.
+
+       Tepinya ikut memutih supaya tidak ada garis yang tertinggal berbeda
+       warna dari isiannya. */
     .btn-ghost-light {
-        @apply btn border border-white/40 text-white hover:-translate-y-0.5 hover:border-navy-600 hover:bg-navy-600 hover:text-white active:translate-y-0;
+        @apply btn border border-white/40 text-white hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-navy-600 active:translate-y-0;
     }
 
     /* Pil putih di atas pita biru: pita ajakan di beranda dan tombol sosialnya.
