@@ -337,18 +337,40 @@
                              bergaris kiri; di empat kolom ia berada di tengah baris
                              sehingga harus. Dihitung per indeks, bukan dengan varian
                              nth-child, supaya aturannya terbaca di satu tempat. --}}
+                        {{-- Garisnya digambar sebagai ::before yang berdiri di tengah
+                             celah kisi, bukan sebagai border-left yang didorong padding.
+                             Yang lama memberi pl-8 hanya kepada sebagian butir, sehingga
+                             angka di kolom pertama mulai di tepi kolomnya sementara tiga
+                             lainnya mulai 32px ke dalam — kolomnya jadi tidak sama lebar
+                             dan tepi kirinya tidak sebaris dengan judul di atasnya.
+                             Tanpa padding, keempatnya duduk tepat di tepi selnya dan
+                             jaraknya diurus celah kisi, yang memang sudah sama rata.
+
+                             Nilai -left mengikuti setengah celahnya: gap-x-5 (20px) jadi
+                             -10px, gap-x-8 (32px) jadi -16px. --}}
                         <div @class([
-                                'border-l border-navy-100 pl-5 sm:pl-8' => $i % 2 === 1,
-                                'lg:border-l lg:border-navy-100 lg:pl-8' => $i % 2 === 0 && $i > 0,
+                                'relative before:absolute before:-left-2.5 before:top-1 before:h-[calc(100%-0.5rem)] before:w-px before:bg-navy-100 sm:before:-left-4' => $i % 2 === 1,
+                                'lg:relative lg:before:absolute lg:before:-left-4 lg:before:top-1 lg:before:h-[calc(100%-0.5rem)] lg:before:w-px lg:before:bg-navy-100' => $i % 2 === 0 && $i > 0,
                             ])>
                             {{-- Satuannya ("+", "%") dipisah ke span sendiri agar bisa
                                  diberi warna: angkanya terbaca sebagai besaran, satuannya
                                  sebagai keterangan. Penghitungnya dipasang pada span angka
                                  saja — JS-nya menimpa seluruh isi elemen yang dipasangi,
                                  jadi kalau satu span memuat keduanya, warnanya ikut hilang
-                                 begitu animasinya mulai. --}}
-                            <p class="flex items-baseline font-display text-4xl font-bold leading-none tracking-tight text-navy sm:text-5xl md:text-6xl">
-                                <span class="tabular-nums" data-counter="{{ $stat['number'] }}">{{ $stat['number'] }}</span><span class="text-sky-600">{{ $stat['suffix'] }}</span>
+                                 begitu animasinya mulai.
+
+                                 navy-600, bukan sky-600. sky-600 condong hijau dan di
+                                 sebelah angka navy yang hampir hitam ia terbaca sebagai
+                                 warna asing, bukan sebagai pasangannya. 6,56:1 di atas
+                                 putih.
+
+                                 Ukurannya diturunkan dari 36/48/60px ke 30/36/40px. Pada
+                                 60px angka ini lebih besar daripada judul seksi mana pun
+                                 di situs — token judul terbesar berhenti di 44px — jadi
+                                 papan angka terbaca lebih utama daripada judul yang
+                                 dinaunginya. --}}
+                            <p class="flex items-baseline font-display text-3xl font-bold leading-none tracking-tight text-navy sm:text-4xl md:text-[2.5rem]">
+                                <span class="tabular-nums" data-counter="{{ $stat['number'] }}">{{ $stat['number'] }}</span><span class="text-navy-600">{{ $stat['suffix'] }}</span>
                             </p>
                             <p class="mt-3 text-sm leading-snug text-slate-600 sm:mt-4">{{ $stat['label'] }}</p>
                         </div>
