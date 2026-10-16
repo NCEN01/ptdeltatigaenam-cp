@@ -444,27 +444,24 @@
                 ];
             @endphp
 
-            {{-- Kartu yang ditunjuk menyala, dan keadaannya bertahan setelah
-                 tunjukan ditarik — pola yang sama dengan lini masa Misi dan daftar
-                 Nilai di halaman Tentang.
+            {{-- Hovernya kini hover CSS biasa lewat .glass-card, sama persis
+                 dengan kartu nilai di seksi "Alasan Memilih Kami" dan kartu
+                 pengalaman di seksi Pendiri: terangkat sedikit, isian dan
+                 tepinya menguat, lalu kembali sendiri saat tunjukan ditarik.
 
-                 Yang aktif ditambahi, bukan yang lain diredupkan: cincin kartu
-                 jadi emas, ubin ikonnya ikut emas dan berpendar, dan kartunya naik
-                 sedikit. Warna dan kepekatan tulisannya tidak disentuh.
+                 Sebelumnya keadaannya dipegang Alpine dan bertahan setelah
+                 tunjukan ditarik, dengan tepi emas dan ubin ikon yang ikut
+                 berubah. Pola itu dibangun ketika latar seksinya masih gradien
+                 bergerak: navy-100 di atas kartu hanya 4,69:1 pada puncak
+                 terangnya, jadi meredupkan kartu lain mustahil dan yang tersisa
+                 hanya menambahi yang aktif. Sejak latarnya menjadi foto diam
+                 bertabir tetap, angka itu 10,63:1 dan batasannya lepas.
 
-                 Dulu itu keharusan. Latar pita ini gradien yang menyapu tiap 22
-                 detik, dan pada puncak terangnya navy-100 di atas kartu bg-white/5
-                 tinggal 4,69:1 — persis di ambang AA, tanpa sisa, sehingga
-                 meredupkan kartu lain pasti menjatuhkannya ke bawah ambang.
-
-                 Latarnya kini foto diam di bawah tabir tetap, dan angka yang sama
-                 menjadi 10,63:1. Batasan itu sudah lepas. Polanya tetap dipakai
-                 karena memang pola yang lebih baik — meredupkan tiga kartu untuk
-                 menonjolkan satu membuat tiga perempat seksi ini terbaca mati —
-                 tapi sekarang itu pilihan, bukan paksaan. --}}
-            <div class="mt-12 grid items-stretch gap-6 md:mt-14 lg:grid-cols-12 lg:gap-8" x-data="{ active: 0 }">
+                 Dengan begitu ketiga seksi berkartu kaca di situs ini bergerak
+                 dengan cara yang sama, dan tidak ada satu pun yang menyimpan
+                 keadaan yang tidak bisa dibatalkan pengunjung. --}}
+            <div class="mt-12 grid items-stretch gap-6 md:mt-14 lg:grid-cols-12 lg:gap-8">
                 @foreach ([$proofLeft, $proofRight] as $column)
-                    @php $colIdx = $loop->index; @endphp
                     {{-- Foto disisipkan di antara kedua kolom. Ditulis sekali di dalam
                          perulangan, bukan dua blok kolom yang disalin. --}}
                     @if ($loop->index === 1 && $hasProofPhoto)
@@ -480,21 +477,10 @@
 
                     <ul class="flex flex-col gap-6 {{ $hasProofPhoto ? 'lg:col-span-4' : 'lg:col-span-6' }}">
                         @foreach ($column as $i => [$icon, $title, $body])
-                            {{-- Nomor urut menyeluruh, bukan nomor di dalam kolomnya:
-                                 keempat kartu berbagi satu keadaan, jadi kartu kedua
-                                 di kolom kanan harus bernomor 3, bukan 1 lagi. --}}
-                            @php $n = $colIdx * 2 + $i; @endphp
-                            <li class="glass-surface glass-card flex flex-1 flex-col p-6 outline-none md:p-7"
-                                tabindex="0"
-                                x-on:mouseenter="active = {{ $n }}"
-                                x-on:focus="active = {{ $n }}"
-                                x-on:click="active = {{ $n }}"
-                                :data-on="active === {{ $n }} ? '1' : '0'"
+                            <li class="glass-surface glass-card flex flex-1 flex-col p-6 md:p-7"
                                 data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
-                                <span class="hover-card-icon grid h-11 w-11 place-items-center rounded-xl ring-1 ring-white/10 transition-colors duration-300"
-                                      aria-hidden="true"
-                                      :data-on="active === {{ $n }} ? '1' : '0'"
-                                      :class="active === {{ $n }} ? 'bg-gold/20 text-gold-soft' : 'bg-white/10 text-sky-400'">
+                                <span class="grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-sky-400 ring-1 ring-white/10"
+                                      aria-hidden="true">
                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">{!! $proofIcons[$icon] !!}</svg>
                                 </span>
                                 <h3 class="mt-5 text-lg leading-snug text-white md:text-xl">{{ $title }}</h3>

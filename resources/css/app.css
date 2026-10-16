@@ -279,23 +279,15 @@
         transform: translateY(-3px);
     }
 
-    /* Keadaan terpilih, dipakai kartu di "Kenapa daftar ini dibuka" yang
-       keadaannya dikendalikan Alpine dan bertahan setelah tunjukan ditarik.
-       Tepinya emas, bukan putih, supaya yang terpilih terbaca berbeda dari
-       yang sekadar sedang disentuh. Menggantikan .hover-card yang mewarnai
-       --tw-ring-color: cincin Tailwind tidak lagi ada di kartu ini sejak
-       permukaannya memakai border. */
-    .glass-card[data-on="1"] {
-        background-color: rgb(255 255 255 / 0.12);
-        border-color: rgb(218 180 94 / 0.55);
-        transform: translateY(-4px);
-    }
+    /* Keadaan terpilih bertepi emas dilepas bersama kendali Alpine di seksi
+       "Kenapa daftar ini dibuka". Ketiga seksi berkartu kaca kini bergerak
+       dengan satu cara yang sama: hover murni CSS yang kembali sendiri,
+       tanpa ada yang menyimpan keadaan. */
 
     @media (prefers-reduced-motion: reduce) {
         .glass-card { transition: none; }
         .glass-card:hover,
-        .glass-card:focus-within,
-        .glass-card[data-on="1"] { transform: none; }
+        .glass-card:focus-within { transform: none; }
     }
 
     .link-underline {
