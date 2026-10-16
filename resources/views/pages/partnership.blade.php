@@ -182,6 +182,7 @@
                          aksennya di sini berwarna: ia dipasang karena diminta,
                          bukan karena tiap seksi otomatis mendapatkannya. --}}
                     <x-heading :lead="$pLead" :accent="$pAccent" :tail="$pTail"
+                               accent-class="text-gradient-navy"
                                class="text-display-lg text-navy" />
                     <p class="mt-5 text-pretty leading-relaxed text-slate-600">{{ $pDesc }}</p>
                 </div>

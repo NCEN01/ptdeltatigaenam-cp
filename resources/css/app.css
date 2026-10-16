@@ -1324,6 +1324,27 @@
         color: transparent;
         -webkit-text-fill-color: transparent;
     }
+    /* Biru tua bergradasi untuk aksen miring di LATAR TERANG — pasangan
+       terang dari .text-gradient-white-gold di hero. Dipakai judul "Kategori
+       Layanan Kami" di beranda dan "Lembaga sertifikasi yang bekerja sama"
+       di halaman Kemitraan.
+
+       Arahnya terbalik dari yang di latar gelap: di sana gradasi berangkat
+       dari putih lalu menghangat, di sini berangkat dari navy yang hampir
+       hitam lalu membiru. Keduanya sama-sama bergerak dari warna judul
+       induknya menuju warna aksennya, jadi sambungannya tidak terlihat.
+
+       Berhenti di navy-600, bukan navy-500. navy-500 masih lulus di atas
+       kertas (3,88:1 terhadap ambang 3:1 untuk judul sebesar ini) tapi ia
+       sudah terbaca biru muda, dan yang diminta biru tua. navy-600 memberi
+       6,56:1 — lulus bahkan untuk teks biasa. */
+    .text-gradient-navy {
+        background: linear-gradient(100deg, #0e2237 0%, #0e2237 12%, #164a7d 52%, #205f9f 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+    }
     .text-gradient-gold { color: #dab45e; }  /* gold accent */
 
     /* Slanted emphasis word inside display headings — Instrument Sans has a true italic. */

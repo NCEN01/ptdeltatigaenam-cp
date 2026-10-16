@@ -188,6 +188,7 @@
                     <x-heading
                         :lead="$isId ? 'Kategori' : 'Our'"
                         :accent="$isId ? 'Layanan Kami' : 'Service Categories'"
+                        accent-class="text-gradient-navy"
                         class="text-display-lg font-bold text-navy" />
                     <p class="mt-5 max-w-sm leading-relaxed text-slate-600 text-pretty">
                         {{ $isId
@@ -273,10 +274,21 @@
                                     {{-- Bulat, bukan kotak membulat: ikonnya sendiri sudah
                                          bersudut, dan lingkaran memberi bentuk yang berbeda
                                          sehingga keduanya tidak saling menyalin. --}}
-                                    <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-navy-50 text-navy transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">
+                                    {{-- navy-600, bukan sky-600. sky-600 condong hijau dan
+                                         membuat kartu kategori satu-satunya yang tidak
+                                         mendarat di biru andalan situs ini saat disentuh.
+                                         Putih di atasnya 6,56:1; di atas sky-600 hanya
+                                         3,56:1. --}}
+                                    <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-navy-50 text-navy transition-colors duration-300 group-hover:bg-navy-600 group-hover:text-white">
                                         <x-category-icon :name="$cat->icon" class="h-6 w-6" />
                                     </span>
 
+                                    {{-- Judulnya tetap sky-700, bukan ikut navy-600 seperti
+                                         ubin ikonnya. Warna itu dipakai judul kartu di tujuh
+                                         tempat — blog, portofolio, layanan, berita — jadi
+                                         mengubah satu di sini justru memutus keseragaman yang
+                                         sudah ada. Yang menyimpang tadi memang hanya ubin
+                                         ikonnya. --}}
                                     <h3 class="mt-4 font-display text-[15px] font-semibold leading-snug text-navy text-balance transition-colors duration-300 group-hover:text-sky-700">{{ $cat->name }}</h3>
 
                                     {{-- Jumlah layanan per kategori. Angkanya sudah ikut
