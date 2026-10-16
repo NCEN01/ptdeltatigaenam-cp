@@ -27,7 +27,7 @@ class PartnershipRegistrationResource extends Resource
 
     protected static ?string $modelLabel = 'Pendaftaran Kemitraan';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 30;
 
     protected static ?string $accessPermission = 'manage_partnership_registrations';
 

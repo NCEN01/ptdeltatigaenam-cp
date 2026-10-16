@@ -402,8 +402,27 @@
 
                 <div class="mt-12 grid items-start gap-6 lg:grid-cols-12 lg:gap-8">
                     {{-- ── Rel kiri: alur & jaminan ──────────────────────── --}}
+                    {{-- data-parallax dipasang di pembungkus dalam, bukan di
+                         <aside> ini: AOS menganimasikan transform elemen yang
+                         membawa data-aos, dan GSAP menulis transform yang sama
+                         untuk pergeserannya. Di satu elemen, keduanya saling
+                         menimpa dan yang terlihat adalah kartu yang tersentak
+                         saat pertama kali masuk layar.
+
+                         Nilainya kecil, 0,12 — sekitar 65 piksel sepanjang
+                         seluruh tinggi seksi. Rel ini berisi nomor langkah dan
+                         kalimat yang memang untuk dibaca, bukan hiasan latar;
+                         pergeseran yang terasa akan membuat tulisannya
+                         berpindah tempat selagi mata mengikutinya. --}}
                     <aside class="lg:col-span-4" data-aos="fade-up">
-                        <div class="space-y-5 lg:sticky lg:top-28">
+                        {{-- lg:sticky dilepas. Menempel dan parallax menjawab
+                             dua maksud yang saling meniadakan: yang satu
+                             menahan rel di tempatnya, yang lain menggesernya
+                             mengikuti guliran. Dipasang bersama, relnya
+                             menempel di bawah navbar lalu merayap turun
+                             sendiri — gerak yang terbaca sebagai cacat, bukan
+                             sebagai kedalaman. --}}
+                        <div class="space-y-5" data-parallax="0.12" data-parallax-from="1024">
                             <div class="rounded-3xl border border-navy-100 bg-white p-6 shadow-card sm:p-7">
                                 <p class="font-mono text-[11px] uppercase tracking-label text-sky-700">{{ $id ? 'Alur Pendaftaran' : 'Registration Flow' }}</p>
 

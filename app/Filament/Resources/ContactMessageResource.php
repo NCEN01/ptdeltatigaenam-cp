@@ -21,6 +21,8 @@ class ContactMessageResource extends Resource
 
     protected static ?string $navigationGroup = 'Konten';
 
+    protected static ?int $navigationSort = 150;
+
     protected static ?string $navigationLabel = 'Pesan Kontak';
 
     protected static ?string $modelLabel = 'Pesan Kontak';

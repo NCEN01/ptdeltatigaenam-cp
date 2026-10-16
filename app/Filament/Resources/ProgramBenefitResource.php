@@ -37,7 +37,7 @@ class ProgramBenefitResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Benefit Bawaan';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 40;
 
     protected static ?string $accessPermission = 'manage_services';
 

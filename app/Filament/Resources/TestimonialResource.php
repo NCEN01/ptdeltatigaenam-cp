@@ -22,6 +22,8 @@ class TestimonialResource extends Resource
 
     protected static ?string $navigationGroup = 'Konten';
 
+    protected static ?int $navigationSort = 60;
+
     protected static ?string $navigationLabel = 'Testimoni';
 
     protected static ?string $modelLabel = 'Testimoni';

@@ -23,6 +23,8 @@ class PortfolioResource extends Resource
 
     protected static ?string $navigationGroup = 'Konten';
 
+    protected static ?int $navigationSort = 40;
+
     protected static ?string $navigationLabel = 'Portofolio';
 
     protected static ?string $modelLabel = 'Portofolio';

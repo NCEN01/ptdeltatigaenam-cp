@@ -25,7 +25,7 @@ class TransactionResource extends Resource
 
     protected static ?string $modelLabel = 'Transaksi';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 30;
 
     protected static ?string $accessPermission = 'view_transactions';
 

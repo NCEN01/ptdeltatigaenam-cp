@@ -23,6 +23,8 @@ class AgendaResource extends Resource
 
     protected static ?string $navigationGroup = 'Konten';
 
+    protected static ?int $navigationSort = 140;
+
     protected static ?string $navigationLabel = 'Agenda';
 
     protected static ?string $modelLabel = 'Agenda';

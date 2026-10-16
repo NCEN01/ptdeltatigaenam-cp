@@ -25,7 +25,7 @@ class InstagramUpdateResource extends Resource
 
     protected static ?string $modelLabel = 'Instagram Update';
 
-    protected static ?int $navigationSort = 50;
+    protected static ?int $navigationSort = 120;
 
     protected static ?string $accessPermission = 'manage_instagram_updates';
 

@@ -23,7 +23,7 @@ class ManagePromoBar extends Page implements HasForms
 
     protected static ?string $navigationLabel = 'Bar Promo Atas';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 20;
 
     protected static ?string $title = 'Bar Promo Atas';
 

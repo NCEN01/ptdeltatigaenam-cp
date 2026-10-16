@@ -25,7 +25,7 @@ class PartnershipPackageResource extends Resource
 
     protected static ?string $modelLabel = 'Paket Kemitraan';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $accessPermission = 'manage_partnership_packages';
 

@@ -21,6 +21,8 @@ class CertificateHolderResource extends Resource
 
     protected static ?string $navigationGroup = 'Konten';
 
+    protected static ?int $navigationSort = 100;
+
     protected static ?string $navigationLabel = 'Pemegang Sertifikat';
 
     protected static ?string $modelLabel = 'Pemegang Sertifikat';

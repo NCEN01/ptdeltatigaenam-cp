@@ -29,13 +29,13 @@ class ManageServiceAgenda extends Page implements HasForms
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
-    protected static ?string $navigationGroup = 'Konten';
+    protected static ?string $navigationGroup = 'Layanan';
 
     protected static ?string $navigationLabel = 'Agenda di Halaman Layanan';
 
     protected static ?string $title = 'Agenda di Halaman Layanan';
 
-    protected static ?int $navigationSort = 96;
+    protected static ?int $navigationSort = 50;
 
     protected static string $view = 'filament.pages.manage-settings';
 
@@ -102,20 +102,29 @@ class ManageServiceAgenda extends Page implements HasForms
                         ->columnSpanFull(),
                 ])->columns(1),
 
-            Section::make('Berkas jadwal (PDF atau Excel)')
-                ->description('Pengunjung dapat membuka atau mengunduh berkas ini untuk melihat jadwal lengkapnya. Kosongkan bila belum ada; tombolnya otomatis tidak ditampilkan.')
+            Section::make('Berkas jadwal (PDF)')
+                ->description('Satu berkas PDF. Pengunjung dapat membuka atau mengunduhnya untuk melihat jadwal lengkapnya. Kosongkan bila belum ada; tombolnya otomatis tidak ditampilkan.')
                 ->schema([
+                    /* Hanya PDF. Sebelumnya XLS dan XLSX juga diterima, dan
+                       keduanya membawa dua persoalan yang tidak terlihat di
+                       panel: berkas Excel tidak bisa dibuka langsung di
+                       peramban sehingga tombol "Lihat" di halaman Layanan
+                       hanya mengunduhnya diam-diam, dan jadwal yang dibagikan
+                       sebagai lembar kerja ikut membawa rumus serta lembar
+                       tersembunyi yang tidak pernah dimaksudkan untuk dibaca
+                       publik.
+
+                       Satu berkas, bukan beberapa: FileUpload tanpa
+                       ->multiple() memang menyimpan satu nilai, dan
+                       ServiceController::agendaFile() membaca tepat satu
+                       pengaturan. Berkas baru menggantikan yang lama. */
                     FileUpload::make('service_agenda_file')
-                        ->label('Berkas jadwal')
+                        ->label('Berkas jadwal (PDF)')
                         ->disk('public')
                         ->directory('agenda')
-                        ->acceptedFileTypes([
-                            'application/pdf',
-                            'application/vnd.ms-excel',
-                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                        ])
+                        ->acceptedFileTypes(['application/pdf'])
                         ->maxSize(10240)
-                        ->helperText('Format PDF, XLS, atau XLSX. Maksimal 10 MB.')
+                        ->helperText('Format PDF saja, maksimal 10 MB. Satu berkas — mengunggah yang baru menggantikan yang lama.')
                         ->downloadable()
                         ->openable()
                         ->columnSpanFull(),

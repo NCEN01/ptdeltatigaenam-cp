@@ -22,6 +22,8 @@ class PartnerResource extends Resource
 
     protected static ?string $navigationGroup = 'Konten';
 
+    protected static ?int $navigationSort = 110;
+
     protected static ?string $navigationLabel = 'Mitra (Logo)';
 
     protected static ?string $modelLabel = 'Mitra';

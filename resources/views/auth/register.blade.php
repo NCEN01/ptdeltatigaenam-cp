@@ -81,8 +81,7 @@
         <button type="submit" class="btn-blue w-full">{{ $id ? 'Buat Akun' : 'Create account' }}</button>
     </form>
 
-    <x-auth-security class="[animation-delay:420ms]"
-        :heading="$id ? 'Data registrasi Anda aman' : 'Your registration data is safe'" />
+    <x-auth-security class="[animation-delay:420ms]" />
 
     <p class="auth-anim mt-8 border-t border-navy-100 pt-6 text-center text-sm text-slate-600 [animation-delay:540ms]">
         {{ $id ? 'Sudah punya akun?' : 'Already have an account?' }}

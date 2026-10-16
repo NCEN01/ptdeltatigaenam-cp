@@ -22,6 +22,8 @@ class BlogTagResource extends Resource
 
     protected static ?string $navigationGroup = 'Konten';
 
+    protected static ?int $navigationSort = 90;
+
     protected static ?string $navigationLabel = 'Tag Blog';
 
     protected static ?string $modelLabel = 'Tag Blog';

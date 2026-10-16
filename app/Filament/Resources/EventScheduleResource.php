@@ -28,7 +28,7 @@ class EventScheduleResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Acara';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 20;
 
     protected static ?string $accessPermission = 'view_orders';
 

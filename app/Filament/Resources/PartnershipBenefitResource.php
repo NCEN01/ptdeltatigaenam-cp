@@ -25,7 +25,7 @@ class PartnershipBenefitResource extends Resource
 
     protected static ?string $modelLabel = 'Manfaat Kemitraan';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 20;
 
     protected static ?string $accessPermission = 'manage_partnership_packages';
 

@@ -27,7 +27,7 @@ class ServiceCategoryResource extends Resource
 
     protected static ?string $modelLabel = 'Kategori Layanan';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $accessPermission = 'manage_services';
 

@@ -39,8 +39,7 @@
         <button type="submit" class="btn-blue w-full">{{ __('site.nav.login') }}</button>
     </form>
 
-    <x-auth-security class="[animation-delay:360ms]"
-        :heading="$id ? 'Akun Anda terlindungi' : 'Your account is protected'" />
+    <x-auth-security class="[animation-delay:360ms]" />
 
     <p class="auth-anim mt-8 border-t border-navy-100 pt-6 text-center text-sm text-slate-600 [animation-delay:480ms]">
         {{ $id ? 'Belum punya akun?' : "Don't have an account?" }}

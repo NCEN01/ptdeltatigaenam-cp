@@ -33,7 +33,7 @@ class MentorResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Mentor';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 30;
 
     protected static ?string $accessPermission = 'manage_services';
 

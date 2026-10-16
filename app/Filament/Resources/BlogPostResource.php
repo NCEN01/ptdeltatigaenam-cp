@@ -23,6 +23,8 @@ class BlogPostResource extends Resource
 
     protected static ?string $navigationGroup = 'Konten';
 
+    protected static ?int $navigationSort = 70;
+
     protected static ?string $navigationLabel = 'Artikel Blog';
 
     protected static ?string $modelLabel = 'Artikel';

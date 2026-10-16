@@ -22,6 +22,8 @@ class BannerResource extends Resource
 
     protected static ?string $navigationGroup = 'Konten';
 
+    protected static ?int $navigationSort = 10;
+
     protected static ?string $navigationLabel = 'Banner';
 
     protected static ?string $modelLabel = 'Banner';

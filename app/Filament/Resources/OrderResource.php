@@ -26,7 +26,7 @@ class OrderResource extends Resource
 
     protected static ?string $modelLabel = 'Pesanan';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $accessPermission = 'view_orders';
 

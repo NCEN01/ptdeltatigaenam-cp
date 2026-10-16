@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Setting;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -20,6 +21,8 @@ class ManageSettings extends Page implements HasForms
 
     protected static ?string $navigationGroup = 'Pengaturan';
 
+    protected static ?int $navigationSort = 10;
+
     protected static ?string $navigationLabel = 'Pengaturan Situs';
 
     protected static ?string $title = 'Pengaturan Situs';
@@ -28,10 +31,18 @@ class ManageSettings extends Page implements HasForms
 
     public ?array $data = [];
 
-    public static function shouldRegisterNavigation(): bool
-    {
-        return false;
-    }
+    /* shouldRegisterNavigation() yang mengembalikan false dilepas dari sini.
+       Halaman ini tidak pernah tampil di sidebar, padahal isinya masih
+       dipakai halaman depan dan tidak dipindahkan ke mana pun: alamat surel
+       dan telepon di footer, naskah Tentang dan Visi di halaman Tentang,
+       intro Kemitraan, judul seksi Lembaga Mitra, dan ajakan Konsultasi
+       Program di setiap halaman program.
+
+       Yang dipindah keluar dulu hanya sebagiannya — bar promo, statistik, dan
+       agenda halaman Layanan kini punya halamannya sendiri — tetapi sisanya
+       tetap di sini tanpa jalan masuk. Satu-satunya cara admin mencapainya
+       adalah mengetahui dan mengetik sendiri alamat /d36-panel/manage-settings,
+       dan tidak ada apa pun di panel yang memberi tahu alamat itu. */
 
     public static function canAccess(): bool
     {
@@ -55,6 +66,7 @@ class ManageSettings extends Page implements HasForms
             'program_consult_desc' => Setting::get('program_consult_desc') ?: ['id' => '', 'en' => ''],
             'program_consult_cta' => Setting::get('program_consult_cta') ?: ['id' => '', 'en' => ''],
             'program_consult_whatsapp' => Setting::get('program_consult_whatsapp'),
+            'company_profile_file' => Setting::get('company_profile_file'),
         ]);
     }
 
@@ -67,6 +79,34 @@ class ManageSettings extends Page implements HasForms
                 TextInput::make('site_phone')->label('Telepon')->required()->maxLength(30),
                 TextInput::make('linkedin_url')->label('LinkedIn')->url()->nullable()->maxLength(255),
             ])->columns(2),
+
+            Section::make('Dokumen Profil Perusahaan (PDF)')
+                ->description('Berkas yang diunduh pengunjung dari kartu "Profil Perusahaan" di halaman Tentang. Kosongkan bila belum ada; kartunya otomatis tidak ditampilkan.')
+                ->schema([
+                    /* Sebelumnya berkas ini dibaca langsung dari
+                       public/documents/company-profile.pdf, nama yang dipatok
+                       di dalam Blade. Memperbaruinya menuntut akses FTP atau
+                       akses ke peladen, dan kalau berkasnya belum ada, halaman
+                       Tentang tetap menampilkan kartu beserta tombol unduhnya
+                       yang menjawab 404 — ukuran berkasnya saja yang berubah
+                       dari "2,3 MB · PDF" menjadi "PDF".
+
+                       Satu berkas saja: FileUpload tanpa ->multiple() memang
+                       menyimpan satu nilai, dan yang baru menggantikan yang
+                       lama. PDF saja karena ini dokumen untuk dibaca, bukan
+                       diolah — dan PDF satu-satunya yang terbuka langsung di
+                       peramban tanpa mengunduh apa pun lebih dulu. */
+                    FileUpload::make('company_profile_file')
+                        ->label('Berkas profil perusahaan')
+                        ->disk('public')
+                        ->directory('documents')
+                        ->acceptedFileTypes(['application/pdf'])
+                        ->maxSize(20480)
+                        ->helperText('Format PDF saja, maksimal 20 MB. Satu berkas — mengunggah yang baru menggantikan yang lama.')
+                        ->downloadable()
+                        ->openable()
+                        ->columnSpanFull(),
+                ]),
 
             Section::make('Tentang (ID/EN)')->schema([
                 Textarea::make('company_tagline.id')->label('Tagline (ID)')->required()->maxLength(500)->rows(2),
@@ -134,6 +174,12 @@ class ManageSettings extends Page implements HasForms
         $this->put('program_consult_desc', json_encode($data['program_consult_desc'] ?? []), 'json', 'services');
         $this->put('program_consult_cta', json_encode($data['program_consult_cta'] ?? []), 'json', 'services');
         $this->put('program_consult_whatsapp', $data['program_consult_whatsapp'] ?? null, 'text', 'services');
+
+        /* FileUpload mengembalikan array saat berkasnya baru diunggah dan
+           string saat tidak disentuh — pola yang sama ditangani
+           ManageServiceAgenda untuk berkas jadwal. */
+        $berkas = $data['company_profile_file'] ?? null;
+        $this->put('company_profile_file', is_array($berkas) ? (reset($berkas) ?: null) : $berkas, 'text', 'general');
 
         Notification::make()->title('Pengaturan disimpan')->success()->send();
     }

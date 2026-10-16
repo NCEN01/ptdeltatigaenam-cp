@@ -113,10 +113,27 @@
 
     {{-- ===================== COMPANY PROFILE (PDF DOWNLOAD) ===================== --}}
     @php
-        $cpUrl = asset('documents/company-profile.pdf');
-        $cpPath = public_path('documents/company-profile.pdf');
-        $cpSize = is_file($cpPath) ? number_format(filesize($cpPath) / 1048576, 1).' MB · PDF' : 'PDF';
+        /* Berkasnya datang dari Pengaturan Situs → Dokumen Profil Perusahaan,
+           bukan dari nama berkas yang dipatok di sini seperti sebelumnya.
+
+           Yang lama membaca public/documents/company-profile.pdf apa adanya:
+           memperbaruinya menuntut akses ke peladen, dan kalau berkasnya belum
+           ada, seksi ini tetap tampil utuh dengan tombol unduh yang menjawab
+           404 — satu-satunya tanda hanyalah keterangan ukuran yang berubah
+           dari "2,3 MB · PDF" menjadi "PDF" saja.
+
+           Sekarang seksinya tidak dirender sama sekali bila berkasnya belum
+           diunggah, dan ukurannya tetap dibaca dari berkas sungguhan, bukan
+           diketik admin — angka yang diketik tangan akan salah begitu
+           berkasnya diganti, dan tidak ada yang mengingatkan. */
+        $cpPath = \App\Models\Setting::get('company_profile_file');
+        $cpExists = $cpPath && \Illuminate\Support\Facades\Storage::disk('public')->exists($cpPath);
+        $cpUrl = $cpExists ? \Illuminate\Support\Facades\Storage::url($cpPath) : null;
+        $cpSize = $cpExists
+            ? number_format(\Illuminate\Support\Facades\Storage::disk('public')->size($cpPath) / 1048576, 1).' MB · PDF'
+            : null;
     @endphp
+    @if ($cpExists)
     <section class="bg-white pb-14 md:pb-20 lg:pb-24">
         <div class="container">
             {{-- shadow-card at rest, not shadow-lift: a 1px border paired with a 48px-blur
@@ -166,6 +183,7 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- ===================== VISION & MISSION =====================
          Pita navy berpendar, judul raksasa di kiri, pernyataan visi di kanan,

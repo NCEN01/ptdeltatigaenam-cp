@@ -23,7 +23,7 @@ class ManageStats extends Page implements HasForms
 
     protected static ?string $title = 'Statistik Perusahaan';
 
-    protected static ?int $navigationSort = 95;
+    protected static ?int $navigationSort = 30;
 
     protected static string $view = 'filament.pages.manage-settings';
 
