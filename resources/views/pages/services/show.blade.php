@@ -207,8 +207,13 @@
             </div>
 
             {{-- Purchase panel --}}
+            {{-- Pembungkus sticky memayungi panel jadwal DAN kartu bagikan di
+                 bawahnya. Kalau hanya panelnya yang sticky, kartu bagikan
+                 tertinggal menggulir sendiri dan di layar panjang ia berpisah
+                 jauh dari panel yang menempel di atasnya. --}}
             <div class="lg:col-span-5" id="daftar">
-                <div class="sticky top-28 overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-lift">
+                <div class="sticky top-28 space-y-5">
+                <div class="overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-lift">
                     {{-- Header — same aurora/blue-gradient treatment as the hero above --}}
                     <div class="relative overflow-hidden border-b border-navy-100 bg-navy-950 p-6 text-white">
                         <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-60"></div>
@@ -303,6 +308,24 @@
                         </div>
                     @endif
                 </div>
+
+                {{-- Bagikan program ini. Bentuknya sama dengan kartu bagikan di
+                     halaman artikel — kotak abu-abu bergaris rambut, satu baris
+                     ajakan, lalu deretan lambang jaringan — dan memakai komponen
+                     yang sama persis, jadi daftar jaringannya tidak bisa
+                     menyimpang antara kedua halaman.
+
+                     Di bawah panel jadwal, bukan di dasar halaman: orang yang
+                     membagikan program biasanya sedang meneruskannya ke atasan
+                     atau rekan yang akan ikut, dan keputusan itu muncul saat ia
+                     sedang menimbang jadwal dan harganya. --}}
+                <div class="rounded-2xl border border-navy-100 bg-neutral-50 p-6">
+                    <p class="mb-4 text-sm font-semibold text-navy">
+                        {{ $id ? 'Bagikan program ini' : 'Share this programme' }}
+                    </p>
+                    <x-share-buttons :url="route('services.show', $service->slug)" :title="$service->title" />
+                </div>
+                </div>
             </div>
         </div>
     </section>
@@ -315,7 +338,7 @@
     @if ($service->mentors->isNotEmpty())
         <section class="section-sm border-t border-navy-50 bg-neutral-50">
             <div class="container">
-                <h2 class="text-display-lg font-bold text-navy" data-aos="fade-up">
+                <h2 class="font-display text-2xl font-bold leading-snug text-navy md:text-3xl" data-aos="fade-up">
                     {{ $id ? 'Mentor yang akan membimbing Anda' : 'The mentors who will guide you' }}
                 </h2>
 
@@ -370,7 +393,7 @@
         <section class="bg-neutral-50 pb-14 md:pb-20">
             <div class="container">
                 <div class="max-w-2xl" data-aos="fade-up">
-                    <h2 class="text-display-lg font-bold text-navy">
+                    <h2 class="font-display text-2xl font-bold leading-snug text-navy md:text-3xl">
                         {{ $id ? 'Rangkaian materi yang akan Anda dapat' : 'The curriculum you will receive' }}
                     </h2>
                     <p class="mt-4 leading-relaxed text-slate-600 text-pretty">
@@ -434,7 +457,7 @@
             <div class="container relative section-sm">
                 <div class="max-w-2xl" data-aos="fade-up">
                     <p class="kicker-on-dark">{{ $id ? 'Fasilitas' : 'What is included' }}</p>
-                    <h2 class="mt-4 text-display-lg text-white">{{ $id ? 'Yang Anda dapatkan' : 'What you receive' }}</h2>
+                    <h2 class="mt-4 font-display text-2xl font-bold leading-snug text-white md:text-3xl">{{ $id ? 'Yang Anda dapatkan' : 'What you receive' }}</h2>
                 </div>
 
                 @if ($benefits->isNotEmpty())
