@@ -1,7 +1,18 @@
 /* Type system: two typefaces on a display↔text axis. Plus Jakarta Sans carries headings,
    labels and UI chrome ("main" voice); Figtree carries body & description prose for calm,
-   readable reading. Both ship real weights (400/500/600/700) + italics. System UI fallback. */
-@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+   readable reading. System UI fallback.
+
+   Font-nya TIDAK lagi ditarik dari sini dengan @import. Aturan itu memaksa
+   peramban menunggu berkas CSS ini selesai diunduh dan diurai lebih dulu,
+   baru ia tahu ada CSS Google Fonts yang perlu diambil — dan baru setelah
+   CSS kedua itu diurai, berkas fontnya sendiri mulai diunduh. Tiga permintaan
+   berurutan sebelum satu huruf pun tampil dengan jenis huruf yang benar, dan
+   permintaan pertamanya adalah berkas 172 kB ini.
+
+   Pemuatannya pindah ke <link rel="preconnect"> dan <link rel="stylesheet">
+   di <head> milik components/layout.blade.php dan components/auth-layout.blade.php,
+   sehingga unduhan fontnya berjalan berbarengan dengan CSS ini, bukan
+   menunggunya selesai. */
 
 @tailwind base;
 @tailwind components;

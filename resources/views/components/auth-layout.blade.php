@@ -33,6 +33,15 @@
          dibanding 284 KB berkas aslinya. --}}
     <link rel="icon" href="{{ asset('images/favicon-180.png') }}" type="image/png">
     <link rel="apple-touch-icon" href="{{ asset('images/favicon-180.png') }}">
+
+    {{-- Sama persis dengan components/layout.blade.php, dan memang harus
+         ditulis dua kali: halaman Masuk, Daftar, dan Lupa Sandi memakai
+         dokumen HTML sendiri, bukan layout utama. Alasan lengkapnya ada di
+         berkas itu. --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-dvh bg-white text-ink antialiased">

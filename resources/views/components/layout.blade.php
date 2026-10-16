@@ -37,6 +37,32 @@
     <link rel="alternate" hreflang="x-default" href="{{ Locale::alternate('id') }}">
     <link rel="canonical" href="{{ url()->current() }}">
 
+    {{-- Font ditarik di sini, bukan lewat @import di dalam app.css.
+
+         Dengan @import, peramban harus mengunduh dan mengurai app.css yang
+         172 kB lebih dulu sebelum ia tahu ada CSS font yang perlu diambil,
+         lalu mengurai CSS kedua itu, baru berkas fontnya diunduh — tiga
+         permintaan berurutan sebelum satu huruf pun tampil dengan jenis huruf
+         yang benar. Sebagai <link> di kepala dokumen, unduhannya berangkat
+         berbarengan dengan app.css.
+
+         preconnect dipasang untuk kedua peladen karena memang ada dua: CSS-nya
+         dari fonts.googleapis.com, berkas fontnya dari fonts.gstatic.com.
+         Yang kedua butuh crossorigin — font diambil dengan mode CORS, dan
+         tanpa atribut itu sambungan yang sudah dihangatkan tidak terpakai
+         sehingga jabat tangannya diulang dari nol.
+
+         Beratnya ditulis sebagai rentang 300..800, bukan deretan 400;500;600;700
+         seperti sebelumnya. Keduanya font variabel, jadi rentang itu dilayani
+         berkas yang sama banyaknya — tetapi deretan yang lama tidak memuat 300
+         dan 800, padahal keduanya dipakai: font-light di dua aksen miring
+         beranda, dan font-extrabold di judul seksi Mitra serta satu angka
+         statistik. Yang terjadi selama ini, peramban memalsukannya sendiri
+         dari berat terdekat. --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap">
+
     {{-- Open Graph --}}
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="{{ $siteName }}">
