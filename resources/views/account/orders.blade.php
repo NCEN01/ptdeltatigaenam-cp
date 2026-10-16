@@ -23,14 +23,36 @@
                     {{ $id ? 'Kembali ke layanan' : 'Back to services' }}
                 </a>
                 @forelse ($orders as $order)
-                    <div class="mb-4 rounded-2xl border border-navy-100 p-6">
+                    {{-- .card, kelas yang sama dengan bidang berisi lain di situs
+                         ini. Sebelumnya sudut, tepi, dan bayangannya disusun
+                         sendiri, jadi kartu pesanan tidak pernah sebangun dengan
+                         kartu mana pun. --}}
+                    <div class="card mb-4 p-6">
                         <div class="flex flex-wrap items-start justify-between gap-4">
-                            <div>
+                            <div class="min-w-0">
                                 <p class="font-mono text-xs text-slate-500">{{ $order->order_number }}</p>
                                 <h3 class="mt-1 font-display text-lg font-semibold text-navy">{{ optional($order->service)->title ?? ($id ? 'Layanan' : 'Service') }}</h3>
-                                <p class="mt-1 text-sm text-slate-500">{{ $order->created_at->translatedFormat('d M Y, H:i') }}</p>
+
+                                {{-- Nama peserta dan perusahaan pemesan ditampilkan
+                                     apa adanya dari pesanannya. Keduanya tersimpan
+                                     di kolom terpisah — customer_name dan
+                                     customer_company — dan menampilkannya di sini
+                                     membuat pemesan bisa memeriksa sendiri bahwa
+                                     yang tercatat memang yang ia maksud, tanpa
+                                     perlu bertanya. --}}
+                                <dl class="mt-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate-600">
+                                    <dt class="sr-only">{{ __('site.contact.name') }}</dt>
+                                    <dd>{{ $order->customer_name }}</dd>
+                                    @if ($order->customer_company)
+                                        <span class="text-navy-200" aria-hidden="true">·</span>
+                                        <dt class="sr-only">{{ $id ? 'Perusahaan' : 'Company' }}</dt>
+                                        <dd class="font-medium text-navy">{{ $order->customer_company }}</dd>
+                                    @endif
+                                </dl>
+
+                                <p class="mt-1.5 text-sm text-slate-500">{{ $order->created_at->translatedFormat('d M Y, H:i') }}</p>
                             </div>
-                            <div class="text-right">
+                            <div class="shrink-0 text-right">
                                 <span class="inline-block rounded-full border px-3 py-1 text-xs font-medium {{ $statusColor($order->status) }}">
                                     {{ $statusLabels[$order->status] ?? $order->status }}
                                 </span>
@@ -52,14 +74,26 @@
                         @endif
                     </div>
                 @empty
-                    <div class="rounded-3xl border border-dashed border-navy-200 p-12 text-center">
-                        <p class="font-display text-xl font-semibold text-navy">{{ $id ? 'Belum ada pesanan' : 'No orders yet' }}</p>
-                        <p class="mt-2 text-slate-600">{{ $id ? 'Mulai jelajahi layanan kami.' : 'Start exploring our services.' }}</p>
+                    {{-- Ikon keadaan kosong, sama bentuknya dengan halaman daftar
+                         lain: ubin navy dengan lambang emas. Tanpa itu, halaman
+                         ini satu-satunya keadaan kosong yang hanya berisi tulisan. --}}
+                    <div class="rounded-3xl border border-dashed border-navy-200 bg-mist p-12 text-center">
+                        <span class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-navy text-gold" aria-hidden="true">
+                            <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l3 3v17H6z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
+                        </span>
+                        <p class="mt-5 font-display text-xl font-semibold text-navy">{{ $id ? 'Belum ada pesanan' : 'No orders yet' }}</p>
+                        <p class="mt-2 text-slate-600">{{ $id ? 'Pesanan yang Anda buat akan tercatat di sini beserta status pembayarannya.' : 'Orders you place will appear here along with their payment status.' }}</p>
                         <a href="{{ route('services.index') }}" class="btn-blue mt-6">{{ __('site.cta.explore') }}</a>
                     </div>
                 @endforelse
 
-                <div class="mt-8">{{ $orders->links() }}</div>
+                {{-- pagination.brand, bukan tampilan bawaan Laravel. Keempat
+                     halaman berhalaman lain di situs ini memakainya; hanya di
+                     sini yang terlewat, sehingga halaman akun menampilkan
+                     penomoran Tailwind polos yang tidak menyerupai apa pun. --}}
+                @if ($orders->hasPages())
+                    <div class="mt-8">{{ $orders->links('pagination.brand') }}</div>
+                @endif
             </div>
         </div>
     </section>

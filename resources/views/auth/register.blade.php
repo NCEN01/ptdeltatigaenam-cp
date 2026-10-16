@@ -38,6 +38,26 @@
             <x-field name="password_confirmation" type="password" :label="$id ? 'Ulangi Kata Sandi' : 'Repeat Password'" autocomplete="new-password" required />
         </div>
 
+        {{-- Persetujuan atas Kebijakan Privasi dan Syarat & Ketentuan. Dicentang
+             sendiri oleh pendaftar, bukan dicentang lebih dulu: Undang-Undang
+             Nomor 27 Tahun 2022 menuntut persetujuan yang diberikan secara tegas,
+             dan kotak yang sudah tercentang bukan persetujuan yang diberikan.
+
+             Kedua tautannya dibuka di tab baru supaya isian yang sudah diketik
+             tidak hilang saat pendaftar memeriksa isinya. --}}
+        <div class="pt-1">
+            <label for="terms" class="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-slate-600">
+                <input type="checkbox" name="terms" id="terms" value="1" required @checked(old('terms'))
+                       class="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-navy-200 text-navy-600 focus:ring-2 focus:ring-navy-600 focus:ring-offset-0">
+                <span>
+                    {{ $id ? 'Saya menyetujui ' : 'I agree to the ' }}<a href="{{ route('terms') }}" target="_blank" rel="noopener" class="font-medium text-sky-700 underline-offset-4 hover:underline">{{ $id ? 'Syarat & Ketentuan' : 'Terms & Conditions' }}</a>{{ $id ? ' dan ' : ' and the ' }}<a href="{{ route('privacy') }}" target="_blank" rel="noopener" class="font-medium text-sky-700 underline-offset-4 hover:underline">{{ $id ? 'Kebijakan Privasi' : 'Privacy Policy' }}</a>{{ $id ? '.' : '.' }}
+                </span>
+            </label>
+            @error('terms')
+                <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
+            @enderror
+        </div>
+
         <button type="submit" class="btn-blue w-full">{{ $id ? 'Buat Akun' : 'Create account' }}</button>
     </form>
 
