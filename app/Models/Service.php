@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\HasTranslations;
 
@@ -69,6 +70,62 @@ class Service extends Model
     public function activities(): HasMany
     {
         return $this->hasMany(ServiceActivity::class)->orderBy('sort_order');
+    }
+
+    /** Pengajar yang mengampu program ini, dari pustaka mentor bersama. */
+    public function mentors(): BelongsToMany
+    {
+        return $this->belongsToMany(Mentor::class)
+            ->withPivot('sort_order')
+            ->orderByPivot('sort_order');
+    }
+
+    /**
+     * Benefit khusus program ini. Untuk menampilkannya di halaman, pakai
+     * resolvedBenefits() — ia yang tahu kapan harus jatuh ke daftar bawaan.
+     */
+    public function benefits(): HasMany
+    {
+        return $this->hasMany(ProgramBenefit::class)->orderBy('sort_order');
+    }
+
+    /** Benefit yang berlaku: milik program ini bila ada, kalau tidak bawaannya. */
+    public function resolvedBenefits()
+    {
+        return ProgramBenefit::forService($this);
+    }
+
+    /**
+     * Keterangan cara pelaksanaan: luring, daring, atau bauran. Dibaca dari
+     * kolom mode yang memang sudah ada sejak awal, dan dipusatkan di sini
+     * supaya kartu daftar dan halaman rinciannya tidak menuliskan padanan
+     * katanya masing-masing lalu menyimpang.
+     */
+    public function modeLabel(?string $locale = null): ?string
+    {
+        $locale ??= app()->getLocale();
+        $isId = $locale === 'id';
+
+        return match ($this->mode) {
+            'offline' => $isId ? 'Tatap Muka' : 'In person',
+            'online' => $isId ? 'Daring' : 'Online',
+            'hybrid' => $isId ? 'Bauran' : 'Hybrid',
+            default => null,
+        };
+    }
+
+    /**
+     * Jadwal terdekat yang belum lewat. Dipakai kartu daftar untuk menyebut
+     * kapan dan di mana — tanpa ini kartunya hanya menyebut harga, dan
+     * pertanyaan pertama pembaca justru "kapan".
+     */
+    public function nextSchedule(): ?ServiceSchedule
+    {
+        return $this->schedules
+            ->where('is_active', true)
+            ->filter(fn ($s) => $s->start_date && $s->start_date->endOfDay()->isFuture())
+            ->sortBy('start_date')
+            ->first();
     }
 
     public function schedules(): HasMany
