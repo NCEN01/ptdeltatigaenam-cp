@@ -268,7 +268,7 @@
                          x-on:focus="active = {{ $i }}"
                          x-on:click="active = {{ $i }}"
                          :data-on="active === {{ $i }} ? '1' : '0'"
-                         class="hover-card relative flex flex-col overflow-hidden rounded-2xl p-7 outline-none md:p-8 {{ $wide ? 'lg:col-span-6' : 'lg:col-span-4' }} {{ $i === 0
+                         class="hover-card relative flex flex-col overflow-hidden rounded-2xl p-7 outline-none md:p-8 {{ $i === 0 || $dark ? 'hover-card-on-dark' : '' }} {{ $wide ? 'lg:col-span-6' : 'lg:col-span-4' }} {{ $i === 0
                              ? 'bg-gradient-to-br from-navy-700 via-navy-800 to-navy-950 text-white ring-1 ring-white/10'
                              : ($dark ? 'bg-navy-950 text-white ring-1 ring-white/10' : 'bg-white ring-1 ring-navy-100') }}">
 

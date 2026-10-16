@@ -211,26 +211,39 @@
         @apply btn border border-white/40 text-white hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-navy-600 active:translate-y-0;
     }
 
-    /* Pil putih di atas pita biru: pita ajakan di beranda dan tombol sosialnya.
-       Isiannya ikut navy-600 saat disentuh, sama dengan tombol lain, dan cincin
-       putih tipis menjaganya tetap terbaca di atas pita yang juga biru. Tanpa
-       cincin itu tombolnya lenyap ke dalam latarnya sendiri. */
+    /* Pil putih di atas pita biru: tombol Instagram dan Facebook di pita
+       sosial beranda.
+       ───────────────────────────────────────────────────────────────────────
+       Pil ini TIDAK berisi navy saat disentuh, berbeda dari seluruh tombol
+       lain di situs ini, dan pengecualiannya bisa diukur.
+
+       Pita tempatnya berdiri adalah gradien biru yang melewati navy-600 di
+       tengah perjalanannya. Isian navy-600 di titik itu memberi 1,00:1
+       terhadap latarnya — tombolnya bukan sekadar sulit dilihat, ia lenyap
+       sepenuhnya. Cincin putih tipis yang dulu ada di sini adalah tambalan
+       untuk itu, dan cincin itulah yang terbaca sebagai garis asing.
+
+       Jalan keluarnya bukan menambal batas, melainkan tidak menghilangkannya:
+       permukaannya tetap terang. Yang berubah hanya rona dan kepekatan
+       tulisannya, ditambah angkat dan bayangan yang lebih dalam. Putih diam
+       memberi 6,56:1 terhadap tengah pita; navy-50 saat disentuh 6,07:1 —
+       batasnya tidak pernah hilang di titik mana pun sepanjang gradiennya. */
     .btn-pill-light {
         @apply inline-flex items-center gap-3.5 rounded-full bg-white py-[7px] pl-7 pr-[7px] text-[15px] font-semibold text-navy-600
                shadow-[0_10px_24px_-10px_rgba(0,0,0,0.3)] transition-all duration-300 ease-out-soft
-               hover:-translate-y-0.5 hover:bg-navy-600 hover:text-white hover:shadow-[0_16px_30px_-10px_rgba(0,0,0,0.38)] hover:ring-1 hover:ring-white/60
+               hover:-translate-y-0.5 hover:bg-navy-50 hover:text-navy hover:shadow-[0_18px_34px_-10px_rgba(0,0,0,0.42)]
                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-700
                active:translate-y-0;
     }
 
-    /* Lingkaran ikon di dalam .btn-pill-light. Ia bertukar warna bersama pilnya
-       supaya ikon WhatsApp, Instagram, atau panah di dalamnya tetap terbaca di
-       kedua keadaan: putih di atas navy-600 dan navy-600 di atas putih,
-       keduanya 6,64:1. */
+    /* Lingkaran ikon di dalam .btn-pill-light. Ia memekat bersama pilnya, bukan
+       berbalik: pilnya tetap terang, jadi lingkaran yang ikut memutih akan
+       hilang ke dalamnya. navy-600 ke navy memberi lambang putih di dalamnya
+       6,56:1 lalu 16,1:1 — terbaca di kedua keadaan. */
     .btn-pill-light-icon {
         @apply grid h-[42px] w-[42px] shrink-0 place-items-center rounded-full bg-navy-600 text-white transition-colors duration-300 ease-out-soft;
     }
-    .btn-pill-light:hover .btn-pill-light-icon { @apply bg-white text-navy-600; }
+    .btn-pill-light:hover .btn-pill-light-icon { @apply bg-navy text-white; }
 
     /* Pil putih tanpa lingkaran ikon — ukurannya sama dengan .btn-blue, jadi
        tombol ajakan di pita biru sebangun dengan tombol utama di seksi terang
@@ -238,14 +251,14 @@
        kini hanya dipakai tombol yang lambangnya memang perlu ruang sendiri:
        Instagram dan Facebook.
 
-       Cincin putih tipis saat disentuh dipertahankan di sini, berbeda dengan
-       .btn-ghost-light yang justru melepasnya. Alasannya terbalik: tombol ini
-       berisi putih di atas pita biru, jadi begitu isiannya berubah navy-600 ia
-       nyaris sewarna latarnya sendiri dan batasnya hilang. Cincin itu yang
-       menahannya tetap terbaca sebagai tombol. */
+       Sentuhnya sama dengan .btn-pill-light di atas, dan alasannya sama pula:
+       keduanya pil terang di atas pita biru yang melewati navy-600. Lihat
+       catatan panjang di sana. Cincin putih yang dulu menambal batasnya
+       dilepas; yang menjaga batas kini permukaannya sendiri, yang memang
+       tidak pernah menggelap. */
     .btn-light {
         @apply btn bg-white text-navy-600 font-semibold shadow-[0_10px_24px_-10px_rgba(0,0,0,0.3)]
-               hover:-translate-y-0.5 hover:bg-navy-600 hover:text-white hover:shadow-[0_16px_30px_-10px_rgba(0,0,0,0.38)] hover:ring-1 hover:ring-white/60
+               hover:-translate-y-0.5 hover:bg-navy-50 hover:text-navy hover:shadow-[0_18px_34px_-10px_rgba(0,0,0,0.42)]
                focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-700
                active:translate-y-0;
     }
@@ -719,9 +732,14 @@
 .nilai-row { transition: background-color 0.3s ease; }
 .nilai-row[data-on="1"] { background-color: #eef5fd; }
 
+/* Pendarnya navy-600, bukan emas. Daftar nilai ini berdiri di latar putih,
+   dan emas di atas putih hanya 1,97:1 — penanda yang nyaris tidak terlihat
+   justru pada baris yang sedang ditunjuk. navy-600 memberi 6,56:1, dan ia
+   warna yang sama dengan angka di dalam lingkarannya saat aktif, jadi
+   pendar dan isiannya terbaca sebagai satu benda. */
 .nilai-node { transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; }
 .nilai-node[data-on="1"] {
-    box-shadow: 0 0 0 6px rgba(218, 180, 94, 0.18);
+    box-shadow: 0 0 0 6px rgba(32, 95, 159, 0.18);
 }
 
 /* Kartu yang menyala saat ditunjuk. Dipakai di dua tempat yang latarnya
@@ -736,16 +754,26 @@
    tanpa sisa, dan di halaman Kemitraan teks slate-600 di atas kartu putih
    jatuh ke 2,88:1 begitu diredupkan.
 
-   Warna cincin dasarnya ditinggal di kelas Tailwind masing-masing kartu: ia
-   berbeda di tiap latar, dan memusatkannya di sini justru memaksa ketiganya
-   seragam. Yang dipusatkan hanya keadaan aktifnya, yang memang sama. */
-.hover-card { transition: box-shadow 0.3s ease, transform 0.3s ease; }
+   Warna penandanya mengikuti latar kartunya, bukan dipatok satu. Diukur di
+   atas kartunya masing-masing, emas 8,59:1 pada kartu navy tapi hanya 1,97:1
+   pada kartu putih; navy-600 justru kebalikannya, 6,56:1 pada putih dan
+   2,58:1 pada navy. Satu warna untuk ketiganya berarti satu di antaranya
+   pasti kehilangan penandanya — dan selama ini yang kehilangan adalah kartu
+   putih, yang cincin emasnya praktis tidak pernah terlihat.
+
+   Bawaannya navy-600, biru andalan situs ini; kartu berlatar gelap menimpanya
+   ke emas lewat .hover-card-on-dark. */
+.hover-card {
+    --hover-accent: 32 95 159;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.hover-card-on-dark { --hover-accent: 218 180 94; }
 .hover-card[data-on="1"] {
-    --tw-ring-color: rgb(218 180 94 / 0.55);
+    --tw-ring-color: rgb(var(--hover-accent) / 0.55);
     transform: translateY(-4px);
 }
 .hover-card-icon { transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; }
-.hover-card-icon[data-on="1"] { box-shadow: 0 0 0 5px rgba(218, 180, 94, 0.14); }
+.hover-card-icon[data-on="1"] { box-shadow: 0 0 0 5px rgb(var(--hover-accent) / 0.16); }
 
 @media (prefers-reduced-motion: reduce) {
     .misi-line-fill,

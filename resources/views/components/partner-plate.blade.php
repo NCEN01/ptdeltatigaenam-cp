@@ -8,7 +8,10 @@
     $light = $tone === 'light';
 
     $box = $light
-        ? 'h-28 border border-navy-100 bg-neutral-50 group-hover:border-sky-200 group-hover:bg-white group-hover:shadow-lift md:h-32'
+        // Tepi sentuhnya navy-200, sama dengan .card-hover yang dipakai seluruh
+        // kartu lain di situs ini. sky-200 membuat pelat ini satu-satunya kartu
+        // yang tepinya berganti ke warna berbeda saat disentuh.
+        ? 'h-28 border border-navy-100 bg-neutral-50 group-hover:border-navy-200 group-hover:bg-white group-hover:shadow-lift md:h-32'
         : 'aspect-[3/2] bg-white shadow-[0_2px_8px_rgba(2,12,27,0.25)]';
 
     $logoSize = $light ? 'max-h-14 md:max-h-16' : 'max-h-full';
