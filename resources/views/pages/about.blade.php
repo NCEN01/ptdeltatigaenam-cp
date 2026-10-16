@@ -367,7 +367,13 @@
              Tabir arah itu pekat ke kanan tempat nama dan kutipan berdiri,
              dan ringan di kiri supaya kota di belakang bahu masih terbaca
              sebagai ruang, bukan bidang mati. --}}
-        <div class="absolute inset-0 bg-navy-800/60"></div>
+        {{-- Tabir birunya linear, bukan satu bidang rata. Tugasnya membirukan
+             foto yang aslinya abu-abu, dan kebutuhannya tidak merata: sisi kiri
+             memperlihatkan kotanya sehingga perlu warna paling banyak, sisi
+             kanan sudah akan dipekatkan lapisan berikutnya. Bidang rata memberi
+             takaran yang sama ke keduanya, dan hasilnya sisi kanan jadi biru
+             berlapis-lapis sementara sisi kiri masih kurang. --}}
+        <div class="absolute inset-0 bg-gradient-to-l from-navy-800/45 via-navy-800/60 to-navy-700/70"></div>
         {{-- Sisi kirinya diturunkan dari /28 ke /55. Fotonya yang paling terang
              di antara ketiga latar seksi gelap, dan pada /28 bagian kiri masih
              terbaca abu-abu terang sementara pita Alasan dan Mitra sudah pekat.

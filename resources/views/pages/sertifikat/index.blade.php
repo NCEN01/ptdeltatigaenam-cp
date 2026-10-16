@@ -419,8 +419,17 @@
         <img src="{{ asset('images/bg-login.webp') }}" alt="" aria-hidden="true"
              width="1870" height="841" loading="lazy" decoding="async"
              class="absolute inset-0 h-full w-full object-cover">
-        <div class="absolute inset-0 bg-navy-950/80"></div>
+        {{-- Linear menyerong ke kanan atas, bukan satu bidang rata navy-950/80.
+             Bidang rata menggelapkan foto secara merata dan yang tersisa hanya
+             tekstur samar; gradien menyisakan sudut kanan atas lebih terang,
+             tempat lingkaran pendar di bawah ini duduk. Pola yang sama dengan
+             pita Alasan di beranda dan seksi Pendiri. --}}
+        <div class="absolute inset-0 bg-gradient-to-tr from-navy-950/90 via-navy-950/80 to-navy-900/65"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-navy-950/70 via-navy-950/55 to-navy-950/85"></div>
+        {{-- Aksen bulat biru muda di pojok kanan atas, sama dengan seksi Alasan
+             dan Pendiri. Digeser keluar tepi supaya yang terlihat lengkungnya
+             saja, bukan bulatan utuh yang terbaca sebagai benda. --}}
+        <div class="pointer-events-none absolute -right-24 -top-32 h-[32rem] w-[32rem] rounded-full bg-sky-500/20 blur-3xl" data-parallax="0.08"></div>
         <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
 

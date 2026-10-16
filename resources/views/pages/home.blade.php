@@ -456,8 +456,13 @@
         <div class="pointer-events-none absolute inset-0 grain opacity-25"></div>
         {{-- /10, bukan /12: 12 di luar skala opasitas Tailwind sehingga kelasnya
              tidak pernah dibuat dan lingkarannya tampil tanpa warna sama sekali. --}}
+        {{-- Aksen bulat biru muda di pojok kanan atas, seukuran dan sewarna
+             dengan yang di seksi Pendiri dan "Kenapa daftar ini dibuka".
+             Sebelumnya ia di pojok kanan bawah dan berwarna cyan: di sana ia
+             menerangi sudut yang justru paling gelap di rancangannya, dan
+             cyan membuat pita ini satu-satunya yang memakai warna itu. --}}
         <div class="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl" data-parallax="0.12"></div>
-        <div class="pointer-events-none absolute -right-24 bottom-0 h-80 w-80 rounded-full bg-cyan/10 blur-3xl" data-parallax="0.08"></div>
+        <div class="pointer-events-none absolute -right-24 -top-32 h-[32rem] w-[32rem] rounded-full bg-sky-500/20 blur-3xl" data-parallax="0.08"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/40 to-transparent"></div>
         {{-- Judul di kiri, alasannya di kanan. Sebelumnya judul di tengah lalu
              satu baris tipis di dasar pita setinggi 34rem, dengan justify-between
