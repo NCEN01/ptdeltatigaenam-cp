@@ -35,17 +35,55 @@
                      di halaman sepanjang ini, pembaca ponsel justru yang paling
                      butuh tahu ada pasal apa saja sebelum mulai menggulir. --}}
                 @if (! empty($toc))
-                    <aside class="lg:col-span-4 xl:col-span-3">
+                    @php
+                        // articleToc menuntut bentuk [['id' => …, 'text' => …], …],
+                        // sementara $toc di sini larik id => judul. Dipetakan di sini
+                        // supaya pemanggil komponen tetap menulis bentuk yang paling
+                        // enak dibaca.
+                        $tocItems = collect($toc)->map(fn ($label, $id) => ['id' => $id, 'text' => $label])->values()->all();
+                    @endphp
+                    {{-- Alpine articleToc, komponen yang sama yang dipakai halaman
+                         artikel: ia mengawasi posisi tiap judul terhadap garis baca
+                         140px dari atas layar, lalu menandai pasal yang sedang dibaca.
+                         Dipakai ulang, bukan ditulis ulang — satu perilaku gulir untuk
+                         satu situs, dan perbaikan di satu tempat berlaku di keduanya.
+
+                         Tampilannya tidak ikut: komponen itu hanya menyediakan
+                         keadaannya, dan daftar isi di sini punya rupa sendiri yang
+                         menempel di sisi kiri. --}}
+                    <aside class="lg:col-span-4 xl:col-span-3" x-data="articleToc(@js($tocItems))">
                         <nav class="lg:sticky lg:top-28" aria-label="{{ $isId ? 'Daftar isi' : 'Table of contents' }}">
-                            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500">
-                                {{ $isId ? 'Daftar Isi' : 'Contents' }}
-                            </p>
+                            <div class="flex items-center justify-between gap-4">
+                                <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500">
+                                    {{ $isId ? 'Daftar Isi' : 'Contents' }}
+                                </p>
+                                {{-- Angka kemajuan baca. Di halaman sepanjang ini,
+                                     mengetahui "tinggal berapa lagi" mengubah keputusan
+                                     untuk terus membaca atau berhenti. --}}
+                                <p class="font-mono text-[10px] tabular-nums text-slate-400" x-text="Math.round(progress) + '%'" aria-hidden="true">0%</p>
+                            </div>
+
+                            {{-- Rel kemajuan setipis rambut di bawah labelnya. --}}
+                            <div class="mt-2 h-px w-full overflow-hidden bg-navy-100" aria-hidden="true">
+                                <div class="h-full bg-navy-600 transition-[width] duration-150 ease-linear" :style="`width: ${progress}%`"></div>
+                            </div>
+
                             <ol class="mt-4 space-y-1 border-l border-navy-100">
                                 @foreach ($toc as $id => $label)
                                     <li>
-                                        <a href="#{{ $id }}"
-                                           class="-ml-px flex gap-3 border-l-2 border-transparent py-1.5 pl-4 text-[13.5px] leading-snug text-slate-600 transition-colors duration-200 hover:border-navy-600 hover:text-navy">
-                                            <span class="shrink-0 font-mono text-[11px] text-slate-400">{{ sprintf('%02d', $loop->iteration) }}</span>
+                                        {{-- data-no-smooth: halaman ini memakai gulir
+                                             halus bawaan peramban lewat scroll-smooth di
+                                             <html>, dan penangan gulir situs tidak perlu
+                                             ikut campur. Sama dengan daftar isi artikel. --}}
+                                        <a href="#{{ $id }}" data-no-smooth
+                                           x-on:click="active = '{{ $id }}'"
+                                           class="-ml-px flex gap-3 border-l-2 py-1.5 pl-4 text-[13.5px] leading-snug transition-colors duration-200"
+                                           :class="active === '{{ $id }}'
+                                               ? 'border-navy-600 font-medium text-navy'
+                                               : 'border-transparent text-slate-600 hover:border-navy-200 hover:text-navy'"
+                                           :aria-current="active === '{{ $id }}' ? 'true' : null">
+                                            <span class="shrink-0 font-mono text-[11px] transition-colors duration-200"
+                                                  :class="active === '{{ $id }}' ? 'text-navy-600' : 'text-slate-400'">{{ sprintf('%02d', $loop->iteration) }}</span>
                                             <span>{{ $label }}</span>
                                         </a>
                                     </li>
@@ -92,7 +130,11 @@
                          menyambung ke bawah menjadi alur putih yang menarik mata keluar
                          dari barisnya. Peramban memenggal menurut lang pada <html>,
                          yang di situs ini memang sudah diisi id atau en. --}}
-                    <div class="legal-body prose prose-lg mt-10 max-w-none [hyphens:auto]
+                    {{-- id="article-body" dibaca articleToc untuk menghitung kemajuan
+                         baca: ia mengukur tinggi wadah ini terhadap jendela. Tanpa id
+                         itu penandanya tetap jalan, tapi angka persennya diam di nol. --}}
+                    <div id="article-body"
+                         class="legal-body prose prose-lg mt-10 max-w-none [hyphens:auto]
                                 prose-headings:font-display prose-headings:text-navy prose-headings:tracking-tight prose-headings:scroll-mt-28
                                 prose-h2:mb-4 prose-h2:mt-12 prose-h2:text-[1.4rem] prose-h2:font-bold prose-h2:leading-snug
                                 prose-h3:mb-3 prose-h3:mt-8 prose-h3:text-[1.05rem] prose-h3:font-semibold
