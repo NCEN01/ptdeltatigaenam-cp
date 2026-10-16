@@ -41,7 +41,17 @@ class PortfolioController extends Controller
                 ->paginate(self::PER_PAGE)->withQueryString()->fragment(self::RESULTS_ANCHOR),
             'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),
             'clients' => Client::where('is_active', true)->orderBy('sort_order')->get(),
-            'testimonials' => Testimonial::where('is_active', true)->latest()->get(),
+            /* Dibatasi, bukan ->get() tanpa batas seperti sebelumnya.
+               <x-testimonial-columns> memuat seluruh testimoni di tiap kolom —
+               tiga kolom — lalu menggandakan isinya supaya putaran -50% tidak
+               menyisakan celah. Jadi yang dirender adalah jumlahnya kali enam:
+               pada 50 testimoni itu 300 kartu beserta fotonya di satu halaman,
+               dan yang terlihat sekaligus tidak sampai sepuluh.
+
+               Angkanya diambil dari modelnya supaya batas render dan batas
+               simpan tidak pernah jadi dua angka yang saling bertentangan. */
+            'testimonials' => Testimonial::where('is_active', true)
+                ->latest()->take(Testimonial::MAX_RENDERED)->get(),
         ]);
     }
 

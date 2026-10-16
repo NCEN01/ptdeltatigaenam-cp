@@ -20,12 +20,14 @@ class HomeController extends Controller
     {
         return view('pages.home', [
             'heroBanners' => Banner::activeNow()->where('placement', 'home_hero')->orderBy('sort_order')->get(),
-            'featuredCategories' => ServiceCategory::where('is_active', true)->where('is_featured', true)
-                ->withCount('services')->orderBy('sort_order')->get(),
+            /* featuredCategories dan featuredServices dilepas: keduanya dikirim
+               ke view yang tidak pernah menyebutnya sekali pun — sudah dicari
+               di seluruh berkas Blade dan PHP proyek ini. Yang dibayar setiap
+               kunjungan beranda adalah dua query, salah satunya withCount yang
+               menjalankan subquery agregat per kategori, untuk dua variabel
+               yang langsung dibuang saat render selesai. */
             'categories' => ServiceCategory::where('is_active', true)
                 ->withCount('services')->orderBy('sort_order')->get(),
-            'featuredServices' => Service::where('is_active', true)->where('is_featured', true)
-                ->with('category')->orderBy('sort_order')->take(4)->get(),
             // Dipetakan ke bentuk yang dipakai <x-pelatihan-terbaru>. Datanya
             // layanan sungguhan, bukan array contoh: judul, gambar, dan harganya
             // ikut berubah begitu admin menyuntingnya lewat CMS.
@@ -58,6 +60,9 @@ class HomeController extends Controller
                 ->selectRaw("COUNT(DISTINCT NULLIF(client_name, '')) as clients")
                 ->selectRaw('COUNT(DISTINCT service_category_id) as categories')
                 ->first(),
+            /* Beranda mengambil lebih sedikit daripada halaman Portofolio:
+               di sini testimoni satu seksi di antara belasan seksi lain,
+               sementara di sana ia salah satu isi utama halamannya. */
             'testimonials' => Testimonial::where('is_active', true)
                 ->latest()->take(12)->get(),
             'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),

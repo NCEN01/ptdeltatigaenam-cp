@@ -25,7 +25,26 @@ class ServiceController extends Controller
             // di satu halaman.
             'categories' => ServiceCategory::where('is_active', true)
                 ->with(['services' => fn ($q) => $q->where('is_active', true)
-                    ->with(['schedules' => fn ($s) => $s->where('is_active', true)->orderBy('start_date')])
+                    /* Hanya jadwal yang belum lewat. Satu-satunya pemakai
+                       relasi ini di halaman tersebut adalah nextSchedule(),
+                       yang menyaring koleksinya untuk tanggal mendatang lalu
+                       membuang sisanya — jadi jadwal yang sudah berlalu dimuat
+                       dari basis data hanya untuk langsung dilempar.
+
+                       Sekarang bedanya tiga baris dari dua puluh empat. Tapi
+                       tabel ini bertambah terus dan tidak pernah dibersihkan:
+                       setiap angkatan yang selesai meninggalkan satu baris,
+                       dan setelah dua tahun jadwal yang sudah lewat jumlahnya
+                       berkali-kali lipat yang masih berlaku. Halaman Layanan
+                       memuat seluruh kategori beserta seluruh layanannya, jadi
+                       pemborosan itu terkali di setiap kartu.
+
+                       endOfDay dipakai nextSchedule(), jadi pembatasnya di sini
+                       tanggal hari ini — bukan waktu sekarang — supaya jadwal
+                       yang digelar hari ini tidak hilang di tengah hari. */
+                    ->with(['schedules' => fn ($s) => $s->where('is_active', true)
+                        ->whereDate('start_date', '>=', now()->toDateString())
+                        ->orderBy('start_date')])
                     ->orderBy('sort_order')])
                 ->orderBy('sort_order')->get(),
 
