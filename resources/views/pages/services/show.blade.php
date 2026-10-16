@@ -71,37 +71,49 @@
     </section>
 
     {{-- ===================== EASY REGISTRATION · 3 STEPS (timeline) ===================== --}}
-    <section class="section-sm relative overflow-hidden bg-white">
-        <div class="pointer-events-none absolute inset-0 aurora-light opacity-70"></div>
-        <div class="container relative">
+    {{-- Tirai aurora dilepas. Seksi ini isinya hanya tiga langkah pendek, dan
+         gradasi bergerak di belakangnya menuntut perhatian yang tidak ada
+         gunanya diberikan di sini — pembaca sedang membaca urutan, bukan
+         mengagumi latar. --}}
+    <section class="section-sm bg-white">
+        <div class="container">
             <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
-                <p class="eyebrow inline-flex items-center justify-center">{{ $id ? 'Cara Mendaftar' : 'How to Register' }}</p>
-                <h2 class="mt-4 font-display text-3xl text-navy text-balance md:text-4xl">{{ $id ? 'Daftar mudah dalam 3 langkah' : 'Register easily in 3 steps' }}</h2>
-                <p class="mx-auto mt-4 max-w-xl text-slate-600">{{ $id ? 'Prosesnya cepat dan aman. Amankan kursi Anda dalam hitungan menit.' : 'Fast and secure. Reserve your seat in minutes.' }}</p>
+                {{-- .kicker, bukan .eyebrow: .eyebrow bernilai display:none di
+                     seluruh situs, jadi barisnya selama ini tidak pernah tampil
+                     sekali pun. --}}
+                <p class="kicker">{{ $id ? 'Cara Mendaftar' : 'How to Register' }}</p>
+                <h2 class="mt-4 text-display-lg font-bold text-navy">{{ $id ? 'Daftar mudah dalam 3 langkah' : 'Register easily in 3 steps' }}</h2>
+                <p class="mx-auto mt-4 max-w-xl leading-relaxed text-slate-600">{{ $id ? 'Prosesnya cepat dan aman. Amankan kursi Anda dalam hitungan menit.' : 'Fast and secure. Reserve your seat in minutes.' }}</p>
             </div>
 
-            <div class="relative mx-auto mt-10 max-w-5xl md:mt-14">
-                {{-- connecting line — spans the icon centers on every screen --}}
-                <div class="pointer-events-none absolute inset-x-[16%] top-7 h-0.5 bg-gradient-to-r from-navy-100 via-gold-soft/60 to-navy-100 md:top-10"></div>
+            {{-- Disederhanakan. Sebelumnya tiap langkah memakai lingkaran 80px
+                 berbayang tebal, ikon 32px di dalamnya, DAN lencana nomor emas
+                 yang menempel di pojoknya — tiga benda bertumpuk untuk satu
+                 langkah, dan nomornya dinyatakan dua kali: sekali oleh urutan
+                 kolomnya, sekali oleh lencananya.
 
-                <div class="grid grid-cols-3 gap-2 sm:gap-6 md:gap-10">
+                 Kini satu ubin 44px berisi ikon 20px, dengan nomor sebagai
+                 angka kecil di atas judulnya. Garis penghubungnya tetap: ia
+                 yang menyatakan ketiganya satu urutan, bukan tiga pilihan. --}}
+            <div class="relative mx-auto mt-10 max-w-4xl md:mt-12">
+                <div class="pointer-events-none absolute inset-x-[16%] top-[22px] h-px bg-gradient-to-r from-navy-100 via-navy-200 to-navy-100"></div>
+
+                <div class="grid grid-cols-3 gap-3 sm:gap-6 md:gap-10">
                     @foreach ($steps as $i => $step)
                         <div class="group relative text-center" data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
-                            {{-- icon + number badge --}}
-                            <div class="relative mx-auto grid h-14 w-14 place-items-center md:h-20 md:w-20">
-                                <span class="grid h-14 w-14 place-items-center rounded-full bg-white text-navy shadow-lift ring-1 ring-navy-100 transition-all duration-300 group-hover:-translate-y-1 group-hover:bg-navy-600 group-hover:text-white md:h-20 md:w-20">
-                                    @if ($step[2] === 'calendar')
-                                        <svg class="h-6 w-6 md:h-8 md:w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="16" x="3" y="4" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
-                                    @elseif ($step[2] === 'users')
-                                        <svg class="h-6 w-6 md:h-8 md:w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
-                                    @else
-                                        <svg class="h-6 w-6 md:h-8 md:w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
-                                    @endif
-                                </span>
-                                <span class="absolute -right-1 -top-1 grid h-6 w-6 place-items-center rounded-full bg-gold font-display text-xs text-navy-950 shadow-gold md:h-8 md:w-8 md:text-sm">{{ $i + 1 }}</span>
-                            </div>
-                            <h3 class="mt-3 font-display text-sm font-semibold leading-tight text-navy md:mt-6 md:text-xl md:font-normal">{{ $step[0] }}</h3>
-                            <p class="mx-auto mt-1.5 max-w-xs text-xs leading-relaxed text-slate-600 md:mt-2 md:text-sm">{{ $step[1] }}</p>
+                            <span class="relative mx-auto grid h-11 w-11 place-items-center rounded-xl border border-navy-100 bg-white text-navy-600 shadow-card transition-colors duration-300 group-hover:border-navy-600 group-hover:bg-navy-600 group-hover:text-white">
+                                @if ($step[2] === 'calendar')
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="16" x="3" y="4" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
+                                @elseif ($step[2] === 'users')
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
+                                @else
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+                                @endif
+                            </span>
+
+                            <p class="mt-4 font-mono text-[11px] text-slate-500">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</p>
+                            <h3 class="mt-1 font-display text-sm font-semibold leading-snug text-navy md:text-base">{{ $step[0] }}</h3>
+                            <p class="mx-auto mt-1.5 max-w-xs text-xs leading-relaxed text-slate-600 md:text-[13px]">{{ $step[1] }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -123,11 +135,19 @@
          Keterangan cara pelaksanaan ditempelkan di atasnya: di sinilah pembaca
          pertama kali berhenti setelah membaca tiga langkah daftar, dan "di mana
          dan bagaimana" adalah pertanyaan yang sudah terbentuk saat itu. --}}
-    @if ($service->banner_image)
+    @php
+        // Spanduk khusus bila admin mengunggahnya; kalau tidak, gambar yang
+        // sudah dipakai kartu program di halaman daftar. Program yang belum
+        // sempat disiapkan spanduknya tetap punya bidang gambar, dan gambar
+        // itu pula yang baru saja dilihat pembaca saat mengklik kartunya —
+        // jadi ia menegaskan "ini program yang tadi", bukan mengejutkan.
+        $bannerSrc = $service->banner_image ?: $service->image;
+    @endphp
+    @if ($bannerSrc)
         <section class="border-t border-navy-50 bg-white pt-12 md:pt-16">
             <div class="container">
                 <div class="relative overflow-hidden rounded-3xl bg-navy-100 shadow-lift">
-                    <img src="{{ \Illuminate\Support\Facades\Storage::url($service->banner_image) }}"
+                    <img src="{{ \Illuminate\Support\Facades\Storage::url($bannerSrc) }}"
                          alt="{{ $service->title }}"
                          loading="lazy" decoding="async"
                          class="aspect-[21/9] w-full object-cover">
@@ -166,7 +186,7 @@
     @endif
 
     {{-- ===================== BODY + PURCHASE PANEL ===================== --}}
-    <section class="section-sm {{ $service->banner_image ? 'bg-white' : 'border-t border-navy-50 bg-neutral-50' }}">
+    <section class="section-sm {{ $bannerSrc ? 'bg-white' : 'border-t border-navy-50 bg-neutral-50' }}">
         <div class="container grid gap-12 lg:grid-cols-12">
             {{-- Description + activities --}}
             <div class="lg:col-span-7">
