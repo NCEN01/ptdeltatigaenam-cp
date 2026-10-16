@@ -29,10 +29,14 @@ class PartnershipBenefitResource extends Resource
 
     protected static ?string $accessPermission = 'manage_partnership_packages';
 
-    public static function shouldRegisterNavigation(): bool
-    {
-        return false;
-    }
+    /* shouldRegisterNavigation() yang mengembalikan false dilepas dari sini.
+       Keenam barisnya adalah kartu "Mengapa menjadi mitra kami" yang tampil di
+       halaman Kemitraan, lima di antaranya aktif — isi hidup, bukan sisa.
+       Tersembunyi dari menu dan tanpa satu pun tautan dari halaman lain,
+       satu-satunya cara admin mencapainya adalah mengetahui sendiri alamat
+       /d36-panel/partnership-benefits, dan tidak ada apa pun di panel yang
+       memberi tahu alamat itu. Rutenya terdaftar sejak awal; yang tidak ada
+       hanyalah pintunya. */
 
     public static function form(Form $form): Form
     {

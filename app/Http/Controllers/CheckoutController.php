@@ -6,6 +6,8 @@ use App\Models\Order;
 use App\Models\ServiceSchedule;
 use App\Models\Transaction;
 use App\Notifications\OrderPaidNotification;
+use App\Rules\PersonName;
+use App\Rules\PhoneNumber;
 use App\Services\MidtransService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,13 +36,13 @@ class CheckoutController extends Controller
     {
         $data = $request->validate([
             'service_schedule_id' => ['required', 'exists:service_schedules,id'],
-            'customer_name' => ['required', 'string', 'max:150'],
+            'customer_name' => ['required', 'string', 'max:150', new PersonName],
             'customer_email' => ['required', 'email', 'max:150'],
-            'customer_phone' => ['required', 'string', 'max:50'],
+            'customer_phone' => ['required', 'string', 'max:50', new PhoneNumber],
             'customer_company' => ['nullable', 'string', 'max:200'],
             'participants' => ['required', 'array', 'min:1', 'max:50'],
-            'participants.*.name' => ['required', 'string', 'max:150'],
-            'participants.*.phone' => ['required', 'string', 'max:50'],
+            'participants.*.name' => ['required', 'string', 'max:150', new PersonName],
+            'participants.*.phone' => ['required', 'string', 'max:50', new PhoneNumber],
             'notes' => ['nullable', 'string', 'max:1000'],
         ]);
 

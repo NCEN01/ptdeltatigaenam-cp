@@ -8,6 +8,8 @@ use App\Models\PartnershipPackage;
 use App\Models\PartnershipRegistration;
 use App\Models\Setting;
 use App\Models\User;
+use App\Rules\PersonName;
+use App\Rules\PhoneNumber;
 use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,9 +46,9 @@ class PartnershipController extends Controller
         $data = $request->validate([
             'company_name' => ['required', 'string', 'max:200'],
             'company_address' => ['required', 'string', 'max:1000'],
-            'pic_name' => ['required', 'string', 'max:150'],
+            'pic_name' => ['required', 'string', 'max:150', new PersonName],
             'pic_position' => ['nullable', 'string', 'max:150'],
-            'phone' => ['required', 'string', 'max:50'],
+            'phone' => ['required', 'string', 'max:50', new PhoneNumber],
             'email' => ['required', 'email', 'max:150'],
             'partnership_package_id' => ['nullable', 'exists:partnership_packages,id'],
             'preferred_meeting_at' => ['nullable', 'date'],

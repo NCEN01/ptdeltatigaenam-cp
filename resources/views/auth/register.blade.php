@@ -40,7 +40,12 @@
              perusahaan terbaca seperti syarat yang menutup pintu bagi peserta
              perorangan. --}}
         <div class="grid gap-4 sm:grid-cols-2">
-            <x-field name="phone" :label="__('site.contact.phone')" :placeholder="$id ? 'Opsional' : 'Optional'" />
+            {{-- Nomor telepon berkode negara, bawaan +62. Komponennya sendiri,
+                 bukan <x-field>: kolom ini butuh dua kendali yang terlihat
+                 (pemilih negara dan angka) yang digabung jadi satu nilai saat
+                 dikirim, dan menyelipkan percabangan itu ke dalam <x-field>
+                 akan membebani sepuluh kolom lain yang tidak membutuhkannya. --}}
+            <x-phone-field name="phone" :label="__('site.contact.phone')" />
             <x-field name="company" :label="$id ? 'Perusahaan' : 'Company'" :placeholder="$id ? 'Opsional' : 'Optional'" />
         </div>
 

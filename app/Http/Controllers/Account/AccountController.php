@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Account;
 
 use App\Http\Controllers\Controller;
+use App\Rules\PersonName;
+use App\Rules\PhoneNumber;
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
@@ -17,8 +19,8 @@ class AccountController extends Controller
         $customer = $request->user('customer');
 
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:50'],
+            'name' => ['required', 'string', 'max:255', new PersonName],
+            'phone' => ['nullable', 'string', 'max:50', new PhoneNumber],
             'company' => ['nullable', 'string', 'max:200'],
             'preferred_locale' => ['required', 'in:id,en'],
         ]);

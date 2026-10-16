@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Rules\PersonName;
+use App\Rules\PhoneNumber;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,14 +42,20 @@ class RegisteredCustomerController extends Controller
         $data = $request->validate([
             // min:2 menutup nama satu huruf yang hampir selalu salah ketik atau
             // isian asal-asalan.
-            'name' => ['required', 'string', 'min:2', 'max:255'],
+            'name' => ['required', 'string', 'min:2', 'max:255', new PersonName],
             'email' => ['required', 'string', 'email:rfc', 'max:255', 'unique:customers,email'],
             // Angka, spasi, dan tanda yang lazim dipakai nomor telepon. Sengaja
             // longgar: pelanggan korporat menulis nomornya dengan bermacam cara
             // ("+62 818-834-766", "(021) 5890 5002"), dan menolak salah satunya
             // hanya menghalangi pendaftaran tanpa membuat datanya lebih bersih.
             // Yang ditolak hanya yang jelas bukan nomor.
-            'phone' => ['nullable', 'string', 'min:7', 'max:50', 'regex:/^[0-9+().\- ]+$/'],
+            /* Aturan yang sama dengan lima kolom telepon lain di situs, bukan
+               regex sendiri seperti sebelumnya. min:7 dulu menghitung panjang
+               string, bukan jumlah angka — "+62 1" lolos karena lima karakter
+               itu dihitung bersama spasi dan tanda plusnya. PhoneNumber
+               menghitung angkanya saja, dan sekaligus menolak nomor di atas
+               lima belas angka yang tidak bisa dirutekan ke jaringan mana pun. */
+            'phone' => ['nullable', 'string', 'max:50', new PhoneNumber],
             'company' => ['nullable', 'string', 'max:200'],
             'password' => ['required', 'confirmed', Password::defaults()],
             // Persetujuan atas Kebijakan Privasi dan Syarat & Ketentuan.
