@@ -14,6 +14,13 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        /* Catatan aktivitas panel admin. Dipasang sebagai satu pendengar
+           berpola, bukan trait di tiap model: ada tiga puluh model yang bisa
+           disunting admin, dan model yang ditambahkan nanti akan diam-diam
+           tidak tercatat kalau pemasangannya harus diingat satu per satu.
+           Penyaring dan alasannya ada di App\Support\ActivityRecorder. */
+        \App\Support\ActivityRecorder::listen();
+
         // Super admins implicitly have every permission.
         Gate::before(function ($user, string $ability) {
             if (method_exists($user, 'hasRole') && $user->hasRole('super_admin')) {

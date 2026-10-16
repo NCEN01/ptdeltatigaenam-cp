@@ -7,6 +7,38 @@ use App\Models\Setting;
 class Company
 {
     /**
+     * Hasil contact() dan offices() untuk permintaan yang sedang berjalan.
+     *
+     * Keduanya dipanggil dua kali di hampir setiap halaman: sekali oleh
+     * halamannya, sekali lagi oleh footer yang dirender di bawahnya. Tanpa
+     * ingatan sesaat ini, offices() menembak query kedua ke tabel yang sama
+     * untuk jawaban yang sama persis — terukur di halaman Kontak sebelum
+     * perbaikan ini.
+     *
+     * Statik, bukan cache: nilainya ikut bahasa yang sedang aktif dan hanya
+     * perlu bertahan selama satu permintaan. Menyimpannya ke cache justru
+     * menyulitkan — ia harus dibuang setiap kali admin menyunting kantor,
+     * dan harus dipisah per bahasa.
+     */
+    private static ?array $contactMemo = null;
+
+    private static ?array $officesMemo = null;
+
+    private static ?string $memoLocale = null;
+
+    /** Membuang ingatan sesaat bila bahasanya berganti di tengah permintaan. */
+    private static function resetMemoIfLocaleChanged(): void
+    {
+        $locale = app()->getLocale();
+
+        if (self::$memoLocale !== $locale) {
+            self::$memoLocale = $locale;
+            self::$contactMemo = null;
+            self::$officesMemo = null;
+        }
+    }
+
+    /**
      * Data kontak perusahaan, dari Pengaturan Situs.
      *
      * Satu sumber untuk dua tempat yang sebelumnya menulisnya sendiri-sendiri:
@@ -30,6 +62,12 @@ class Company
      */
     public static function contact(): array
     {
+        self::resetMemoIfLocaleChanged();
+
+        if (self::$contactMemo !== null) {
+            return self::$contactMemo;
+        }
+
         $isId = app()->getLocale() === 'id';
 
         $jam = Setting::get('site_hours');
@@ -37,7 +75,7 @@ class Company
             $jam = $jam[app()->getLocale()] ?? ($jam['id'] ?? '');
         }
 
-        return [
+        return self::$contactMemo = [
             'email' => trim((string) Setting::get('site_email')) ?: 'info@deltatigaenam.com',
             'phone' => trim((string) Setting::get('site_phone')) ?: '(021) 5890 5002',
             'phone_tel' => trim((string) Setting::get('site_phone_tel')) ?: '+622158905002',
@@ -165,6 +203,12 @@ class Company
 
     public static function offices(): array
     {
+        self::resetMemoIfLocaleChanged();
+
+        if (self::$officesMemo !== null) {
+            return self::$officesMemo;
+        }
+
         $locale = app()->getLocale();
 
         /* Dibaca dari tabel offices, yang bisa disunting admin lewat
@@ -185,7 +229,7 @@ class Company
         $dariDb = \App\Models\Office::displayable()->get();
 
         if ($dariDb->isNotEmpty()) {
-            return $dariDb->map(static fn ($o): array => [
+            return self::$officesMemo = $dariDb->map(static fn ($o): array => [
                 'name' => $o->getTranslation('name', $locale, true) ?: $o->name,
                 'address' => (string) $o->address,
                 'phone' => (string) $o->phone,
@@ -194,7 +238,7 @@ class Company
             ])->all();
         }
 
-        return array_map(static function (array $office) use ($locale): array {
+        return self::$officesMemo = array_map(static function (array $office) use ($locale): array {
             if (is_array($office['name'] ?? null)) {
                 // reset() sebagai cadangan: bahasa baru yang belum punya
                 // terjemahan tetap menampilkan nama, bukan kolom kosong.
