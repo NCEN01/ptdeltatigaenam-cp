@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Translatable\HasTranslations;
 
 /**
  * Pengajar yang mengampu satu program atau lebih.
@@ -16,6 +17,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Mentor extends Model
 {
+    use HasTranslations;
+
+    /** Nama orang tidak diterjemahkan; keahlian dan bionya iya. */
+    public array $translatable = ['role', 'bio'];
+
     protected $fillable = [
         'name',
         'photo',
