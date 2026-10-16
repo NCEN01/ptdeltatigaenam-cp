@@ -1208,7 +1208,24 @@
             {{-- Right Side: Accordion driven by AlpineJS --}}
             <div class="lg:col-span-7" data-aos="fade-left" x-data="{ activeFaq: 0 }">
                 @php
-                    $faqs = $isId ? [
+                    /* Tanya-jawab datang dari basis data dan bisa disunting
+                       admin lewat Konten → Tanya Jawab (FAQ), paling banyak
+                       enam baris (lihat Faq::MAX_RECORDS).
+
+                       Array di bawah ini tidak dihapus, melainkan dipakai
+                       sebagai jaring pengaman ketika tabelnya kosong — pada
+                       pemasangan baru yang penyemainya belum dijalankan, atau
+                       kalau keenam barisnya dinonaktifkan sekaligus. Seksi ini
+                       berdiri di beranda dengan judul besar dan kartu ajakan di
+                       sebelahnya; kosong, yang tampak bukan "belum ada
+                       pertanyaan" melainkan halaman yang rusak.
+
+                       Yang dari basis data diubah ke bentuk ['q' => …, 'a' => …]
+                       yang sama, jadi markah di bawahnya hanya mengenal satu
+                       bentuk data. */
+                    $faqs = (isset($faqs) && $faqs->isNotEmpty())
+                        ? $faqs->map(fn ($f) => ['q' => $f->question, 'a' => $f->answer])->all()
+                        : ($isId ? [
                         [
                             'q' => 'Apa saja layanan utama yang ditawarkan oleh PT Delta Tiga Enam?',
                             'a' => 'Kami menawarkan solusi human capital terintegrasi yang mencakup Pelatihan SDM, Sertifikasi Kompetensi Profesi (BNSP), Asesmen & Seleksi Karyawan, serta Headhunter & Penempatan Tenaga Kerja.',
@@ -1258,7 +1275,7 @@
                             'q' => 'Can training programs be customized for internal company needs (In-House)?',
                             'a' => 'Absolutely. We provide customized In-House Training with curriculum, schedule, and methods tailored to address specific competence needs in your organization.',
                         ],
-                    ];
+                    ]);
                 @endphp
 
                 {{-- One surface with hairline dividers instead of a stack of boxed cards:

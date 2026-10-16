@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Banner;
 use App\Models\BlogPost;
 use App\Models\Client;
+use App\Models\Faq;
 use App\Models\InstagramUpdate;
 use App\Models\Partner;
 use App\Models\Portfolio;
@@ -74,6 +75,13 @@ class HomeController extends Controller
                     ->take(12)->get()
                 : collect(),
             'instagramUpdates' => InstagramUpdate::where('is_active', true)->orderBy('sort_order')->take(2)->get(),
+            /* Tanya-jawab, dulu ditulis sebagai array PHP di dalam Blade-nya.
+               take() tetap dipasang walau Faq::MAX_RECORDS sudah menahannya di
+               enam: batas itu dijaga di jalur penyimpanan, dan seksi ini tidak
+               boleh ikut jebol kalau suatu saat ada baris yang masuk dari luar
+               jalur itu. Satu query dengan satu LIMIT lebih murah daripada
+               seksi yang harus dipercaya tidak pernah menerima baris ketujuh. */
+            'faqs' => Faq::displayable()->take(Faq::MAX_RECORDS)->get(),
         ]);
     }
 }
