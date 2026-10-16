@@ -389,13 +389,20 @@
             $draftValue = fn (string $key) => data_get($draft, $key);
             $hasDraft = filled(array_filter($draft));
         @endphp
-        {{-- overflow-hidden wajib di sini: pendar lapisan belakang rel kiri
-             menjorok keluar batas kolomnya dan bergeser sampai ratusan piksel
-             sepanjang seksi ini. Tanpa pengurung, pendar itu memanjangkan
-             dokumen ke kanan dan memunculkan bilah gulir mendatar di seluruh
-             halaman — cacat yang muncul di halaman lain, bukan di sini, jadi
-             paling sulit dilacak ke sumbernya. --}}
-        <section id="daftar" class="section relative scroll-mt-28 overflow-hidden border-t border-navy-50 bg-neutral-50">
+        {{-- TANPA overflow-hidden, dan itu bukan kelalaian.
+
+             overflow selain visible pada leluhur mana pun akan mematikan
+             position: sticky di dalamnya — elemennya tetap dirender, tetapi
+             tidak pernah menempel, tanpa pesan galat apa pun. Rel kiri seksi
+             ini menempel, jadi seluruh jalurnya ke atas harus bebas dari
+             overflow.
+
+             Pengurung itu sempat dipasang untuk menahan pendar lapisan
+             belakang yang dulu bergeser ratusan piksel. Sekarang pendarnya
+             tidak bergeser dan kotaknya tidak lagi menjorok keluar kolom
+             (inset-x-0), sehingga tidak ada yang perlu dikurung: kekaburan
+             adalah filter, dan filter tidak pernah memunculkan bilah gulir. --}}
+        <section id="daftar" class="section relative scroll-mt-28 border-t border-navy-50 bg-neutral-50">
             <div class="container">
                 <div class="mx-auto max-w-3xl text-center">
                     <h2 class="text-display-lg text-navy">{{ $id ? 'Mulai kolaborasi' : 'Start a collaboration' }}</h2>
@@ -408,48 +415,45 @@
 
                 <div class="mt-12 grid items-start gap-6 lg:grid-cols-12 lg:gap-8">
                     {{-- ── Rel kiri: alur & jaminan ──────────────────────── --}}
-                    {{-- Parallax di sini dua lapisan, bukan satu.
+                    {{-- Kedua kartu ini mengikuti pembaca turun, lewat
+                         position: sticky — bukan lewat pergeseran parallax.
 
-                         Percobaan pertama hanya menggeser relnya sendiri pada
-                         0,12 — dan gerak itu praktis tidak terbaca. Parallax
-                         tidak pernah dirasakan dari kecepatan satu benda,
-                         melainkan dari SELISIH kecepatan dua benda di
-                         kedalaman berbeda. Satu lapisan yang bergeser
-                         sendirian hanya tampak seperti isi yang sedikit
-                         tertinggal, bukan seperti ruang.
+                         Dua percobaan sebelumnya memakai parallax dan keduanya
+                         meleset dari yang dibutuhkan. Parallax menggeser benda
+                         pada laju berbeda supaya terasa ada kedalaman, tetapi
+                         benda itu tetap ikut hanyut keluar layar; yang
+                         diperlukan di sini justru sebaliknya, yaitu alur tiga
+                         langkah yang TETAP terlihat sepanjang formulir di
+                         sebelahnya diisi. Formulir itu panjang, dan pertanyaan
+                         yang muncul di tengah pengisian adalah "setelah ini
+                         apa" — pertanyaan yang tidak terjawab oleh jawaban
+                         yang sudah tergulir jauh di atas.
 
-                         Jadi sekarang: pendar di belakang melaju 0,45,
-                         relnya 0,08. Selisih itulah yang terlihat, dan
-                         relnya tetap nyaris diam sehingga nomor langkah
-                         serta kalimatnya tidak berpindah tempat selagi
-                         dibaca — hiasan yang boleh bergerak jauh, tulisan
-                         yang tidak.
+                         top-28 menyisakan ruang untuk navbar yang menempel,
+                         supaya kartu pertama tidak tersembunyi di belakangnya.
 
-                         data-parallax tidak dipasang di <aside> ini: AOS
-                         menganimasikan transform elemen yang membawa data-aos,
-                         dan GSAP menulis transform yang sama. Di satu elemen,
-                         keduanya saling menimpa dan kartunya tersentak saat
-                         pertama masuk layar. --}}
+                         items-start pada kisi induknya wajib ada agar sticky
+                         bekerja: dengan items-stretch bawaan, <aside> ini
+                         setinggi kolom formulir di sebelahnya, sehingga tidak
+                         pernah ada ruang untuk ditempeli dan sticky-nya diam
+                         saja tanpa pesan galat. --}}
                     <aside class="relative lg:col-span-4" data-aos="fade-up">
-                        {{-- Lapisan belakang. Dua pendar kabur yang mengintip
-                             di sekeliling kartu putih di depannya — itulah yang
-                             memberi acuan gerak. Hanya dari lg: di bawah itu
-                             kedua kolomnya menumpuk dan parallax-nya memang
-                             dimatikan, jadi merender pendarnya pun sia-sia. --}}
-                        <div class="pointer-events-none absolute -inset-x-8 -top-12 -z-10 hidden h-[560px] lg:block"
-                             aria-hidden="true" data-parallax="0.45" data-parallax-from="1024">
-                            <div class="absolute left-0 top-0 h-64 w-64 rounded-full bg-navy-200/40 blur-3xl"></div>
-                            <div class="absolute bottom-0 right-2 h-56 w-56 rounded-full bg-sky-300/30 blur-3xl"></div>
-                        </div>
+                        <div class="relative space-y-5 lg:sticky lg:top-28">
+                            {{-- Pendar lembut di belakang kedua kartu. Ikut di
+                                 dalam pembungkus yang menempel, bukan di luar:
+                                 ditaruh di <aside>, ia akan tergulir pergi
+                                 sementara kartunya tinggal — dan kartu putih
+                                 yang tiba-tiba kehilangan latarnya terbaca
+                                 sebagai cacat. Diam, tanpa pergeseran: benda
+                                 yang terus merayap di dalam elemen yang sedang
+                                 menempel tidak pernah berhenti bergerak, dan
+                                 lama-lama keluar dari bidangnya sendiri. --}}
+                            <div class="pointer-events-none absolute inset-x-0 -top-12 -z-10 hidden h-[560px] lg:block"
+                                 aria-hidden="true">
+                                <div class="absolute left-0 top-0 h-64 w-64 rounded-full bg-navy-200/40 blur-3xl"></div>
+                                <div class="absolute bottom-0 right-2 h-56 w-56 rounded-full bg-sky-300/30 blur-3xl"></div>
+                            </div>
 
-                        {{-- lg:sticky dilepas. Menempel dan parallax menjawab
-                             dua maksud yang saling meniadakan: yang satu
-                             menahan rel di tempatnya, yang lain menggesernya
-                             mengikuti guliran. Dipasang bersama, relnya
-                             menempel di bawah navbar lalu merayap turun
-                             sendiri — gerak yang terbaca sebagai cacat, bukan
-                             sebagai kedalaman. --}}
-                        <div class="relative space-y-5" data-parallax="0.08" data-parallax-from="1024">
                             <div class="rounded-3xl border border-navy-100 bg-white p-6 shadow-card sm:p-7">
                                 <p class="font-mono text-[11px] uppercase tracking-label text-sky-700">{{ $id ? 'Alur Pendaftaran' : 'Registration Flow' }}</p>
 
@@ -699,8 +703,8 @@
                                             <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><path d="M10 17l5-5-5-5M15 12H3"/>
                                         </svg>
                                         <span>{{ $id
-                                            ? 'Anda belum masuk. Setelah menekan Kirim, Anda diminta masuk dulu — isian di atas kami simpan dan kembalikan ke formulir ini.'
-                                            : 'You are not signed in. After pressing Send you will be asked to sign in first — the details above are saved and restored to this form.' }}</span>
+                                            ? 'Anda belum masuk. Setelah menekan Kirim, Anda diminta masuk dulu. Isian di atas kami simpan dan kembalikan ke formulir ini.'
+                                            : 'You are not signed in. After pressing Send you will be asked to sign in first. The details above are saved and restored to this form.' }}</span>
                                     </p>
                                 @endguest
 

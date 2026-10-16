@@ -70,7 +70,30 @@
         @apply bg-white text-ink font-sans antialiased;
         /* Instrument Sans ships true weights & italics — allow the real cuts. */
         font-synthesis: weight style;
-        overflow-x: hidden;
+
+        /* overflow-x: hidden SENGAJA tidak ada di sini, dan itu memperbaiki
+           delapan tempat sekaligus.
+
+           Nilai overflow apa pun selain visible mengubah elemennya menjadi
+           wadah gulir, dan position: sticky selalu menempel pada wadah gulir
+           terdekat — bukan pada layar. Tinggi body mengikuti isinya, jadi di
+           dalamnya tidak pernah ada ruang untuk digulir, dan setiap elemen
+           sticky di dalam body berhenti menempel sama sekali. Tanpa pesan
+           galat, tanpa tanda apa pun di peralatan pengembang.
+
+           Yang selama ini tidak pernah menempel padahal dirancang menempel:
+           panel pembelian halaman Layanan, ringkasan Checkout, daftar isi
+           Kebijakan Privasi dan Syarat & Ketentuan, navigasi Akun, sisi kanan
+           artikel Blog dan Portofolio, kolom FAQ beranda, dan rel Alur
+           Pendaftaran di halaman Kemitraan.
+
+           Pengguntingan mendatar tidak hilang. overflow-x: hidden tetap ada
+           di html, dan menurut aturan perambatan viewport, nilai overflow
+           elemen akar diterapkan ke viewport — html sendiri lalu diperlakukan
+           sebagai visible. Jadi luapan mendatar tetap tergunting di tepi
+           layar, sementara body kembali menjadi elemen biasa. Aturan di body
+           ini memang tidak pernah menambah pengguntingan apa pun; ia hanya
+           mematikan sticky. */
     }
 
     /*

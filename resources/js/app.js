@@ -399,45 +399,27 @@ if (!reduceMotion) {
 // ═══════════════════════════════════════════
 //  PARALLAX SCROLL EFFECTS
 // ═══════════════════════════════════════════
+// Seluruh pemakaiannya kini hiasan latar — pendar kabur di balik isi halaman,
+// bukan teks yang sedang dibaca. Itu memang tempat yang tepat untuknya:
+// tulisan yang bergeser mengikuti guliran justru melawan mata yang sedang
+// mengejarnya.
 if (!reduceMotion) {
-    const parallaxMM = gsap.matchMedia();
-
-    const driftTween = (el, speed) => gsap.to(el, {
-        // Positif: elemennya turun selagi halaman digulir, jadi ia tertinggal
-        // di belakang isi di sebelahnya — itulah yang membuatnya terbaca
-        // sebagai lapisan yang lebih jauh.
-        y: () => el.offsetHeight * speed,
-        ease: 'none',
-        scrollTrigger: {
-            trigger: el.closest('section') || el.parentElement,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true,
-        },
-    });
-
     document.querySelectorAll('[data-parallax]').forEach((el) => {
         const speed = parseFloat(el.dataset.parallax) || 0.3;
 
-        // data-parallax-from="1024": hanya berjalan mulai lebar itu.
-        //
-        // Dibutuhkan kolom yang di layar sempit menumpuk, bukan bersanding.
-        // Di layar lebar, pergeseran ke bawah membuat satu kolom tertinggal
-        // dari kolom di sebelahnya; begitu keduanya menumpuk, pergeseran yang
-        // sama hanya mendorong kolom atas menimpa yang di bawahnya.
-        //
-        // gsap.matchMedia memulihkan sendiri apa pun yang dibuat di dalamnya
-        // begitu kuerinya tidak lagi cocok, jadi memutar layar dari lanskap ke
-        // potret tidak meninggalkan transform yang tersangkut.
-        const from = parseInt(el.dataset.parallaxFrom || '0', 10);
-
-        if (from > 0) {
-            parallaxMM.add(`(min-width: ${from}px)`, () => { driftTween(el, speed); });
-
-            return;
-        }
-
-        driftTween(el, speed);
+        gsap.to(el, {
+            // Positif: elemennya turun selagi halaman digulir, jadi ia
+            // tertinggal di belakang isi di depannya — itulah yang membuatnya
+            // terbaca sebagai lapisan yang lebih jauh.
+            y: () => el.offsetHeight * speed,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: el.closest('section') || el.parentElement,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true,
+            },
+        });
     });
 }
 
