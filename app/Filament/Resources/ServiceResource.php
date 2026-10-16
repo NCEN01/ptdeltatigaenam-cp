@@ -150,6 +150,61 @@ class ServiceResource extends Resource
                     ),
             ])->collapsed(),
 
+            Forms\Components\Section::make('Halaman Program')
+                ->description('Isi bagian-bagian halaman rincian program: spanduk, mentor pengampu, dan benefit.')
+                ->collapsed()
+                ->schema([
+                    Forms\Components\FileUpload::make('banner_image')
+                        ->label('Spanduk')
+                        ->image()
+                        ->imageEditor()
+                        ->directory('services/banners')
+                        // Bentang lebar, bukan potret seperti kolom Gambar di
+                        // atas: yang ini membentang di dalam halaman, yang itu
+                        // mengisi kartu tegak di kisi tiga kolom. Satu berkas
+                        // tidak bisa melayani keduanya tanpa terpotong buruk di
+                        // salah satunya.
+                        ->imageCropAspectRatio('21:9')
+                        ->maxSize(3072)
+                        ->helperText('Tampil tepat di bawah "3 langkah daftar". Bentang lebar (21:9), maksimal 3 MB. Boleh dikosongkan — bila kosong, bagiannya tidak tampil.')
+                        ->columnSpanFull(),
+
+                    Forms\Components\Select::make('mentors')
+                        ->label('Mentor Pengampu')
+                        ->relationship('mentors', 'name')
+                        ->multiple()
+                        ->preload()
+                        ->searchable()
+                        ->helperText('Dipilih dari pustaka Mentor. Belum ada namanya di daftar? Tambahkan lebih dulu di menu Layanan → Mentor.')
+                        ->columnSpanFull(),
+
+                    Forms\Components\Repeater::make('benefits')
+                        ->relationship()
+                        ->label('Benefit Khusus Program Ini')
+                        ->helperText('Biarkan kosong agar program ini memakai daftar Benefit Bawaan. Begitu diisi satu baris saja, daftar bawaan tidak lagi dipakai untuk program ini — jadi isi selengkapnya atau jangan sama sekali.')
+                        ->schema([
+                            Forms\Components\TextInput::make('title.id')->label('Judul (ID)')->required()->maxLength(200),
+                            Forms\Components\TextInput::make('title.en')->label('Judul (EN)')->maxLength(200),
+                            Forms\Components\Textarea::make('description.id')->label('Keterangan (ID)')->rows(2),
+                            Forms\Components\Textarea::make('description.en')->label('Keterangan (EN)')->rows(2),
+                            Forms\Components\Select::make('icon')
+                                ->label('Ikon')
+                                ->options(\App\Filament\Resources\ProgramBenefitResource::iconOptions())
+                                ->searchable()
+                                ->native(false),
+                            Forms\Components\TextInput::make('sort_order')->label('Urutan')->numeric()->default(0),
+                        ])
+                        ->columns(2)
+                        ->defaultItems(0)
+                        ->reorderable('sort_order')
+                        ->collapsible()
+                        ->itemLabel(fn (array $state): ?string => is_string($state['title']['id'] ?? null)
+                            ? $state['title']['id']
+                            : 'Benefit')
+                        ->columnSpanFull(),
+                ])
+                ->columns(2),
+
             Forms\Components\Section::make('SEO (ID/EN)')->collapsed()->schema([
                 Forms\Components\TextInput::make('meta_title.id')->label('Meta Title (ID)')->maxLength(200),
                 Forms\Components\TextInput::make('meta_title.en')->label('Meta Title (EN)')->maxLength(200),

@@ -51,6 +51,10 @@ class ManageSettings extends Page implements HasForms
             'partnership_intro' => Setting::get('partnership_intro') ?: ['id' => '', 'en' => ''],
             'partnership_partners_title' => Setting::get('partnership_partners_title') ?: ['id' => '', 'en' => ''],
             'partnership_partners_desc' => Setting::get('partnership_partners_desc') ?: ['id' => '', 'en' => ''],
+            'program_consult_title' => Setting::get('program_consult_title') ?: ['id' => '', 'en' => ''],
+            'program_consult_desc' => Setting::get('program_consult_desc') ?: ['id' => '', 'en' => ''],
+            'program_consult_cta' => Setting::get('program_consult_cta') ?: ['id' => '', 'en' => ''],
+            'program_consult_whatsapp' => Setting::get('program_consult_whatsapp'),
         ]);
     }
 
@@ -90,6 +94,24 @@ class ManageSettings extends Page implements HasForms
                         ->helperText('Kosongkan untuk memakai teks bawaan.'),
                     Textarea::make('partnership_partners_desc.en')->label('Deskripsi (EN)')->nullable()->maxLength(600)->rows(3),
                 ])->columns(2),
+
+            Section::make('Konsultasi Program Gratis')
+                ->description('Ajakan berkonsultasi di bagian bawah setiap halaman program. Satu teks ini dipakai semua program, jadi mengubahnya sekali berlaku di mana-mana.')
+                ->schema([
+                    TextInput::make('program_consult_title.id')->label('Judul (ID)')->nullable()->maxLength(160)
+                        ->placeholder('Konsultasi Program Gratis')
+                        ->helperText('Kosongkan untuk memakai teks bawaan.'),
+                    TextInput::make('program_consult_title.en')->label('Judul (EN)')->nullable()->maxLength(160),
+                    Textarea::make('program_consult_desc.id')->label('Keterangan (ID)')->nullable()->maxLength(600)->rows(2)
+                        ->placeholder('Punya pertanyaan dan ingin berbicara langsung dengan tim kami?'),
+                    Textarea::make('program_consult_desc.en')->label('Keterangan (EN)')->nullable()->maxLength(600)->rows(2),
+                    TextInput::make('program_consult_cta.id')->label('Teks Tombol (ID)')->nullable()->maxLength(60)
+                        ->placeholder('Konsultasi Sekarang'),
+                    TextInput::make('program_consult_cta.en')->label('Teks Tombol (EN)')->nullable()->maxLength(60),
+                    TextInput::make('program_consult_whatsapp')->label('Nomor WhatsApp')->nullable()->maxLength(30)
+                        ->placeholder('62818834766')
+                        ->helperText('Diawali 62, tanpa tanda plus dan tanpa spasi. Dikosongkan berarti tombolnya menuju halaman Kontak.'),
+                ])->columns(2),
         ])->statePath('data');
     }
 
@@ -107,6 +129,11 @@ class ManageSettings extends Page implements HasForms
         $this->put('partnership_intro', json_encode($data['partnership_intro']), 'json', 'partnership');
         $this->put('partnership_partners_title', json_encode($data['partnership_partners_title']), 'json', 'partnership');
         $this->put('partnership_partners_desc', json_encode($data['partnership_partners_desc']), 'json', 'partnership');
+
+        $this->put('program_consult_title', json_encode($data['program_consult_title'] ?? []), 'json', 'services');
+        $this->put('program_consult_desc', json_encode($data['program_consult_desc'] ?? []), 'json', 'services');
+        $this->put('program_consult_cta', json_encode($data['program_consult_cta'] ?? []), 'json', 'services');
+        $this->put('program_consult_whatsapp', $data['program_consult_whatsapp'] ?? null, 'text', 'services');
 
         Notification::make()->title('Pengaturan disimpan')->success()->send();
     }
