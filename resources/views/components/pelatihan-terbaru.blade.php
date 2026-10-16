@@ -126,7 +126,10 @@
                     {{-- style="--i:.." dilepas: nilainya dulu hanya memberi jeda
                          berurutan pada animasi muat kartu, dan animasi itu sudah
                          tidak ada. --}}
-                    <a href="{{ $p->url ?? '#' }}" class="pt-card">
+                    {{-- 'group' dibutuhkan .card-arrow di kaki kartu: putaran dan
+                         warnanya dipicu .group:hover, aturan yang sama yang dipakai
+                         keempat kartu berpanah lain di situs ini. --}}
+                    <a href="{{ $p->url ?? '#' }}" class="pt-card group">
                         <div class="pt-media">
                             @if (! empty($p->gambar))
                                 <img src="{{ $p->gambar }}" alt="{{ $p->judul }}" loading="lazy">
@@ -157,13 +160,19 @@
                                         @endif
                                     </div>
                                 </div>
-                                {{-- Panah SVG yang sama dengan kartu portofolio dan
-                                     layanan, bukan entitas &rarr;. Entitas mengikuti
+                                {{-- .card-arrow, kelas yang sama dengan panah kartu
+                                     Layanan, rel Agenda, kartu Portofolio, dan indeks
+                                     Portofolio di beranda. Sebelumnya seksi ini punya
+                                     .pt-go sendiri di berkas CSS-nya: tanpa putaran, dan
+                                     isiannya navy-500 yang hanya 3,88:1 untuk panah putih
+                                     di dalamnya.
+
+                                     Panah SVG, bukan entitas &rarr;. Entitas mengikuti
                                      bentuk panah bawaan jenis huruf, jadi tebal dan
-                                     sudutnya tidak pernah cocok dengan panah di
-                                     kartu lain pada halaman yang sama. --}}
-                                <span class="pt-go">
-                                    <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                     sudutnya tidak pernah cocok dengan panah di kartu
+                                     lain pada halaman yang sama. --}}
+                                <span class="card-arrow grid h-10 w-10 shrink-0 place-items-center rounded-full border border-navy-200 text-navy group-hover:border-navy-600 group-hover:bg-navy-600 group-hover:text-white" aria-hidden="true">
+                                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 </span>
                             </div>
                         </div>
