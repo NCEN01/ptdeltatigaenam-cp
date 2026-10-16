@@ -461,22 +461,31 @@
                      putih, biru) untuk dua hal yang sebenarnya satu tawaran:
                      ini yang Anda dapatkan, dan ini cara menanyakannya.
 
-                     Panel kaca, bukan pita biru: permukaan yang sama dengan
-                     kartu benefit di atasnya, jadi keduanya terbaca sebagai satu
-                     bagian dan bukan dua yang kebetulan bertetangga. --}}
-                <div class="glass-surface mt-12 flex flex-col items-start gap-6 rounded-2xl p-6 md:mt-14 md:flex-row md:items-center md:justify-between md:gap-10 md:p-8"
-                     data-aos="fade-up">
-                    <div class="min-w-0">
-                        <h3 class="font-display text-xl font-bold leading-snug text-white md:text-2xl">{{ $consultTitle }}</h3>
-                        <p class="mt-2 max-w-xl text-pretty text-[15px] leading-relaxed text-navy-100">{{ $consultDesc }}</p>
+                     Bentuknya mengikuti ajakan di halaman Sertifikat: garis
+                     rambut sebagai pemisah, tulisan di kiri, tombol di kanan,
+                     tanpa panel sendiri. Panel kaca sempat dipakai di sini dan
+                     dilepas — di dalam pita yang kartunya juga kaca, panel kaca
+                     kedua terbaca sebagai kartu benefit raksasa, bukan sebagai
+                     ajakan yang berbeda jenisnya.
+
+                     Dua tombol, bukan satu, dengan pola yang sama: tindakan
+                     utama berisi, konsultasi bergaris di sebelahnya. Tombol
+                     jadwal hanya muncul bila programnya memang bisa dipesan dan
+                     jadwalnya ada — kalau tidak, konsultasi berdiri sendiri. --}}
+                <div class="mt-14 grid gap-6 border-t border-white/10 pt-10 lg:grid-cols-12 lg:items-center lg:gap-10" data-aos="fade-up">
+                    <div class="lg:col-span-7">
+                        <h3 class="text-2xl leading-snug text-white text-balance md:text-3xl">{{ $consultTitle }}</h3>
+                        <p class="mt-3 max-w-xl text-pretty leading-relaxed text-navy-100">{{ $consultDesc }}</p>
                     </div>
 
-                    <a href="{{ $consultHref }}"
-                       @if ($consult['whatsapp'] !== '') target="_blank" rel="noopener" @endif
-                       class="btn-light group shrink-0">
-                        {{ $consultCta }}
-                        <svg class="h-4 w-4 transition-transform duration-300 ease-out-soft group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </a>
+                    <div class="flex flex-col gap-3 sm:flex-row lg:col-span-5 lg:justify-end">
+                        @if ($service->is_purchasable && $scheduleCount)
+                            <a href="#daftar" class="btn-blue justify-center">{{ $id ? 'Pilih Jadwal' : 'Choose a schedule' }}</a>
+                        @endif
+                        <a href="{{ $consultHref }}"
+                           @if ($consult['whatsapp'] !== '') target="_blank" rel="noopener" @endif
+                           class="btn-ghost-light justify-center">{{ $consultCta }}</a>
+                    </div>
                 </div>
             </div>
         </section>
