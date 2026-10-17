@@ -176,12 +176,37 @@
                      sehingga patahan yang dipatok akan jatuh di tengah nama
                      jalan. --}}
                 <div class="sm:col-span-2 lg:col-span-5">
-                    <p class="text-sm font-semibold text-gold-soft">{{ $id ? 'Kontak' : 'Contact' }}</p>
+                    {{-- "Lokasi & Kontak", bukan "Kontak" saja: kolom ini memuat
+                         alamat kedua kantor beserta surel dan teleponnya, dan
+                         judul yang hanya menyebut kontak tidak menjanjikan
+                         alamat yang justru paling panjang di bawahnya. --}}
+                    <p class="text-sm font-semibold text-gold-soft">{{ $id ? 'Lokasi & Kontak' : 'Location & Contact' }}</p>
 
                     <div class="mt-5 space-y-5">
                         @foreach ($offices as $office)
                             <div @class(['border-t border-white/10 pt-5' => ! $loop->first])>
-                                <p class="text-xs font-semibold uppercase tracking-wider text-gold-soft">{{ $office['name'] }}</p>
+                                {{-- Tanpa uppercase, dan karena itu tanpa tracking-wider.
+                                     Keduanya satu paket: jarak huruf yang dilebarkan
+                                     ada untuk menolong huruf kapital yang berderet,
+                                     dan dipakai pada tulisan berkapitalisasi biasa ia
+                                     justru membuat katanya terbaca renggang.
+
+                                     Ukurannya naik dari text-xs ke text-sm dengan
+                                     alasan yang sama: huruf kapital terbaca lebih
+                                     besar daripada ukuran sebenarnya, jadi label yang
+                                     pas saat dikapitalkan menjadi terlalu kecil untuk
+                                     sebuah judul begitu kapitalnya dilepas.
+
+                                     Putih, bukan emas. Emas di footer ini dipakai
+                                     keempat judul kolom — Layanan, Tautan Cepat,
+                                     Lokasi & Kontak — dan nama kantor yang ikut emas
+                                     dengan ukuran yang sama akan terbaca sejajar
+                                     dengan judul-judul itu, padahal ia anak dari
+                                     salah satunya. Putih menempatkannya satu
+                                     tingkat di bawah judul kolomnya dan satu
+                                     tingkat di atas alamat di bawahnya, yang
+                                     memakai putih diredam. --}}
+                                <p class="text-sm font-semibold text-white">{{ $office['name'] }}</p>
                                 <ul class="mt-2.5 space-y-2 text-sm text-white/80">
                                     <li class="flex items-start gap-2.5">
                                         <svg class="mt-0.5 h-4 w-4 shrink-0 text-white/45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
