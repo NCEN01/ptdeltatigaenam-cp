@@ -77,10 +77,22 @@
          lebarnya, dan logo setinggi itu akan melebar sampai menutupi seluruh
          isi footer.
 
+         Di bawah lg ia juga ditambatkan ke BAWAH (-bottom-10), bukan ke atas.
+         Saat kolomnya menumpuk, bagian atas footer justru yang paling padat —
+         di situ berdiri logo kecil beserta nama perusahaan dan kalimat
+         pengantarnya, dan segitiga samar di belakangnya membuat ketiganya
+         saling tumpang. Di dasar footer, yang ada hanya baris hak cipta,
+         sehingga ornamennya punya ruang kosong untuk ditempati dan terbaca
+         sebagai latar, bukan sebagai noda di belakang tulisan.
+
+         Mulai lg ia kembali memenuhi tinggi footer, jadi atas dan bawah
+         sama-sama nol — di sana kolomnya berjajar dan tidak ada yang
+         tertimpa.
+
          aria-hidden + alt kosong: ini ornamen, dan pembaca layar sudah
          mendapat nama perusahaan dari tautan logo di kolom brand. --}}
     <div aria-hidden="true"
-         class="pointer-events-none absolute -right-20 -top-10 aspect-[1600/1310] w-[22rem] overflow-hidden opacity-[0.07] sm:-right-24 sm:w-[30rem] lg:-right-28 lg:bottom-0 lg:top-0 lg:h-full lg:w-auto">
+         class="pointer-events-none absolute -bottom-10 -right-20 aspect-[1600/1310] w-[22rem] overflow-hidden opacity-[0.07] sm:-right-24 sm:w-[30rem] lg:-right-28 lg:bottom-0 lg:top-0 lg:h-full lg:w-auto">
         <img src="{{ asset('images/logodelta36.webp') }}" alt="" loading="lazy" class="h-auto w-full max-w-none">
     </div>
 
