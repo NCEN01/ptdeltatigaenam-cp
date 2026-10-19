@@ -37,7 +37,7 @@ class PortfolioController extends Controller
                         ->orWhereRaw('LOWER(client_name) LIKE ?', [$needle])
                         ->orWhereRaw('LOWER(location) LIKE ?', [$needle]),
                 ))
-                ->orderBy('sort_order')->latest('project_date')
+                ->orderByDesc('is_featured')->orderBy('sort_order')->latest('project_date')
                 ->paginate(self::PER_PAGE)->withQueryString()->fragment(self::RESULTS_ANCHOR),
             'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),
             'clients' => Client::where('is_active', true)->orderBy('sort_order')->get(),
@@ -51,7 +51,7 @@ class PortfolioController extends Controller
                Angkanya diambil dari modelnya supaya batas render dan batas
                simpan tidak pernah jadi dua angka yang saling bertentangan. */
             'testimonials' => Testimonial::where('is_active', true)
-                ->latest()->take(Testimonial::MAX_RENDERED)->get(),
+                ->orderByDesc('is_featured')->latest()->take(Testimonial::MAX_RENDERED)->get(),
         ]);
     }
 

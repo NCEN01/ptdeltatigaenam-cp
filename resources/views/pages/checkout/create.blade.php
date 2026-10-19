@@ -36,7 +36,7 @@
                         <div class="mt-5 grid gap-5 sm:grid-cols-2">
                             <x-field name="customer_name" :label="__('site.contact.name')" :value="$customer->name" required />
                             <x-field name="customer_email" type="email" :label="__('site.contact.email')" :value="$customer->email" required />
-                            <x-field name="customer_phone" :label="__('site.contact.phone')" :value="$customer->phone" required />
+                            <x-phone-field name="customer_phone" :label="__('site.contact.phone')" :value="$customer->phone" required />
                             <x-field name="customer_company" :label="$id ? 'Perusahaan' : 'Company'" :value="$customer->company" />
                         </div>
                     </div>

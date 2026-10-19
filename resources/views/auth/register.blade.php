@@ -18,6 +18,8 @@
         </div>
     @endif
 
+    <x-google-auth-button action="register" />
+
     <form method="POST" action="{{ route('register') }}" class="auth-form space-y-4">
         @csrf
         <div style="display:none !important" aria-hidden="true">

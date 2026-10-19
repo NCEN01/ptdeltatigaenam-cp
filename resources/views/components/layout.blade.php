@@ -130,7 +130,7 @@
                     </svg>
                 </span>
                 <p class="text-sm font-medium">{{ $flash }}</p>
-                <button @click="show = false" class="ml-2 text-current/60 hover:text-current" aria-label="Close">
+                <button @click="show = false" class="ml-2 opacity-60 transition-opacity hover:opacity-100" aria-label="Close">
                     <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                 </button>
             </div>

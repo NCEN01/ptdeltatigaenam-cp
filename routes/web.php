@@ -4,6 +4,7 @@ use App\Http\Controllers\Account\AccountController;
 use App\Http\Controllers\Auth\CustomerEmailVerificationController;
 use App\Http\Controllers\Auth\CustomerPasswordController;
 use App\Http\Controllers\Auth\CustomerSessionController;
+use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\RegisteredCustomerController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\BlogController;
@@ -27,6 +28,12 @@ Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'ind
 
 // Midtrans webhook (no locale prefix, CSRF-exempt — see bootstrap/app.php).
 Route::post('/midtrans/callback', [MidtransWebhookController::class, 'handle'])->name('midtrans.callback');
+
+// Google OAuth callback (satu URI statis tanpa prefix bahasa supaya cukup
+// mendaftarkan satu Authorized Redirect URI di Google Cloud Console).
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])
+    ->middleware(['guest:customer', 'throttle:10,1'])
+    ->name('auth.google.callback');
 
 Route::prefix('{locale}')
     ->where(['locale' => 'id|en'])
@@ -79,6 +86,10 @@ Route::prefix('{locale}')
             Route::get('/masuk', [CustomerSessionController::class, 'show'])->name('login');
             Route::post('/masuk', [CustomerSessionController::class, 'store'])
                 ->middleware('throttle:5,1');
+
+            Route::get('/masuk/google', [GoogleAuthController::class, 'redirect'])
+                ->middleware('throttle:10,1')
+                ->name('auth.google');
 
             Route::get('/lupa-password', [CustomerPasswordController::class, 'request'])->name('password.request');
             Route::post('/lupa-password', [CustomerPasswordController::class, 'email'])

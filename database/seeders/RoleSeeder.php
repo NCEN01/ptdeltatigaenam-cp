@@ -24,7 +24,6 @@ class RoleSeeder extends Seeder
         'manage_faqs',
         'manage_settings',
         'manage_offices',
-        'manage_missions',
         'view_contact_messages',
     ];
 

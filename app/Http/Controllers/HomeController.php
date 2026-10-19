@@ -27,7 +27,7 @@ class HomeController extends Controller
                menjalankan subquery agregat per kategori, untuk dua variabel
                yang langsung dibuang saat render selesai. */
             'categories' => ServiceCategory::where('is_active', true)
-                ->withCount('services')->orderBy('sort_order')->get(),
+                ->withCount('services')->orderByDesc('is_featured')->orderBy('sort_order')->get(),
             // Dipetakan ke bentuk yang dipakai <x-pelatihan-terbaru>. Datanya
             // layanan sungguhan, bukan array contoh: judul, gambar, dan harganya
             // ikut berubah begitu admin menyuntingnya lewat CMS.
@@ -37,7 +37,7 @@ class HomeController extends Controller
             // syarat akan memunculkan lencana diskon pada layanan yang tidak
             // sedang berdiskon.
             'programs' => Service::where('is_active', true)
-                ->with('category')->latest()->take(8)->get()
+                ->with('category')->orderByDesc('is_featured')->latest()->take(8)->get()
                 ->map(fn (Service $s): array => [
                     'kategori' => optional($s->category)->name,
                     'judul' => $s->title,
@@ -51,7 +51,7 @@ class HomeController extends Controller
             // Empat, bukan tiga: seksi ini kini indeks berdaftar, dan daftar
             // setinggi tiga butir berakhir jauh di atas panel fotonya.
             'portfolios' => Portfolio::where('is_active', true)
-                ->with('category')->latest('project_date')->latest('id')->take(4)->get(),
+                ->with('category')->orderByDesc('is_featured')->latest('project_date')->latest('id')->take(4)->get(),
             // Cakupan portofolio, dihitung dari datanya sendiri sehingga angkanya
             // ikut bergerak saat admin menambah proyek. Satu query, bukan tiga:
             // ketiganya membaca tabel dan filter yang sama persis.
@@ -64,10 +64,10 @@ class HomeController extends Controller
                di sini testimoni satu seksi di antara belasan seksi lain,
                sementara di sana ia salah satu isi utama halamannya. */
             'testimonials' => Testimonial::where('is_active', true)
-                ->latest()->take(12)->get(),
+                ->orderByDesc('is_featured')->latest()->take(12)->get(),
             'partners' => Partner::where('is_active', true)->orderBy('sort_order')->get(),
             'clients' => Client::where('is_active', true)->orderBy('sort_order')->get(),
-            'posts' => BlogPost::published()->with('category')->latest('published_at')->take(9)->get(),
+            'posts' => BlogPost::published()->with('category')->orderByDesc('is_featured')->latest('published_at')->take(9)->get(),
             // Show all agendas — upcoming (soonest first) lead, past events trail (most recent first).
             // Tidak diambil sama sekali selagi halaman Agenda disembunyikan lewat
             // config/company.php: seksinya di beranda pun tidak dirender, jadi

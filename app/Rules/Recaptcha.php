@@ -25,6 +25,19 @@ use Throwable;
 class Recaptcha implements ValidationRule
 {
     /**
+     * Tetap dijalankan walau kolom g-recaptcha-response kosong atau tidak
+     * dikirim sama sekali, sehingga pesan "Centang dulu..." dalam bahasa
+     * Indonesia maupun Inggris diatur dari satu pintu di bawah ini.
+     */
+    public bool $implicit = true;
+
+    /**
+     * Panjang maksimum token reCAPTCHA v2 yang wajar (biasanya ~500–1000 byte).
+     * Menolak kiriman raksasa sebelum sempat diteruskan ke peladen Google.
+     */
+    private const MAX_TOKEN_BYTES = 4096;
+
+    /**
      * Aturan untuk kolom g-recaptcha-response, atau array kosong bila
      * fiturnya belum dinyalakan.
      *
@@ -36,7 +49,7 @@ class Recaptcha implements ValidationRule
             return [];
         }
 
-        return ['required', new self];
+        return [new self];
     }
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
@@ -45,10 +58,30 @@ class Recaptcha implements ValidationRule
             return;
         }
 
-        $jawaban = trim((string) $value);
+        $isId = app()->getLocale() === 'id';
+
+        if (! is_string($value)) {
+            $fail($isId
+                ? 'Centang dulu kotak "Saya bukan robot" sebelum mengirim.'
+                : 'Please tick the "I\'m not a robot" box before submitting.');
+
+            return;
+        }
+
+        $jawaban = trim($value);
 
         if ($jawaban === '') {
-            $fail('Centang dulu kotak "Saya bukan robot" sebelum mengirim.');
+            $fail($isId
+                ? 'Centang dulu kotak "Saya bukan robot" sebelum mengirim.'
+                : 'Please tick the "I\'m not a robot" box before submitting.');
+
+            return;
+        }
+
+        if (strlen($jawaban) > self::MAX_TOKEN_BYTES) {
+            $fail($isId
+                ? 'Verifikasi "Saya bukan robot" gagal. Coba centang ulang kotaknya.'
+                : 'The "I\'m not a robot" verification failed. Please tick the box again.');
 
             return;
         }
@@ -71,7 +104,9 @@ class Recaptcha implements ValidationRule
             Log::warning('reCAPTCHA tidak bisa dihubungi', ['pesan' => $e->getMessage()]);
 
             if (! config('captcha.allow_on_failure', true)) {
-                $fail('Verifikasi "Saya bukan robot" sedang tidak bisa dijalankan. Coba lagi sebentar lagi.');
+                $fail($isId
+                    ? 'Verifikasi "Saya bukan robot" sedang tidak bisa dijalankan. Coba lagi sebentar lagi.'
+                    : 'The "I\'m not a robot" verification is temporarily unavailable. Please try again shortly.');
             }
 
             return;
@@ -81,7 +116,9 @@ class Recaptcha implements ValidationRule
             Log::warning('reCAPTCHA menjawab dengan status tidak sukses', ['status' => $res->status()]);
 
             if (! config('captcha.allow_on_failure', true)) {
-                $fail('Verifikasi "Saya bukan robot" sedang tidak bisa dijalankan. Coba lagi sebentar lagi.');
+                $fail($isId
+                    ? 'Verifikasi "Saya bukan robot" sedang tidak bisa dijalankan. Coba lagi sebentar lagi.'
+                    : 'The "I\'m not a robot" verification is temporarily unavailable. Please try again shortly.');
             }
 
             return;
@@ -97,10 +134,17 @@ class Recaptcha implements ValidationRule
            lebih berguna baginya daripada "verifikasi gagal". */
         $galat = (array) $res->json('error-codes', []);
 
-        $fail(
-            array_intersect($galat, ['timeout-or-duplicate'])
+        if (array_intersect($galat, ['timeout-or-duplicate'])) {
+            $fail($isId
                 ? 'Verifikasi "Saya bukan robot" sudah kedaluwarsa. Centang ulang kotaknya, lalu kirim lagi.'
-                : 'Verifikasi "Saya bukan robot" gagal. Coba centang ulang kotaknya.'
-        );
+                : 'The "I\'m not a robot" verification has expired. Please tick the box again and resubmit.');
+
+            return;
+        }
+
+        $fail($isId
+            ? 'Verifikasi "Saya bukan robot" gagal. Coba centang ulang kotaknya.'
+            : 'The "I\'m not a robot" verification failed. Please tick the box again.');
     }
 }
+

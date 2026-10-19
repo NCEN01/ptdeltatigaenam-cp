@@ -35,4 +35,24 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Google OAuth 2.0 (Masuk / Daftar Pelanggan)
+    |--------------------------------------------------------------------------
+    |
+    | Sama seperti config/captcha.php: fitur ini MATI TOTAL selama
+    | GOOGLE_CLIENT_ID dan GOOGLE_CLIENT_SECRET belum diisi di .env. Tombol
+    | "Lanjutkan dengan Google" tidak dirender dan rutenya mengembalikan 404.
+    | Begitu kedua kunci diisi, fitur langsung menyala sendiri.
+    |
+    */
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URI'),
+        'enabled' => (bool) (env('GOOGLE_CLIENT_ID') && env('GOOGLE_CLIENT_SECRET')),
+        'timeout' => (int) env('GOOGLE_OAUTH_TIMEOUT', 8),
+    ],
+
 ];
+

@@ -613,7 +613,7 @@
                                         <x-field name="company_name" :label="$id ? 'Nama Perusahaan' : 'Company Name'" :value="$draftValue('company_name')" required />
                                         <x-field name="pic_name" :label="$id ? 'Nama PIC' : 'PIC Name'" :value="$draftValue('pic_name')" required />
                                         <x-field name="pic_position" :label="$id ? 'Jabatan PIC' : 'PIC Position'" :value="$draftValue('pic_position')" />
-                                        <x-field name="phone" :label="$id ? 'No. Telp/WhatsApp' : 'Phone/WhatsApp'" :value="$draftValue('phone')" required />
+                                        <x-phone-field name="phone" :label="$id ? 'No. Telp/WhatsApp' : 'Phone/WhatsApp'" :value="$draftValue('phone')" required />
                                         <x-field name="email" type="email" :label="__('site.contact.email')" :value="$draftValue('email')" required />
                                     </div>
                                     <div class="mt-5">

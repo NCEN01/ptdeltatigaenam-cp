@@ -555,11 +555,6 @@
     /* ── Section sm ── */
     .section-sm { @apply py-14 md:py-20 lg:py-24; }
 
-    /* ── Button outline gold ── */
-    .btn-outline-gold {
-        @apply btn border border-gold/40 text-gold hover:bg-gold hover:text-ink hover:border-gold hover:shadow-gold;
-    }
-
     /* ── Link gold ── */
     .link-gold {
         @apply relative inline-flex items-center gap-1.5 text-navy transition-colors duration-300 hover:text-gold;

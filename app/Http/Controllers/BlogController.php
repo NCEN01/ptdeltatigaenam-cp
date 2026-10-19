@@ -21,7 +21,7 @@ class BlogController extends Controller
      */
     private const CARD_COLUMNS = [
         'id', 'slug', 'title', 'excerpt', 'featured_image',
-        'location', 'published_at', 'blog_category_id',
+        'location', 'published_at', 'blog_category_id', 'is_featured',
     ];
 
     public function index()
@@ -49,7 +49,7 @@ class BlogController extends Controller
                             ->orWhereRaw('LOWER(excerpt) LIKE ?', [$needle]);
                     });
                 })
-                ->latest('published_at')->paginate(self::PER_PAGE)->withQueryString()->fragment(self::RESULTS_ANCHOR),
+                ->orderByDesc('is_featured')->latest('published_at')->paginate(self::PER_PAGE)->withQueryString()->fragment(self::RESULTS_ANCHOR),
             'categories' => BlogCategory::where('is_active', true)->orderBy('sort_order')->get(),
             'q' => $q,
         ]);

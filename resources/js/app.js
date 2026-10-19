@@ -6,8 +6,6 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Swiper from 'swiper';
-import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
@@ -213,50 +211,83 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     }, { passive: true });
 }
 
-// Hero category rotator
+// ── Swiper carousels (loaded on-demand only on pages that use them) ──────────
 const heroEl = document.querySelector('[data-hero-swiper]');
-if (heroEl) {
-    new Swiper(heroEl, {
-        modules: [Autoplay, EffectFade, Pagination, Navigation],
-        effect: 'fade',
-        fadeEffect: { crossFade: true },
-        loop: true,
-        speed: 800,
-        autoplay: reduceMotion ? false : { delay: 4500, disableOnInteraction: false },
-        pagination: { el: heroEl.querySelector('[data-hero-pagination]'), clickable: true },
-        navigation: {
-            nextEl: heroEl.querySelector('[data-hero-next]'),
-            prevEl: heroEl.querySelector('[data-hero-prev]'),
-        },
-    });
-}
-
-// Hero promo slider — 3 categories sliding sideways
 const heroPromo = document.querySelector('[data-hero-promo]');
-if (heroPromo) {
-    new Swiper(heroPromo, {
-        modules: [Autoplay, Pagination],
-        slidesPerView: 1,
-        loop: true,
-        speed: 700,
-        autoHeight: true,
-        autoplay: reduceMotion ? false : { delay: 3800, disableOnInteraction: false },
-        pagination: { el: document.querySelector('[data-hero-promo-pagination]'), clickable: true },
-    });
-}
-
-// Hero image carousel — full-width horizontal slider
 const heroCar = document.querySelector('[data-hero-carousel]');
-if (heroCar) {
-    new Swiper(heroCar, {
-        modules: [Autoplay, Pagination, Navigation],
-        slidesPerView: 1,
-        loop: true,
-        speed: 800,
-        autoplay: reduceMotion ? false : { delay: 4500, disableOnInteraction: false, pauseOnMouseEnter: true },
-        pagination: { el: heroCar.querySelector('[data-hero-carousel-pagination]'), clickable: true },
-        navigation: { prevEl: heroCar.querySelector('[data-hero-prev]'), nextEl: heroCar.querySelector('[data-hero-next]') },
-    });
+const carouselEls = document.querySelectorAll('[data-carousel]');
+
+if (heroEl || heroPromo || heroCar || carouselEls.length > 0) {
+    Promise.all([import('swiper'), import('swiper/modules')])
+        .then(([{ default: Swiper }, { Autoplay, EffectFade, Navigation, Pagination }]) => {
+            if (heroEl) {
+                new Swiper(heroEl, {
+                    modules: [Autoplay, EffectFade, Pagination, Navigation],
+                    effect: 'fade',
+                    fadeEffect: { crossFade: true },
+                    loop: true,
+                    speed: 800,
+                    autoplay: reduceMotion ? false : { delay: 4500, disableOnInteraction: false },
+                    pagination: { el: heroEl.querySelector('[data-hero-pagination]'), clickable: true },
+                    navigation: {
+                        nextEl: heroEl.querySelector('[data-hero-next]'),
+                        prevEl: heroEl.querySelector('[data-hero-prev]'),
+                    },
+                });
+            }
+
+            if (heroPromo) {
+                new Swiper(heroPromo, {
+                    modules: [Autoplay, Pagination],
+                    slidesPerView: 1,
+                    loop: true,
+                    speed: 700,
+                    autoHeight: true,
+                    autoplay: reduceMotion ? false : { delay: 3800, disableOnInteraction: false },
+                    pagination: { el: document.querySelector('[data-hero-promo-pagination]'), clickable: true },
+                });
+            }
+
+            if (heroCar) {
+                new Swiper(heroCar, {
+                    modules: [Autoplay, Pagination, Navigation],
+                    slidesPerView: 1,
+                    loop: true,
+                    speed: 800,
+                    autoplay: reduceMotion ? false : { delay: 4500, disableOnInteraction: false, pauseOnMouseEnter: true },
+                    pagination: { el: heroCar.querySelector('[data-hero-carousel-pagination]'), clickable: true },
+                    navigation: { prevEl: heroCar.querySelector('[data-hero-prev]'), nextEl: heroCar.querySelector('[data-hero-next]') },
+                });
+            }
+
+            carouselEls.forEach((el) => {
+                try {
+                    const prevEl = el.parentElement.querySelector('[data-carousel-prev]');
+                    const nextEl = el.parentElement.querySelector('[data-carousel-next]');
+                    const hasNav = !!(prevEl && nextEl);
+                    const autoplayOff = el.dataset.carouselAutoplay === 'false';
+                    const maxPerView = parseFloat(el.dataset.carouselMax) || Infinity;
+                    const cap = (n) => Math.min(n, maxPerView);
+                    const config = {
+                        modules: hasNav ? [Autoplay, Navigation, Pagination] : [Autoplay, Pagination],
+                        slidesPerView: cap(1.2),
+                        spaceBetween: 16,
+                        autoplay: (reduceMotion || autoplayOff) ? false : { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
+                        pagination: { el: el.parentElement.querySelector('[data-carousel-pagination]'), clickable: true },
+                        breakpoints: {
+                            640: { slidesPerView: cap(2), spaceBetween: 18 },
+                            1024: { slidesPerView: cap(3), spaceBetween: 20 },
+                            1280: { slidesPerView: cap(4), spaceBetween: 20 },
+                        },
+                    };
+                    if (hasNav) config.navigation = { prevEl, nextEl };
+                    new Swiper(el, config);
+                } catch (e) { console.error('[carousel]', e); }
+            });
+
+            refreshScroll();
+        })
+        .catch((e) => console.error('[swiper]', e));
 }
 
 // Hero rotating promo phrases (cycles 3 categories)
@@ -339,39 +370,6 @@ if (!reduceMotion) {
         el.addEventListener('pointerleave', reset);
     });
 }
-
-// Generic content carousels (testimonials, portfolio, agenda)
-document.querySelectorAll('[data-carousel]').forEach((el) => {
-    try {
-        const prevEl = el.parentElement.querySelector('[data-carousel-prev]');
-        const nextEl = el.parentElement.querySelector('[data-carousel-next]');
-        const hasNav = !!(prevEl && nextEl);
-        // Opt out with data-carousel-autoplay="false" — a browsing rail the reader
-        // is choosing from shouldn't move on its own.
-        const autoplayOff = el.dataset.carouselAutoplay === 'false';
-        // Cap with data-carousel-max where wide cards would be squeezed by the default
-        // 4-up — testimonial quotes, for instance, need the width to stay readable.
-        const maxPerView = parseFloat(el.dataset.carouselMax) || Infinity;
-        const cap = (n) => Math.min(n, maxPerView);
-        const config = {
-            // Only load the Navigation module when arrow buttons exist — passing
-            // `navigation: undefined` while the module is active crashes Swiper
-            // (it reads params.navigation.enabled on an undefined object).
-            modules: hasNav ? [Autoplay, Navigation, Pagination] : [Autoplay, Pagination],
-            slidesPerView: cap(1.2),
-            spaceBetween: 16,
-            autoplay: (reduceMotion || autoplayOff) ? false : { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
-            pagination: { el: el.parentElement.querySelector('[data-carousel-pagination]'), clickable: true },
-            breakpoints: {
-                640: { slidesPerView: cap(2), spaceBetween: 18 },
-                1024: { slidesPerView: cap(3), spaceBetween: 20 },
-                1280: { slidesPerView: cap(4), spaceBetween: 20 },
-            },
-        };
-        if (hasNav) config.navigation = { prevEl, nextEl };
-        new Swiper(el, config);
-    } catch (e) { console.error('[carousel]', e); }
-});
 
 // ═══════════════════════════════════════════
 //  SCROLL-TRIGGERED TEXT REVEAL (word-by-word)

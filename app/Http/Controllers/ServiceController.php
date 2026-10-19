@@ -45,7 +45,9 @@ class ServiceController extends Controller
                     ->with(['schedules' => fn ($s) => $s->where('is_active', true)
                         ->whereDate('start_date', '>=', now()->toDateString())
                         ->orderBy('start_date')])
+                    ->orderByDesc('is_featured')
                     ->orderBy('sort_order')])
+                ->orderByDesc('is_featured')
                 ->orderBy('sort_order')->get(),
 
             'agendaActive' => $agendaActive,

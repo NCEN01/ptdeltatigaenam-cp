@@ -130,7 +130,7 @@
                         <div class="grid gap-5 sm:grid-cols-2">
                             <x-field name="name" :label="__('site.contact.name')" required />
                             <x-field name="email" type="email" :label="__('site.contact.email')" required />
-                            <x-field name="phone" :label="__('site.contact.phone')" />
+                            <x-phone-field name="phone" :label="__('site.contact.phone')" />
                             <x-field name="subject" :label="__('site.contact.subject')" />
                         </div>
                         <x-field name="message" :label="__('site.contact.message')" type="textarea" required />

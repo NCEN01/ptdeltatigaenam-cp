@@ -153,33 +153,8 @@ class CheckoutController extends Controller
         // When returning from Midtrans Snap in sandbox, auto-confirm the payment
         // because webhooks cannot reach localhost.
         $status = $request->query('transaction_status');
-        if (!config('midtrans.is_production') && in_array($status, ['settlement', 'capture'])) {
-            if ($order->status !== 'paid') {
-                DB::transaction(function () use ($order, $request) {
-                    Transaction::updateOrCreate(
-                        ['midtrans_order_id' => $order->order_number],
-                        [
-                            'order_id' => $order->id,
-                            'gross_amount' => $order->total_amount,
-                            'transaction_status' => 'settlement',
-                            'payment_type' => $request->query('payment_type', 'midtrans'),
-                            'transaction_time' => now(),
-                            'settlement_time' => now(),
-                        ],
-                    );
-
-                    $order->update(['status' => 'paid', 'paid_at' => now()]);
-
-                    // Increment seats_taken
-                    $service = $order->service;
-                    if ($service && $service->quota) {
-                        $service->increment('seats_taken', $order->quantity);
-                    }
-                });
-
-                Notification::route('mail', $order->customer_email)
-                    ->notify(new OrderPaidNotification($order->fresh()));
-            }
+        if (! config('midtrans.is_production') && in_array($status, ['settlement', 'capture'], true)) {
+            $this->confirmSandboxOrder($order, (string) $request->query('payment_type', 'midtrans'));
         }
 
         return view('pages.checkout.finish', ['order' => $order->fresh()]);
@@ -195,34 +170,48 @@ class CheckoutController extends Controller
         abort_unless($order->customer_id === $request->user('customer')->id, 403);
         abort_if(config('midtrans.is_production'), 404);
 
-        if ($order->status !== 'paid') {
-            DB::transaction(function () use ($order) {
-                Transaction::updateOrCreate(
-                    ['midtrans_order_id' => $order->order_number],
-                    [
-                        'order_id' => $order->id,
-                        'gross_amount' => $order->total_amount,
-                        'transaction_status' => 'settlement',
-                        'payment_type' => 'simulation',
-                        'transaction_time' => now(),
-                        'settlement_time' => now(),
-                    ],
-                );
-
-                $order->update(['status' => 'paid', 'paid_at' => now()]);
-
-                // Increment seats_taken on the service
-                $service = $order->service;
-                if ($service && $service->quota) {
-                    $service->increment('seats_taken', $order->quantity);
-                }
-            });
-
-            Notification::route('mail', $order->customer_email)
-                ->notify(new OrderPaidNotification($order->fresh()));
-        }
+        $this->confirmSandboxOrder($order, 'simulation');
 
         return redirect()->route('checkout.finish', $order->order_number)
             ->with('success', __('site.checkout.paid_simulated'));
+    }
+
+    /**
+     * Kunci baris pesanan dengan lockForUpdate sebelum mengubah status ke paid,
+     * supaya tidak balapan dengan MidtransWebhookController bila sandbox diuji
+     * memakai tunnel (ngrok/cloudflared).
+     */
+    private function confirmSandboxOrder(Order $order, string $paymentType): void
+    {
+        DB::transaction(function () use ($order, $paymentType) {
+            $locked = Order::whereKey($order->id)->lockForUpdate()->first();
+            if (! $locked || $locked->status === 'paid') {
+                return;
+            }
+
+            Transaction::updateOrCreate(
+                ['midtrans_order_id' => $locked->order_number],
+                [
+                    'order_id' => $locked->id,
+                    'gross_amount' => $locked->total_amount,
+                    'transaction_status' => 'settlement',
+                    'payment_type' => $paymentType,
+                    'transaction_time' => now(),
+                    'settlement_time' => now(),
+                ],
+            );
+
+            $locked->update(['status' => 'paid', 'paid_at' => now()]);
+
+            $service = $locked->service;
+            if ($service && $service->quota) {
+                $service->increment('seats_taken', $locked->quantity);
+            }
+
+            DB::afterCommit(function () use ($locked) {
+                Notification::route('mail', $locked->customer_email)
+                    ->notify(new OrderPaidNotification($locked->fresh()));
+            });
+        });
     }
 }
