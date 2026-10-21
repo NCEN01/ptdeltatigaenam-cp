@@ -5,9 +5,11 @@ namespace App\Filament\Resources;
 use App\Filament\Concerns\RestrictsToPermission;
 use App\Filament\Forms\Components\MediaUpload;
 use App\Filament\Resources\ServiceResource\Pages;
+use App\Jobs\BroadcastServicePromoJob;
 use App\Models\Service;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -79,6 +81,22 @@ class ServiceResource extends Resource
                 Forms\Components\Toggle::make('is_purchasable')->label('Dapat Dibeli Online')->default(true),
                 Forms\Components\Toggle::make('is_featured')->label('Unggulan')->default(false),
                 Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
+                Forms\Components\Toggle::make('broadcast_promo_on_create')
+                    ->label('Broadcast Email Promo ke Pelanggan setelah dibuat')
+                    ->helperText('Jika dinyalakan (dan layanan berstatus Aktif), email promo layanan baru akan otomatis dimasukkan ke antrean (queue) untuk seluruh pelanggan aktif & terverifikasi.')
+                    ->default(false)
+                    ->live()
+                    ->dehydrated(false)
+                    ->visible(fn (string $operation): bool => $operation === 'create')
+                    ->columnSpanFull(),
+                Forms\Components\Textarea::make('broadcast_promo_message')
+                    ->label('Pesan Tambahan Promo (Opsional)')
+                    ->placeholder('Contoh: Dapatkan potongan harga early bird untuk pendaftaran minggu ini...')
+                    ->rows(2)
+                    ->maxLength(500)
+                    ->dehydrated(false)
+                    ->visible(fn (Forms\Get $get, string $operation): bool => $operation === 'create' && (bool) $get('broadcast_promo_on_create'))
+                    ->columnSpanFull(),
             ])->columns(3),
 
             // Lima field di bawah ini tampil di situs tetapi sebelumnya tidak bisa
@@ -247,6 +265,43 @@ class ServiceResource extends Resource
                 Tables\Filters\TernaryFilter::make('is_active')->label('Aktif'),
             ])
             ->actions([
+                Tables\Actions\Action::make('broadcastPromo')
+                    ->label('Broadcast Promo')
+                    ->icon('heroicon-o-megaphone')
+                    ->color('gold')
+                    ->requiresConfirmation()
+                    ->modalHeading('Broadcast Email Promo Layanan')
+                    ->modalDescription(fn (Service $record): string => 'Email promo untuk "' . ($record->getTranslation('title', 'id', false) ?: $record->title) . '" akan dikirim melalui antrean (queue) ke seluruh pelanggan aktif yang emailnya sudah terverifikasi.')
+                    ->form([
+                        Forms\Components\Textarea::make('custom_message')
+                            ->label('Pesan Tambahan Promo (Opsional)')
+                            ->placeholder('Contoh: Kuota angkatan pertama terbatas, daftar sebelum harga promo berakhir.')
+                            ->rows(3)
+                            ->maxLength(500),
+                    ])
+                    ->action(function (Service $record, array $data): void {
+                        if (! $record->is_active) {
+                            Notification::make()
+                                ->title('Layanan masih berstatus nonaktif/draft')
+                                ->body('Aktifkan layanan terlebih dahulu sebelum mengirim broadcast email promo.')
+                                ->warning()
+                                ->send();
+
+                            return;
+                        }
+
+                        BroadcastServicePromoJob::dispatch(
+                            $record->id,
+                            $data['custom_message'] ?? null,
+                            auth()->id(),
+                        );
+
+                        Notification::make()
+                            ->title('Broadcast promo masuk antrean')
+                            ->body('Email promo untuk "' . ($record->getTranslation('title', 'id', false) ?: $record->title) . '" sedang diproses di antrean queue.')
+                            ->success()
+                            ->send();
+                    }),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])

@@ -127,6 +127,12 @@ Route::prefix('{locale}')
                     ->middleware('throttle:10,1')
                     ->name('checkout.store');
                 Route::get('/checkout/{order:order_number}/bayar', [CheckoutController::class, 'pay'])->name('checkout.pay');
+                Route::post('/checkout/{order:order_number}/ulangi-bayar', [CheckoutController::class, 'retry'])
+                    ->middleware('throttle:10,1')
+                    ->name('checkout.retry');
+                Route::post('/checkout/{order:order_number}/batal', [CheckoutController::class, 'cancel'])
+                    ->middleware('throttle:10,1')
+                    ->name('checkout.cancel');
                 Route::get('/checkout/{order:order_number}/status', [CheckoutController::class, 'finish'])->name('checkout.finish');
 
                 if (! app()->environment('production')) {

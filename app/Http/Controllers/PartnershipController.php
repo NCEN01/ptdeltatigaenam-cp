@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Filament\Resources\PartnershipRegistrationResource;
 use App\Models\Partner;
 use App\Models\PartnershipBenefit;
 use App\Models\PartnershipPackage;
@@ -12,9 +13,11 @@ use App\Rules\PersonName;
 use App\Rules\PhoneNumber;
 use App\Rules\Recaptcha;
 use App\Rules\SafeEmail;
+use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class PartnershipController extends Controller
 {
@@ -46,15 +49,21 @@ class PartnershipController extends Controller
     public function store(Request $request, string $locale)
     {
         $data = $request->validate([
-            'company_name' => ['required', 'string', 'max:200'],
-            'company_address' => ['required', 'string', 'max:1000'],
+            'company_name' => ['required', 'string', 'min:2', 'max:200'],
+            'company_address' => ['required', 'string', 'min:5', 'max:1000'],
             'pic_name' => ['required', 'string', 'max:150', new PersonName],
             'pic_position' => ['nullable', 'string', 'max:150'],
             'phone' => ['required', 'string', 'max:50', new PhoneNumber],
             'email' => ['required', 'email', 'max:150', new SafeEmail],
-            'partnership_package_id' => ['nullable', 'exists:partnership_packages,id'],
-            'preferred_meeting_at' => ['nullable', 'date'],
-            'alternative_meeting_at' => ['nullable', 'date'],
+            /* Paket yang sudah dinonaktifkan admin tidak tampil di formulir,
+               jadi id-nya hanya bisa datang dari permintaan yang direkayasa. */
+            'partnership_package_id' => [
+                'nullable', 'integer',
+                Rule::exists('partnership_packages', 'id')->where('is_active', true),
+            ],
+            /* Jadwal presentasi di masa lalu tidak bisa dikonfirmasi tim. */
+            'preferred_meeting_at' => ['nullable', 'date', 'after:now'],
+            'alternative_meeting_at' => ['nullable', 'date', 'after:now', 'different:preferred_meeting_at'],
             'notes' => ['nullable', 'string', 'max:2000'],
 
             /* Kotak "Saya bukan robot". rules() mengembalikan array kosong
@@ -103,12 +112,26 @@ class PartnershipController extends Controller
             ->get();
 
         if ($admins->isNotEmpty()) {
-            Notification::make()
+            $notification = Notification::make()
                 ->title('Pendaftaran Kemitraan Baru')
                 ->body("{$registration->company_name} · {$registration->pic_name}")
                 ->icon('heroicon-o-clipboard-document-list')
-                ->success()
-                ->sendToDatabase($admins);
+                ->success();
+
+            try {
+                $notification->actions([
+                    Action::make('view')
+                        ->label('Lihat pendaftaran')
+                        ->url(PartnershipRegistrationResource::getUrl('edit', ['record' => $registration->getKey()], panel: 'admin'))
+                        ->markAsRead(),
+                ]);
+            } catch (\Throwable $e) {
+                // Skip action URL if route resolution is unavailable.
+            }
+
+            foreach ($admins as $admin) {
+                $admin->notifyNow($notification->toDatabase());
+            }
         }
 
         return back()->with('status', __('site.contact.success'));

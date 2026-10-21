@@ -60,7 +60,12 @@ class MidtransWebhookController extends Controller
            di luar kunci adalah salinan lama, dan mengunci setelah membacanya
            tidak menolong apa-apa. */
         return DB::transaction(function () use ($payload, $newStatus) {
-            $order = Order::where('order_number', $payload['order_id'] ?? '')
+            $midtransOrderId = (string) ($payload['order_id'] ?? '');
+            $baseOrderNumber = preg_replace('/-R\d+$/', '', $midtransOrderId);
+
+            $order = Order::where('order_number', $midtransOrderId)
+                ->orWhere('order_number', $baseOrderNumber)
+                ->orWhereHas('transactions', fn ($q) => $q->where('midtrans_order_id', $midtransOrderId))
                 ->lockForUpdate()
                 ->first();
 
@@ -101,6 +106,25 @@ class MidtransWebhookController extends Controller
         );
 
         $wasPaid = $order->status === 'paid';
+
+        // Pesanan yang sudah lunas tidak boleh diturunkan kembali ke status gagal/kedaluwarsa
+        // oleh notifikasi terlambat dari percobaan pembayaran sebelumnya.
+        if ($wasPaid && ! in_array($newStatus, ['paid', 'refunded'], true)) {
+            return response()->json(['message' => 'OK']);
+        }
+
+        // Bila pelanggan sudah melakukan retry/reset (ada transaksi terbaru yang masih pending),
+        // notifikasi expire/cancel/deny dari percobaan lama tidak boleh membatalkan pesanan aktifnya.
+        if (in_array($newStatus, ['expired', 'cancelled', 'failed'], true)) {
+            $latestTx = $order->latestTransaction()->first();
+            if (
+                $latestTx
+                && $latestTx->midtrans_order_id !== ($payload['order_id'] ?? '')
+                && $latestTx->transaction_status === 'pending'
+            ) {
+                return response()->json(['message' => 'OK']);
+            }
+        }
 
         if ($order->status !== $newStatus) {
             $order->update([

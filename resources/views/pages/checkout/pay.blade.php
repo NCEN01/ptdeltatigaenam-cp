@@ -23,6 +23,29 @@
                     {{ $id ? 'Bayar Sekarang' : 'Pay Now' }}
                 </button>
 
+                <div class="mt-6 flex flex-wrap items-center justify-center gap-3 border-t border-dashed border-navy-100 pt-6">
+                    <form method="POST" action="{{ route('checkout.retry', $order->order_number) }}">
+                        @csrf
+                        <button type="submit" class="btn-ghost !px-5 !py-2.5 text-sm">
+                            {{ $id ? 'Ganti Metode / Ulangi Pembayaran' : 'Change Method / Retry Payment' }}
+                        </button>
+                    </form>
+                    @if ($order->service_schedule_id)
+                        <form method="POST" action="{{ route('checkout.cancel', ['order' => $order->order_number, 'recreate' => 1]) }}">
+                            @csrf
+                            <button type="submit" class="inline-flex items-center justify-center rounded-full border border-navy-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:border-navy hover:text-navy">
+                                {{ $id ? 'Reset & Ubah Data Pesanan' : 'Reset & Edit Order Details' }}
+                            </button>
+                        </form>
+                    @endif
+                    <form method="POST" action="{{ route('checkout.cancel', $order->order_number) }}">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center justify-center rounded-full border border-rose-200 bg-white px-5 py-2.5 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50">
+                            {{ $id ? 'Batalkan Pesanan' : 'Cancel Order' }}
+                        </button>
+                    </form>
+                </div>
+
                 <p class="mt-6 text-xs text-slate-500">{{ $id ? 'Pembayaran diproses aman oleh Midtrans (QRIS, e-wallet, VA, kartu).' : 'Securely processed by Midtrans (QRIS, e-wallet, VA, card).' }}</p>
             </div>
         </div>

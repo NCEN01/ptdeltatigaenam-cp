@@ -56,15 +56,17 @@
         x-data="{
             i: 0,
             n: {{ count($slides) }},
+            {{-- Sengaja tidak disimpan ke storage: tombol X hanya menutup bar
+                 di halaman ini, refresh/pindah halaman memunculkannya lagi. --}}
             dismissed: false,
             _t: null,
             init() {
-                try { this.dismissed = sessionStorage.getItem('dte_promo_x') === '1'; } catch (e) {}
+                try { sessionStorage.removeItem('dte_promo_x'); } catch (e) {}
                 this.play();
             },
             play() { if (this.n > 1 && !this._t) { this._t = setInterval(() => { this.i = (this.i + 1) % this.n; }, 5500); } },
             pause() { clearInterval(this._t); this._t = null; },
-            close() { this.dismissed = true; this.pause(); try { sessionStorage.setItem('dte_promo_x', '1'); } catch (e) {} },
+            close() { this.dismissed = true; this.pause(); },
         }"
         x-show="!dismissed"
         x-cloak

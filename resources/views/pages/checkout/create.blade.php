@@ -1,7 +1,10 @@
 @php
     $id = app()->getLocale() === 'id';
     $oldParticipants = old('participants');
-    $rows = $oldParticipants ?: [['name' => '', 'phone' => '']];
+    $prefillParticipants = (! $oldParticipants && empty($paidOrder) && !empty($pendingOrder?->participants))
+        ? $pendingOrder->participants
+        : null;
+    $rows = $oldParticipants ?: ($prefillParticipants ?: [['name' => '', 'phone' => '']]);
     $unit = (int) $unitPrice;
 @endphp
 
@@ -16,10 +19,80 @@
             </a>
             <div class="grid gap-8 lg:grid-cols-12 lg:items-start lg:gap-10">
                 {{-- Form --}}
-                <div class="lg:col-span-7">
-                    <form method="POST" action="{{ route('checkout.store') }}" class="space-y-6">
+                <div class="lg:col-span-7 space-y-6">
+                    @if (!empty($paidOrder))
+                        <div class="rounded-3xl border border-emerald-200 bg-emerald-50/75 p-6">
+                            <div class="flex items-start gap-3.5">
+                                <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-emerald-600 text-white">
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
+                                <div class="min-w-0 flex-1">
+                                    <p class="font-display text-lg font-semibold text-navy">
+                                        {{ $id ? 'Pembayaran Jadwal Ini Sudah Lunas' : 'This Schedule Is Already Paid' }}
+                                    </p>
+                                    <p class="mt-1 text-sm leading-relaxed text-slate-700">
+                                        {{ $id
+                                            ? "Anda sudah memiliki pesanan lunas ({$paidOrder->order_number} · {$paidOrder->quantity} peserta). Anda dapat langsung melihat bukti pembayaran tanpa mengisi ulang formulir, atau tetap mendaftar bila ingin menambah peserta baru."
+                                            : "You already have a paid order ({$paidOrder->order_number} · {$paidOrder->quantity} participant(s)). You can skip straight to your payment receipt, or continue below to register additional participants." }}
+                                    </p>
+                                    <div class="mt-4 flex flex-wrap items-center gap-3">
+                                        <a href="{{ route('checkout.finish', $paidOrder->order_number) }}" class="btn-blue !px-5 !py-2.5 text-sm">
+                                            {{ $id ? 'Lihat Bukti Pembayaran (Lewati)' : 'View Payment Receipt (Skip)' }}
+                                        </a>
+                                        @if (empty($repurchase))
+                                            <a href="{{ route('checkout.create', ['schedule' => $schedule->id, 'repurchase' => 1]) }}#form-checkout" class="btn-ghost !px-5 !py-2.5 text-sm">
+                                                {{ $id ? 'Tetap Daftar Peserta Tambahan' : 'Register Additional Participants' }}
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if (!empty($pendingOrder))
+                        <div class="rounded-3xl border border-amber-200 bg-amber-50/75 p-6">
+                            <div class="flex items-start gap-3.5">
+                                <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-amber-500 text-white">
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                                </span>
+                                <div class="min-w-0 flex-1">
+                                    <p class="font-display text-lg font-semibold text-navy">
+                                        {{ $id ? 'Ada Pesanan Menunggu Pembayaran' : 'You Have a Pending Payment' }}
+                                    </p>
+                                    <p class="mt-1 text-sm leading-relaxed text-slate-700">
+                                        {{ $id
+                                            ? "Pesanan {$pendingOrder->order_number} ({$pendingOrder->quantity} peserta · Rp ".number_format((float) $pendingOrder->total_amount, 0, ',', '.').") masih berstatus menunggu pembayaran. Lanjutkan pembayaran, ganti metode bayar, atau kirim formulir di bawah untuk mereset pesanan."
+                                            : "Order {$pendingOrder->order_number} ({$pendingOrder->quantity} participant(s) · Rp ".number_format((float) $pendingOrder->total_amount, 0, ',', '.').") is awaiting payment. Continue payment, change payment method, or submit the form below to reset the order." }}
+                                    </p>
+                                    <div class="mt-4 flex flex-wrap items-center gap-2.5">
+                                        <a href="{{ route('checkout.pay', $pendingOrder->order_number) }}" class="btn-blue !px-5 !py-2.5 text-sm">
+                                            {{ $id ? 'Lanjutkan Pembayaran' : 'Continue Payment' }}
+                                        </a>
+                                        <form method="POST" action="{{ route('checkout.retry', $pendingOrder->order_number) }}">
+                                            @csrf
+                                            <button type="submit" class="btn-ghost !px-5 !py-2.5 text-sm">
+                                                {{ $id ? 'Ganti Metode / Ulangi Bayar' : 'Change Method / Retry' }}
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{{ route('checkout.cancel', $pendingOrder->order_number) }}">
+                                            @csrf
+                                            <button type="submit" class="inline-flex items-center justify-center rounded-full border border-rose-200 bg-white px-4 py-2.5 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50">
+                                                {{ $id ? 'Batalkan Pesanan' : 'Cancel Order' }}
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    <form id="form-checkout" method="POST" action="{{ route('checkout.store') }}" class="space-y-6">
                     @csrf
                     <input type="hidden" name="service_schedule_id" value="{{ $schedule->id }}">
+                    @if (!empty($paidOrder))
+                        <input type="hidden" name="confirm_repurchase" value="1">
+                    @endif
 
                     @if ($errors->any())
                         <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4">
@@ -34,10 +107,10 @@
                     <div class="rounded-3xl border border-navy-100 p-7">
                         <h2 class="font-display text-xl font-semibold text-navy">{{ $id ? 'Data Pemesan' : 'Your Details' }}</h2>
                         <div class="mt-5 grid gap-5 sm:grid-cols-2">
-                            <x-field name="customer_name" :label="__('site.contact.name')" :value="$customer->name" required />
-                            <x-field name="customer_email" type="email" :label="__('site.contact.email')" :value="$customer->email" required />
+                            <x-field name="customer_name" :label="__('site.contact.name')" :value="$customer->name" required maxlength="150" />
+                            <x-field name="customer_email" type="email" :label="__('site.contact.email')" :value="$customer->email" required maxlength="150" />
                             <x-phone-field name="customer_phone" :label="__('site.contact.phone')" :value="$customer->phone" required />
-                            <x-field name="customer_company" :label="$id ? 'Perusahaan' : 'Company'" :value="$customer->company" />
+                            <x-field name="customer_company" :label="$id ? 'Perusahaan' : 'Company'" :value="$customer->company" minlength="2" maxlength="200" />
                         </div>
                     </div>
 
@@ -74,12 +147,12 @@
                                     <div class="grid gap-4 sm:grid-cols-2">
                                         <div>
                                             <label class="mb-1.5 block text-sm font-medium text-navy" for="p-name-{{ $i }}">{{ $id ? 'Nama Peserta' : 'Participant Name' }}<span class="text-gold" aria-hidden="true"> *</span></label>
-                                            <input data-field="name" id="p-name-{{ $i }}" type="text" name="participants[{{ $i }}][name]" value="{{ $p['name'] ?? '' }}" required
+                                            <input data-field="name" id="p-name-{{ $i }}" type="text" name="participants[{{ $i }}][name]" value="{{ $p['name'] ?? '' }}" required maxlength="150" autocomplete="off"
                                                    class="w-full rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold">
                                         </div>
                                         <div>
                                             <label class="mb-1.5 block text-sm font-medium text-navy" for="p-phone-{{ $i }}">{{ $id ? 'No. Telepon' : 'Phone' }}<span class="text-gold" aria-hidden="true"> *</span></label>
-                                            <input data-field="phone" id="p-phone-{{ $i }}" type="tel" name="participants[{{ $i }}][phone]" value="{{ $p['phone'] ?? '' }}" required
+                                            <input data-field="phone" id="p-phone-{{ $i }}" type="tel" inputmode="tel" name="participants[{{ $i }}][phone]" value="{{ $p['phone'] ?? '' }}" required maxlength="50" pattern="\+?[0-9 \(\)\.\-]{7,50}"
                                                    class="w-full rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold">
                                         </div>
                                     </div>
@@ -98,12 +171,12 @@
                                 <div class="grid gap-4 sm:grid-cols-2">
                                     <div>
                                         <label class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'Nama Peserta' : 'Participant Name' }}<span class="text-gold" aria-hidden="true"> *</span></label>
-                                        <input data-field="name" type="text" name="" required
+                                        <input data-field="name" type="text" name="" required maxlength="150" autocomplete="off"
                                                class="w-full rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold">
                                     </div>
                                     <div>
                                         <label class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'No. Telepon' : 'Phone' }}<span class="text-gold" aria-hidden="true"> *</span></label>
-                                        <input data-field="phone" type="tel" name="" required
+                                        <input data-field="phone" type="tel" inputmode="tel" name="" required maxlength="50" pattern="\+?[0-9 \(\)\.\-]{7,50}"
                                                class="w-full rounded-2xl border border-navy-200 bg-white px-4 py-3 text-navy shadow-sm transition-colors placeholder:text-slate-400 focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold">
                                     </div>
                                 </div>
@@ -111,7 +184,7 @@
                         </template>
 
                         <div class="mt-5">
-                            <x-field name="notes" type="textarea" :label="$id ? 'Catatan (opsional)' : 'Notes (optional)'" />
+                            <x-field name="notes" type="textarea" :label="$id ? 'Catatan (opsional)' : 'Notes (optional)'" maxlength="1000" />
                         </div>
                     </div>
 

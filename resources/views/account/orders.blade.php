@@ -60,16 +60,36 @@
                             </div>
                         </div>
 
-                        @if ($order->status !== 'paid' && ! config('midtrans.is_production'))
+                        @if (in_array($order->status, ['pending', 'expired', 'failed'], true))
                             <div class="mt-4 flex flex-wrap items-center gap-3 border-t border-dashed border-navy-100 pt-4">
-                                <a href="{{ route('checkout.pay', $order->order_number) }}" class="btn-ghost !px-5 !py-2.5 text-sm">{{ $id ? 'Lanjutkan pembayaran' : 'Continue payment' }}</a>
-                                <form method="POST" action="{{ route('checkout.simulate', $order->order_number) }}">
+                                @if ($order->status === 'pending')
+                                    <a href="{{ route('checkout.pay', $order->order_number) }}" class="btn-blue !px-5 !py-2.5 text-sm">{{ $id ? 'Lanjutkan pembayaran' : 'Continue payment' }}</a>
+                                @endif
+                                <form method="POST" action="{{ route('checkout.retry', $order->order_number) }}">
                                     @csrf
-                                    <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
-                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                        {{ $id ? 'Simulasi Bayar (Sandbox)' : 'Simulate Payment (Sandbox)' }}
+                                    <button type="submit" class="btn-ghost !px-5 !py-2.5 text-sm">
+                                        {{ $order->status === 'pending'
+                                            ? ($id ? 'Ganti Metode / Ulangi Bayar' : 'Change Method / Retry')
+                                            : ($id ? 'Coba Bayar Lagi' : 'Retry Payment') }}
                                     </button>
                                 </form>
+                                @if ($order->status === 'pending')
+                                    <form method="POST" action="{{ route('checkout.cancel', $order->order_number) }}">
+                                        @csrf
+                                        <button type="submit" class="inline-flex items-center justify-center rounded-full border border-rose-200 bg-white px-5 py-2.5 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50">
+                                            {{ $id ? 'Batalkan' : 'Cancel' }}
+                                        </button>
+                                    </form>
+                                @endif
+                                @if (! config('midtrans.is_production') && ! app()->environment('production'))
+                                    <form method="POST" action="{{ route('checkout.simulate', $order->order_number) }}">
+                                        @csrf
+                                        <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
+                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            {{ $id ? 'Simulasi Bayar (Sandbox)' : 'Simulate Payment (Sandbox)' }}
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         @endif
                     </div>

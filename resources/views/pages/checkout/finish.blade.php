@@ -32,7 +32,23 @@
             <div class="mt-8 flex flex-wrap justify-center gap-3">
                 <a href="{{ route('account.orders') }}" class="btn-blue">{{ $id ? 'Lihat Pesanan Saya' : 'View My Orders' }}</a>
                 @if ($order->status === 'pending')
-                    <a href="{{ route('checkout.pay', $order->order_number) }}" class="btn-ghost">{{ $id ? 'Bayar Lagi' : 'Pay Again' }}</a>
+                    <a href="{{ route('checkout.pay', $order->order_number) }}" class="btn-ghost">{{ $id ? 'Lanjutkan Pembayaran' : 'Continue Payment' }}</a>
+                    <form method="POST" action="{{ route('checkout.retry', $order->order_number) }}">
+                        @csrf
+                        <button type="submit" class="btn-ghost">{{ $id ? 'Ganti Metode / Ulangi Bayar' : 'Change Method / Retry' }}</button>
+                    </form>
+                    <form method="POST" action="{{ route('checkout.cancel', $order->order_number) }}">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center justify-center rounded-full border border-rose-200 bg-white px-6 py-3 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50">
+                            {{ $id ? 'Batalkan Pesanan' : 'Cancel Order' }}
+                        </button>
+                    </form>
+                @elseif (in_array($order->status, ['expired', 'failed'], true))
+                    <form method="POST" action="{{ route('checkout.retry', $order->order_number) }}">
+                        @csrf
+                        <button type="submit" class="btn-ghost">{{ $id ? 'Coba Bayar Lagi' : 'Retry Payment' }}</button>
+                    </form>
+                    <a href="{{ route('services.index') }}" class="btn-ghost">{{ __('site.cta.explore') }}</a>
                 @elseif ($order->status !== 'paid')
                     <a href="{{ route('services.index') }}" class="btn-ghost">{{ __('site.cta.explore') }}</a>
                 @endif

@@ -8,6 +8,7 @@ use App\Filament\Resources\AgendaResource\Pages;
 use App\Models\Agenda;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -75,7 +76,48 @@ class AgendaResource extends Resource
             ]),
         ])->filters([
             Tables\Filters\SelectFilter::make('status')->options(['draft' => 'Draft', 'published' => 'Terbit', 'archived' => 'Arsip']),
+        ])->headerActions([
+            Tables\Actions\Action::make('syncAutoDraft')
+                ->label('Auto-Draft Agenda < 1 Minggu')
+                ->icon('heroicon-o-arrow-path')
+                ->color('warning')
+                ->requiresConfirmation()
+                ->modalHeading('Konversi Agenda Terdekat ke Draft Layanan')
+                ->modalDescription('Seluruh agenda berstatus Terbit yang waktu mulainya tinggal <= 7 hari ke depan akan otomatis dibuatkan Draft Layanan untuk direview.')
+                ->action(function (): void {
+                    $count = Agenda::syncUpcomingAgendasToDraftServices();
+                    Notification::make()
+                        ->title($count > 0 ? "{$count} draft layanan berhasil dibuat" : 'Tidak ada agenda baru yang perlu dikonversi')
+                        ->success()
+                        ->send();
+                }),
         ])->actions([
+            Tables\Actions\Action::make('draftToService')
+                ->label('Jadikan Draft Layanan')
+                ->icon('heroicon-o-document-duplicate')
+                ->color('gold')
+                ->requiresConfirmation()
+                ->modalHeading('Buat Draft Layanan dari Agenda Ini')
+                ->modalDescription('Agenda ini akan disalin menjadi layanan berstatus Draft (nonaktif) beserta jadwalnya, dan notifikasi review akan dikirim ke Admin Konten & Super Admin.')
+                ->visible(fn (Agenda $record): bool => $record->draftedService() === null)
+                ->action(function (Agenda $record): void {
+                    $service = $record->draftToService();
+                    if ($service) {
+                        Notification::make()
+                            ->title('Draft layanan berhasil dibuat')
+                            ->body('Silakan lengkapi kategori serta harga di menu Layanan.')
+                            ->success()
+                            ->send();
+                    }
+                }),
+            Tables\Actions\Action::make('viewDraftService')
+                ->label('Review Layanan')
+                ->icon('heroicon-o-arrow-top-right-on-square')
+                ->color('info')
+                ->visible(fn (Agenda $record): bool => $record->draftedService() !== null)
+                ->url(fn (Agenda $record): ?string => ($svc = $record->draftedService())
+                    ? ServiceResource::getUrl('edit', ['record' => $svc->getKey()])
+                    : null),
             Tables\Actions\EditAction::make(),
             Tables\Actions\DeleteAction::make(),
         ])->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);

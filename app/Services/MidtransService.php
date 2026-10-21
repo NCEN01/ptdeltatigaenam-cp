@@ -23,13 +23,14 @@ class MidtransService
     }
 
     /**
-     * Create a Snap token for an order. The Midtrans order_id mirrors order_number.
+     * Create a Snap token for an order. The Midtrans order_id defaults to
+     * order_number, or accepts a retry-suffixed ID when resetting a pending order.
      */
-    public function createSnapToken(Order $order): string
+    public function createSnapToken(Order $order, ?string $midtransOrderId = null): string
     {
         $params = [
             'transaction_details' => [
-                'order_id' => $order->order_number,
+                'order_id' => $midtransOrderId ?: $order->order_number,
                 'gross_amount' => (int) round($order->total_amount),
             ],
             'item_details' => [[

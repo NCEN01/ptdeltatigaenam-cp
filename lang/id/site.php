@@ -55,6 +55,10 @@ return [
         'unavailable' => 'Pembayaran online sedang tidak tersedia. Silakan hubungi kami untuk pendaftaran.',
         'gateway_error' => 'Maaf, terjadi kendala saat memproses pembayaran. Silakan coba lagi atau hubungi kami.',
         'paid_simulated' => 'Pembayaran dikonfirmasi (simulasi sandbox). Pesanan Anda kini berstatus lunas.',
+        'already_paid_redirect' => 'Pesanan ini sudah lunas. Anda dialihkan langsung ke bukti pembayaran.',
+        'payment_reset' => 'Sesi pembayaran telah diperbarui. Silakan pilih metode pembayaran Anda.',
+        'cancelled' => 'Pesanan berhasil dibatalkan.',
+        'cancelled_recreate' => 'Pesanan sebelumnya dibatalkan. Silakan lengkapi kembali data pendaftaran Anda.',
     ],
     'contact' => [
         'title' => 'Mari berbincang',

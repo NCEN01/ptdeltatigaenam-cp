@@ -128,12 +128,12 @@
                             <input type="text" name="website_url" tabindex="-1" autocomplete="off">
                         </div>
                         <div class="grid gap-5 sm:grid-cols-2">
-                            <x-field name="name" :label="__('site.contact.name')" required />
-                            <x-field name="email" type="email" :label="__('site.contact.email')" required />
+                            <x-field name="name" :label="__('site.contact.name')" required maxlength="150" />
+                            <x-field name="email" type="email" :label="__('site.contact.email')" required maxlength="150" />
                             <x-phone-field name="phone" :label="__('site.contact.phone')" />
-                            <x-field name="subject" :label="__('site.contact.subject')" />
+                            <x-field name="subject" :label="__('site.contact.subject')" minlength="3" maxlength="200" />
                         </div>
-                        <x-field name="message" :label="__('site.contact.message')" type="textarea" required />
+                        <x-field name="message" :label="__('site.contact.message')" type="textarea" required minlength="10" maxlength="5000" />
 
                         <x-recaptcha />
 

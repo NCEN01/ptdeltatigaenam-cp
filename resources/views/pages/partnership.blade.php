@@ -610,14 +610,14 @@
                                         <p id="part-a" class="font-display text-navy">{{ $id ? 'Informasi Perusahaan' : 'Company Information' }}</p>
                                     </div>
                                     <div class="mt-6 grid gap-5 sm:grid-cols-2">
-                                        <x-field name="company_name" :label="$id ? 'Nama Perusahaan' : 'Company Name'" :value="$draftValue('company_name')" required />
-                                        <x-field name="pic_name" :label="$id ? 'Nama PIC' : 'PIC Name'" :value="$draftValue('pic_name')" required />
-                                        <x-field name="pic_position" :label="$id ? 'Jabatan PIC' : 'PIC Position'" :value="$draftValue('pic_position')" />
+                                        <x-field name="company_name" :label="$id ? 'Nama Perusahaan' : 'Company Name'" :value="$draftValue('company_name')" required minlength="2" maxlength="200" />
+                                        <x-field name="pic_name" :label="$id ? 'Nama PIC' : 'PIC Name'" :value="$draftValue('pic_name')" required maxlength="150" />
+                                        <x-field name="pic_position" :label="$id ? 'Jabatan PIC' : 'PIC Position'" :value="$draftValue('pic_position')" maxlength="150" />
                                         <x-phone-field name="phone" :label="$id ? 'No. Telp/WhatsApp' : 'Phone/WhatsApp'" :value="$draftValue('phone')" required />
-                                        <x-field name="email" type="email" :label="__('site.contact.email')" :value="$draftValue('email')" required />
+                                        <x-field name="email" type="email" :label="__('site.contact.email')" :value="$draftValue('email')" required maxlength="150" />
                                     </div>
                                     <div class="mt-5">
-                                        <x-field name="company_address" type="textarea" :label="$id ? 'Alamat Perusahaan' : 'Company Address'" :value="$draftValue('company_address')" required />
+                                        <x-field name="company_address" type="textarea" :label="$id ? 'Alamat Perusahaan' : 'Company Address'" :value="$draftValue('company_address')" required minlength="5" maxlength="1000" />
                                     </div>
                                 </div>
 
@@ -667,11 +667,13 @@
                                     <div class="mt-6 grid gap-5 sm:grid-cols-2">
                                         <div class="min-w-0" data-field-box="preferred_meeting_at">
                                             <label for="preferred_meeting_at" class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'Waktu Diinginkan' : 'Preferred Time' }}</label>
-                                            <input type="datetime-local" id="preferred_meeting_at" name="preferred_meeting_at" value="{{ old('preferred_meeting_at', $draftValue('preferred_meeting_at')) }}" class="w-full min-w-0 rounded-2xl border border-navy-400 bg-white px-4 py-3 text-navy shadow-sm transition-colors focus:border-navy focus:outline-none focus:ring-2 focus:ring-sky-700">
+                                            <input type="datetime-local" id="preferred_meeting_at" name="preferred_meeting_at" min="{{ now()->format('Y-m-d\TH:i') }}" value="{{ old('preferred_meeting_at', $draftValue('preferred_meeting_at')) }}" @error('preferred_meeting_at') aria-invalid="true" aria-describedby="preferred_meeting_at-error" @enderror class="w-full min-w-0 rounded-2xl border border-navy-400 bg-white px-4 py-3 text-navy shadow-sm transition-colors focus:border-navy focus:outline-none focus:ring-2 focus:ring-sky-700">
+                                            @error('preferred_meeting_at')<p id="preferred_meeting_at-error" class="mt-1.5 text-sm text-rose-600" role="alert">{{ $message }}</p>@enderror
                                         </div>
                                         <div class="min-w-0" data-field-box="alternative_meeting_at">
                                             <label for="alternative_meeting_at" class="mb-1.5 block text-sm font-medium text-navy">{{ $id ? 'Waktu Alternatif' : 'Alternative Time' }}</label>
-                                            <input type="datetime-local" id="alternative_meeting_at" name="alternative_meeting_at" value="{{ old('alternative_meeting_at', $draftValue('alternative_meeting_at')) }}" class="w-full min-w-0 rounded-2xl border border-navy-400 bg-white px-4 py-3 text-navy shadow-sm transition-colors focus:border-navy focus:outline-none focus:ring-2 focus:ring-sky-700">
+                                            <input type="datetime-local" id="alternative_meeting_at" name="alternative_meeting_at" min="{{ now()->format('Y-m-d\TH:i') }}" value="{{ old('alternative_meeting_at', $draftValue('alternative_meeting_at')) }}" @error('alternative_meeting_at') aria-invalid="true" aria-describedby="alternative_meeting_at-error" @enderror class="w-full min-w-0 rounded-2xl border border-navy-400 bg-white px-4 py-3 text-navy shadow-sm transition-colors focus:border-navy focus:outline-none focus:ring-2 focus:ring-sky-700">
+                                            @error('alternative_meeting_at')<p id="alternative_meeting_at-error" class="mt-1.5 text-sm text-rose-600" role="alert">{{ $message }}</p>@enderror
                                         </div>
                                     </div>
                                 </div>
@@ -686,7 +688,7 @@
                                         </div>
                                     </div>
                                     <div class="mt-6">
-                                        <x-field name="notes" type="textarea" :label="$id ? 'Catatan' : 'Notes'" :value="$draftValue('notes')" />
+                                        <x-field name="notes" type="textarea" :label="$id ? 'Catatan' : 'Notes'" :value="$draftValue('notes')" maxlength="2000" />
                                     </div>
                                 </div>
                             </div>

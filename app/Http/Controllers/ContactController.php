@@ -27,8 +27,8 @@ class ContactController extends Controller
             'name' => ['required', 'string', 'max:150', new PersonName],
             'email' => ['required', 'email', 'max:150', new SafeEmail],
             'phone' => ['nullable', 'string', 'max:50', new PhoneNumber],
-            'subject' => ['nullable', 'string', 'max:200'],
-            'message' => ['required', 'string', 'max:5000'],
+            'subject' => ['nullable', 'string', 'min:3', 'max:200'],
+            'message' => ['required', 'string', 'min:10', 'max:5000'],
 
             /* Kotak "Saya bukan robot". rules() mengembalikan array kosong
                selama kuncinya belum diisi di .env, jadi kolom ini tidak
@@ -41,7 +41,8 @@ class ContactController extends Controller
            akan mencoba menulisnya ke kolom contact_messages yang tidak ada. */
         unset($data['g-recaptcha-response']);
 
-        ContactMessage::create([...$data, 'locale' => app()->getLocale(), 'is_read' => false]);
+        $contactMessage = ContactMessage::create([...$data, 'locale' => app()->getLocale(), 'is_read' => false]);
+        $contactMessage->notifyAdmins();
 
         return back()->with('status', __('site.contact.success'));
     }

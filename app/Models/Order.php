@@ -57,7 +57,7 @@ class Order extends Model
         try {
             $recipients = User::query()
                 ->where('is_active', true)
-                ->role(['super_admin', 'admin_transaksi'])
+                ->whereHas('roles', fn ($q) => $q->whereIn('name', ['super_admin', 'admin_transaksi']))
                 ->get();
 
             if ($recipients->isEmpty()) {
@@ -77,7 +77,7 @@ class Order extends Model
                 $notification->actions([
                     Action::make('view')
                         ->label('Lihat pesanan')
-                        ->url(OrderResource::getUrl('view', ['record' => $this->getKey()]))
+                        ->url(OrderResource::getUrl('view', ['record' => $this->getKey()], panel: 'admin'))
                         ->markAsRead(),
                 ]);
             } catch (\Throwable $e) {

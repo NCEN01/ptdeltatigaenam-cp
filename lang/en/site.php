@@ -55,6 +55,10 @@ return [
         'unavailable' => 'Online payment is currently unavailable. Please contact us to register.',
         'gateway_error' => 'Sorry, something went wrong while processing your payment. Please try again or contact us.',
         'paid_simulated' => 'Payment confirmed (sandbox simulation). Your order is now marked as paid.',
+        'already_paid_redirect' => 'This order is already paid. Redirected directly to your payment receipt.',
+        'payment_reset' => 'Payment session has been reset. Please choose your payment method.',
+        'cancelled' => 'Your order has been cancelled.',
+        'cancelled_recreate' => 'Your previous pending order was cancelled. Please fill in your registration details again.',
     ],
     'contact' => [
         'title' => "Let's talk",

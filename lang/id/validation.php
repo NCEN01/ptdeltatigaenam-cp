@@ -196,6 +196,15 @@ return [
         'g-recaptcha-response' => [
             'required' => 'Centang dulu kotak "Saya bukan robot" sebelum mengirim.',
         ],
+
+        /* Tanpa ini aturan after:now terbaca "tanggal setelah now". */
+        'preferred_meeting_at' => [
+            'after' => 'Waktu presentasi yang diinginkan harus di masa mendatang.',
+        ],
+        'alternative_meeting_at' => [
+            'after' => 'Waktu presentasi alternatif harus di masa mendatang.',
+            'different' => 'Waktu alternatif harus berbeda dari waktu yang diinginkan.',
+        ],
     ],
 
     /*
