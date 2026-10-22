@@ -208,130 +208,13 @@
                      yang jauh lebih pendek. --}}
             </div>
 
-            {{-- Purchase panel --}}
-            {{-- Pembungkus sticky memayungi panel jadwal DAN kartu bagikan di
-                 bawahnya. Kalau hanya panelnya yang sticky, kartu bagikan
-                 tertinggal menggulir sendiri dan di layar panjang ia berpisah
-                 jauh dari panel yang menempel di atasnya. --}}
-            <div class="lg:col-span-5" id="daftar">
+            {{-- Purchase panel (layar lebar). Di ponsel panel yang sama tampil di
+                 bawah "Rangkaian materi" — lihat seksi #daftar versi ponsel di
+                 bawah. Pembungkus sticky memayungi panel jadwal DAN kartu
+                 bagikan, supaya keduanya menempel bersama. --}}
+            <div class="hidden lg:col-span-5 lg:block" id="daftar">
                 <div class="sticky top-28 space-y-5">
-                <div class="overflow-hidden rounded-3xl border border-navy-100 bg-white shadow-lift">
-                    {{-- Header — same aurora/blue-gradient treatment as the hero above --}}
-                    <div class="relative overflow-hidden border-b border-navy-100 bg-navy-950 p-5 text-white">
-                        <div class="pointer-events-none absolute inset-0 aurora animate-aurora-drift opacity-60"></div>
-                        <div class="pointer-events-none absolute inset-0 grain opacity-40"></div>
-                        <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-soft/45 to-transparent"></div>
-                        {{-- Layanan per penugasan hanya membuka satu batch, jadi tidak ada
-                             yang bisa "dipilih". Teksnya menyesuaikan agar tidak menjanjikan
-                             pilihan yang tidak ada. --}}
-                        <div class="relative">
-                            <p class="font-mono text-[11px] uppercase tracking-normal text-gold-soft">{{ $id ? 'Amankan Kursi Anda' : 'Secure Your Seat' }}</p>
-                            <h3 class="mt-2 font-display text-xl">
-                                @if ($scheduleCount > 1)
-                                    {{ $id ? 'Pilih jadwal di bawah' : 'Pick a schedule below' }}
-                                @else
-                                    {{ $id ? 'Jadwal terdekat' : 'Next available schedule' }}
-                                @endif
-                            </h3>
-                        </div>
-                    </div>
-
-                    {{-- Jadwal --}}
-                    <div class="space-y-2.5 p-4">
-                        {{-- Sisa kursi dihitung PER angkatan, di dalam perulangan.
-                             Dulu dihitung sekali di luarnya dari kuota layanan,
-                             sehingga tiga angkatan dengan keterisian berbeda
-                             menunjukkan angka yang sama persis. --}}
-                        @forelse ($service->schedules as $schedule)
-                            @php
-                                $left = $schedule->seats_available;
-                                $full = $left !== null && $left <= 0;
-                                $low = $left !== null && $left > 0 && $left <= 5;
-                            @endphp
-                            <div class="rounded-2xl border {{ $low ? 'border-amber-200' : 'border-navy-100' }} bg-white p-4 transition-shadow duration-300 hover:shadow-card">
-                                <div class="flex items-start justify-between gap-3">
-                                    <div>
-                                        <p class="font-display text-base text-navy">{{ $schedule->start_date?->translatedFormat('d M Y') }}</p>
-                                        @if ($schedule->start_time)
-                                            <p class="mt-1 font-mono text-xs text-slate-600">
-                                                {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }}
-                                                @if ($schedule->end_time) - {{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }} WIB @endif
-                                            </p>
-                                        @endif
-                                        @if ($service->location)<p class="mt-0.5 text-[13px] text-slate-500">{{ $service->location }}</p>@endif
-                                    </div>
-                                    @if ($service->modeLabel())
-                                        <span class="shrink-0 rounded-full bg-navy-50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-slate-600">{{ $service->modeLabel() }}</span>
-                                    @endif
-                                </div>
-
-                                @if ($left !== null)
-                                    <div class="mt-2.5 flex items-center gap-3">
-                                        {{-- Quota bar --}}
-                                        <div class="flex-1 h-1.5 rounded-full bg-navy-100 overflow-hidden">
-                                            <div class="h-full rounded-full transition-all {{ $full ? 'bg-rose-500' : ($low ? 'bg-amber-500' : 'bg-emerald-500') }}"
-                                                 style="width: {{ $schedule->quota > 0 ? min(100, round(($schedule->seats_taken / $schedule->quota) * 100)) : 0 }}%"></div>
-                                        </div>
-                                        <span class="shrink-0 font-mono text-[10px] uppercase tracking-wider {{ $full ? 'text-rose-600' : ($low ? 'text-amber-700' : 'text-emerald-700') }}">
-                                            {{ $full ? ($id ? 'Penuh' : 'Full') : $left.'/'.$schedule->quota }}
-                                        </span>
-                                    </div>
-                                @endif
-
-                                @if ($schedule->effectivePrice() > 0)
-                                    <p class="mt-2.5 font-display text-lg text-navy">Rp {{ number_format($schedule->effectivePrice(), 0, ',', '.') }}<span class="text-sm font-normal text-slate-500"> / {{ $priceUnit }}</span></p>
-                                @endif
-
-                                @if ($service->is_purchasable)
-                                    @if ($full)
-                                        <button disabled class="mt-3 w-full justify-center !py-2 text-sm rounded-full border border-navy-200 bg-navy-50 text-slate-500 cursor-not-allowed font-medium">
-                                            {{ $id ? 'Kuota Penuh' : 'Fully Booked' }}
-                                        </button>
-                                    @elseif (Route::has('checkout.create'))
-                                        <a href="{{ route('checkout.create', $schedule->id) }}" class="btn-blue mt-3 w-full justify-center !py-2 text-sm">{{ $id ? 'Daftar / Beli' : 'Register / Buy' }}</a>
-                                    @else
-                                        <a href="{{ route('contact.index') }}" class="btn-ghost mt-3 w-full justify-center !py-2 text-sm">{{ __('site.cta.consult') }}</a>
-                                    @endif
-                                @endif
-                            </div>
-                        @empty
-                            <div class="rounded-2xl border border-dashed border-navy-200 bg-white p-6 text-center">
-                                <p class="text-sm text-slate-600">{{ $id ? 'Belum ada jadwal terbuka. Hubungi kami untuk jadwal khusus atau in-house training.' : 'No open schedules yet. Contact us for a custom or in-house batch.' }}</p>
-                                <a href="{{ route('contact.index') }}" class="btn-blue mt-5 w-full justify-center">{{ __('site.cta.consult') }}</a>
-                            </div>
-                        @endforelse
-                    </div>
-
-                    @if ($service->is_purchasable && $service->schedules->isNotEmpty())
-                        <div class="space-y-1.5 border-t border-navy-100 bg-neutral-50 px-5 py-4 text-xs text-slate-600">
-                            <div class="flex items-center gap-2">
-                                <svg class="h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 24 24" fill="none"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-                                {{ $id ? 'Pembayaran aman: QRIS, e-wallet, VA, & kartu (Midtrans).' : 'Secure payment: QRIS, e-wallet, VA & card (Midtrans).' }}
-                            </div>
-                            <p class="flex items-center gap-2">
-                                <svg class="h-4 w-4 shrink-0 text-gold-deep" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5 5.5.8-4 3.9 1 5.5L12 15.5 7 18.2l1-5.5-4-3.9 5.5-.8z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-                                {{ $id ? 'Sertifikat resmi untuk setiap peserta yang lulus.' : 'Official certificate for every participant who passes.' }}
-                            </p>
-                        </div>
-                    @endif
-                </div>
-
-                {{-- Bagikan program ini. Bentuknya sama dengan kartu bagikan di
-                     halaman artikel — kotak abu-abu bergaris rambut, satu baris
-                     ajakan, lalu deretan lambang jaringan — dan memakai komponen
-                     yang sama persis, jadi daftar jaringannya tidak bisa
-                     menyimpang antara kedua halaman.
-
-                     Di bawah panel jadwal, bukan di dasar halaman: orang yang
-                     membagikan program biasanya sedang meneruskannya ke atasan
-                     atau rekan yang akan ikut, dan keputusan itu muncul saat ia
-                     sedang menimbang jadwal dan harganya. --}}
-                <div class="rounded-2xl border border-navy-100 bg-neutral-50 p-6">
-                    <p class="mb-4 text-sm font-semibold text-navy">
-                        {{ $id ? 'Bagikan program ini' : 'Share this programme' }}
-                    </p>
-                    <x-share-buttons :url="route('services.show', $service->slug)" :title="$service->title" />
-                </div>
+                    @include('pages.services.partials.purchase-panel')
                 </div>
             </div>
         </div>
@@ -351,29 +234,39 @@
 
                 <div class="mt-10 grid gap-5 {{ $service->mentors->count() > 1 ? 'lg:grid-cols-2' : '' }}">
                     @foreach ($service->mentors as $mentor)
-                        <article class="card flex gap-5 p-5 sm:gap-6 sm:p-6" data-aos="fade-up" data-aos-delay="{{ min($loop->index, 3) * 60 }}">
+                        {{-- Di ponsel: foto kecil dan nama sebaris, lalu bio
+                             selebar kartu di bawahnya. Dengan foto 96px di kiri
+                             seperti di layar lebar, bio di ponsel tinggal lajur
+                             selebar ±180px yang memanjang jadi belasan baris
+                             pendek. Mulai sm susunannya kembali dua kolom: foto
+                             tegak di kiri, nama dan bio di kanan. --}}
+                        <article class="card grid grid-cols-[4rem_minmax(0,1fr)] items-center gap-x-4 gap-y-4 p-5 sm:grid-cols-[7rem_minmax(0,1fr)] sm:items-start sm:gap-x-6 sm:gap-y-0 sm:p-6" data-aos="fade-up" data-aos-delay="{{ min($loop->index, 3) * 60 }}">
                             {{-- Potret tegak di kolom kiri. Bila mentornya belum
                                  punya foto, huruf depan namanya yang mengisi —
                                  lingkaran kosong terbaca sebagai gambar yang gagal
                                  dimuat, dan itu menurunkan kepercayaan pada kartu
                                  yang justru tugasnya membangun kepercayaan. --}}
-                            <div class="h-28 w-24 shrink-0 overflow-hidden rounded-2xl bg-navy-100 sm:h-32 sm:w-28">
+                            <div class="h-[4.75rem] w-16 shrink-0 overflow-hidden rounded-xl bg-navy-100 sm:row-span-2 sm:h-32 sm:w-28 sm:rounded-2xl">
                                 @if ($mentor->photo)
                                     <img src="{{ \Illuminate\Support\Facades\Storage::url($mentor->photo) }}"
                                          alt="{{ $mentor->name }}" loading="lazy" decoding="async"
                                          class="h-full w-full object-cover object-top">
                                 @else
-                                    <span class="grid h-full w-full place-items-center bg-gradient-to-br from-navy-700 to-navy-950 font-display text-3xl font-bold text-white" aria-hidden="true">{{ $mentor->initial }}</span>
+                                    <span class="grid h-full w-full place-items-center bg-gradient-to-br from-navy-700 to-navy-950 font-display text-2xl font-bold text-white sm:text-3xl" aria-hidden="true">{{ $mentor->initial }}</span>
                                 @endif
                             </div>
 
-                            <div class="min-w-0 flex-1">
+                            <div class="min-w-0">
                                 <h3 class="font-display text-lg font-semibold leading-snug text-navy">{{ $mentor->name }}</h3>
                                 @if ($mentor->role)
                                     <p class="mt-0.5 font-mono text-[11px] uppercase tracking-normal text-sky-700">{{ $mentor->role }}</p>
                                 @endif
+                            </div>
+
+                            @if ($mentor->bio || $mentor->linkedin_url)
+                            <div class="col-span-2 min-w-0 sm:col-span-1 sm:col-start-2">
                                 @if ($mentor->bio)
-                                    <p class="mt-2.5 text-pretty text-sm leading-relaxed text-slate-600">{{ $mentor->bio }}</p>
+                                    <p class="text-pretty text-sm leading-relaxed text-slate-600 sm:mt-2.5">{{ $mentor->bio }}</p>
                                 @endif
                                 @if ($mentor->linkedin_url)
                                     <a href="{{ $mentor->linkedin_url }}" target="_blank" rel="noopener"
@@ -383,6 +276,7 @@
                                     </a>
                                 @endif
                             </div>
+                            @endif
                         </article>
                     @endforeach
                 </div>
@@ -437,6 +331,23 @@
             </div>
         </section>
     @endif
+
+    {{-- ===================== PANEL PEMBELIAN · PONSEL =====================
+         Di ponsel panel jadwal dan kartu bagikan turun ke sini, setelah
+         "Rangkaian materi". Di kolom kanan seperti di layar lebar, keduanya
+         jatuh di antara "Tentang program" dan Mentor — memotong bacaan tepat
+         di tengah, sebelum pembaca tahu siapa pengajarnya dan apa materinya.
+         Di sini ia menjadi langkah berikutnya setelah semuanya terbaca.
+
+         data-anchor="daftar": tautan #daftar di halaman ini (tombol Daftar
+         Sekarang, Pilih Jadwal) diarahkan app.js ke salinan yang sedang
+         terlihat, jadi di ponsel ia mendarat di sini, bukan di salinan kolom
+         kanan yang tersembunyi. --}}
+    <section class="section-sm border-t border-navy-50 bg-white lg:hidden" data-anchor="daftar">
+        <div class="container space-y-5">
+            @include('pages.services.partials.purchase-panel')
+        </div>
+    </section>
 
     {{-- ===================== YANG KAMU DAPATKAN =====================
          Daftar benefit: milik program ini bila diisi, kalau tidak daftar
@@ -520,32 +431,77 @@
             </div>
         </section>
 
+    {{-- ===================== LAYANAN TERKAIT =====================
+         Program lain di kategori yang sama. Sampai tiga, kisi biasa sudah
+         memuat semuanya dalam satu baris. Lebih dari itu ia menjadi satu
+         baris yang bisa digeser — rel yang sama dengan "Terus Membaca" di
+         halaman artikel: label, judul, tautan "lihat semua", panah, dan
+         penanda slide. Kisi bertingkat empat-lima kartu di dasar halaman
+         membuat halaman program memanjang untuk hal yang bukan pokoknya.
+
+         Panah dan penanda harus berada di induk langsung slider: di sanalah
+         penangan [data-carousel] bersama mencarinya. --}}
     @if ($related->isNotEmpty())
-        <section class="section-sm border-t border-navy-50 bg-white">
+        @php $relRail = $related->count() > 3; @endphp
+        <section class="section-sm border-t border-navy-50 bg-neutral-50">
             <div class="container">
-                <p class="kicker mb-8" data-aos="fade-up">{{ $id ? 'Layanan terkait' : 'Related services' }}</p>
-                <div class="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    @foreach ($related as $r)
-                        <a href="{{ route('services.show', $r->slug) }}" class="group flex h-full flex-col overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
-                            <div class="relative aspect-[3/2] overflow-hidden bg-navy-100">
-                                @if ($r->image)
-                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($r->image) }}" alt="{{ $r->title }}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
-                                @else
-                                    <div class="h-full w-full bg-gradient-to-br from-navy-200 to-navy-100"></div>
-                                @endif
-                            </div>
-                            <div class="flex flex-1 flex-col p-6">
-                                @if ($r->category)<p class="font-mono text-[10px] uppercase tracking-wider text-gold-deep">{{ $r->category->name }}</p>@endif
-                                <h3 class="mt-1.5 font-display text-lg leading-snug text-navy transition-colors duration-300 group-hover:text-sky-700">{{ $r->title }}</h3>
-                                @if ($r->short_description)<p class="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">{{ $r->short_description }}</p>@endif
-                                <span class="mt-auto flex items-center gap-2 pt-4 text-sm font-medium text-navy">
-                                    {{ $id ? 'Lihat detail' : 'View details' }}
-                                    <svg class="h-4 w-4 text-gold-deep transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                </span>
-                            </div>
+                <div class="mb-8 flex flex-col gap-5 md:mb-10 md:flex-row md:items-end md:justify-between">
+                    <div class="max-w-2xl">
+                        <p class="kicker mb-3" data-aos="fade-up">{{ $id ? 'Layanan Terkait' : 'Related Services' }}</p>
+                        <h2 class="font-display text-2xl text-navy text-balance md:text-4xl" data-aos="fade-up">
+                            @if ($service->category)
+                                {{ $id ? 'Program lain di '.$service->category->name : 'More in '.$service->category->name }}
+                            @else
+                                {{ $id ? 'Program lain yang mungkin Anda perlukan' : 'Other programmes you may need' }}
+                            @endif
+                        </h2>
+                    </div>
+
+                    <div class="flex shrink-0 items-center gap-5" data-aos="fade-up">
+                        <a href="{{ route('services.index') }}" class="link-underline text-sm font-medium">
+                            {{ $id ? 'Lihat semua layanan' : 'View all services' }}
+                            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </a>
-                    @endforeach
+
+                        @if ($relRail)
+                            <div class="hidden items-center gap-2 sm:flex">
+                                <button type="button" data-carousel-prev
+                                        aria-label="{{ $id ? 'Layanan sebelumnya' : 'Previous services' }}"
+                                        class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:bg-none hover:bg-navy-600 active:scale-95 disabled:pointer-events-none disabled:opacity-35">
+                                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </button>
+                                <button type="button" data-carousel-next
+                                        aria-label="{{ $id ? 'Layanan berikutnya' : 'Next services' }}"
+                                        class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-navy-500 to-sky-400 text-white transition hover:-translate-y-0.5 hover:bg-none hover:bg-navy-600 active:scale-95 disabled:pointer-events-none disabled:opacity-35">
+                                    <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </button>
+                            </div>
+                        @endif
+                    </div>
                 </div>
+
+                @if ($relRail)
+                    {{-- data-carousel-max="3": kartu program memuat foto, judul,
+                         dan ringkasan; empat sebaris di layar lebar membuatnya
+                         terlalu sempit untuk judul program yang panjang. --}}
+                    <div class="swiper swiper-equal-height" data-carousel data-carousel-autoplay="false" data-carousel-max="3">
+                        <div class="swiper-wrapper items-stretch">
+                            @foreach ($related as $r)
+                                <div class="swiper-slide h-auto">
+                                    @include('pages.services.partials.related-card')
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex justify-center gap-2" data-carousel-pagination></div>
+                @else
+                    <div class="grid auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+                        @foreach ($related as $r)
+                            @include('pages.services.partials.related-card')
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </section>
     @endif

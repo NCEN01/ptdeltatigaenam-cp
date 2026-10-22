@@ -52,7 +52,11 @@ class AgendaResource extends Resource
             Forms\Components\Section::make('Jadwal & Media')->schema([
                 Forms\Components\DateTimePicker::make('starts_at')->label('Waktu Mulai')->required(),
                 Forms\Components\DateTimePicker::make('ends_at')->label('Waktu Selesai'),
-                MediaUpload::for('image', 'blog', 'agenda')->label('Gambar'),
+                // Profil 'service' (1200x800, 3:2), bukan 'blog' (1200x630). Kartu agenda
+                // di beranda, halaman Agenda, dan halaman Layanan semuanya 3:2 —
+                // sama dengan kartu layanan — jadi gambar 1,9:1 dari profil blog
+                // selalu terpotong kiri-kanannya.
+                MediaUpload::for('image', 'service', 'agenda')->label('Gambar'),
                 Forms\Components\Select::make('status')->options([
                     'draft' => 'Draft', 'published' => 'Terbit', 'archived' => 'Arsip',
                 ])->default('draft')->required(),

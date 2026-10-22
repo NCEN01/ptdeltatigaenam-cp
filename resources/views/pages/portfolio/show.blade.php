@@ -292,7 +292,7 @@
                     <div class="swiper-wrapper items-stretch">
                         @foreach ($latestPortfolios as $r)
                             <div class="swiper-slide h-auto">
-                                <a href="{{ route('portfolio.show', $r->slug) }}" data-spotlight
+                                <a href="{{ route('portfolio.show', $r->slug) }}"
                                    class="card card-hover group flex h-full flex-col overflow-hidden">
                                     <div class="relative aspect-[16/9] shrink-0 overflow-hidden bg-navy-900 sm:aspect-[16/10]">
                                         @if ($imgUrl($r->cover_image))

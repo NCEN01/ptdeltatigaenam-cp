@@ -129,7 +129,7 @@
         @if ($multi)
             <div class="pointer-events-none absolute left-3 top-1/2 hidden -translate-y-1/2 items-center gap-1.5 md:flex">
                 @foreach ($slides as $idx => $s)
-                    <span class="h-1.5 w-1.5 rounded-full transition-all duration-300" :class="i === {{ $idx }} ? 'bg-navy-950/80 w-3' : 'bg-navy-950/25'"></span>
+                    <span class="h-[2px] rounded-full transition-all duration-300" :class="i === {{ $idx }} ? 'w-4 bg-navy-950/80' : 'w-2 bg-navy-950/25'"></span>
                 @endforeach
             </div>
         @endif

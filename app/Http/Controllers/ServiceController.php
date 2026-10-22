@@ -144,8 +144,12 @@ class ServiceController extends Controller
             'related' => Service::where('is_active', true)
                 ->where('service_category_id', $service->service_category_id)
                 ->where('id', '!=', $service->id)
-                ->with(['schedules' => fn ($q) => $q->where('is_active', true)->orderBy('start_date')])
-                ->take(3)->get(),
+                ->with(['category', 'schedules' => fn ($q) => $q->where('is_active', true)->orderBy('start_date')])
+                // Sampai dua belas: lebih dari tiga tampil sebagai rel geser
+                // (lihat "Layanan terkait" di services/show), jadi batas tiga
+                // yang lama tidak lagi diperlukan untuk menjaga tinggi halaman.
+                ->orderBy('sort_order')
+                ->take(12)->get(),
         ]);
     }
 }

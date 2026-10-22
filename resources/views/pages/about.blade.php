@@ -171,8 +171,8 @@
 
                     <div class="flex w-full shrink-0 flex-col gap-3 sm:flex-row md:w-auto">
                         <a href="{{ $cpUrl }}" target="_blank" rel="noopener" class="btn-ghost justify-center">
-                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
                             {{ $isId ? 'Lihat' : 'View' }}
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
                         </a>
                         <a href="{{ $cpUrl }}" download class="btn-blue justify-center">
                             {{ $isId ? 'Unduh PDF' : 'Download PDF' }}

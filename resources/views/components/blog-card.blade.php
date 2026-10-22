@@ -22,7 +22,7 @@
         : null;
 @endphp
 
-<a href="{{ route('blog.show', $post->slug) }}" data-spotlight
+<a href="{{ route('blog.show', $post->slug) }}"
    class="card card-hover group flex h-full flex-col overflow-hidden"
    @if ($animate) data-aos="fade-up" data-aos-delay="{{ $delay }}" @endif>
 

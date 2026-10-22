@@ -183,15 +183,6 @@ try { initHscroll(); } catch (e) { console.error('[hscroll]', e); }
 // pernah terpasang sehingga validasi bawaan peramban kembali bekerja.
 try { initFormValidation(); } catch (e) { console.error('[form-validate]', e); }
 
-// Cursor spotlight glow on cards — delegated; positions the radial glow under the cursor.
-document.addEventListener('pointermove', (e) => {
-    const el = e.target.closest('[data-spotlight]');
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--sx', `${((e.clientX - r.left) / r.width) * 100}%`);
-    el.style.setProperty('--sy', `${((e.clientY - r.top) / r.height) * 100}%`);
-}, { passive: true });
-
 // Button press ripple — delegated, so it also covers buttons added later. The soft
 // scale-down on :active is handled in CSS. Disabled under reduced-motion.
 if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -220,6 +211,21 @@ const carouselEls = document.querySelectorAll('[data-carousel]');
 if (heroEl || heroPromo || heroCar || carouselEls.length > 0) {
     Promise.all([import('swiper'), import('swiper/modules')])
         .then(([{ default: Swiper }, { Autoplay, EffectFade, Navigation, Pagination }]) => {
+            // Garis penanda slide yang aktif terisi seiring sisa waktu putar
+            // otomatis (lihat "Penanda slide" di app.css). progress dari Swiper
+            // berjalan 1 → 0, garisnya 0 → 1. Berhenti saat kursor di atas
+            // carousel (pauseOnMouseEnter) karena event-nya ikut berhenti.
+            const dotProgress = (pagEl) => ({
+                autoplayTimeLeft(_s, _t, progress) {
+                    if (pagEl) pagEl.style.setProperty('--dot-progress', String(1 - progress));
+                },
+                // Dikosongkan tepat saat slide berganti, supaya garis yang baru
+                // aktif tidak sempat tampil penuh satu bingkai sebelum terisi.
+                slideChange(s) {
+                    if (pagEl && s.autoplay?.running) pagEl.style.setProperty('--dot-progress', '0');
+                },
+            });
+
             if (heroEl) {
                 new Swiper(heroEl, {
                     modules: [Autoplay, EffectFade, Pagination, Navigation],
@@ -256,6 +262,7 @@ if (heroEl || heroPromo || heroCar || carouselEls.length > 0) {
                     speed: 800,
                     autoplay: reduceMotion ? false : { delay: 4500, disableOnInteraction: false, pauseOnMouseEnter: true },
                     pagination: { el: heroCar.querySelector('[data-hero-carousel-pagination]'), clickable: true },
+                    on: dotProgress(heroCar.querySelector('[data-hero-carousel-pagination]')),
                     navigation: { prevEl: heroCar.querySelector('[data-hero-prev]'), nextEl: heroCar.querySelector('[data-hero-next]') },
                 });
             }
@@ -274,6 +281,7 @@ if (heroEl || heroPromo || heroCar || carouselEls.length > 0) {
                         spaceBetween: 16,
                         autoplay: (reduceMotion || autoplayOff) ? false : { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
                         pagination: { el: el.parentElement.querySelector('[data-carousel-pagination]'), clickable: true },
+                        on: dotProgress(el.parentElement.querySelector('[data-carousel-pagination]')),
                         breakpoints: {
                             640: { slidesPerView: cap(2), spaceBetween: 18 },
                             1024: { slidesPerView: cap(3), spaceBetween: 20 },
@@ -501,6 +509,18 @@ if (!reduceMotion) {
 // ═══════════════════════════════════════════
 //  SMOOTH INTERNAL LINK SCROLLING (offset header)
 // ═══════════════════════════════════════════
+// Satu tujuan tautan bisa punya dua tempat, satu per ukuran layar — panel
+// pembelian program, misalnya, di kolom kanan pada layar lebar tetapi di
+// bawah materi pada ponsel. Elemen ber-id yang sedang tersembunyi dilewati,
+// dan yang dipakai adalah pasangannya yang terlihat dengan data-anchor sama.
+function resolveAnchor(id) {
+    const el = document.getElementById(id);
+    if (el && el.getClientRects().length) return el;
+    for (const alt of document.querySelectorAll('[data-anchor]')) {
+        if (alt.dataset.anchor === id && alt.getClientRects().length) return alt;
+    }
+    return el;
+}
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     // Opted-out links (e.g. the article table of contents) scroll via CSS scroll-margin
     // instead — running both would start two competing scroll animations per click.
@@ -509,7 +529,7 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', function (e) {
         const href = this.getAttribute('href');
         if (href === '#') return;
-        const target = document.querySelector(href);
+        const target = resolveAnchor(decodeURIComponent(href.slice(1)));
         if (target) {
             e.preventDefault();
             const offset = parseInt(target.dataset.scrollOffset) || 100;
@@ -538,7 +558,7 @@ function landOnHashTarget() {
 
     // getElementById, not querySelector: an id can legally contain characters
     // that are invalid in a CSS selector and would throw.
-    const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+    const target = resolveAnchor(decodeURIComponent(hash.slice(1)));
     if (!target) return;
 
     const offset = parseInt(target.dataset.scrollOffset) || 100;
@@ -745,6 +765,10 @@ function initHscroll() {
         // max <= 2 berarti isinya muat seluruhnya; keduanya harus dianggap ujung
         // supaya rel pendek tidak meluruh di sisi mana pun.
         track.dataset.atEnd = (max <= 2 || track.scrollLeft >= max - 2) ? '1' : '0';
+        // Panah yang tidak bisa menggeser apa-apa lagi dimatikan, supaya
+        // tidak terlihat seperti tombol yang rusak saat diklik di ujung rel.
+        if (prev) prev.disabled = track.dataset.atStart === '1';
+        if (next) next.disabled = track.dataset.atEnd === '1';
     };
     track.addEventListener('scroll', syncEdges, { passive: true });
     window.addEventListener('resize', syncEdges);

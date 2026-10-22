@@ -213,10 +213,10 @@
                              padahal hanya satu yang benar-benar tujuan pengunjung.
                              Sebagai garis tipis, panahnya tetap jelas tanpa bersaing. --}}
                         <div class="mb-6 flex items-center justify-end gap-2">
-                            <button type="button" data-hscroll-prev class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 text-navy transition duration-300 hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
+                            <button type="button" data-hscroll-prev class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 text-navy transition duration-300 hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-40" aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
-                            <button type="button" data-hscroll-next class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 text-navy transition duration-300 hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95" aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
+                            <button type="button" data-hscroll-next class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 text-navy transition duration-300 hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-40" aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                         </div>
@@ -680,11 +680,16 @@
                                 </div>
                             @endforeach
 
-                            {{-- Dua gradasi: yang biru memberi nada seksi ini, yang gelap
-                                 menjamin keterbacaan tulisan di kakinya. Dipisah supaya
-                                 pekatnya bisa diatur sendiri-sendiri. --}}
-                            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-600/60 via-navy-500/20 to-transparent"></div>
-                            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/70 via-transparent to-navy-950/20"></div>
+                            {{-- Gradasi hanya di kaki foto, berhenti tepat di atas judul
+                                 proyek, bukan menutup seluruh foto. Sebelumnya ada dua
+                                 lapis selebar penuh, salah satunya biru (navy-600/60), dan
+                                 bersama-sama keduanya membuat foto proyek tampak kebiruan
+                                 dan buram padahal fotonya justru buktinya. Kini satu lapis
+                                 gelap netral setinggi blok judul (lebih tinggi di ponsel
+                                 karena penanda proyek turun ke bawah judul), ditambah
+                                 bayang tipis di atas untuk label kategori dan penghitung. --}}
+                            <div class="pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-navy-950/80 via-navy-950/40 to-transparent sm:h-1/2 lg:h-[42%]"></div>
+                            <div class="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-navy-950/35 to-transparent"></div>
 
                             <div class="absolute inset-x-5 top-5 flex items-start justify-between gap-3 sm:inset-x-7 sm:top-7">
                                 @foreach ($portfolios as $i => $p)
@@ -926,11 +931,11 @@
                              ke dalam panel tepat saat disentuh. Di keadaan diam
                              cincinnya tidak terlihat karena isinya juga putih. --}}
                         <button type="button" data-hscroll-prev aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}"
-                            class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift ring-1 ring-white/80 transition hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 lg:grid">
+                            class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift ring-1 ring-white/80 transition hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 lg:grid disabled:pointer-events-none disabled:opacity-40">
                             <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
                         <button type="button" data-hscroll-next aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}"
-                            class="absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 lg:grid">
+                            class="absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 lg:grid disabled:pointer-events-none disabled:opacity-40">
                             <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
 
@@ -1388,11 +1393,11 @@
                 <div class="relative mt-12" data-hscroll data-hscroll-auto data-aos="fade-up">
                     {{-- Arrows (desktop) --}}
                     <button type="button" data-hscroll-prev aria-label="{{ $isId ? 'Sebelumnya' : 'Previous' }}"
-                        class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 lg:grid">
+                        class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 lg:grid disabled:pointer-events-none disabled:opacity-40">
                         <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
                     <button type="button" data-hscroll-next aria-label="{{ $isId ? 'Berikutnya' : 'Next' }}"
-                        class="absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 lg:grid">
+                        class="absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 lg:grid disabled:pointer-events-none disabled:opacity-40">
                         <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
 
@@ -1402,11 +1407,11 @@
                                 $isPast = $agenda->starts_at->isPast();
                                 $isNearest = $loop->first && ! $isPast; // first upcoming = soonest
                             @endphp
-                            <a href="{{ route('agenda.index') }}" data-spotlight
-                               class="group relative flex min-w-0 shrink-0 basis-[80%] snap-start flex-col overflow-hidden rounded-3xl border bg-white shadow-card transition-all duration-500 ease-out-soft hover:-translate-y-1.5 hover:shadow-lift sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)] lg:basis-[calc((100%_-_4.5rem)/4)] {{ $isNearest ? 'border-gold/60 ring-1 ring-gold/40' : 'border-navy-100 hover:border-navy-200' }}">
+                            <a href="{{ route('agenda.index') }}"
+                               class="group relative flex min-w-0 shrink-0 basis-[80%] snap-start flex-col overflow-hidden rounded-2xl border bg-white shadow-card transition-all duration-500 ease-out-soft hover:-translate-y-1.5 hover:shadow-lift sm:basis-[calc((100%_-_1.5rem)/2)] md:basis-[calc((100%_-_3rem)/3)] {{ $isNearest ? 'border-gold/60 ring-1 ring-gold/40' : 'border-navy-100 hover:border-navy-200' }}">
 
                             {{-- Media (compact) --}}
-                            <div class="relative aspect-[16/10] overflow-hidden bg-navy-900">
+                            <div class="relative aspect-[3/2] overflow-hidden bg-navy-900">
                                 @if ($agenda->image)
                                     <img src="{{ Storage::url($agenda->image) }}" alt="{{ $agenda->title }}" loading="lazy"
                                          class="h-full w-full object-cover transition-transform duration-700 ease-out-soft group-hover:scale-[1.05]">

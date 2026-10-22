@@ -231,11 +231,11 @@
                     @if ($agendas->count() > 1)
                         <div class="hidden shrink-0 items-center gap-3 md:flex" data-aos="fade-up">
                             <button type="button" data-hscroll-prev aria-label="{{ $id ? 'Sebelumnya' : 'Previous' }}"
-                                    class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 bg-white text-navy shadow-card transition-colors hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95">
+                                    class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 bg-white text-navy shadow-card transition-colors hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-40">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                             <button type="button" data-hscroll-next aria-label="{{ $id ? 'Berikutnya' : 'Next' }}"
-                                    class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 bg-white text-navy shadow-card transition-colors hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95">
+                                    class="grid h-11 w-11 place-items-center rounded-full border border-navy-200 bg-white text-navy shadow-card transition-colors hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-40">
                                 <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                         </div>
@@ -413,8 +413,8 @@
 
                         <div class="flex w-full shrink-0 flex-col gap-3 sm:flex-row md:w-auto">
                             <a href="{{ $agendaFile['url'] }}" target="_blank" rel="noopener" class="btn-ghost justify-center">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
                                 {{ $id ? 'Lihat' : 'View' }}
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
                             </a>
                             <a href="{{ $agendaFile['url'] }}" download class="btn-blue justify-center">
                                 {{ $id ? 'Unduh' : 'Download' }}
@@ -456,9 +456,34 @@
                 </div>
 
                 @if ($cat->services->isNotEmpty())
+                    {{-- Lebih dari tiga layanan: satu baris yang bisa digeser, dengan
+                         panah di sisi kiri dan kanan deretan seperti rel "Program
+                         Pelatihan Terbaru" di beranda. Kisi bertingkat membuat satu
+                         kategori yang gemuk mendorong kategori berikutnya jauh ke
+                         bawah, padahal pengunjung halaman ini sedang memindai
+                         kategori, bukan membaca satu kategori sampai habis. Sampai
+                         tiga, kisi biasa sudah muat dalam satu baris. --}}
+                    @php $catRail = $cat->services->count() > 3; @endphp
+                    @if ($catRail)
+                    <div class="relative mt-8" data-hscroll>
+                        <button type="button" data-hscroll-prev aria-label="{{ $id ? 'Layanan sebelumnya' : 'Previous services' }}"
+                                class="absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-0 lg:grid">
+                            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <button type="button" data-hscroll-next aria-label="{{ $id ? 'Layanan berikutnya' : 'Next services' }}"
+                                class="absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 place-items-center rounded-full border border-navy-100 bg-white text-navy shadow-lift transition hover:border-navy-600 hover:bg-navy-600 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-0 lg:grid">
+                            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+
+                        <div data-hscroll-track class="-mx-1 flex cursor-grab snap-x snap-proximity select-none items-stretch gap-5 overflow-x-auto scroll-smooth px-1 py-2 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                    @else
                     <div class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3" data-stagger>
+                    @endif
                         @foreach ($cat->services as $service)
-                            <a href="{{ route('services.show', $service->slug) }}" class="card card-hover group flex flex-col overflow-hidden" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 50 }}">
+                            <a href="{{ route('services.show', $service->slug) }}" @class([
+                                    'card card-hover group flex flex-col overflow-hidden',
+                                    'min-w-0 shrink-0 basis-[82%] snap-start sm:basis-[calc((100%_-_1.25rem)/2)] lg:basis-[calc((100%_-_2.5rem)/3)]' => $catRail,
+                               ]) draggable="false" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 50 }}">
                                 <div class="relative aspect-[3/2] overflow-hidden bg-navy-100">
                                     @if ($service->image)
                                         <img src="{{ Storage::url($service->image) }}" alt="{{ $service->title }}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
@@ -573,6 +598,9 @@
                             </a>
                         @endforeach
                     </div>
+                    @if ($catRail)
+                    </div>
+                    @endif
                 @else
                     <div class="mt-10 rounded-3xl border border-dashed border-navy-200 bg-white p-12 text-center">
                         <p class="text-lg text-navy">{{ $id ? 'Layanan akan segera hadir' : 'Services coming soon' }}</p>
