@@ -265,7 +265,7 @@
     .btn-pill-light {
         @apply inline-flex items-center gap-3.5 rounded-full bg-white py-[7px] pl-7 pr-[7px] text-[15px] font-semibold text-navy-600
                shadow-[0_10px_24px_-10px_rgba(0,0,0,0.3)] transition-all duration-300 ease-out-soft
-               hover:-translate-y-0.5 hover:bg-navy-50 hover:text-navy hover:shadow-[0_18px_34px_-10px_rgba(0,0,0,0.42)]
+               hover:-translate-y-0.5 hover:bg-navy-50 hover:text-navy-600 hover:shadow-[0_18px_34px_-10px_rgba(0,0,0,0.42)]
                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy-700
                active:translate-y-0;
     }
@@ -277,7 +277,12 @@
     .btn-pill-light-icon {
         @apply grid h-[42px] w-[42px] shrink-0 place-items-center rounded-full bg-navy-600 text-white transition-colors duration-300 ease-out-soft;
     }
-    .btn-pill-light:hover .btn-pill-light-icon { @apply bg-navy text-white; }
+    /* Saat disentuh lingkarannya MENERANG ke biru logo (navy-500), bukan
+       memekat ke navy #0e2237. Yang lama terbaca hitam di tombol Instagram dan
+       Facebook, satu-satunya tombol di situs yang hovernya menggelap ke hitam
+       — sisanya mendarat di keluarga biru. Lambang putih di atas navy-500
+       3,88:1, di atas ambang 3:1 untuk unsur grafis. */
+    .btn-pill-light:hover .btn-pill-light-icon { @apply bg-navy-500 text-white; }
 
     /* Pil putih tanpa lingkaran ikon — ukurannya sama dengan .btn-blue, jadi
        tombol ajakan di pita biru sebangun dengan tombol utama di seksi terang

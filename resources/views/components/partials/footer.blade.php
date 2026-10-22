@@ -101,15 +101,21 @@
          kartu itu keduanya tidak ada gunanya lagi dan jaraknya kembali
          sederhana. --}}
     <div class="relative z-10">
-        <div class="container py-16 md:py-20">
-            <div class="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-12">
+        {{-- Di ponsel footer dirapatkan: Layanan dan Tautan Cepat bersanding dua
+             kolom (grid-cols-2 sejak lebar terkecil), bukan menumpuk satu per satu.
+             Menumpuk, keduanya dua belas baris tautan pendek yang masing-masing
+             hanya mengisi sepertiga lebar layar, dan footer menjadi bagian
+             terpanjang di halaman ponsel. Merek dan kontak tetap selebar penuh
+             karena isinya kalimat dan alamat. Mulai lg susunannya tidak berubah. --}}
+        <div class="container py-12 md:py-20">
+            <div class="grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-x-8 sm:gap-y-12 lg:grid-cols-12">
 
                 {{-- Brand. Layanan dan Tautan sekarang berdiri sebagai kolom
                      tersendiri, bukan satu kolom berisi dua daftar, sehingga
                      keempatnya sejajar dalam satu baris: 3-2-2-5. Kontak yang
                      paling berisi dapat porsi terlebar, Layanan dan Tautan yang
                      hanya daftar pendek cukup sempit. --}}
-                <div class="space-y-6 sm:col-span-2 lg:col-span-3">
+                <div class="col-span-2 space-y-5 sm:space-y-6 lg:col-span-3">
                     <a href="{{ route('home') }}" class="inline-flex items-center gap-3">
                         <img src="{{ asset('images/logodelta36.webp') }}" alt="PT. Delta Tiga Enam" class="h-10 w-10 shrink-0">
                         <span class="font-display text-lg font-semibold tracking-wide text-white">PT. Delta Tiga Enam</span>
@@ -138,7 +144,7 @@
                 {{-- Layanan --}}
                 <div class="lg:col-span-2">
                     <p class="text-sm font-semibold text-gold-soft">{{ $id ? 'Layanan' : 'Services' }}</p>
-                    <ul class="mt-5 space-y-3 text-sm">
+                    <ul class="mt-4 space-y-2.5 text-sm sm:mt-5 sm:space-y-3">
                         @forelse ($footerServices as $svc)
                             <li><a href="{{ route('services.index') }}#{{ $svc->slug }}" class="group -my-1.5 inline-flex items-center py-1.5 text-white/75 transition-colors hover:text-gold">
                                 <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $svc->name }}
@@ -154,7 +160,7 @@
                 {{-- Tautan --}}
                 <div class="lg:col-span-2">
                     <p class="text-sm font-semibold text-gold-soft">{{ __('site.common.quick_links') }}</p>
-                    <ul class="mt-5 space-y-3 text-sm">
+                    <ul class="mt-4 space-y-2.5 text-sm sm:mt-5 sm:space-y-3">
                         @foreach ($nav as $route => $label)
                             <li><a href="{{ route($route) }}" class="group -my-1.5 inline-flex items-center py-1.5 text-white/75 transition-colors hover:text-gold">
                                 <span class="h-px w-0 bg-gradient-to-r from-gold to-gold-soft transition-all duration-300 group-hover:mr-2.5 group-hover:w-4"></span>{{ $label }}
@@ -175,7 +181,7 @@
                      ini jauh lebih sempit daripada blok selebar footer tadi,
                      sehingga patahan yang dipatok akan jatuh di tengah nama
                      jalan. --}}
-                <div class="sm:col-span-2 lg:col-span-5">
+                <div class="col-span-2 lg:col-span-5">
                     {{-- "Lokasi & Kontak", bukan "Kontak" saja: kolom ini memuat
                          alamat kedua kantor beserta surel dan teleponnya, dan
                          judul yang hanya menyebut kontak tidak menjanjikan
@@ -231,7 +237,7 @@
             </div>
 
             {{-- Bottom bar --}}
-            <div class="mt-12 flex flex-col items-start justify-between gap-4 border-t border-white/15 pt-7 text-xs text-white/60 md:flex-row md:items-center">
+            <div class="mt-10 flex flex-col items-start justify-between gap-4 border-t border-white/15 pt-6 sm:mt-12 sm:pt-7 text-xs text-white/60 md:flex-row md:items-center">
                 <p>© {{ $year }} PT. Delta Tiga Enam. {{ $id ? 'Hak Cipta Dilindungi Undang-Undang.' : 'All rights reserved.' }}</p>
                 <div class="flex items-center gap-5">
                     <a href="{{ route('privacy') }}" class="transition-colors hover:text-gold">{{ $id ? 'Kebijakan Privasi' : 'Privacy Policy' }}</a>
