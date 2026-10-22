@@ -31,13 +31,15 @@
          berformat WebP tidak dipasang iOS, dan ikon layar awalnya jadi kosong.
          180x180 adalah ukuran yang diminta iOS, dan versi kecil ini 22 KB
          dibanding 284 KB berkas aslinya. --}}
-    {{-- Ikon tab: favicon.ico berisi 16/32/48/64 px segitiga logo tanpa tulisan.
-         Sebelumnya tab memakai PNG 180 px yang memuat tulisan DELTA TIGA ENAM,
-         dan pada 16 px tulisan itu hanya menjadi bintik. ?v memaksa peramban
-         mengambil ulang — favicon disimpan peramban jauh lebih lama daripada
-         berkas lain. --}}
-    <link rel="icon" href="{{ asset('favicon.ico') }}?v=2" sizes="any">
-    <link rel="apple-touch-icon" href="{{ asset('images/favicon-180.png') }}">
+    {{-- Ikon tab: favicon.ico berisi logo Delta utuh — segitiga beserta
+         tulisan DELTA TIGA ENAM — dalam 16 sampai 256 px. Berkas yang sama
+         dipakai panel admin, PDF yang dibuka di peramban, dan halaman galat,
+         yang semuanya meminta /favicon.ico. ?v memaksa peramban mengambil
+         ulang — favicon disimpan peramban jauh lebih lama daripada berkas
+         lain; naikkan angkanya setiap kali ikonnya diganti. --}}
+    <link rel="icon" href="{{ asset('favicon.ico') }}?v=3" sizes="any">
+    <link rel="icon" href="{{ asset('favicon.svg') }}?v=3" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{{ asset('images/favicon-180.png') }}?v=3">
 
     {{-- Sama persis dengan components/layout.blade.php, dan memang harus
          ditulis dua kali: halaman Masuk, Daftar, dan Lupa Sandi memakai
