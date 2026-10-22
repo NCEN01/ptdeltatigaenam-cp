@@ -31,7 +31,12 @@
          berformat WebP tidak dipasang iOS, dan ikon layar awalnya jadi kosong.
          180x180 adalah ukuran yang diminta iOS, dan versi kecil ini 22 KB
          dibanding 284 KB berkas aslinya. --}}
-    <link rel="icon" href="{{ asset('images/favicon-180.png') }}" type="image/png">
+    {{-- Ikon tab: favicon.ico berisi 16/32/48/64 px segitiga logo tanpa tulisan.
+         Sebelumnya tab memakai PNG 180 px yang memuat tulisan DELTA TIGA ENAM,
+         dan pada 16 px tulisan itu hanya menjadi bintik. ?v memaksa peramban
+         mengambil ulang — favicon disimpan peramban jauh lebih lama daripada
+         berkas lain. --}}
+    <link rel="icon" href="{{ asset('favicon.ico') }}?v=2" sizes="any">
     <link rel="apple-touch-icon" href="{{ asset('images/favicon-180.png') }}">
 
     {{-- Sama persis dengan components/layout.blade.php, dan memang harus

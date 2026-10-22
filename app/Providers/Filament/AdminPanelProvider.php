@@ -36,6 +36,9 @@ class AdminPanelProvider extends PanelProvider
             // bergradasi. Tampil juga di bilah samping panel.
             ->brandLogo(fn (): string => asset('images/logodelta36.webp'))
             ->brandLogoHeight('2.5rem')
+            // Ikon tab panel admin. Tanpa ini peramban jatuh ke /favicon.ico,
+            // yang sejak proyek dibuat berukuran 0 byte.
+            ->favicon(asset('favicon.ico').'?v=2')
             ->colors([
                 'primary' => Color::hex('#1565c0'),  // brand dark blue
                 'gold' => Color::hex('#edae49'),     // accent
