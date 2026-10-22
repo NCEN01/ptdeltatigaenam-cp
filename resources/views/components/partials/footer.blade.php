@@ -2,7 +2,7 @@
     use App\Models\Setting;
 
     $id = app()->getLocale() === 'id';
-    // Pengaturan Situs → Kontak, sumber yang sama dengan kartu kontak di
+    // Panel Pengaturan → Kontak & Media Sosial, sumber yang sama dengan kartu kontak di
     // halaman Kontak. Sebelumnya alamat surel ini diketik di sini DAN di
     // berkas itu; dua salinan yang harus diperbarui bersamaan selalu
     // berakhir sama, yaitu satu diperbarui dan satu tertinggal.

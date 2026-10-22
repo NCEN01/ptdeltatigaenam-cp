@@ -49,7 +49,9 @@ class Setting extends Model
         }
 
         if ($setting->type === 'json') {
-            return json_decode($setting->value, true) ?? $default;
+            // Baris JSON boleh berisi null — terjemahan yang seluruhnya kosong
+            // disimpan begitu oleh halaman pengaturan.
+            return $setting->value === null ? $default : (json_decode($setting->value, true) ?? $default);
         }
 
         return $setting->value ?? $default;

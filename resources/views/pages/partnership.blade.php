@@ -149,7 +149,7 @@
          menyebut isinya, dan seksi lain di halaman ini pun tidak memakainya. --}}
     @if ($partners->isNotEmpty())
         @php
-            // Judul dan deskripsi bisa diganti admin lewat Pengaturan Situs →
+            // Judul dan deskripsi bisa diganti admin lewat panel Kemitraan → Teks Halaman Kemitraan,
             // Seksi Lembaga Mitra. Dikosongkan berarti memakai teks bawaan di
             // bawah ini, jadi seksinya tidak pernah tampil tanpa tulisan.
             //

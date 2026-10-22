@@ -1,7 +1,7 @@
 @php
     $id = app()->getLocale() === 'id';
 
-    /* Keempat barisnya dibaca dari Pengaturan Situs lewat Company::contact(),
+    /* Keempat barisnya dibaca dari panel Pengaturan → Kontak & Media Sosial lewat Company::contact(),
        bukan diketik di sini seperti sebelumnya. Alamat surel dan nomor yang
        sama juga ditulis di footer, dan dua salinan yang harus diperbarui
        bersamaan selalu berakhir sama: satu diperbarui, satu tertinggal, dan

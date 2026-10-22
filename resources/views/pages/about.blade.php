@@ -113,7 +113,7 @@
 
     {{-- ===================== COMPANY PROFILE (PDF DOWNLOAD) ===================== --}}
     @php
-        /* Berkasnya datang dari Pengaturan Situs → Dokumen Profil Perusahaan,
+        /* Berkasnya datang dari panel Konten → Halaman Tentang,
            bukan dari nama berkas yang dipatok di sini seperti sebelumnya.
 
            Yang lama membaca public/documents/company-profile.pdf apa adanya:

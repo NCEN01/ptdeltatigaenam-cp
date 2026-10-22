@@ -39,7 +39,7 @@ class Company
     }
 
     /**
-     * Data kontak perusahaan, dari Pengaturan Situs.
+     * Data kontak perusahaan, dari panel Pengaturan → Kontak & Media Sosial.
      *
      * Satu sumber untuk dua tempat yang sebelumnya menulisnya sendiri-sendiri:
      * kartu kontak di halaman Kontak dan kolom Kontak di footer. Alamat surel
@@ -103,7 +103,7 @@ class Company
      * @return array<int, array<string, string>>
      */
     /**
-     * Empat angka statistik perusahaan, dari Pengaturan Situs.
+     * Empat angka statistik perusahaan, dari panel Konten → Statistik Perusahaan.
      *
      * Satu sumber untuk dua halaman: papan angka di bawah Kategori Layanan di
      * beranda, dan papan angka di halaman Tentang Kami. Sebelumnya beranda

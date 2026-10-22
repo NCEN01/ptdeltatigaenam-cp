@@ -4,7 +4,7 @@
 
         <div class="flex justify-end">
             <x-filament::button type="submit">
-                Simpan Pengaturan
+                Simpan
             </x-filament::button>
         </div>
     </form>
