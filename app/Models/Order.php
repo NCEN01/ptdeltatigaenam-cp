@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -35,7 +36,13 @@ class Order extends Model
                 if ($isPaid && ! $wasPaid) {
                     $schedule->increment('seats_taken', $seats);
                 } elseif ($wasPaid && ! $isPaid) {
-                    $schedule->decrement('seats_taken', min((int) $schedule->seats_taken, $seats));
+                    // Dihitung di dalam satu UPDATE, bukan dari nilai yang sudah
+                    // dimuat: dua pembatalan bersamaan sama-sama membaca angka
+                    // lama, dan min() dari angka lama itu tidak mencegah hasil
+                    // akhirnya turun di bawah nol. GREATEST di SQL mencegahnya.
+                    ServiceSchedule::whereKey($schedule->id)->update([
+                        'seats_taken' => DB::raw('GREATEST(seats_taken - '.$seats.', 0)'),
+                    ]);
                 }
             }
 
