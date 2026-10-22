@@ -413,32 +413,21 @@
                     </p>
                 </div>
 
-                <div class="mt-12 grid items-start gap-6 lg:grid-cols-12 lg:gap-8">
+                <div class="mt-12 grid gap-6 lg:grid-cols-12 lg:gap-8">
                     {{-- ── Rel kiri: alur & jaminan ──────────────────────── --}}
-                    {{-- Kedua kartu ini mengikuti pembaca turun, lewat
-                         position: sticky — bukan lewat pergeseran parallax.
+                    {{-- Satu kartu setinggi kartu formulir di sebelahnya, rata
+                         di atas dan di bawah. Sebelumnya rel ini dua kartu
+                         pendek yang menempel (sticky) saat digulir; di layar
+                         lebar ujung bawahnya selalu berhenti jauh di atas ujung
+                         bawah formulir, dan dua kolom yang tingginya tidak sama
+                         terbaca belum selesai disusun.
 
-                         Dua percobaan sebelumnya memakai parallax dan keduanya
-                         meleset dari yang dibutuhkan. Parallax menggeser benda
-                         pada laju berbeda supaya terasa ada kedalaman, tetapi
-                         benda itu tetap ikut hanyut keluar layar; yang
-                         diperlukan di sini justru sebaliknya, yaitu alur tiga
-                         langkah yang TETAP terlihat sepanjang formulir di
-                         sebelahnya diisi. Formulir itu panjang, dan pertanyaan
-                         yang muncul di tengah pengisian adalah "setelah ini
-                         apa" — pertanyaan yang tidak terjawab oleh jawaban
-                         yang sudah tergulir jauh di atas.
-
-                         top-28 menyisakan ruang untuk navbar yang menempel,
-                         supaya kartu pertama tidak tersembunyi di belakangnya.
-
-                         items-start pada kisi induknya wajib ada agar sticky
-                         bekerja: dengan items-stretch bawaan, <aside> ini
-                         setinggi kolom formulir di sebelahnya, sehingga tidak
-                         pernah ada ruang untuk ditempeli dan sticky-nya diam
-                         saja tanpa pesan galat. --}}
+                         Kisi induknya kini stretch (tanpa items-start), jadi
+                         <aside> ini setinggi kolom formulir; kartunya h-full dan
+                         isinya dibagi dua: alur di atas, jaminan di dasar kartu
+                         — sejajar dengan tombol Kirim di formulir. --}}
                     <aside class="relative lg:col-span-4" data-aos="fade-up">
-                        <div class="relative space-y-5 lg:sticky lg:top-28">
+                        <div class="relative h-full">
                             {{-- Pendar lembut di belakang kedua kartu. Ikut di
                                  dalam pembungkus yang menempel, bukan di luar:
                                  ditaruh di <aside>, ia akan tergulir pergi
@@ -454,7 +443,7 @@
                                 <div class="absolute bottom-0 right-2 h-56 w-56 rounded-full bg-sky-300/30 blur-3xl"></div>
                             </div>
 
-                            <div class="rounded-3xl border border-navy-100 bg-white p-6 shadow-card sm:p-7">
+                            <div class="flex h-full flex-col rounded-3xl border border-navy-100 bg-white p-6 shadow-card sm:p-7">
                                 <p class="font-mono text-[11px] uppercase tracking-label text-sky-700">{{ $id ? 'Alur Pendaftaran' : 'Registration Flow' }}</p>
 
                                 {{-- Garis penghubungnya menegak di belakang nomor dan
@@ -470,15 +459,17 @@
                                         </li>
                                     @endforeach
                                 </ol>
-                            </div>
 
-                            {{-- Tiga baris jaminan. Isinya hal yang bisa diperiksa
+                                {{-- Pengisi ruang: mendorong jaminan ke dasar kartu bila
+                                     kartunya lebih tinggi dari isinya (layar lebar). --}}
+                                <div class="min-h-8 flex-1" aria-hidden="true"></div>
+
+                                {{-- Tiga baris jaminan. Isinya hal yang bisa diperiksa
                                  sendiri di halaman ini — penagihan lewat invoice,
                                  jadwal yang dipilih sendiri di bagian C, dan tautan
                                  ke Kebijakan Privasi — bukan janji umum tentang
                                  "kepercayaan" dan "komitmen". --}}
-                            <div class="rounded-3xl border border-navy-100 bg-white p-6 shadow-card sm:p-7">
-                                <ul class="space-y-5">
+                                <ul class="space-y-5 border-t border-navy-100 pt-7">
                                     <li class="flex items-start gap-3.5">
                                         <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-navy-100 bg-navy-50 text-navy-600">
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

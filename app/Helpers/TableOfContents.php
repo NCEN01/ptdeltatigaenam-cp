@@ -4,7 +4,6 @@ namespace App\Helpers;
 
 use DOMDocument;
 use DOMElement;
-use DOMNode;
 use DOMXPath;
 use Illuminate\Support\Str;
 
@@ -20,10 +19,12 @@ class TableOfContents
      * Normalise an article body for display and return the heading list that
      * drives the table of contents.
      *
-     * Editors using the rich text editor routinely mark section titles as a
-     * bold paragraph rather than using the heading control, and paste bodies
-     * that open with their own <h1>. Both are treated as real section headings
-     * here so the contents panel reflects how the article actually reads.
+     * Daftar isi dibaca dari Heading 2 saja (petunjuk yang sama tertulis di
+     * kolom Konten di panel admin). Paragraf yang seluruhnya tebal dulu ikut
+     * dinaikkan menjadi heading; akibatnya pertanyaan FAQ dan kalimat ajakan
+     * di akhir artikel ikut masuk daftar isi dan tampil sebesar judul bagian.
+     * Kini ia dibiarkan sebagai paragraf tebal, persis seperti ditulis.
+     * <h1> di dalam isi tetap diturunkan menjadi <h2>: judul halaman sudah h1.
      *
      * Expects already-sanitized HTML (see HtmlSanitizer::clean).
      *
@@ -51,32 +52,13 @@ class TableOfContents
             self::retag($h1, 'h2');
         }
 
-        // Promote "the whole paragraph is bold" into a real heading.
-        foreach (iterator_to_array($xpath->query('//p')) as $paragraph) {
-            $bold = self::soleBoldChild($paragraph);
-
-            if (! $bold) {
-                continue;
-            }
-
-            $text = trim($paragraph->textContent);
-
-            if ($text === '' || mb_strlen($text) > self::MAX_PROMOTED_HEADING_LENGTH) {
-                continue;
-            }
-
-            // Drop the <strong> wrapper — a heading is already emphatic.
-            $heading = $dom->createElement('h2');
-            while ($bold->firstChild) {
-                $heading->appendChild($bold->firstChild);
-            }
-            $paragraph->parentNode->replaceChild($heading, $paragraph);
-        }
-
         $items = [];
         $used = [];
 
-        foreach ($xpath->query('//h2 | //h3') as $heading) {
+        // Hanya Heading 2. Heading 3 adalah sub-bagian di dalam satu butir,
+        // dan memasukkannya membuat daftar isi artikel panjang dua kali lipat
+        // tanpa menambah arah baru bagi pembaca.
+        foreach ($xpath->query('//h2') as $heading) {
             if (! $heading instanceof DOMElement) {
                 continue;
             }
@@ -118,35 +100,6 @@ class TableOfContents
             'html' => mb_decode_numericentity($out, [0x80, 0x10ffff, 0, 0x1fffff], 'UTF-8'),
             'items' => $items,
         ];
-    }
-
-    /**
-     * The single <strong>/<b> that makes up the entire paragraph, or null when
-     * the paragraph mixes bold with other content (i.e. it is ordinary prose).
-     */
-    private static function soleBoldChild(DOMNode $paragraph): ?DOMElement
-    {
-        $bold = null;
-
-        foreach ($paragraph->childNodes as $child) {
-            if ($child instanceof DOMElement) {
-                // A second element, or a non-bold one, means this is prose.
-                if ($bold !== null || ! in_array(strtolower($child->nodeName), ['strong', 'b'], true)) {
-                    return null;
-                }
-
-                $bold = $child;
-
-                continue;
-            }
-
-            // Any visible text outside the bold run disqualifies the paragraph.
-            if (trim($child->textContent) !== '') {
-                return null;
-            }
-        }
-
-        return $bold;
     }
 
     /** Replace an element with the same children under a different tag name. */

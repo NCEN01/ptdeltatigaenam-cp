@@ -9,7 +9,6 @@
     $tocData = array_map(fn ($item) => ['id' => $item['id'], 'text' => $item['text']], $items);
     // Progress ring geometry: r=15.5 -> circumference 2*pi*r.
     $ring = 97.39;
-    $topLevelSeen = 0;
 @endphp
 
 @if (count($items))
@@ -17,44 +16,38 @@
 
         {{-- ════════ Desktop: sticky panel in the sidebar ════════ --}}
         <nav aria-label="{{ $isId ? 'Daftar isi artikel' : 'Article table of contents' }}"
-             class="hidden rounded-2xl bg-navy-50/60 p-6 lg:block">
+             class="hidden rounded-2xl border border-navy-100 bg-white p-6 shadow-card lg:block">
 
             <div class="flex items-baseline justify-between gap-3">
-                <span class="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                <span class="font-mono text-[11px] uppercase tracking-wider text-sky-700">
                     {{ $isId ? 'Daftar Isi' : 'On this page' }}
                 </span>
                 <span class="font-mono text-[11px] tabular-nums text-slate-400" x-text="Math.round(progress) + '%'">0%</span>
             </div>
 
-            <div class="mt-3 h-0.5 w-full overflow-hidden rounded-full bg-navy-200/70">
-                <div class="h-full origin-left rounded-full bg-gradient-to-r from-sky-500 to-gold"
+            <div class="mt-3 h-0.5 w-full overflow-hidden rounded-full bg-navy-100">
+                <div class="h-full origin-left rounded-full bg-navy-500"
                      :style="`transform: scaleX(${progress / 100})`"></div>
             </div>
 
             <ol class="relative mt-5">
-                <span class="pointer-events-none absolute bottom-2 left-[3px] top-2 w-px bg-navy-200/70" aria-hidden="true"></span>
-                <span class="pointer-events-none absolute bottom-2 left-[3px] top-2 w-px origin-top bg-gradient-to-b from-sky-500 to-gold"
+                <span class="pointer-events-none absolute bottom-2 left-[3px] top-2 w-px bg-navy-100" aria-hidden="true"></span>
+                <span class="pointer-events-none absolute bottom-2 left-[3px] top-2 w-px origin-top bg-navy-500"
                       :style="`transform: scaleY(${progress / 100})`" aria-hidden="true"></span>
 
                 @foreach ($items as $item)
-                    @php
-                        $isSub = ($item['level'] ?? 2) >= 3;
-                        $number = $isSub ? null : ++$topLevelSeen;
-                    @endphp
                     <li class="relative" x-data="{ id: @js($item['id']) }">
                         <a href="#{{ $item['id'] }}" data-no-smooth @click="active = id"
-                           class="group relative flex items-start gap-2.5 py-2 pr-1 text-sm leading-snug transition-colors duration-200 {{ $isSub ? 'pl-11' : 'pl-6' }}"
+                           class="group relative flex items-start gap-2.5 py-2 pr-1 text-sm leading-snug transition-colors duration-200 pl-6"
                            :class="active === id ? 'text-navy font-semibold' : 'text-slate-500 hover:text-navy'"
                            :aria-current="active === id ? 'true' : null">
                             <span aria-hidden="true"
-                                  class="absolute left-0 top-[1.05rem] h-[7px] w-[7px] -translate-y-1/2 rounded-full ring-2 ring-navy-50 transition-all duration-300 ease-out-soft"
-                                  :class="active === id ? 'bg-sky-500 scale-[1.35]' : 'bg-navy-200 group-hover:bg-navy-300'"></span>
-                            @if ($number !== null)
-                                <span class="mt-px shrink-0 font-mono text-[10px] tabular-nums transition-colors duration-200"
-                                      :class="active === id ? 'text-sky-600' : 'text-slate-300 group-hover:text-slate-400'">
-                                    {{ str_pad((string) $number, 2, '0', STR_PAD_LEFT) }}
+                                  class="absolute left-0 top-[1.05rem] h-[7px] w-[7px] -translate-y-1/2 rounded-full ring-2 ring-white transition-all duration-300 ease-out-soft"
+                                  :class="active === id ? 'bg-navy-500 scale-[1.35]' : 'bg-navy-200 group-hover:bg-navy-400'"></span>
+                            <span class="mt-px shrink-0 font-mono text-[10px] tabular-nums transition-colors duration-200"
+                                      :class="active === id ? 'text-navy-500' : 'text-slate-400 group-hover:text-navy-400'">
+                                    {{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}
                                 </span>
-                            @endif
                             <span class="min-w-0 flex-1 text-pretty">{{ $item['text'] }}</span>
                         </a>
                     </li>
@@ -108,7 +101,7 @@
 
             <div class="flex items-start justify-between gap-3 border-b border-navy-100 px-5 py-4">
                 <div class="min-w-0">
-                    <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
+                    <p class="font-mono text-[10px] uppercase tracking-wider text-sky-700">
                         {{ $isId ? 'Daftar Isi' : 'On this page' }}
                     </p>
                     <p class="mt-1 truncate text-sm font-semibold text-navy" x-text="activeLabel"></p>
@@ -123,29 +116,22 @@
             </div>
 
             <div class="h-0.5 w-full shrink-0 overflow-hidden bg-navy-100">
-                <div class="h-full origin-left bg-gradient-to-r from-sky-500 to-gold"
+                <div class="h-full origin-left bg-navy-500"
                      :style="`transform: scaleX(${progress / 100})`"></div>
             </div>
 
             <ol class="flex-1 overflow-y-auto px-3 py-3">
-                @php $topLevelSeen = 0; @endphp
                 @foreach ($items as $item)
-                    @php
-                        $isSub = ($item['level'] ?? 2) >= 3;
-                        $number = $isSub ? null : ++$topLevelSeen;
-                    @endphp
                     <li x-data="{ id: @js($item['id']) }">
                         <a href="#{{ $item['id'] }}" data-no-smooth
                            @click="active = id; expanded = false"
-                           class="flex items-start gap-2.5 rounded-xl px-3 py-2.5 text-sm leading-snug transition-colors duration-200 {{ $isSub ? 'pl-9' : '' }}"
-                           :class="active === id ? 'bg-sky-50 font-semibold text-navy' : 'text-slate-500'"
+                           class="flex items-start gap-2.5 rounded-xl px-3 py-2.5 text-sm leading-snug transition-colors duration-200"
+                           :class="active === id ? 'bg-navy-50 font-semibold text-navy' : 'text-slate-600 hover:text-navy'"
                            :aria-current="active === id ? 'true' : null">
-                            @if ($number !== null)
                                 <span class="mt-px shrink-0 font-mono text-[10px] tabular-nums"
-                                      :class="active === id ? 'text-sky-600' : 'text-slate-300'">
-                                    {{ str_pad((string) $number, 2, '0', STR_PAD_LEFT) }}
+                                      :class="active === id ? 'text-navy-500' : 'text-slate-400'">
+                                    {{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}
                                 </span>
-                            @endif
                             <span class="min-w-0 flex-1 text-pretty">{{ $item['text'] }}</span>
                         </a>
                     </li>
