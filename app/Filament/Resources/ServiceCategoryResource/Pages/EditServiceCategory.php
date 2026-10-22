@@ -22,7 +22,7 @@ class EditServiceCategory extends EditRecord
     {
         $record = $this->getRecord();
 
-        foreach (['name', 'short_description', 'description', 'meta_title', 'meta_description'] as $field) {
+        foreach (['name', 'short_description', 'meta_title', 'meta_description'] as $field) {
             $translations = $record->getTranslations($field);
             foreach ($translations as $locale => $text) {
                 if (is_string($text)) {
@@ -38,7 +38,7 @@ class EditServiceCategory extends EditRecord
     {
         $locales = ['id', 'en'];
 
-        foreach (['name', 'short_description', 'description', 'meta_title', 'meta_description'] as $field) {
+        foreach (['name', 'short_description', 'meta_title', 'meta_description'] as $field) {
             $translations = [];
             foreach ($locales as $locale) {
                 $key = "{$field}.{$locale}";

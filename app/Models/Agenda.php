@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Filament\Resources\ServiceResource;
+use App\Models\Concerns\HasAutoSlug;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,10 @@ use Spatie\Translatable\HasTranslations;
 
 class Agenda extends Model
 {
-    use HasTranslations;
+    use HasAutoSlug, HasTranslations;
+
+    /** Kolom sumber slug otomatis (App\Models\Concerns\HasAutoSlug). */
+    protected string $slugFrom = 'title';
 
     protected $guarded = ['id'];
 
@@ -148,8 +152,8 @@ class Agenda extends Model
                     'end_date' => ($this->ends_at ?? $this->starts_at)->toDateString(),
                     'start_time' => $this->starts_at->format('H:i'),
                     'end_time' => $this->ends_at?->format('H:i'),
-                    'location' => $this->location,
-                    'mode' => $mode,
+                    // Lokasi dan mode tidak lagi disimpan per angkatan; keduanya
+                    // sudah tercatat di layanannya tepat di atas.
                     'is_active' => true,
                 ]);
             }

@@ -41,19 +41,10 @@ class PortfolioResource extends Resource
                 Forms\Components\TextInput::make('title.id')
                     ->label('Judul (ID)')
                     ->required()
-                    ->maxLength(280)
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
+                    ->maxLength(280),
                 Forms\Components\TextInput::make('title.en')
                     ->label('Judul (EN)')
                     ->maxLength(280),
-                Forms\Components\TextInput::make('slug')
-                    ->label('Slug')
-                    ->required()
-                    ->maxLength(280)
-                    ->unique(ignoreRecord: true)
-                    ->helperText('Terisi otomatis dari Judul (ID) saat membuat baru.')
-                    ->columnSpanFull(),
                 Forms\Components\Textarea::make('short_description.id')->label('Deskripsi Singkat (ID)')->rows(3),
                 Forms\Components\Textarea::make('short_description.en')->label('Deskripsi Singkat (EN)')->rows(3),
                 Forms\Components\RichEditor::make('content.id')->label('Konten (ID)')->columnSpanFull(),
@@ -72,8 +63,7 @@ class PortfolioResource extends Resource
                     ->placeholder('Jakarta Selatan, Indonesia')
                     ->helperText('Tampil di kartu portofolio dan halaman detailnya.'),
                 Forms\Components\Select::make('service_category_id')
-                    ->relationship('category', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)
+                    ->relationship('category', 'slug')->getOptionLabelFromRecordUsing(fn (\Illuminate\Database\Eloquent\Model $record): string => (string) ($record->getTranslation('name', 'id', false) ?: $record->name))
                     ->preload()
                     ->searchable()
                     ->label('Kategori'),

@@ -483,7 +483,7 @@
                                     @php
                                         $svcNext = $service->nextSchedule();
                                         $svcMode = $service->modeLabel();
-                                        $svcPlace = $svcNext?->location ?: $service->location;
+                                        $svcPlace = $service->location;
                                     @endphp
                                     @if ($svcNext || $svcMode || $svcPlace)
                                         <div class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[11px] text-slate-600">

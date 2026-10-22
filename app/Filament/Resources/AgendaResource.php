@@ -12,7 +12,6 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
 
 class AgendaResource extends Resource
 {
@@ -39,13 +38,10 @@ class AgendaResource extends Resource
                 Forms\Components\TextInput::make('title.id')
                     ->label('Judul (ID)')
                     ->required()
-                    ->maxLength(280)
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
+                    ->maxLength(280),
                 Forms\Components\TextInput::make('title.en')
                     ->label('Judul (EN)')
                     ->maxLength(280),
-                Forms\Components\TextInput::make('slug')->required()->maxLength(280)->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('location')->label('Lokasi')->maxLength(200),
                 Forms\Components\Textarea::make('excerpt.id')->label('Ringkasan (ID)')->rows(2),
                 Forms\Components\Textarea::make('excerpt.en')->label('Ringkasan (EN)')->rows(2),

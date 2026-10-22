@@ -36,7 +36,6 @@ class PartnershipPackageResource extends Resource
                 Forms\Components\Select::make('tier')->options([
                     'blue' => 'Blue', 'silver' => 'Silver', 'gold' => 'Gold', 'platinum' => 'Platinum',
                 ])->required()->unique(ignoreRecord: true),
-                Forms\Components\TextInput::make('slug')->required()->unique(ignoreRecord: true),
                 Forms\Components\ColorPicker::make('color')->label('Warna Aksen'),
                 Forms\Components\TextInput::make('sort_order')->numeric()->default(0),
             ])->columns(4),

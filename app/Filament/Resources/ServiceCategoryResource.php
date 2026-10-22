@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Concerns\RestrictsToPermission;
-use App\Filament\Forms\Components\MediaUpload;
 use App\Filament\Resources\ServiceCategoryResource\Pages;
 use App\Models\ServiceCategory;
 use Filament\Forms;
@@ -11,7 +10,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
 
 class ServiceCategoryResource extends Resource
 {
@@ -38,24 +36,19 @@ class ServiceCategoryResource extends Resource
                 Forms\Components\TextInput::make('name.id')
                     ->label('Nama (ID)')
                     ->required()
-                    ->maxLength(170)
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
+                    ->maxLength(170),
                 Forms\Components\TextInput::make('name.en')
                     ->label('Nama (EN)')
                     ->maxLength(170),
-                Forms\Components\TextInput::make('slug')
-                    ->required()
-                    ->maxLength(170)
-                    ->unique(ignoreRecord: true)
-                    ->helperText('URL unik, otomatis dari nama (boleh diubah).'),
-                Forms\Components\TextInput::make('short_description.id')->label('Deskripsi Singkat (ID)')->maxLength(255),
-                Forms\Components\TextInput::make('short_description.en')->label('Deskripsi Singkat (EN)')->maxLength(255),
-                Forms\Components\Textarea::make('description.id')->label('Deskripsi (ID)')->rows(4),
-                Forms\Components\Textarea::make('description.en')->label('Deskripsi (EN)')->rows(4),
+                /* Satu deskripsi saja, yang singkat. Deskripsi panjang tidak pernah
+                   dibaca halaman mana pun — yang tampil di bawah nama kategori di
+                   halaman Layanan hanyalah kalimat singkat ini. */
+                Forms\Components\Textarea::make('short_description.id')->label('Deskripsi Singkat (ID)')->rows(2)->maxLength(255)
+                    ->helperText('Tampil di bawah nama kategori pada halaman Layanan. Satu sampai dua kalimat.'),
+                Forms\Components\Textarea::make('short_description.en')->label('Deskripsi Singkat (EN)')->rows(2)->maxLength(255),
             ])->columns(2),
 
-            Forms\Components\Section::make('Media & Tampilan')->schema([
+            Forms\Components\Section::make('Ikon & Tampilan')->schema([
                 // Kartu kategori di beranda memakai ikon, bukan foto. Kolom `icon`
                 // sudah lama ada di tabel tetapi tidak pernah diisi maupun dibaca;
                 // sekarang terpakai dan bisa dipilih admin.
@@ -76,9 +69,6 @@ class ServiceCategoryResource extends Resource
                     ->native(false)
                     ->placeholder('Koper kerja (bawaan)')
                     ->helperText('Tampil pada kartu kategori di beranda. Dikosongkan akan memakai ikon koper.'),
-                MediaUpload::for('image', 'thumbnail', 'service-categories')
-                    ->label('Gambar')
-                    ->helperText('Dipakai halaman Layanan. Kartu kategori di beranda memakai ikon di sebelah.'),
                 Forms\Components\Toggle::make('is_featured')->label('Unggulan')->default(false),
                 Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
             ])->columns(2),
@@ -98,9 +88,7 @@ class ServiceCategoryResource extends Resource
             ->reorderable('sort_order')
             ->defaultSort('sort_order')
             ->columns([
-                Tables\Columns\ImageColumn::make('image')->label('Gambar')->disk('public')->square(),
                 Tables\Columns\TextColumn::make('name')->label('Nama')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('slug')->toggleable()->color('gray'),
                 Tables\Columns\IconColumn::make('is_featured')->label('Unggulan')->boolean(),
                 Tables\Columns\ToggleColumn::make('is_active')->label('Aktif'),
                 Tables\Columns\TextColumn::make('services_count')->counts('services')->label('Layanan'),

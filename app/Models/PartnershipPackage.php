@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasAutoSlug;
 use App\Models\Concerns\HasRecordLimit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,7 +10,10 @@ use Spatie\Translatable\HasTranslations;
 
 class PartnershipPackage extends Model
 {
-    use HasRecordLimit, HasTranslations;
+    use HasAutoSlug, HasRecordLimit, HasTranslations;
+
+    /** Kolom sumber slug otomatis (App\Models\Concerns\HasAutoSlug). */
+    protected string $slugFrom = 'name';
 
     /**
      * Empat tingkat kemitraan. Halaman Kemitraan menyusunnya dalam satu kisi

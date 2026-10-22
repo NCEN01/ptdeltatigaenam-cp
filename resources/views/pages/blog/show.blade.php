@@ -18,10 +18,6 @@
             <span class="text-white/20" aria-hidden="true">·</span>
             <span class="text-sm text-navy-200">{{ $post->readingMinutes() }} {{ $id ? 'menit baca' : 'min read' }}</span>
 
-            @if ($post->tags->isNotEmpty())
-                <span class="text-white/20" aria-hidden="true">·</span>
-                @foreach ($post->tags as $tag)<span class="rounded-full border border-white/15 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-navy-200">{{ $tag->name }}</span>@endforeach
-            @endif
         </x-page-header>
 
         <section class="section bg-white">
@@ -101,15 +97,29 @@
                             <x-share-buttons :url="$shareUrl" :title="$post->title" />
                         </div>
 
-                        {{-- Footer --}}
+                        {{-- Kaki artikel: penulisnya, lalu tautan kembali ke daftar.
+
+                             Penulis diketik bebas di CMS (blog_posts.author_name),
+                             bukan diambil dari akun admin yang menyimpan artikel —
+                             yang menulis artikel tidak selalu orang yang memegang
+                             akun panelnya. Dikosongkan, artikelnya tetap bertanda
+                             tangan tim perusahaan: tulisan tanpa nama penulis sama
+                             sekali kurang dipercaya pembaca, dan mesin pencari
+                             menimbang kejelasan penulis saat menilai kredibilitas
+                             halaman. --}}
+                        @php
+                            $penulis = trim((string) $post->author_name) ?: ($id ? 'Tim PT Delta Tiga Enam' : 'PT Delta Tiga Enam Team');
+                        @endphp
                         <div class="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-navy-100 pt-8">
-                            @if ($post->tags->isNotEmpty())
-                                <div class="flex flex-wrap gap-2">
-                                    @foreach ($post->tags as $tag)
-                                        <span class="rounded-full border border-navy-100 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-slate-600">{{ $tag->name }}</span>
-                                    @endforeach
+                            <div class="flex items-center gap-3">
+                                <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-navy-50 font-display text-base font-semibold text-navy-600 ring-1 ring-navy-100" aria-hidden="true">
+                                    {{ mb_strtoupper(mb_substr($penulis, 0, 1)) }}
+                                </span>
+                                <div class="leading-tight">
+                                    <p class="text-xs text-slate-500">{{ $id ? 'Ditulis oleh' : 'Written by' }}</p>
+                                    <p class="mt-1 text-sm font-semibold text-navy">{{ $penulis }}</p>
                                 </div>
-                            @else<span></span>@endif
+                            </div>
                             <a href="{{ route('blog.index') }}" class="link-underline text-sm font-medium">{{ $id ? 'Semua artikel' : 'All articles' }}</a>
                         </div>
                     </div>

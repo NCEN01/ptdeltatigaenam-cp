@@ -40,8 +40,7 @@ class ServiceSeeder extends Seeder
                     'duration' => $item['duration'],
                     'location' => $item['location'],
                     'mode' => $item['mode'],
-                    'quota' => $item['quota'],
-                    'seats_taken' => $item['taken'],
+                    // Kuota dan kursi terisi milik tiap angkatan, lihat syncSchedules().
                     // Layanan konsultasi berharga 0 tidak dijual per kursi, jadi
                     // tombol "Daftar Sekarang" tidak ditawarkan untuk itu.
                     'is_purchasable' => $item['price'] > 0,
@@ -110,8 +109,7 @@ class ServiceSeeder extends Seeder
                 'end_date' => $start->copy()->addDays($item['days'] - 1),
                 'start_time' => '08:30:00',
                 'end_time' => '16:30:00',
-                'location' => $item['location'],
-                'mode' => $item['mode'],
+                // Lokasi dan mode dibaca dari layanannya.
                 'quota' => $item['quota'],
                 'seats_taken' => max(0, $item['taken'] - ($n * 4)),
                 'is_active' => true,

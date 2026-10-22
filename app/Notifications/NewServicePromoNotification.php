@@ -90,7 +90,7 @@ class NewServicePromoNotification extends Notification implements ShouldQueue
         if ($nextSchedule && $nextSchedule->start_date) {
             $dateText = $nextSchedule->start_date->translatedFormat('d M Y');
             $modeText = $service->modeLabel($locale);
-            $locText = $nextSchedule->location ?: $service->location;
+            $locText = $service->location;
             $scheduleParts = array_filter([$dateText, $modeText, $locText]);
 
             $mail->line(($isId ? 'Jadwal Terdekat: ' : 'Next Schedule: ').implode(' · ', $scheduleParts));

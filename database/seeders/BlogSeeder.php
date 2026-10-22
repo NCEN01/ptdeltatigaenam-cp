@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
-use App\Models\BlogTag;
 use Database\Seeders\Support\StoredImages;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
@@ -15,7 +14,6 @@ class BlogSeeder extends Seeder
     public function run(): void
     {
         $categories = $this->seedCategories();
-        $tags = $this->seedTags();
         $images = StoredImages::pool('blog', 'agenda', 'services', 'banners');
 
         foreach ($this->posts() as $index => $item) {
@@ -40,11 +38,10 @@ class BlogSeeder extends Seeder
                 ],
             );
 
-            $post->tags()->sync(array_map(fn ($t) => $tags[$t], $item['tags']));
         }
 
         $this->command?->info('Blog siap: '.BlogPost::count().' artikel, '
-            .BlogCategory::count().' kategori, '.BlogTag::count().' tag.');
+            .BlogCategory::count().' kategori.');
     }
 
     /** @return array<string, int> */
@@ -66,31 +63,6 @@ class BlogSeeder extends Seeder
                 ['slug' => $slug],
                 ['name' => $name, 'sort_order' => count($map) + 1, 'is_active' => true],
             )->id;
-        }
-
-        return $map;
-    }
-
-    /** @return array<string, int> */
-    private function seedTags(): array
-    {
-        $tags = [
-            'kompetensi' => ['id' => 'Kompetensi', 'en' => 'Competency'],
-            'bnsp' => ['id' => 'BNSP', 'en' => 'BNSP'],
-            'kepemimpinan' => ['id' => 'Kepemimpinan', 'en' => 'Leadership'],
-            'karier' => ['id' => 'Karier', 'en' => 'Career'],
-            'produktivitas' => ['id' => 'Produktivitas', 'en' => 'Productivity'],
-            'k3' => ['id' => 'K3', 'en' => 'Safety'],
-            'talenta' => ['id' => 'Talenta', 'en' => 'Talent'],
-            'organisasi' => ['id' => 'Organisasi', 'en' => 'Organisation'],
-            'wawancara' => ['id' => 'Wawancara', 'en' => 'Interview'],
-            'remunerasi' => ['id' => 'Remunerasi', 'en' => 'Remuneration'],
-        ];
-
-        $map = [];
-
-        foreach ($tags as $slug => $name) {
-            $map[$slug] = BlogTag::updateOrCreate(['slug' => $slug], ['name' => $name])->id;
         }
 
         return $map;

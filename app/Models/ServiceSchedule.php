@@ -16,7 +16,6 @@ class ServiceSchedule extends Model
         return [
             'start_date' => 'date',
             'end_date' => 'date',
-            'price_override' => 'decimal:2',
             'is_active' => 'boolean',
         ];
     }
@@ -67,8 +66,16 @@ class ServiceSchedule extends Model
         return $end && $end->gte($today) ? 'ongoing' : 'past';
     }
 
+    /**
+     * Harga per peserta untuk angkatan ini — selalu harga layanannya.
+     *
+     * Dulu bisa ditimpa per angkatan lewat price_override, yang tidak pernah
+     * terisi satu kali pun dan hanya membuat admin bertanya harga mana yang
+     * dipakai. Nama metodenya dipertahankan karena dipanggil checkout dan
+     * halaman program; dengan begitu harga tetap dibaca dari satu tempat.
+     */
     public function effectivePrice(): float
     {
-        return (float) ($this->price_override ?? $this->service?->price ?? 0);
+        return (float) ($this->service?->price ?? 0);
     }
 }

@@ -133,13 +133,14 @@ class MidtransWebhookController extends Controller
             ]);
 
             if ($newStatus === 'paid' && ! $wasPaid) {
-                /* Kursi ditambah di dalam transaksi: ia tulisan basis data
-                   yang harus jadi atau batal bersama perubahan status. Kalau
-                   di luar, pesanan yang gagal disimpan tetap memakan kuota. */
-                $service = $order->service;
-                if ($service && $service->quota) {
-                    $service->increment('seats_taken', $order->quantity);
-                }
+                /* Kursi TIDAK ditambah di sini. $order->update() di atas sudah
+                   memicu Order::booted(), yang menambah seats_taken milik
+                   angkatannya — di dalam transaksi berkunci yang sama, jadi
+                   tetap jadi atau batal bersama perubahan status.
+
+                   Dulu di sini juga ada penambahan kursi milik LAYANAN, sehingga
+                   satu pembayaran lunas tercatat di dua penghitung sekaligus.
+                   Kuota kini hanya milik angkatan. */
 
                 /* Surelnya justru harus di LUAR — afterCommit, bukan langsung.
                    Dua alasan, keduanya nyata:

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Concerns\RestrictsToPermission;
 use App\Filament\Forms\Components\MediaUpload;
 use App\Filament\Resources\ServiceResource\Pages;
+use App\Filament\Resources\ServiceResource\RelationManagers;
 use App\Jobs\BroadcastServicePromoJob;
 use App\Models\Service;
 use Filament\Forms;
@@ -13,7 +14,6 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
 
 class ServiceResource extends Resource
 {
@@ -39,19 +39,15 @@ class ServiceResource extends Resource
             Forms\Components\Section::make('Informasi Layanan (ID/EN)')->schema([
                 Forms\Components\Select::make('service_category_id')
                     ->label('Kategori')
-                    ->relationship('category', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)
+                    ->relationship('category', 'slug')->getOptionLabelFromRecordUsing(fn (\Illuminate\Database\Eloquent\Model $record): string => (string) ($record->getTranslation('name', 'id', false) ?: $record->name))
                     ->searchable()->preload()->required(),
                 Forms\Components\TextInput::make('title.id')
                     ->label('Judul (ID)')
                     ->required()
-                    ->maxLength(220)
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
+                    ->maxLength(220),
                 Forms\Components\TextInput::make('title.en')
                     ->label('Judul (EN)')
                     ->maxLength(220),
-                Forms\Components\TextInput::make('slug')->required()->maxLength(220)->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('short_description.id')->label('Deskripsi Singkat (ID)')->maxLength(255),
                 Forms\Components\TextInput::make('short_description.en')->label('Deskripsi Singkat (EN)')->maxLength(255),
                 Forms\Components\RichEditor::make('description.id')->label('Deskripsi (ID)')->columnSpanFull(),
@@ -74,10 +70,19 @@ class ServiceResource extends Resource
                 Forms\Components\TextInput::make('price_label.en')->label('Satuan Harga (EN)')
                     ->placeholder('person')->maxLength(40),
                 Forms\Components\TextInput::make('duration')->label('Durasi')->placeholder('2 hari'),
-                Forms\Components\TextInput::make('location')->label('Lokasi')->placeholder('Cilegon'),
-                Forms\Components\Select::make('mode')->options(['offline' => 'Offline', 'online' => 'Online', 'hybrid' => 'Hybrid'])->default('offline'),
-                Forms\Components\TextInput::make('quota')->label('Kuota Peserta')->numeric(),
-                MediaUpload::for('image', 'service', 'services')->label('Gambar Layanan')->columnSpanFull(),
+                /* Satu lokasi dan satu cara mengikuti untuk seluruh angkatan.
+                   Dulu keduanya juga diisi lagi di setiap jadwal, dengan nilai
+                   yang di seluruh data tidak pernah berbeda dari yang di sini. */
+                Forms\Components\TextInput::make('location')->label('Lokasi')->placeholder('Jakarta Selatan, atau Di lokasi klien')->maxLength(200),
+                Forms\Components\Select::make('mode')->label('Cara Mengikuti')
+                    ->options(['offline' => 'Offline (tatap muka)', 'online' => 'Online (daring)', 'hybrid' => 'Hybrid (bauran)'])
+                    ->default('offline')->native(false),
+                /* Kuota TIDAK diisi di sini: kursi habis per angkatan, jadi ia
+                   diisi di tiap batch. Satu gambar untuk kartu dan kepala halaman
+                   program — spanduk terpisah sudah dilepas. */
+                MediaUpload::for('image', 'service', 'services')->label('Gambar Layanan')
+                    ->helperText('Tampil di kartu layanan dan sebagai gambar utama di halaman program.')
+                    ->columnSpanFull(),
                 Forms\Components\Toggle::make('is_purchasable')->label('Dapat Dibeli Online')->default(true),
                 Forms\Components\Toggle::make('is_featured')->label('Unggulan')->default(false),
                 Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
@@ -99,43 +104,29 @@ class ServiceResource extends Resource
                     ->columnSpanFull(),
             ])->columns(3),
 
-            // Lima field di bawah ini tampil di situs tetapi sebelumnya tidak bisa
-            // diisi admin sama sekali: lokasi, cara mengikuti, kuota, kursi terisi,
-            // dan harga khusus batch. Nilainya hanya bisa masuk lewat seeder.
-            //
-            // maxItems(1)->addable(false) juga dilepas. Tujuh layanan sudah punya
-            // tiga jadwal, sedangkan situs menampilkan seluruhnya; dengan batas satu
-            // item admin tidak dapat menambah angkatan baru, dan membuka layanan
-            // berjadwal tiga lalu menyimpannya berbenturan dengan batas itu.
-            Forms\Components\Section::make('Jadwal / Batch')->schema([
-                Forms\Components\Repeater::make('schedules')->relationship()->label('Jadwal')
-                    ->addActionLabel('Tambah Jadwal')
-                    // Tanpa ini tiap baris yang dilipat hanya bertuliskan "Schedules".
-                    ->itemLabel(fn (array $state): string => filled($state['start_date'] ?? null)
-                        ? \Illuminate\Support\Carbon::parse($state['start_date'])->translatedFormat('d M Y')
-                        : 'Jadwal baru')
-                    ->orderColumn('start_date')
-                    ->schema([
-                        Forms\Components\DatePicker::make('start_date')->label('Mulai')->required(),
-                        Forms\Components\DatePicker::make('end_date')->label('Selesai'),
-                        Forms\Components\Select::make('mode')
-                            ->label('Cara Mengikuti')
-                            ->options(['offline' => 'Offline', 'online' => 'Online', 'hybrid' => 'Hybrid'])
-                            ->default('offline')
-                            ->helperText('Tampil sebagai label pada kartu jadwal di situs.'),
-                        Forms\Components\TimePicker::make('start_time')->label('Jam Mulai')->seconds(false),
-                        Forms\Components\TimePicker::make('end_time')->label('Jam Selesai')->seconds(false),
-                        Forms\Components\TextInput::make('location')->label('Lokasi')->maxLength(200)
-                            ->placeholder('Jakarta Selatan, atau Di lokasi klien'),
-                        Forms\Components\TextInput::make('quota')->label('Kuota Peserta')->numeric()->minValue(0),
-                        Forms\Components\TextInput::make('seats_taken')->label('Kursi Terisi')->numeric()->minValue(0)->default(0)
-                            ->helperText('Sisa kursi dan bilah keterisian di situs dihitung dari sini.'),
-                        Forms\Components\TextInput::make('price_override')->label('Harga Khusus Batch (IDR)')->numeric()->prefix('Rp')
-                            ->helperText('Kosongkan untuk memakai harga layanan.'),
-                        Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true)
-                            ->helperText('Nonaktif berarti jadwal ini tidak tampil di situs.'),
-                    ])->columns(3)->collapsible()->defaultItems(1),
-            ])->collapsed(),
+            /* Batch dan jadwal TIDAK lagi diisi di form ini.
+
+               Dulu jadwal adalah repeater di dalam form layanan, dan itu
+               membawa dua masalah. Pertama, admin yang hanya ingin menambah
+               satu layanan tanpa angkatan apa pun tetap dihadapkan pada blok
+               jadwal yang terisi satu baris kosong. Kedua — dan ini yang
+               merusak data — repeater itu memakai ->orderColumn('start_date'):
+               Filament menyimpan NOMOR URUT item ke kolom yang ditunjuk, jadi
+               setiap kali layanan disimpan, tanggal mulai seluruh jadwalnya
+               tertimpa angka 1, 2, 3 dan tersimpan sebagai 1970-01-01.
+
+               Sekarang batch punya tabelnya sendiri di bawah form ini
+               (ServiceResource\RelationManagers\SchedulesRelationManager),
+               dengan tombol "Tambah Batch" yang terpisah. Layanan bisa
+               disimpan tanpa batch sama sekali. */
+            Forms\Components\Section::make('Batch & Jadwal')
+                ->schema([
+                    Forms\Components\Placeholder::make('info_batch')
+                        ->hiddenLabel()
+                        ->content(fn (string $operation): string => $operation === 'create'
+                            ? 'Layanan boleh disimpan tanpa batch. Bila program ini dibuka dalam beberapa angkatan (batch) dengan tanggal tertentu, simpan layanan ini dulu, lalu tambahkan batch-nya di tabel "Batch & Jadwal" yang muncul di bawah halaman sunting.'
+                            : 'Batch dikelola di tabel "Batch & Jadwal" di bawah form ini. Lokasi, cara mengikuti, dan harga setiap batch mengikuti isian layanan di atas.'),
+                ]),
 
             Forms\Components\Section::make('Kegiatan')->schema([
                 Forms\Components\Repeater::make('activities')
@@ -169,24 +160,9 @@ class ServiceResource extends Resource
             ])->collapsed(),
 
             Forms\Components\Section::make('Halaman Program')
-                ->description('Isi bagian-bagian halaman rincian program: spanduk, mentor pengampu, dan benefit.')
+                ->description('Isi bagian-bagian halaman rincian program: mentor pengampu dan benefit.')
                 ->collapsed()
                 ->schema([
-                    Forms\Components\FileUpload::make('banner_image')
-                        ->label('Spanduk')
-                        ->image()
-                        ->imageEditor()
-                        ->directory('services/banners')
-                        // Bentang lebar, bukan potret seperti kolom Gambar di
-                        // atas: yang ini membentang di dalam halaman, yang itu
-                        // mengisi kartu tegak di kisi tiga kolom. Satu berkas
-                        // tidak bisa melayani keduanya tanpa terpotong buruk di
-                        // salah satunya.
-                        ->imageCropAspectRatio('21:9')
-                        ->maxSize(3072)
-                        ->helperText('Tampil tepat di bawah "3 langkah daftar". Bentang lebar (21:9), maksimal 3 MB. Boleh dikosongkan — bila kosong, bagiannya tidak tampil.')
-                        ->columnSpanFull(),
-
                     Forms\Components\Select::make('mentors')
                         ->label('Mentor Pengampu')
                         ->relationship('mentors', 'name')
@@ -241,12 +217,14 @@ class ServiceResource extends Resource
                 Tables\Columns\TextColumn::make('title')->label('Judul')->searchable()->sortable()->wrap(),
                 Tables\Columns\TextColumn::make('category.name')->label('Kategori')->badge(),
                 Tables\Columns\TextColumn::make('price')->label('Harga')->money('IDR')->sortable(),
+                /* Jumlah batch aktif, dan sisa kursi batch terdekat. Kuota kini
+                   milik batch, bukan layanan, jadi angkanya dibaca dari sana. */
+                Tables\Columns\TextColumn::make('schedules_count')
+                    ->label('Batch')
+                    ->counts(['schedules' => fn (\Illuminate\Database\Eloquent\Builder $q) => $q->where('is_active', true)])
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('available_seats')
-                    ->label('Stok Tersedia')
-                    ->sortable(query: function (\Illuminate\Database\Eloquent\Builder $query, string $direction) {
-                        $query->orderByRaw('CASE WHEN quota IS NULL THEN 1 ELSE 0 END ' . $direction)
-                              ->orderByRaw('(quota - seats_taken) ' . $direction);
-                    })
+                    ->label('Sisa Kursi (batch terdekat)')
                     ->state(fn (Service $record): string => $record->available_seats !== null ? (string) $record->available_seats : '-'),
                 Tables\Columns\IconColumn::make('is_purchasable')->label('Online')->boolean(),
                 Tables\Columns\IconColumn::make('is_active')
@@ -261,7 +239,7 @@ class ServiceResource extends Resource
                     ),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('service_category_id')->relationship('category', 'slug')->label('Kategori'),
+                Tables\Filters\SelectFilter::make('service_category_id')->relationship('category', 'slug')->getOptionLabelFromRecordUsing(fn (\Illuminate\Database\Eloquent\Model $record): string => (string) ($record->getTranslation('name', 'id', false) ?: $record->name))->label('Kategori'),
                 Tables\Filters\TernaryFilter::make('is_active')->label('Aktif'),
             ])
             ->actions([
@@ -306,6 +284,13 @@ class ServiceResource extends Resource
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\SchedulesRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

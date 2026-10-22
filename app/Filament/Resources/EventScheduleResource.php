@@ -70,8 +70,8 @@ class EventScheduleResource extends Resource
                 Tables\Columns\TextColumn::make('service.title')->label('Layanan')->limit(34)->searchable()->placeholder('-'),
                 Tables\Columns\TextColumn::make('start_date')->label('Mulai')->date('d M Y')->sortable(),
                 Tables\Columns\TextColumn::make('end_date')->label('Selesai')->date('d M Y')->placeholder('-'),
-                Tables\Columns\TextColumn::make('mode')->label('Mode')->badge(),
-                Tables\Columns\TextColumn::make('location')->label('Lokasi')->limit(24)->placeholder('-'),
+                Tables\Columns\TextColumn::make('service.mode')->label('Mode')->badge(),
+                Tables\Columns\TextColumn::make('service.location')->label('Lokasi')->limit(24)->placeholder('-'),
                 Tables\Columns\TextColumn::make('timeframe')
                     ->label('Status')
                     ->badge()
@@ -130,8 +130,8 @@ class EventScheduleResource extends Resource
                 Infolists\Components\TextEntry::make('end_date')->label('Tanggal Selesai')->date('d M Y')->placeholder('-'),
                 Infolists\Components\TextEntry::make('start_time')->label('Jam Mulai')->placeholder('-'),
                 Infolists\Components\TextEntry::make('end_time')->label('Jam Selesai')->placeholder('-'),
-                Infolists\Components\TextEntry::make('mode')->label('Mode')->badge(),
-                Infolists\Components\TextEntry::make('location')->label('Lokasi')->placeholder('-'),
+                Infolists\Components\TextEntry::make('service.mode')->label('Mode')->badge(),
+                Infolists\Components\TextEntry::make('service.location')->label('Lokasi')->placeholder('-'),
                 Infolists\Components\TextEntry::make('seats_taken')->label('Kursi Terisi'),
                 Infolists\Components\TextEntry::make('quota')->label('Kuota')->placeholder('Tanpa batas'),
             ])->columns(3),

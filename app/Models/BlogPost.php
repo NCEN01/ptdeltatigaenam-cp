@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasAutoSlug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -9,7 +10,10 @@ use Spatie\Translatable\HasTranslations;
 
 class BlogPost extends Model
 {
-    use HasTranslations;
+    use HasAutoSlug, HasTranslations;
+
+    /** Kolom sumber slug otomatis (App\Models\Concerns\HasAutoSlug). */
+    protected string $slugFrom = 'title';
 
     protected $guarded = ['id'];
 
@@ -31,11 +35,6 @@ class BlogPost extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
-    }
-
-    public function tags(): BelongsToMany
-    {
-        return $this->belongsToMany(BlogTag::class, 'blog_post_tag');
     }
 
     /**

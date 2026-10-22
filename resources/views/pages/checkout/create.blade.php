@@ -202,7 +202,7 @@
                         <div class="space-y-3 text-sm">
                             <div class="flex justify-between gap-4"><span class="text-slate-600">{{ $id ? 'Layanan' : 'Service' }}</span><span class="text-right font-medium text-navy">{{ $service->title }}</span></div>
                             <div class="flex justify-between gap-4"><span class="text-slate-600">{{ $id ? 'Jadwal' : 'Schedule' }}</span><span class="text-right font-medium text-navy">{{ $schedule->start_date?->translatedFormat('d M Y') }}</span></div>
-                            <div class="flex justify-between"><span class="text-slate-600">Mode</span><span class="font-medium capitalize text-navy">{{ $schedule->mode }}</span></div>
+                            <div class="flex justify-between"><span class="text-slate-600">Mode</span><span class="font-medium text-navy">{{ $service->modeLabel() ?? "-" }}</span></div>
                             <div class="flex justify-between gap-4">
                                 <span class="text-slate-600">{{ $id ? 'Harga/peserta' : 'Price/person' }}</span>
                                 <span class="text-right">

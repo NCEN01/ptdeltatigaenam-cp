@@ -95,12 +95,9 @@ class CheckoutController extends Controller
 
         /* Kuota dicek terhadap jumlah peserta yang dipesan, bukan sekadar
            "sudah penuh atau belum": sisa 2 kursi tidak boleh menerima 5 peserta.
-           Kuota layanan dan kuota batch jadwal sama-sama dihormati. */
-        $service = $schedule->service;
+           Kuota hanya milik angkatan; null berarti angkatan itu tidak dibatasi. */
         $qtyRequested = count($data['participants']);
-        $serviceLeft = $service->quota ? max(0, $service->quota - $service->seats_taken) : null;
-        $scheduleLeft = $schedule->seats_available;
-        $left = collect([$serviceLeft, $scheduleLeft])->filter(fn ($v) => $v !== null)->min();
+        $left = $schedule->seats_available;
 
         if ($left !== null && $qtyRequested > $left) {
             $msg = $left === 0
@@ -260,10 +257,7 @@ class CheckoutController extends Controller
             return redirect()->route('account.orders')->with('error', __('Jadwal ini sudah berakhir.'));
         }
 
-        $service = $order->service;
-        $serviceLeft = ($service && $service->quota) ? max(0, $service->quota - $service->seats_taken) : null;
-        $scheduleLeft = $order->schedule?->seats_available;
-        $left = collect([$serviceLeft, $scheduleLeft])->filter(fn ($v) => $v !== null)->min();
+        $left = $order->schedule?->seats_available;
 
         if ($left !== null && $order->quantity > $left) {
             $msg = $left === 0
@@ -423,10 +417,8 @@ class CheckoutController extends Controller
 
             $locked->update(['status' => 'paid', 'paid_at' => now()]);
 
-            $service = $locked->service;
-            if ($service && $service->quota) {
-                $service->increment('seats_taken', $locked->quantity);
-            }
+            /* Kursi ditambah Order::booted() lewat update() di atas, satu
+               kali, milik angkatannya. Lihat MidtransWebhookController. */
 
             DB::afterCommit(function () use ($locked) {
                 Notification::route('mail', $locked->customer_email)

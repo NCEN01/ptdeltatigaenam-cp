@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasAutoSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,10 @@ use Spatie\Translatable\HasTranslations;
 
 class Service extends Model
 {
-    use HasFactory, HasTranslations;
+    use HasAutoSlug, HasFactory, HasTranslations;
+
+    /** Kolom sumber slug otomatis (App\Models\Concerns\HasAutoSlug). */
+    protected string $slugFrom = 'title';
 
     protected $guarded = ['id'];
 
@@ -33,8 +37,6 @@ class Service extends Model
             'is_purchasable' => 'boolean',
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
-            'quota' => 'integer',
-            'seats_taken' => 'integer',
         ];
     }
 
@@ -138,12 +140,15 @@ class Service extends Model
         return $this->hasMany(Order::class);
     }
 
+    /**
+     * Sisa kursi angkatan terdekat, atau null bila tidak ada angkatan berkuota.
+     *
+     * Kuota kini milik angkatan (service_schedules), bukan milik layanan:
+     * kursi memang habis per angkatan, dan dua penghitung untuk hal yang sama
+     * sebelumnya bertambah bersamaan setiap kali ada pembayaran lunas.
+     */
     public function getAvailableSeatsAttribute(): ?int
     {
-        if ($this->quota === null) {
-            return null;
-        }
-
-        return max(0, (int) $this->quota - (int) $this->seats_taken);
+        return $this->nextSchedule()?->seats_available;
     }
 }

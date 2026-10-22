@@ -10,11 +10,7 @@ class ServiceCategorySeeder extends Seeder
 {
     public function run(): void
     {
-        // Berkas gambar kategori selamat di disk ketika isi database terhapus,
-        // jadi dipasangkan kembali di sini. Tanpa kolom image terisi, carousel
-        // "Kategori Layanan" di beranda jatuh ke gradien biru polos.
-        $images = StoredImages::pool('service-categories', 'services', 'banners');
-
+        // Kategori tidak lagi bergambar: kartunya memakai ikon (kolom icon).
         foreach ($this->categories() as $i => $cat) {
             ServiceCategory::updateOrCreate(
                 ['slug' => $cat['slug']],
@@ -22,7 +18,6 @@ class ServiceCategorySeeder extends Seeder
                     'name' => $cat['name'],
                     'short_description' => $cat['summary'],
                     'icon' => $cat['icon'],
-                    'image' => StoredImages::pick($images, $i),
                     'is_featured' => true,
                     'sort_order' => $i + 1,
                     'is_active' => true,
@@ -30,8 +25,7 @@ class ServiceCategorySeeder extends Seeder
             );
         }
 
-        $this->command?->info('Kategori layanan siap: '.ServiceCategory::count().' kategori, '
-            .ServiceCategory::whereNotNull('image')->count().' bergambar.');
+        $this->command?->info('Kategori layanan siap: '.ServiceCategory::count().' kategori.');
     }
 
     /**

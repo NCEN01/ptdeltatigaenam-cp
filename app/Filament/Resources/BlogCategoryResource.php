@@ -10,7 +10,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
 
 class BlogCategoryResource extends Resource
 {
@@ -36,13 +35,10 @@ class BlogCategoryResource extends Resource
             Forms\Components\TextInput::make('name.id')
                 ->label('Nama (ID)')
                 ->required()
-                ->maxLength(100)
-                ->live(onBlur: true)
-                ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
+                ->maxLength(100),
             Forms\Components\TextInput::make('name.en')
                 ->label('Nama (EN)')
                 ->maxLength(100),
-            Forms\Components\TextInput::make('slug')->required()->unique(ignoreRecord: true)->maxLength(150),
             Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
         ])->columns(2);
     }
@@ -51,7 +47,6 @@ class BlogCategoryResource extends Resource
     {
         return $table->columns([
             Tables\Columns\TextColumn::make('name')->label('Nama')->searchable(),
-            Tables\Columns\TextColumn::make('slug')->color('gray'),
             Tables\Columns\TextColumn::make('posts_count')->counts('posts')->label('Artikel'),
             Tables\Columns\ToggleColumn::make('is_active')->label('Aktif'),
         ])->actions([

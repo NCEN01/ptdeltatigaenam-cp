@@ -57,7 +57,7 @@ class BlogController extends Controller
 
     public function show(string $locale, string $slug)
     {
-        $post = BlogPost::where('slug', $slug)->published()->with(['category', 'tags'])->firstOrFail();
+        $post = BlogPost::where('slug', $slug)->published()->with('category')->firstOrFail();
 
         $sessionKey = 'viewed_post_' . $post->id;
         if (! session()->has($sessionKey)) {

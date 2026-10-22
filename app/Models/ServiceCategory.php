@@ -2,15 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Concerns\HasAutoSlug;
 use App\Models\Concerns\HasRecordLimit;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\HasTranslations;
 
 class ServiceCategory extends Model
 {
-    use HasFactory, HasRecordLimit, HasTranslations;
+    use HasAutoSlug, HasFactory, HasRecordLimit, HasTranslations;
+
+    /** Kolom sumber slug otomatis (App\Models\Concerns\HasAutoSlug). */
+    protected string $slugFrom = 'name';
 
     /**
      * Kategori layanan. Dua belas ditentukan oleh menu atas, bukan oleh basis
@@ -26,7 +30,7 @@ class ServiceCategory extends Model
     protected $guarded = ['id'];
 
     public array $translatable = [
-        'name', 'short_description', 'description', 'meta_title', 'meta_description',
+        'name', 'short_description', 'meta_title', 'meta_description',
     ];
 
     protected function casts(): array

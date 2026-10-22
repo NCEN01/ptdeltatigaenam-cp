@@ -133,7 +133,9 @@
         // sempat disiapkan spanduknya tetap punya bidang gambar, dan gambar
         // itu pula yang baru saja dilihat pembaca saat mengklik kartunya —
         // jadi ia menegaskan "ini program yang tadi", bukan mengejutkan.
-        $bannerSrc = $service->banner_image ?: $service->image;
+        // Satu gambar untuk kartu dan kepala halaman: spanduk terpisah
+        // (banner_image) sudah dilepas supaya admin tidak mengunggah dua kali.
+        $bannerSrc = $service->image;
     @endphp
     {{-- ===================== BODY + PURCHASE PANEL ===================== --}}
     <section class="section-sm border-t border-navy-50 bg-white">
@@ -236,12 +238,16 @@
 
                     {{-- Jadwal --}}
                     <div class="space-y-2.5 p-4">
-                        @php
-                            $left = $service->quota ? max(0, $service->quota - $service->seats_taken) : null;
-                            $full = $left !== null && $left <= 0;
-                            $low = $left !== null && $left > 0 && $left <= 5;
-                        @endphp
+                        {{-- Sisa kursi dihitung PER angkatan, di dalam perulangan.
+                             Dulu dihitung sekali di luarnya dari kuota layanan,
+                             sehingga tiga angkatan dengan keterisian berbeda
+                             menunjukkan angka yang sama persis. --}}
                         @forelse ($service->schedules as $schedule)
+                            @php
+                                $left = $schedule->seats_available;
+                                $full = $left !== null && $left <= 0;
+                                $low = $left !== null && $left > 0 && $left <= 5;
+                            @endphp
                             <div class="rounded-2xl border {{ $low ? 'border-amber-200' : 'border-navy-100' }} bg-white p-4 transition-shadow duration-300 hover:shadow-card">
                                 <div class="flex items-start justify-between gap-3">
                                     <div>
@@ -252,9 +258,11 @@
                                                 @if ($schedule->end_time) - {{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }} WIB @endif
                                             </p>
                                         @endif
-                                        @if ($schedule->location)<p class="mt-0.5 text-[13px] text-slate-500">{{ $schedule->location }}</p>@endif
+                                        @if ($service->location)<p class="mt-0.5 text-[13px] text-slate-500">{{ $service->location }}</p>@endif
                                     </div>
-                                    <span class="shrink-0 rounded-full bg-navy-50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-slate-600">{{ $service->mode }}</span>
+                                    @if ($service->modeLabel())
+                                        <span class="shrink-0 rounded-full bg-navy-50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-slate-600">{{ $service->modeLabel() }}</span>
+                                    @endif
                                 </div>
 
                                 @if ($left !== null)
@@ -262,10 +270,10 @@
                                         {{-- Quota bar --}}
                                         <div class="flex-1 h-1.5 rounded-full bg-navy-100 overflow-hidden">
                                             <div class="h-full rounded-full transition-all {{ $full ? 'bg-rose-500' : ($low ? 'bg-amber-500' : 'bg-emerald-500') }}"
-                                                 style="width: {{ $service->quota > 0 ? round(($service->seats_taken / $service->quota) * 100) : 0 }}%"></div>
+                                                 style="width: {{ $schedule->quota > 0 ? min(100, round(($schedule->seats_taken / $schedule->quota) * 100)) : 0 }}%"></div>
                                         </div>
                                         <span class="shrink-0 font-mono text-[10px] uppercase tracking-wider {{ $full ? 'text-rose-600' : ($low ? 'text-amber-700' : 'text-emerald-700') }}">
-                                            {{ $full ? ($id ? 'Penuh' : 'Full') : $left.'/'.$service->quota }}
+                                            {{ $full ? ($id ? 'Penuh' : 'Full') : $left.'/'.$schedule->quota }}
                                         </span>
                                     </div>
                                 @endif

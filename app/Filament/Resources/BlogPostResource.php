@@ -11,7 +11,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
 
 class BlogPostResource extends Resource
 {
@@ -38,41 +37,74 @@ class BlogPostResource extends Resource
                 Forms\Components\TextInput::make('title.id')
                     ->label('Judul (ID)')
                     ->required()
-                    ->maxLength(280)
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(fn (Forms\Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
+                    ->maxLength(280),
                 Forms\Components\TextInput::make('title.en')
                     ->label('Judul (EN)')
                     ->maxLength(280),
-                Forms\Components\TextInput::make('slug')->required()->maxLength(280)->unique(ignoreRecord: true),
                 Forms\Components\Textarea::make('excerpt.id')->label('Ringkasan (ID)')->rows(2),
                 Forms\Components\Textarea::make('excerpt.en')->label('Ringkasan (EN)')->rows(2),
                 Forms\Components\RichEditor::make('content.id')->label('Konten (ID)')->columnSpanFull()
                     ->helperText('Judul bagian memakai Heading 2 / Heading 3 akan otomatis masuk ke Daftar Isi artikel. Baris yang seluruhnya ditebalkan juga dianggap judul bagian.'),
                 Forms\Components\RichEditor::make('content.en')->label('Konten (EN)')->columnSpanFull()
-                    ->helperText('Heading 2 / Heading 3 sections automatically build the article table of contents.'),
+                    ->helperText('Setiap Heading 2 menjadi satu butir daftar isi artikel.'),
             ])->columns(2),
 
-            Forms\Components\Section::make('Media')->schema([
-                MediaUpload::for('featured_image', 'blog', 'blog')->label('Gambar Utama'),
-                MediaUpload::for('banner_image', 'blog_banner', 'blog')->label('Banner Header'),
-            ])->columns(2),
+            /* Satu gambar untuk kartu blog sekaligus kepala halaman artikel.
+               Kolom "Banner Header" yang dulu ada di sini tidak pernah dibaca
+               halaman mana pun — admin mengunggah dua gambar, hanya satu yang
+               tampil. */
+            Forms\Components\Section::make('Gambar')->schema([
+                MediaUpload::for('featured_image', 'blog', 'blog')
+                    ->label('Gambar Artikel')
+                    ->helperText('Tampil di kartu daftar blog dan di bagian atas halaman artikel.')
+                    ->columnSpanFull(),
+            ]),
 
             Forms\Components\Section::make('Publikasi')->schema([
-                Forms\Components\TextInput::make('location')
-                    ->label('Lokasi')
-                    ->maxLength(160)
-                    ->placeholder('Jakarta Selatan, Indonesia')
-                    ->helperText('Lokasi kegiatan atau peliputan artikel. Tampil di kartu blog dan halaman artikel.')
-                    ->columnSpanFull(),
-                Forms\Components\Select::make('blog_category_id')->relationship('category', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)->searchable()->preload()->label('Kategori'),
-                Forms\Components\Select::make('tags')->relationship('tags', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)->multiple()->preload()->label('Tag'),
+                Forms\Components\Select::make('blog_category_id')
+                    ->relationship('category', 'slug')
+                    ->getOptionLabelFromRecordUsing(fn (\Illuminate\Database\Eloquent\Model $record): string => (string) ($record->getTranslation('name', 'id', false) ?: $record->name))
+                    ->searchable()->preload()->label('Kategori'),
+
+                /* Penulis yang tercantum di akhir artikel. Diketik bebas, bukan
+                   dipilih dari akun admin: yang menulis tidak selalu orang yang
+                   memegang akun panel. */
+                Forms\Components\TextInput::make('author_name')
+                    ->label('Ditulis oleh')
+                    ->maxLength(120)
+                    ->placeholder('Tim PT Delta Tiga Enam')
+                    ->helperText('Mis. "Admin" atau "Dani Ramdani, S.Psi.". Kosongkan untuk memakai "Tim PT Delta Tiga Enam".'),
+
                 Forms\Components\Select::make('status')->options([
                     'draft' => 'Draft', 'published' => 'Terbit', 'archived' => 'Arsip',
                 ])->default('draft')->required(),
                 Forms\Components\DateTimePicker::make('published_at')->label('Tanggal Terbit'),
+
+                /* Lokasi bersifat pilihan. Tidak setiap artikel terikat tempat —
+                   tulisan tentang cara menyusun KPI tidak terjadi "di" mana pun.
+
+                   Saklarnya tidak punya kolom sendiri: keadaannya dibaca dari
+                   apakah lokasi terisi, dan dimatikan berarti lokasinya
+                   dikosongkan saat disimpan. dehydratedWhenHidden() wajib ada —
+                   tanpa itu Filament tidak mengirim kolom yang sedang
+                   tersembunyi, sehingga mematikan saklar justru membiarkan
+                   lokasi lama tetap tersimpan. */
+                Forms\Components\Toggle::make('show_location')
+                    ->label('Tampilkan lokasi')
+                    ->helperText('Nyalakan bila artikel ini meliput kegiatan di tempat tertentu.')
+                    ->live()
+                    ->dehydrated(false)
+                    ->afterStateHydrated(fn (Forms\Components\Toggle $component, ?\App\Models\BlogPost $record) => $component->state(filled($record?->location)))
+                    ->columnSpanFull(),
+                Forms\Components\TextInput::make('location')
+                    ->label('Lokasi')
+                    ->maxLength(160)
+                    ->placeholder('Jakarta Selatan, Indonesia')
+                    ->helperText('Tampil di kartu blog dan halaman artikel.')
+                    ->visible(fn (Forms\Get $get): bool => (bool) $get('show_location'))
+                    ->dehydratedWhenHidden()
+                    ->dehydrateStateUsing(fn (?string $state, Forms\Get $get): ?string => $get('show_location') ? (trim((string) $state) ?: null) : null)
+                    ->columnSpanFull(),
             ])->columns(2),
 
             Forms\Components\Section::make('SEO (ID/EN)')->collapsed()->schema([
@@ -99,7 +131,7 @@ class BlogPostResource extends Resource
             Tables\Columns\TextColumn::make('views')->label('Dilihat')->sortable(),
         ])->filters([
             Tables\Filters\SelectFilter::make('status')->options(['draft' => 'Draft', 'published' => 'Terbit', 'archived' => 'Arsip']),
-            Tables\Filters\SelectFilter::make('blog_category_id')->relationship('category', 'slug')->label('Kategori'),
+            Tables\Filters\SelectFilter::make('blog_category_id')->relationship('category', 'slug')->getOptionLabelFromRecordUsing(fn (\Illuminate\Database\Eloquent\Model $record): string => (string) ($record->getTranslation('name', 'id', false) ?: $record->name))->label('Kategori'),
         ])->actions([
             Tables\Actions\EditAction::make(),
             Tables\Actions\DeleteAction::make(),
